@@ -92,6 +92,47 @@ export default function App() {
             </div>
           </div>
         </div>
+
+        <div className="feature-strip">
+          <div className="fs-text">
+            <div className="fs-tag">Novedad</div>
+            <h3>Tendencias y revisión por la dirección</h3>
+            <p>QEPilot reúne tus no conformidades en indicadores claros y redacta el resumen de entrada para la revisión por la dirección (ISO 9001, 9.3) con IA. Lo que antes montabas a mano en una hoja, listo en segundos.</p>
+          </div>
+          <div className="panel">
+            <div className="panel-bar"><span /><span /><span /></div>
+            <div className="panel-body">
+              <div className="panel-kpis">
+                <div className="pk"><div className="pk-n">142</div><div className="pk-l">Expedientes</div></div>
+                <div className="pk"><div className="pk-n alert">7</div><div className="pk-l">Vencidas</div></div>
+                <div className="pk"><div className="pk-n">23<small>d</small></div><div className="pk-l">Cierre medio</div></div>
+                <div className="pk"><div className="pk-n">88<small>%</small></div><div className="pk-l">Tasa cierre</div></div>
+              </div>
+              <div className="panel-chart-h">Altas y cierres por mes</div>
+              <div className="panel-chart">
+                {[[60,45],[75,58],[52,61],[88,70],[64,72],[80,76]].map((p, i) => (
+                  <div className="pc-col" key={i}>
+                    <div className="pc-bars">
+                      <span className="pc-bar open" style={{ height: p[0] + "%" }} />
+                      <span className="pc-bar close" style={{ height: p[1] + "%" }} />
+                    </div>
+                    <div className="pc-lbl">{["ene","feb","mar","abr","may","jun"][i]}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="panel-areas">
+                <div className="pa-row"><span className="pa-lbl">Producción</span><span className="pa-track"><span style={{ width: "100%" }} /></span><span className="pa-v">48</span></div>
+                <div className="pa-row"><span className="pa-lbl">Logística</span><span className="pa-track"><span style={{ width: "62%" }} /></span><span className="pa-v">30</span></div>
+                <div className="pa-row"><span className="pa-lbl">Compras</span><span className="pa-track"><span style={{ width: "40%" }} /></span><span className="pa-v">19</span></div>
+                <div className="pa-row"><span className="pa-lbl">Laboratorio</span><span className="pa-track"><span style={{ width: "27%" }} /></span><span className="pa-v">13</span></div>
+              </div>
+              <div className="panel-ai">
+                <div className="pa-ai-h">Resumen para revisión por la dirección · IA</div>
+                <p>Durante el primer semestre se registraron 142 no conformidades, con una tasa de cierre del 88 % y un tiempo medio de resolución de 23 días. La concentración en Producción (34 %) sugiere revisar los controles de la línea de montaje…</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="section wrap">
