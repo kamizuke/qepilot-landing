@@ -5,7 +5,7 @@ import {
   ClipboardCheck, FlaskConical, Car, Leaf, HardHat, ShieldHalf,
 } from "lucide-react";
 
-const DEMO_EMAIL = "mailto:hola@qepilot.com?subject=Solicitud%20de%20demo%20QEPilot";
+const DEMO_URL = "https://ochod-demo.vercel.app";
 
 function LogoIcon({ className }) {
   return (
@@ -28,7 +28,7 @@ export default function App() {
               <a href="#casos">Casos de uso</a>
               <a href="#planes">Planes</a>
             </div>
-            <a className="nav-cta" href={DEMO_EMAIL}>Pedir demo</a>
+            <a className="nav-cta" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
           </div>
         </nav>
         <div className="hero-pad">
@@ -40,7 +40,7 @@ export default function App() {
               respuestas a auditorías, acciones correctivas e informes 8D listos para revisión.
             </p>
             <div className="hero-actions">
-              <a className="btn-primary" href={DEMO_EMAIL}>
+              <a className="btn-primary" href={DEMO_URL} target="_blank" rel="noopener">
                 Probar la demo <span className="circle"><ArrowRight size={16} /></span>
               </a>
               <a className="btn-link" href="#como">Ver cómo funciona <ArrowRight size={15} /></a>
@@ -179,7 +179,7 @@ export default function App() {
               <li><Check size={17} /> Entrevistas asistidas por IA</li>
               <li><Check size={17} /> Exportación de informes</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_EMAIL}>Pedir demo</a>
+            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
           </div>
           <div className="price feat">
             <div className="pname">Professional</div>
@@ -191,7 +191,7 @@ export default function App() {
               <li><Check size={17} /> Apoyo en causa raíz y eficacia</li>
               <li><Check size={17} /> Panel con indicadores</li>
             </ul>
-            <a className="pbtn dark" href={DEMO_EMAIL}>Pedir demo</a>
+            <a className="pbtn dark" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
           </div>
           <div className="price">
             <div className="pname">Business</div>
@@ -203,7 +203,7 @@ export default function App() {
               <li><Check size={17} /> Resúmenes para revisión por dirección</li>
               <li><Check size={17} /> Roles de usuario y soporte prioritario</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_EMAIL}>Pedir demo</a>
+            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
           </div>
         </div>
         <p className="price-note">Todos los planes incluyen entrevistas asistidas por IA y generación de informes. Precios orientativos; el precio final puede variar según el uso.</p>
@@ -226,7 +226,7 @@ export default function App() {
         <div className="cta-card">
           <h2>Convierte las incidencias en acciones claras.</h2>
           <p>Dedica menos tiempo a redactar informes y más a mejorar tu organización.</p>
-          <a className="btn-primary" href={DEMO_EMAIL} style={{ margin: "0 auto" }}>
+          <a className="btn-primary" href={DEMO_URL} target="_blank" rel="noopener" style={{ margin: "0 auto" }}>
             Pedir demo <span className="circle"><ArrowRight size={16} /></span>
           </a>
         </div>
