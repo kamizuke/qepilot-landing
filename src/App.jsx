@@ -33,17 +33,24 @@ export default function App() {
         </nav>
         <div className="hero-pad">
           <div className="hero-card hero">
-            <span className="hero-eyebrow"><span className="dot" />Copiloto de calidad con IA</span>
-            <h1>Documenta no conformidades<br /><span className="accent">en minutos, no en horas.</span></h1>
-            <p className="hero-sub">
-              QEPilot guía a tu equipo con una entrevista asistida por IA para generar no conformidades internas,
-              respuestas a auditorías, acciones correctivas e informes 8D listos para revisión.
-            </p>
-            <div className="hero-actions">
-              <a className="btn-primary" href={DEMO_URL} target="_blank" rel="noopener">
-                Probar la demo <span className="circle"><ArrowRight size={16} /></span>
-              </a>
-              <a className="btn-link" href="#como">Ver cómo funciona <ArrowRight size={15} /></a>
+            <div className="hero-grid">
+              <div className="hero-text">
+                <span className="hero-eyebrow"><span className="dot" />Copiloto de calidad con IA</span>
+                <h1>Documenta no conformidades<br /><span className="accent">en minutos, no en horas.</span></h1>
+                <p className="hero-sub">
+                  QEPilot guía a tu equipo con una entrevista asistida por IA para generar no conformidades internas,
+                  respuestas a auditorías, acciones correctivas e informes 8D listos para revisión.
+                </p>
+                <div className="hero-actions">
+                  <a className="btn-primary" href={DEMO_URL} target="_blank" rel="noopener">
+                    Probar la demo <span className="circle"><ArrowRight size={16} /></span>
+                  </a>
+                  <a className="btn-link" href="#como">Ver cómo funciona <ArrowRight size={15} /></a>
+                </div>
+              </div>
+              <div className="hero-img">
+                <img src="/hero.png" alt="QEPilot transforma incidencias dispersas en un informe de no conformidad estructurado" loading="eager" />
+              </div>
             </div>
           </div>
         </div>
