@@ -228,28 +228,28 @@ export default function App() {
             <ul>
               <li><Check size={17} /> No conformidades internas ISO 9001</li>
               <li><Check size={17} /> No conformidades ISO 14001</li>
+              <li><Check size={17} /> Respuesta asistida a NC de auditoría</li>
               <li><Check size={17} /> Entrevistas guiadas por IA</li>
               <li><Check size={17} /> Corrección vs. acción correctiva</li>
               <li><Check size={17} /> Causa raíz asistida</li>
-              <li><Check size={17} /> Informes PDF listos para revisión</li>
-              <li><Check size={17} /> Dashboard de seguimiento</li>
-              <li><Check size={17} /> Datos alojados en Europa</li>
+              <li><Check size={17} /> Informes PDF y dashboard de seguimiento</li>
+              <li><Check size={17} /> Hasta 2 usuarios · Datos alojados en Europa</li>
             </ul>
             <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Comenzar</a>
           </div>
           <div className="price feat">
             <div className="pname">Professional</div>
             <div className="pamt">199 €<small> /mes</small></div>
-            <div className="pdesc">Para organizaciones que gestionan auditorías, acciones correctivas y mejora continua.</div>
+            <div className="pdesc">Para organizaciones que gestionan acciones correctivas y mejora continua.</div>
             <div className="pincl">Incluye todo lo anterior, más:</div>
             <ul>
-              <li><Check size={17} /> Respuesta asistida a NC de auditoría</li>
               <li><Check size={17} /> Trabajo no conforme ISO/IEC 17025</li>
               <li><Check size={17} /> Análisis de tendencias</li>
               <li><Check size={17} /> Detección de causas recurrentes</li>
               <li><Check size={17} /> Seguimiento de eficacia</li>
               <li><Check size={17} /> Indicadores para Revisión por la Dirección (9.3)</li>
               <li><Check size={17} /> Informes avanzados</li>
+              <li><Check size={17} /> Hasta 5 usuarios</li>
             </ul>
             <a className="pbtn dark" href={DEMO_URL} target="_blank" rel="noopener">Solicitar demo</a>
           </div>
