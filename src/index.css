@@ -242,3 +242,5 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .pa-v { font-size: 0.8rem; font-weight: 600; color: var(--ink); width: 24px; text-align: right; font-variant-numeric: tabular-nums; }
 .panel-ai { background: var(--steel-soft); border: 1px solid rgba(45,90,123,0.16); border-radius: 12px; padding: 16px 18px; }
 .panel-ai p { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.55; }
+
+.pincl { font-size: 0.82rem; font-weight: 600; color: var(--ink); margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }

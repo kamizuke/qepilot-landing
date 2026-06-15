@@ -216,45 +216,61 @@ export default function App() {
 
       <section className="section wrap" id="planes">
         <div className="eyebrow">Planes</div>
-        <h2 className="h2" style={{ maxWidth: "20ch" }}>Suscripción por volumen de informes.</h2>
+        <h2 className="h2" style={{ maxWidth: "22ch" }}>Planes simples para equipos de calidad.</h2>
+        <p className="lead" style={{ fontSize: "1.1rem", maxWidth: "60ch", marginTop: 8 }}>
+          Desde la documentación de no conformidades hasta el análisis de tendencias y la revisión por la dirección.
+        </p>
         <div className="prices">
           <div className="price">
             <div className="pname">Starter</div>
-            <div className="pamt">49 €<small> /mes</small></div>
-            <div className="pdesc">Hasta 30 informes al mes.</div>
+            <div className="pamt">99 €<small> /mes</small></div>
+            <div className="pdesc">Para pequeñas organizaciones que quieren dejar atrás Word y Excel.</div>
             <ul>
-              <li><Check size={17} /> NC internas y hallazgos de auditoría</li>
-              <li><Check size={17} /> Entrevistas asistidas por IA</li>
-              <li><Check size={17} /> Exportación de informes</li>
+              <li><Check size={17} /> No conformidades internas ISO 9001</li>
+              <li><Check size={17} /> No conformidades ISO 14001</li>
+              <li><Check size={17} /> Entrevistas guiadas por IA</li>
+              <li><Check size={17} /> Corrección vs. acción correctiva</li>
+              <li><Check size={17} /> Causa raíz asistida</li>
+              <li><Check size={17} /> Informes PDF listos para revisión</li>
+              <li><Check size={17} /> Dashboard de seguimiento</li>
+              <li><Check size={17} /> Datos alojados en Europa</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
+            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Comenzar</a>
           </div>
           <div className="price feat">
             <div className="pname">Professional</div>
-            <div className="pamt">99 €<small> /mes</small></div>
-            <div className="pdesc">Hasta 150 informes al mes.</div>
+            <div className="pamt">199 €<small> /mes</small></div>
+            <div className="pdesc">Para organizaciones que gestionan auditorías, acciones correctivas y mejora continua.</div>
+            <div className="pincl">Incluye todo lo anterior, más:</div>
             <ul>
-              <li><Check size={17} /> Todo lo de Starter</li>
-              <li><Check size={17} /> Informes 8D y CAPA</li>
-              <li><Check size={17} /> Apoyo en causa raíz y eficacia</li>
-              <li><Check size={17} /> Panel con indicadores</li>
+              <li><Check size={17} /> Respuesta asistida a NC de auditoría</li>
+              <li><Check size={17} /> Trabajo no conforme ISO/IEC 17025</li>
+              <li><Check size={17} /> Análisis de tendencias</li>
+              <li><Check size={17} /> Detección de causas recurrentes</li>
+              <li><Check size={17} /> Seguimiento de eficacia</li>
+              <li><Check size={17} /> Indicadores para Revisión por la Dirección (9.3)</li>
+              <li><Check size={17} /> Informes avanzados</li>
             </ul>
-            <a className="pbtn dark" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
+            <a className="pbtn dark" href={DEMO_URL} target="_blank" rel="noopener">Solicitar demo</a>
           </div>
           <div className="price">
             <div className="pname">Business</div>
-            <div className="pamt">199 €<small> /mes</small></div>
-            <div className="pdesc">Equipos de alto volumen y multi-sede.</div>
+            <div className="pamt">Desde 399 €<small> /mes</small></div>
+            <div className="pdesc">Para grupos empresariales y organizaciones con varias sedes.</div>
+            <div className="pincl">Incluye todo lo anterior, más:</div>
             <ul>
-              <li><Check size={17} /> Todo lo de Professional</li>
-              <li><Check size={17} /> Multi-sede y multi-norma</li>
-              <li><Check size={17} /> Resúmenes para revisión por dirección</li>
-              <li><Check size={17} /> Roles de usuario y soporte prioritario</li>
+              <li><Check size={17} /> Multiempresa</li>
+              <li><Check size={17} /> Multisede</li>
+              <li><Check size={17} /> Gestión avanzada de permisos</li>
+              <li><Check size={17} /> Informes personalizados</li>
+              <li><Check size={17} /> Exportaciones avanzadas</li>
+              <li><Check size={17} /> Soporte prioritario</li>
+              <li><Check size={17} /> Acceso anticipado a nuevos módulos</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
+            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Hablar con ventas</a>
           </div>
         </div>
-        <p className="price-note">Todos los planes incluyen entrevistas asistidas por IA y generación de informes. Precios orientativos; el precio final puede variar según el uso.</p>
+        <p className="price-note">Usuarios adicionales: 25 €/mes · No conformidades e informes ilimitados en todos los planes · Sin costes de implantación.</p>
       </section>
 
       <section className="section wrap">
