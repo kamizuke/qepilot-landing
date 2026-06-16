@@ -300,8 +300,8 @@ export default function App() {
         <div className="eyebrow">Confianza</div>
         <h2 className="h2" style={{ maxWidth: "22ch" }}>Pensado para información sensible de sistemas de gestión.</h2>
         <div className="sec-grid">
-          <div className="sec-item"><Server size={19} /><span>Datos alojados en Europa cuando está disponible</span></div>
-          <div className="sec-item"><Lock size={19} /><span>Comunicaciones cifradas</span></div>
+          <div className="sec-item"><Server size={19} /><span>Datos alojados en Europa</span></div>
+          <div className="sec-item"><Lock size={19} /><span>Conexión cifrada (TLS)</span></div>
           <div className="sec-item"><Users size={19} /><span>Acceso por organización, aislado entre clientes</span></div>
           <div className="sec-item"><Download size={19} /><span>Registros exportables en todo momento</span></div>
           <div className="sec-item"><Eye size={19} /><span>Transparencia sobre el uso de IA</span></div>
