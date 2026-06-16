@@ -1,0 +1,12 @@
+# dependencias (se regeneran con npm install)
+node_modules/
+
+# build (se regenera con npm run build)
+dist/
+
+# preview / herramientas locales
+.claude/
+
+# sistema
+.DS_Store
+*.local

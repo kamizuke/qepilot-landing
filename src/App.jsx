@@ -196,22 +196,45 @@ export default function App() {
       </section>
 
       <section className="section wrap" id="casos">
-        <div className="two-col">
-          <div>
-            <div className="eyebrow">QEPilot en la práctica</div>
-            <h2 className="h2" style={{ marginBottom: 18 }}>Casos de uso</h2>
-            <p className="lead" style={{ fontSize: "1.15rem" }}>
-              Apoyo práctico para documentar qué pasó, por qué pasó y qué se va a hacer — en cada tipo de incidencia
-              de tu sistema de gestión.
-            </p>
+        <div className="eyebrow">QEPilot en la práctica</div>
+        <h2 className="h2" style={{ marginBottom: 16 }}>Casos de uso</h2>
+        <p className="lead" style={{ fontSize: "1.1rem", maxWidth: "62ch", marginTop: 10 }}>
+          Apoyo práctico para documentar qué pasó, por qué pasó y qué se va a hacer, sin formularios
+          interminables ni páginas en blanco.
+        </p>
+        <div className="uc-grid">
+          <div className="uc-box">
+            <div className="uc-eyebrow">Incidencias internas</div>
+            <h3>No conformidades internas</h3>
+            <p>Distingue entre incidencias puntuales y problemas que requieren una acción correctiva real. Evita causas superficiales y ayuda a llegar a la causa raíz.</p>
+            <div className="uc-foot"><span className="uc-badge">ISO 9001</span><ArrowRight className="uc-arrow" size={18} /></div>
           </div>
-          <div className="uc-grid">
-            <div className="uc-box"><h3>No conformidades internas</h3><p>Distingue entre incidencias menores y problemas que requieren acción correctiva formal.</p></div>
-            <div className="uc-box"><h3>Hallazgos de auditoría</h3><p>Prepara respuestas estructuradas a auditorías de certificación y acreditación.</p></div>
-            <div className="uc-box"><h3>Informes 8D</h3><p>Guía a equipos multidisciplinares por una resolución de problemas estructurada.</p></div>
-            <div className="uc-box"><h3>Trabajo no conforme</h3><p>Documenta desviaciones, evaluación de impacto y acciones necesarias.</p></div>
+          <div className="uc-box">
+            <div className="uc-eyebrow">Auditorías</div>
+            <h3>Hallazgos de auditoría</h3>
+            <p>Prepara respuestas estructuradas para certificadoras y entidades de acreditación, manteniendo coherencia entre el hallazgo, la causa raíz y el plan de acción.</p>
+            <div className="uc-foot"><span className="uc-badge">ENAC · Certificadoras</span><ArrowRight className="uc-arrow" size={18} /></div>
+          </div>
+          <div className="uc-box">
+            <div className="uc-eyebrow">Reclamaciones de cliente</div>
+            <h3>Informes 8D</h3>
+            <p>Guía la investigación paso a paso para que el equipo documente contención, causas, acciones y prevención sin olvidar ninguna disciplina.</p>
+            <div className="uc-foot"><span className="uc-badge">8D Report</span><ArrowRight className="uc-arrow" size={18} /></div>
+          </div>
+          <div className="uc-box">
+            <div className="uc-eyebrow">Laboratorios</div>
+            <h3>Trabajo no conforme</h3>
+            <p>Documenta desviaciones, evalúa su impacto y analiza si es necesario actuar sobre informes emitidos o comunicar al cliente.</p>
+            <div className="uc-foot"><span className="uc-badge">ISO/IEC 17025</span><ArrowRight className="uc-arrow" size={18} /></div>
+          </div>
+          <div className="uc-box">
+            <div className="uc-eyebrow">Medio ambiente</div>
+            <h3>No conformidades ambientales</h3>
+            <p>Registra el aspecto y el impacto ambiental, contempla la comunicación a la administración y, ante un requisito legal, lo deja marcado para verificar en vez de darlo por supuesto.</p>
+            <div className="uc-foot"><span className="uc-badge">ISO 14001</span><ArrowRight className="uc-arrow" size={18} /></div>
           </div>
         </div>
+        <p className="uc-note">Todos los expedientes se construyen mediante entrevistas guiadas, no mediante formularios.</p>
       </section>
 
       <section className="section wrap" id="planes">
