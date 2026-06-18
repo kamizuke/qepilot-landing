@@ -254,7 +254,7 @@ export default function App() {
               <li><Check size={17} /> Informes PDF y dashboard de seguimiento</li>
               <li><Check size={17} /> Hasta 2 usuarios · Datos alojados en Europa</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Comenzar</a>
+            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Solicitar demo</a>
           </div>
           <div className="price feat">
             <div className="pname">Professional</div>
@@ -286,7 +286,7 @@ export default function App() {
               <li><Check size={17} /> Soporte prioritario</li>
               <li><Check size={17} /> Acceso anticipado a nuevos módulos</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Hablar con ventas</a>
+            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Solicitar demo</a>
           </div>
         </div>
         <p className="price-note">Usuarios adicionales: 25 €/mes · No conformidades e informes ilimitados en todos los planes · Sin costes de implantación.</p>
