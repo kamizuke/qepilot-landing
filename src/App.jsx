@@ -31,7 +31,7 @@ export default function App() {
           <div className="hero-card hero">
             <div className="hero-grid">
               <div className="hero-text">
-                <span className="hero-eyebrow"><span className="dot" />Copiloto de calidad con IA</span>
+                <span className="hero-eyebrow"><span className="dot" />Elaborado para entornos certificados</span>
                 <h1>El copiloto para <span className="accent">sistemas de gestión.</span></h1>
                 <p className="hero-sub">
                   Documenta no conformidades, auditorías, trabajos no conformes y acciones correctivas
