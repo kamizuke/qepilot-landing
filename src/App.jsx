@@ -7,21 +7,13 @@ import {
 
 const DEMO_URL = "https://ochod-demo.vercel.app";
 
-function LogoIcon({ className }) {
-  return (
-    <svg className={className} viewBox="0 0 256 256" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M 128.005 191.173 C 128.448 156.208 156.93 128 192 128 L 192 64 L 128 64 C 128 99.346 99.346 128 64 128 L 64 192 L 128 192 Z M 192 256 L 64 256 C 28.654 256 0 227.346 0 192 L 0 64 L 64 64 L 64 0 L 192 0 C 227.346 0 256 28.654 256 64 L 256 192 L 192 192 Z" />
-    </svg>
-  );
-}
-
 export default function App() {
   return (
     <div>
       <div className="hero-outer">
         <nav className="nav">
           <div className="nav-row">
-            <div className="nav-brand"><LogoIcon /><span>QEPilot</span></div>
+            <div className="nav-brand"><img src="/logo_evidran.png" alt="Evidran" className="brand-logo" /></div>
             <div className="nav-links">
               <a href="#como">Cómo funciona</a>
               <a href="#porque">Por qué</a>
@@ -38,7 +30,7 @@ export default function App() {
                 <span className="hero-eyebrow"><span className="dot" />Copiloto de calidad con IA</span>
                 <h1>Documenta no conformidades<br /><span className="accent">en minutos, no en horas.</span></h1>
                 <p className="hero-sub">
-                  QEPilot guía a tu equipo con una entrevista asistida por IA para generar no conformidades internas,
+                  Evidran guía a tu equipo con una entrevista asistida por IA para generar no conformidades internas,
                   respuestas a auditorías, acciones correctivas e informes 8D listos para revisión.
                 </p>
                 <div className="hero-actions">
@@ -49,7 +41,7 @@ export default function App() {
                 </div>
               </div>
               <div className="hero-img">
-                <img src="/hero.png" alt="QEPilot transforma incidencias dispersas en un informe de no conformidad estructurado" loading="eager" />
+                <img src="/hero.png" alt="Evidran transforma incidencias dispersas en un informe de no conformidad estructurado" loading="eager" />
               </div>
             </div>
           </div>
@@ -57,7 +49,7 @@ export default function App() {
       </div>
 
       <section className="section wrap" id="como">
-        <div className="eyebrow">Cómo funciona QEPilot</div>
+        <div className="eyebrow">Cómo funciona Evidran</div>
         <h2 className="h2" style={{ maxWidth: "20ch", marginBottom: 56 }}>De la incidencia al informe en tres pasos.</h2>
         <div className="steps">
           <div className="step">
@@ -70,7 +62,7 @@ export default function App() {
           <div className="step">
             <div className="step-n">02</div>
             <div className="step-ico"><Sparkles size={22} /></div>
-            <h3>QEPilot hace las preguntas correctas</h3>
+            <h3>Evidran hace las preguntas correctas</h3>
             <p>La IA adapta la profundidad de la entrevista a la gravedad y a si el problema puede repetirse.</p>
           </div>
           <div className="step-arrow"><ArrowRight size={20} /></div>
@@ -104,7 +96,7 @@ export default function App() {
           <div className="fs-text">
             <div className="fs-tag">Novedad</div>
             <h3>Tendencias y revisión por la dirección</h3>
-            <p>QEPilot reúne tus no conformidades en indicadores claros y redacta el resumen de entrada para la revisión por la dirección (ISO 9001, 9.3) con IA. Lo que antes montabas a mano en una hoja, listo en segundos.</p>
+            <p>Evidran reúne tus no conformidades en indicadores claros y redacta el resumen de entrada para la revisión por la dirección (ISO 9001, 9.3) con IA. Lo que antes montabas a mano en una hoja, listo en segundos.</p>
           </div>
           <div className="panel">
             <div className="panel-bar"><span /><span /><span /></div>
@@ -152,11 +144,11 @@ export default function App() {
           <li>Horas preparando respuestas a auditorías.</li>
           <li>Revisiones por la dirección montadas a mano desde hojas sueltas.</li>
         </ul>
-        <p className="pains-close">QEPilot ayuda a los equipos de calidad a pasar de documentar a mejorar.</p>
+        <p className="pains-close">Evidran ayuda a los equipos de calidad a pasar de documentar a mejorar.</p>
       </section>
 
       <section className="section wrap" id="porque">
-        <div className="eyebrow">Por qué los equipos de calidad usan QEPilot</div>
+        <div className="eyebrow">Por qué los equipos de calidad usan Evidran</div>
         <h2 className="h2" style={{ maxWidth: "20ch" }}>El rigor que pide la norma, sin el peso del papeleo.</h2>
         <div className="cards">
           <div className="card">
@@ -167,12 +159,12 @@ export default function App() {
           <div className="card">
             <div className="card-ico"><GitBranch size={22} /></div>
             <h3>Profundiza cuando el problema importa</h3>
-            <p>QEPilot ayuda a identificar causas sistémicas en lugar de detenerse en el “error humano”.</p>
+            <p>Evidran ayuda a identificar causas sistémicas en lugar de detenerse en el “error humano”.</p>
           </div>
           <div className="card">
             <div className="card-ico"><PenLine size={22} /></div>
             <h3>Elimina el folio en blanco</h3>
-            <p>Empieza describiendo el problema. QEPilot estructura todo lo demás.</p>
+            <p>Empieza describiendo el problema. Evidran estructura todo lo demás.</p>
           </div>
           <div className="card">
             <div className="card-ico"><TrendingUp size={22} /></div>
@@ -196,7 +188,7 @@ export default function App() {
       </section>
 
       <section className="section wrap" id="casos">
-        <div className="eyebrow">QEPilot en la práctica</div>
+        <div className="eyebrow">Evidran en la práctica</div>
         <h2 className="h2" style={{ marginBottom: 16 }}>Casos de uso</h2>
         <p className="lead" style={{ fontSize: "1.1rem", maxWidth: "62ch", marginTop: 10 }}>
           Apoyo práctico para documentar qué pasó, por qué pasó y qué se va a hacer, sin formularios
@@ -321,7 +313,7 @@ export default function App() {
 
       <footer className="footer">
         <div className="footer-row wrap">
-          <div className="footer-brand"><LogoIcon /> QEPilot</div>
+          <div className="footer-brand"><img src="/logo_evidran.png" alt="Evidran" className="brand-logo brand-logo-footer" /></div>
           <p>Copiloto de calidad con IA · Documentación de no conformidades y acciones correctivas</p>
         </div>
       </footer>
