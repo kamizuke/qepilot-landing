@@ -13,7 +13,7 @@ export default function App() {
       <div className="hero-outer">
         <nav className="nav">
           <div className="nav-row">
-            <div className="nav-brand"><img src="/logo_evidran.png" alt="Evidran" className="brand-logo" /></div>
+            <div className="nav-brand"><img src="/logo-evidran.png" alt="Evidran" className="brand-logo" /></div>
             <div className="nav-links">
               <a href="#como">Cómo funciona</a>
               <a href="#porque">Por qué</a>
@@ -313,7 +313,7 @@ export default function App() {
 
       <footer className="footer">
         <div className="footer-row wrap">
-          <div className="footer-brand"><img src="/logo_evidran.png" alt="Evidran" className="brand-logo brand-logo-footer" /></div>
+          <div className="footer-brand"><img src="/logo-evidran.png" alt="Evidran" className="brand-logo brand-logo-footer" /></div>
           <p>Copiloto de calidad con IA · Documentación de no conformidades y acciones correctivas</p>
         </div>
       </footer>

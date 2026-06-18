@@ -25,8 +25,8 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .nav-brand { display: flex; align-items: center; gap: 10px; }
 .nav-brand svg { width: 26px; height: 26px; color: var(--ink); }
 .nav-brand span { font-size: 1.45rem; font-weight: 600; letter-spacing: -0.03em; }
-.brand-logo { height: 40px; width: auto; display: block; mix-blend-mode: multiply; }
-.brand-logo-footer { height: 30px; }
+.brand-logo { height: 32px; width: auto; display: block; }
+.brand-logo-footer { height: 26px; }
 .nav-links { display: none; gap: 32px; }
 .nav-links a { font-size: 0.98rem; color: var(--ink-soft); font-weight: 500; transition: color 0.2s; }
 .nav-links a:hover { color: var(--ink); }
