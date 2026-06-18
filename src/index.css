@@ -32,6 +32,9 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .nav-links a:hover { color: var(--ink); }
 .nav-cta { background: var(--ink); color: #fff; font-size: 0.95rem; font-weight: 500; padding: 10px 26px; border-radius: 999px; transition: background 0.2s; }
 .nav-cta:hover { background: #2c333b; }
+.nav-actions { display: flex; align-items: center; gap: 16px; }
+.nav-login { font-size: 0.95rem; font-weight: 500; color: var(--ink); transition: color 0.2s; }
+.nav-login:hover { color: var(--steel); }
 @media (min-width: 860px) { .nav-links { display: flex; } }
 
 /* ---------- HERO ---------- */

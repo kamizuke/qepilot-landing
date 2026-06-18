@@ -5,7 +5,8 @@ import {
   ClipboardCheck, FlaskConical, Car, Leaf, HardHat, ShieldHalf,
 } from "lucide-react";
 
-const DEMO_URL = "https://ochod-demo.vercel.app";
+const DEMO_EMAIL = "mailto:demo@evidran.com?subject=Solicitud%20de%20demo%20de%20Evidran";
+const LOGIN_URL = "https://ochod-demo.vercel.app";
 
 export default function App() {
   return (
@@ -20,7 +21,10 @@ export default function App() {
               <a href="#casos">Casos de uso</a>
               <a href="#planes">Planes</a>
             </div>
-            <a className="nav-cta" href={DEMO_URL} target="_blank" rel="noopener">Pedir demo</a>
+            <div className="nav-actions">
+              <a className="nav-login" href={LOGIN_URL} target="_blank" rel="noopener">Acceder</a>
+              <a className="nav-cta" href={DEMO_EMAIL}>Pedir demo</a>
+            </div>
           </div>
         </nav>
         <div className="hero-pad">
@@ -34,8 +38,8 @@ export default function App() {
                   respuestas a auditorías, acciones correctivas e informes 8D listos para revisión.
                 </p>
                 <div className="hero-actions">
-                  <a className="btn-primary" href={DEMO_URL} target="_blank" rel="noopener">
-                    Probar la demo <span className="circle"><ArrowRight size={16} /></span>
+                  <a className="btn-primary" href={DEMO_EMAIL} target="_blank" rel="noopener">
+                    Pedir demo <span className="circle"><ArrowRight size={16} /></span>
                   </a>
                   <a className="btn-link" href="#como">Ver cómo funciona <ArrowRight size={15} /></a>
                 </div>
@@ -250,7 +254,7 @@ export default function App() {
               <li><Check size={17} /> Informes PDF y dashboard de seguimiento</li>
               <li><Check size={17} /> Hasta 2 usuarios · Datos alojados en Europa</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Comenzar</a>
+            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Comenzar</a>
           </div>
           <div className="price feat">
             <div className="pname">Professional</div>
@@ -266,7 +270,7 @@ export default function App() {
               <li><Check size={17} /> Informes avanzados</li>
               <li><Check size={17} /> Hasta 5 usuarios</li>
             </ul>
-            <a className="pbtn dark" href={DEMO_URL} target="_blank" rel="noopener">Solicitar demo</a>
+            <a className="pbtn dark" href={DEMO_EMAIL} target="_blank" rel="noopener">Solicitar demo</a>
           </div>
           <div className="price">
             <div className="pname">Business</div>
@@ -282,7 +286,7 @@ export default function App() {
               <li><Check size={17} /> Soporte prioritario</li>
               <li><Check size={17} /> Acceso anticipado a nuevos módulos</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_URL} target="_blank" rel="noopener">Hablar con ventas</a>
+            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Hablar con ventas</a>
           </div>
         </div>
         <p className="price-note">Usuarios adicionales: 25 €/mes · No conformidades e informes ilimitados en todos los planes · Sin costes de implantación.</p>
@@ -305,7 +309,7 @@ export default function App() {
         <div className="cta-card">
           <h2>Convierte las incidencias en acciones claras.</h2>
           <p>Dedica menos tiempo a redactar informes y más a mejorar tu organización.</p>
-          <a className="btn-primary" href={DEMO_URL} target="_blank" rel="noopener" style={{ margin: "0 auto" }}>
+          <a className="btn-primary" href={DEMO_EMAIL} target="_blank" rel="noopener" style={{ margin: "0 auto" }}>
             Pedir demo <span className="circle"><ArrowRight size={16} /></span>
           </a>
         </div>
