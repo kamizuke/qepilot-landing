@@ -226,8 +226,14 @@ export default function App() {
           <div className="uc-box">
             <div className="uc-eyebrow">Medio ambiente</div>
             <h3>No conformidades ambientales</h3>
-            <p>Registra el aspecto y el impacto ambiental, contempla la comunicación a la administración y, ante un requisito legal, lo deja marcado para verificar en vez de darlo por supuesto.</p>
+            <p>Registra el aspecto y el impacto ambiental, contempla la comunicación a la administración y deja marcados los requisitos legales para verificarlos.</p>
             <div className="uc-foot"><span className="uc-badge">ISO 14001</span><ArrowRight className="uc-arrow" size={18} /></div>
+          </div>
+          <div className="uc-box">
+            <div className="uc-eyebrow">Seguridad y salud</div>
+            <h3>No conformidades SST</h3>
+            <p>Incidente, accidente, casi accidente o riesgo laboral. Analiza el peligro, la consecuencia potencial y el nivel de riesgo, y separa la corrección de la acción correctiva.</p>
+            <div className="uc-foot"><span className="uc-badge">ISO 45001</span><ArrowRight className="uc-arrow" size={18} /></div>
           </div>
         </div>
         <p className="uc-note">Todos los expedientes se construyen mediante entrevistas guiadas, no mediante formularios.</p>
