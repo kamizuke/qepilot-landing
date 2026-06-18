@@ -185,8 +185,8 @@ export default function App() {
           <div className="bf"><div className="bf-ico"><ClipboardCheck size={20} /></div><div><div className="bf-t">Gestión de Calidad</div><div className="bf-s">ISO 9001</div></div></div>
           <div className="bf"><div className="bf-ico"><Leaf size={20} /></div><div><div className="bf-t">Medioambiente</div><div className="bf-s">ISO 14001</div></div></div>
           <div className="bf"><div className="bf-ico"><FlaskConical size={20} /></div><div><div className="bf-t">Laboratorios</div><div className="bf-s">ISO/IEC 17025</div></div></div>
+          <div className="bf"><div className="bf-ico"><HardHat size={20} /></div><div><div className="bf-t">Seguridad y Salud</div><div className="bf-s">ISO 45001</div></div></div>
           <div className="bf soon"><div className="bf-ico"><Car size={20} /></div><div><div className="bf-t">Calidad Automoción <span className="soon-tag">Próximamente</span></div><div className="bf-s">IATF 16949</div></div></div>
-          <div className="bf soon"><div className="bf-ico"><HardHat size={20} /></div><div><div className="bf-t">Seguridad y Salud <span className="soon-tag">Próximamente</span></div><div className="bf-s">ISO 45001</div></div></div>
           <div className="bf soon"><div className="bf-ico"><ShieldHalf size={20} /></div><div><div className="bf-t">Seguridad de la Información <span className="soon-tag">Próximamente</span></div><div className="bf-s">ISO 27001</div></div></div>
         </div>
       </section>
