@@ -32,10 +32,10 @@ export default function App() {
             <div className="hero-grid">
               <div className="hero-text">
                 <span className="hero-eyebrow"><span className="dot" />Copiloto de calidad con IA</span>
-                <h1>Documenta no conformidades<br /><span className="accent">en minutos, no en horas.</span></h1>
+                <h1>El copiloto para <span className="accent">sistemas de gestión.</span></h1>
                 <p className="hero-sub">
-                  Evidran guía a tu equipo con una entrevista asistida por IA para generar no conformidades internas,
-                  respuestas a auditorías, acciones correctivas e informes 8D listos para revisión.
+                  Documenta no conformidades, auditorías, trabajos no conformes y acciones correctivas
+                  con el criterio de un responsable de calidad experimentado.
                 </p>
                 <div className="hero-actions">
                   <a className="btn-primary" href={DEMO_EMAIL} target="_blank" rel="noopener">
