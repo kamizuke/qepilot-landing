@@ -15,6 +15,12 @@ export default function App() {
   // color de cada sistema: azul calidad, mostaza SST. La key fuerza el reinicio
   // de la animación al cambiar de pestaña.
   const [openDemo, setOpenDemo] = useState(null);
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" && window.innerWidth <= 820);
+  useEffect(() => {
+    const onR = () => setIsMobile(window.innerWidth <= 820);
+    window.addEventListener("resize", onR);
+    return () => window.removeEventListener("resize", onR);
+  }, []);
   const DEMOS = {
     nc9001: { src: "/mockups/editor-demo-nc9001.html", label: "Calidad · ISO 9001", color: "#2563EB", alto: 1000 },
     sst: { src: "/mockups/editor-demo-sst.html", label: "Seguridad y salud · ISO 45001", color: "#B45309", alto: 1140 },
@@ -122,21 +128,23 @@ export default function App() {
         {openDemo && (
           <div
             onClick={() => setOpenDemo(null)}
-            style={{ position: "fixed", inset: 0, background: "rgba(15,19,25,.72)", zIndex: 100, overflow: "auto", padding: "56px 20px 24px", display: "flex", justifyContent: "center", alignItems: "flex-start" }}
+            style={{ position: "fixed", inset: 0, background: "rgba(15,19,25,.72)", zIndex: 100, overflow: "auto", padding: isMobile ? 0 : "56px 20px 24px", display: "flex", justifyContent: "center", alignItems: isMobile ? "stretch" : "flex-start" }}
           >
-            <div onClick={(e) => e.stopPropagation()} style={{ position: "relative", width: "100%", maxWidth: 1180, margin: "auto" }}>
+            <div onClick={(e) => e.stopPropagation()} style={{ position: "relative", width: "100%", maxWidth: isMobile ? "100%" : 1180, margin: isMobile ? 0 : "auto" }}>
               <button
                 type="button"
                 onClick={() => setOpenDemo(null)}
                 aria-label="Cerrar"
-                style={{ position: "absolute", top: -42, right: 0, display: "inline-flex", alignItems: "center", gap: 6, background: "transparent", border: 0, color: "#fff", fontFamily: "inherit", fontSize: 14, cursor: "pointer" }}
+                style={isMobile
+                  ? { position: "absolute", top: 8, right: 8, zIndex: 2, display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(22,29,38,.85)", border: 0, color: "#fff", fontFamily: "inherit", fontSize: 13, cursor: "pointer", padding: "8px 12px", borderRadius: 8 }
+                  : { position: "absolute", top: -42, right: 0, display: "inline-flex", alignItems: "center", gap: 6, background: "transparent", border: 0, color: "#fff", fontFamily: "inherit", fontSize: 14, cursor: "pointer" }}
               >
                 <X size={18} /> Cerrar
               </button>
               <iframe
                 src={DEMOS[openDemo].src}
                 title="Evidran: de la incidencia al informe, en vivo"
-                style={{ width: "100%", height: DEMOS[openDemo].alto, border: 0, borderRadius: 16, display: "block", background: "#ECEAE3" }}
+                style={{ width: "100%", height: isMobile ? "100vh" : DEMOS[openDemo].alto, border: 0, borderRadius: isMobile ? 0 : 16, display: "block", background: "#ECEAE3" }}
               />
             </div>
           </div>
