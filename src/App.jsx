@@ -3,6 +3,7 @@ import {
   Zap, GitBranch, PenLine, TrendingUp, Check,
   ShieldCheck, Lock, Users, Download, Eye, Server,
   ClipboardCheck, FlaskConical, Car, Leaf, HardHat, ShieldHalf,
+  ChevronDown,
 } from "lucide-react";
 
 const DEMO_EMAIL = "mailto:demo@evidran.com?subject=Solicitud%20de%20demo%20de%20Evidran";
@@ -20,6 +21,7 @@ export default function App() {
               <a href="#porque">Por qué</a>
               <a href="#casos">Casos de uso</a>
               <a href="#planes">Planes</a>
+              <a href="#faq">FAQ</a>
             </div>
             <div className="nav-actions">
               <a className="nav-login" href={LOGIN_URL} target="_blank" rel="noopener">Acceder</a>
@@ -308,6 +310,41 @@ export default function App() {
           <div className="sec-item"><Download size={19} /><span>Registros exportables en todo momento</span></div>
           <div className="sec-item"><Eye size={19} /><span>Transparencia sobre el uso de IA</span></div>
           <div className="sec-item"><ShieldCheck size={19} /><span>Los datos de cliente no se usan para entrenar modelos públicos cuando el proveedor de IA lo permite</span></div>
+        </div>
+      </section>
+
+      <section className="section wrap" id="faq">
+        <div className="eyebrow">Preguntas frecuentes</div>
+        <h2 className="h2" style={{ maxWidth: "22ch", marginBottom: 44 }}>Lo que nos preguntan antes de empezar.</h2>
+        <div className="faq-list">
+          <details className="faq-item">
+            <summary>¿En qué se diferencia de mis plantillas de Word?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>Las plantillas no te entrevistan, no evitan causas pobres, no te avisan de vencimientos ni te dan objetivos. Evidran sí. Le hablas y el informe se redacta solo, con criterio de calidad de verdad detrás.</p>
+          </details>
+          <details className="faq-item">
+            <summary>¿La IA se inventa cosas?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>No. Redacta a partir de lo que tú le cuentas. Los hallazgos y porcentajes son cálculos sobre tus datos, no invención. Los objetivos son sugerencias ancladas al dato real, y siempre editables.</p>
+          </details>
+          <details className="faq-item">
+            <summary>Llevo varias normas yo solo. ¿Me sirve?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>Para eso está pensado Evidran. Una sola herramienta para ISO 9001, 14001, 45001, 17025 y 8D de cliente — calidad, medioambiente, seguridad y laboratorio en la misma conversación, gestionados por una sola persona con poco tiempo.</p>
+          </details>
+          <details className="faq-item">
+            <summary>¿Puedo usar mi propia codificación de expedientes?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>Sí. El código de cada expediente es editable, así que respetamos la nomenclatura que ya uses. Y si prefieres delegarlo, Evidran activa por organización una numeración consecutiva tipo NC-AAAA-NNN que se reinicia cada año, con un contador que no deja huecos ni duplicados aunque dos personas abran una NC a la vez. Tú eliges.</p>
+          </details>
+          <details className="faq-item">
+            <summary>¿Cómo garantiza la trazabilidad de cara al auditor?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>Cada expediente lleva responsable y fecha límite explícitos, estados (abierto / en curso / cerrado) y un semáforo de vencimiento. Puedes bloquearlo en solo lectura para congelarlo, con traza de quién lo bloqueó y cuándo, incluidas las reaperturas. Las evidencias quedan adjuntas al expediente y se descargan con enlaces firmados y temporales. Es exactamente el rastro que una certificadora espera encontrar.</p>
+          </details>
+          <details className="faq-item">
+            <summary>«Esto ya nos pasó antes» — ¿puedo recuperar cómo se resolvió?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>Sí. El historial es consultable por palabra clave sobre la causa raíz, la descripción y la solución, con filtros por tipo, área y rango de fechas. Cuando vuelve a aparecer un problema parecido, encuentras cómo se atajó la última vez en lugar de empezar de cero. El conocimiento deja de irse con la persona que lo resolvió.</p>
+          </details>
+          <details className="faq-item">
+            <summary>¿Mis datos están seguros?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>Aislados por empresa a nivel de base de datos: cada organización solo ve lo suyo. Las evidencias son privadas con enlaces de descarga firmados y temporales, y la IA recibe solo lo mínimo imprescindible (la Revisión por la Dirección, por ejemplo, se genera con estadísticas agregadas, no con expedientes completos).</p>
+          </details>
         </div>
       </section>
 

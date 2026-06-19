@@ -258,3 +258,13 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .panel-ai p { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.55; }
 
 .pincl { font-size: 0.82rem; font-weight: 600; color: var(--ink); margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+
+/* ---------- FAQ ---------- */
+.faq-list { max-width: 52rem; }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 1.08rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); cursor: pointer; list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::marker { display: none; content: ""; }
+.faq-chevron { flex-shrink: 0; color: var(--ink-faint); transition: transform 0.25s ease; }
+.faq-item[open] .faq-chevron { transform: rotate(180deg); }
+.faq-item p { font-size: 0.98rem; color: var(--ink-soft); line-height: 1.6; padding: 0 0 24px; max-width: 62ch; }
