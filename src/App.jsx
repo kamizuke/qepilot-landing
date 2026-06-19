@@ -104,7 +104,7 @@ export default function App() {
         </div>
         <div className="livedemo" style={{ marginTop: 8, textAlign: "center" }}>
           <div className="livedemo-cap" style={{ fontSize: 14, color: "#5F5E5A", marginBottom: 14 }}>
-            Míralo en acción — del relato al informe, redactado solo. Cada sistema con su color.
+            Míralo en acción — las preguntas se adaptan a cada sistema de gestión.
           </div>
           <div className="livedemo-tabs" style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             {Object.entries(DEMOS).map(([k, d]) => (
