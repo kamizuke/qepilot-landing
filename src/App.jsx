@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ArrowRight, MessageSquareText, Sparkles, FileCheck2,
   Zap, GitBranch, PenLine, TrendingUp, Check,
@@ -10,6 +11,14 @@ const DEMO_EMAIL = "mailto:demo@evidran.com?subject=Solicitud%20de%20demo%20de%2
 const LOGIN_URL = "https://ochod-demo.vercel.app";
 
 export default function App() {
+  // Demos animadas (HTML autocontenidos servidos desde /public/mockups), con el
+  // color de cada sistema: azul calidad, mostaza SST. La key fuerza el reinicio
+  // de la animación al cambiar de pestaña.
+  const [demo, setDemo] = useState("nc9001");
+  const DEMOS = {
+    nc9001: { src: "/mockups/editor-demo-nc9001.html", label: "Calidad · ISO 9001", color: "#2563EB", alto: 1000 },
+    sst: { src: "/mockups/editor-demo-sst.html", label: "Seguridad y salud · ISO 45001", color: "#B45309", alto: 1140 },
+  };
   return (
     <div>
       <div className="hero-outer">
@@ -79,23 +88,39 @@ export default function App() {
             <p>Recibe un informe estructurado con corrección, causa raíz, acción correctiva y verificación de eficacia cuando hace falta.</p>
           </div>
         </div>
-        <div className="mock">
-          <div className="mock-bar"><span /><span /><span /></div>
-          <div className="mock-body">
-            <div className="mock-chat">
-              <div className="mb mb-a">¿Ves esto como un caso puntual que ya queda resuelto, o algo que podría repetirse?</div>
-              <div className="mb mb-u">Puede repetirse, el control no estaba definido.</div>
-              <div className="mb mb-a">Entonces vamos a la causa. El procedimiento existía y era conocido, ¿verdad? En estos casos la causa suele estar en la ausencia de un control que garantice que se cumple. ¿Encaja?</div>
-            </div>
-            <div className="mock-doc">
-              <div className="mock-doc-h">INFORME DE NO CONFORMIDAD</div>
-              <div className="mock-fld"><span>Descripción</span><div /></div>
-              <div className="mock-fld"><span>Corrección inmediata</span><div /></div>
-              <div className="mock-fld hl"><span>Causa raíz</span><div /></div>
-              <div className="mock-fld"><span>Acción correctiva</span><div /></div>
-              <div className="mock-fld"><span>Responsable · fecha límite</span><div /></div>
-            </div>
+        <div className="livedemo" style={{ marginTop: 8 }}>
+          <div className="livedemo-cap" style={{ textAlign: "center", fontSize: 14, color: "#5F5E5A", marginBottom: 14 }}>
+            Míralo en acción — del relato al informe, redactado solo. Cada sistema con su color.
           </div>
+          <div className="livedemo-tabs" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 16 }}>
+            {Object.entries(DEMOS).map(([k, d]) => (
+              <button
+                key={k}
+                type="button"
+                onClick={() => setDemo(k)}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: 8,
+                  border: "1px solid " + (demo === k ? d.color : "#D9D5CC"),
+                  background: demo === k ? d.color : "#fff",
+                  color: demo === k ? "#fff" : "#5F5E5A",
+                  fontFamily: "inherit",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                {d.label}
+              </button>
+            ))}
+          </div>
+          <iframe
+            key={demo}
+            src={DEMOS[demo].src}
+            title="Evidran: de la incidencia al informe, en vivo"
+            loading="lazy"
+            style={{ width: "100%", height: DEMOS[demo].alto, border: 0, borderRadius: 16, display: "block" }}
+          />
         </div>
 
         <div className="feature-strip">

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Evidran · Entrevista y expediente — maqueta para landing</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#ECEAE3;font-family:'Archivo',system-ui,sans-serif;color:#1C2128;
+       min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 32px}
+  /* Tarjeta = "captura" de la app. Mide ~1140px: ideal para hero o screenshot. */
+  .app{width:1140px;max-width:100%;background:#F7F6F2;border-radius:14px;overflow:hidden;
+       box-shadow:0 24px 60px rgba(22,29,38,.16),0 2px 0 #C9C3B4}
+  .hdr{display:flex;align-items:center;gap:12px;padding:12px 18px;background:#fff;border-bottom:3px solid #2563EB;flex-wrap:wrap}
+  .name{font-weight:900;font-size:18px;letter-spacing:.03em;color:#161D26}
+  .name em{color:#2D5A7B;font-style:normal}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6E7787;letter-spacing:.08em}
+  .sp{flex:1}
+  .btn{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#1C2128;border:1px solid #C9C3B4;border-radius:6px;padding:6px 11px;background:#fff}
+  .btn.lock{background:#7A2E2E;border-color:#9B4A4A;color:#fff}
+  .body{display:grid;grid-template-columns:470px 8px 1fr}
+  /* ---- Panel de entrevista (chat) ---- */
+  .chat{background:#161D26;display:flex;flex-direction:column;min-height:680px}
+  .msgs{flex:1;padding:18px;display:flex;flex-direction:column;gap:11px}
+  .m{max-width:90%;padding:11px 14px;border-radius:10px;font-size:14px;line-height:1.55;color:#E8E5DD}
+  .m.a{background:#2C3947;border-left:3px solid #2563EB;align-self:flex-start;border-top-left-radius:2px}
+  .m.u{background:#3D4A59;align-self:flex-end;border-bottom-right-radius:2px}
+  .comp{padding:13px 16px;border-top:1px solid #303B49;display:flex;gap:8px}
+  .inp{flex:1;background:#222C39;border:1px solid #3B4654;border-radius:8px;color:#8C95A1;padding:11px 13px;font-size:14px}
+  .send{background:#2563EB;border:0;color:#fff;font-weight:700;border-radius:8px;padding:0 20px;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .div{background:#161D26}
+  /* ---- Documento (expediente) ---- */
+  .doc{background:#F7F6F2;padding:22px;overflow:hidden}
+  .card{background:#fff;border:1px solid #C9C3B4;box-shadow:0 1px 0 #C9C3B4;padding:24px 28px}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7A7466}
+  .title{font-weight:900;font-size:27px;color:#161D26;letter-spacing:-.01em;margin-top:3px}
+  .code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;color:#2563EB;margin-top:6px}
+  .head{border-bottom:3px solid #161D26;padding-bottom:14px;margin-bottom:4px}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 22px;margin-top:13px}
+  .sec{display:flex;gap:16px;border-bottom:1px solid #DDD8CC;padding:13px 0}
+  .sec.last{border-bottom:3px solid #161D26}
+  .num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;color:#fff;background:#161D26;padding:3px 8px;align-self:flex-start}
+  .sh{width:128px;flex-shrink:0}
+  .st{display:block;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#161D26;line-height:1.3;margin-top:5px}
+  .sb{flex:1}
+  .fld{padding:6px 0}
+  .l{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7A7466;margin-bottom:3px}
+  .v{font-size:13.5px;line-height:1.55;color:#1C2128}
+  .v.pend{color:#B45309;font-weight:500}
+  .fresh{background:rgba(37,99,235,.10);box-shadow:inset 3px 0 0 #2563EB;padding-left:9px;margin-left:-9px;border-radius:2px}
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="hdr">
+      <span class="name">Evi<em>dran</em></span>
+      <span class="tag">· NC Interna · ISO 9001 · guardado</span>
+      <span class="sp"></span>
+      <span class="btn">En curso</span>
+      <span class="btn lock">🔒 Bloquear</span>
+      <span class="btn">Exportar PDF</span>
+    </div>
+    <div class="body">
+      <!-- Entrevista -->
+      <div class="chat">
+        <div class="msgs">
+          <div class="m a">Vamos a documentar una no conformidad interna. Cuéntame qué se ha detectado, dónde y quién lo ha visto.</div>
+          <div class="m u">En la línea 2 de montaje salieron 12 piezas con el par de apriete por debajo del mínimo. Lo vio Marta, de calidad, en la inspección final de hoy.</div>
+          <div class="m a">Anotado, con la fecha de hoy. ¿Qué hicisteis con esas 12 piezas? ¿Se segregaron o llegó alguna al cliente?</div>
+          <div class="m u">Se segregaron todas, ninguna salió. Se reapretaron y se verificaron otra vez.</div>
+          <div class="m a">Perfecto. ¿El procedimiento de apriete estaba vigente y se conocía? Lo pregunto porque aquí la causa suele estar en un control que falla, no en la persona.</div>
+          <div class="m u">El procedimiento estaba. Pero la llave dinamométrica llevaba 3 meses sin calibrar y daba lecturas altas.</div>
+          <div class="m a">Ahí está la causa raíz: un equipo de medición fuera del plan de calibración. Te propongo como acción correctiva incluir la llave en el plan con control trimestral. ¿Quién la asume y para cuándo?</div>
+          <div class="m u">Javier, de mantenimiento. Para el 15 de julio.</div>
+          <div class="m a">Listo, ya tengo lo que necesito. Tienes el informe redactado a la derecha.</div>
+        </div>
+        <div class="comp">
+          <div class="inp">Cuenta qué ha pasado, con tus palabras…</div>
+          <div class="send">Enviar</div>
+        </div>
+      </div>
+      <div class="div"></div>
+      <!-- Expediente -->
+      <div class="doc">
+        <div class="card">
+          <div class="head">
+            <div class="eyebrow">No conformidad interna · ISO 9001 (10.2)</div>
+            <div class="title">Informe de no conformidad</div>
+            <div class="code">NC-2026-014</div>
+            <div class="meta">
+              <div class="fld"><div class="l">Fecha de detección</div><div class="v">18/06/2026</div></div>
+              <div class="fld"><div class="l">Origen</div><div class="v">Producción</div></div>
+              <div class="fld"><div class="l">Detectado por</div><div class="v">Marta Ruiz (Calidad)</div></div>
+              <div class="fld"><div class="l">Proceso / área</div><div class="v">Línea 2 · Montaje</div></div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <span class="num">01</span>
+            <div class="sh"><span class="st">Descripción y alcance</span></div>
+            <div class="sb">
+              <div class="fld"><div class="l">Descripción</div><div class="v">En la inspección final del 18/06/2026 se detectan 12 piezas del conjunto montado en la línea 2 con el par de apriete por debajo del valor mínimo especificado.</div></div>
+              <div class="fld"><div class="l">Alcance</div><div class="v">12 piezas del lote en curso. Se confirma que ninguna unidad afectada se expidió al cliente.</div></div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <span class="num">02</span>
+            <div class="sh"><span class="st">Corrección inmediata</span></div>
+            <div class="sb">
+              <div class="fld"><div class="v">Segregación de las 12 piezas, reapriete al par especificado y nueva verificación. Todas conformes tras el retrabajo.</div></div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <span class="num">03</span>
+            <div class="sh"><span class="st">Análisis de causa</span></div>
+            <div class="sb">
+              <div class="fld"><div class="l">Causa raíz (5 porqués)</div><div class="v">La llave dinamométrica de la línea 2 llevaba 3 meses fuera del plan de calibración y ofrecía lecturas superiores a las reales, dando por válidos aprietes por debajo del mínimo.</div></div>
+              <div class="fld"><div class="l">Por qué no se detectó antes</div><div class="v">El control de par en la inspección final no incluía verificación cruzada con un equipo calibrado de referencia.</div></div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <span class="num">04</span>
+            <div class="sh"><span class="st">Acción correctiva</span></div>
+            <div class="sb">
+              <div class="fld fresh"><div class="l">Acción correctiva</div><div class="v">Incluir la llave dinamométrica de la línea 2 en el plan de calibración con control trimestral y bloqueo de uso si la calibración está vencida.</div></div>
+              <div class="fld"><div class="l">Responsable</div><div class="v">Javier Soto (Mantenimiento)</div></div>
+              <div class="fld"><div class="l">Fecha límite</div><div class="v">15/07/2026</div></div>
+            </div>
+          </div>
+
+          <div class="sec last">
+            <span class="num">05</span>
+            <div class="sh"><span class="st">Eficacia y cierre</span></div>
+            <div class="sb">
+              <div class="fld"><div class="l">Verificación de eficacia</div><div class="v pend">A los 3 meses: revisar registros de calibración y muestreo de par en la línea 2.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
