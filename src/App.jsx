@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   ArrowRight, MessageSquareText, Sparkles, FileCheck2,
-  Zap, GitBranch, PenLine, TrendingUp, Check,
+  Zap, GitBranch, PenLine, TrendingUp, Search, Check,
   ShieldCheck, Lock, Users, Download, Eye, Server,
   ClipboardCheck, FlaskConical, Car, Leaf, HardHat, ShieldHalf,
   ChevronDown, Play, X,
@@ -226,6 +226,11 @@ export default function App() {
             <div className="card-ico"><PenLine size={22} /></div>
             <h3>Elimina el folio en blanco</h3>
             <p>Empieza describiendo el problema. Evidran estructura todo lo demás.</p>
+          </div>
+          <div className="card">
+            <div className="card-ico"><Search size={22} /></div>
+            <h3>Conserva lo que ya aprendiste</h3>
+            <p>Busca en el historial por palabras clave y recupera cómo se resolvió un problema similar. El conocimiento deja de irse con quien lo resolvió.</p>
           </div>
           <div className="card">
             <div className="card-ico"><TrendingUp size={22} /></div>
