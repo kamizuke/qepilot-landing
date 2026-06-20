@@ -340,7 +340,7 @@ export default function App() {
             <div className="pname">Profesional</div>
             <div className="pamt">{billing === "anual" ? "290" : "363"} €<small> /mes</small></div>
             <div className="pbilling">{billing === "anual" ? "facturación anual · ahorras 20 %" : "facturación mensual"}</div>
-            <div className="pdesc">Para la pyme industrial que va en serio con varias normas.</div>
+            <div className="pdesc">Para la pyme industrial que gestiona varias normas a la vez.</div>
             <div className="pincl">Todo lo de Esencial, y además:</div>
             <ul>
               <li><Check size={17} /> + ISO/IEC 17025 (trabajo no conforme) · + 8D automoción (genérico y formato OEM)</li>
