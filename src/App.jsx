@@ -432,6 +432,10 @@ export default function App() {
             <p>Sí. El historial es consultable por palabra clave sobre la causa raíz, la descripción y la solución, con filtros por tipo, área y rango de fechas. Cuando vuelve a aparecer un problema parecido, encuentras cómo se atajó la última vez en lugar de empezar de cero. El conocimiento deja de irse con la persona que lo resolvió.</p>
           </details>
           <details className="faq-item">
+            <summary>Ya tengo un histórico de NC en Excel. ¿Puedo aprovecharlo?<ChevronDown className="faq-chevron" size={18} /></summary>
+            <p>Sí. Puedes importar un CSV con tus no conformidades anteriores, sistema por sistema. Evidran incorpora ese histórico para que las tendencias, los hallazgos y la revisión por la dirección se calculen sobre todos tus datos, no solo los nuevos. No empiezas de cero.</p>
+          </details>
+          <details className="faq-item">
             <summary>¿Mis datos están seguros?<ChevronDown className="faq-chevron" size={18} /></summary>
             <p>Aislados por empresa a nivel de base de datos: cada organización solo ve lo suyo. Las evidencias son privadas con enlaces de descarga firmados y temporales, y la IA recibe solo lo mínimo imprescindible (la Revisión por la Dirección, por ejemplo, se genera con estadísticas agregadas, no con expedientes completos).</p>
           </details>
