@@ -448,9 +448,9 @@ export default function Workspace({ org, session, isAdmin, onChangeOrg, onSignOu
   function Picker() {
     return (
       <div className="picker">
-        <div className="picker-brand"><div className="hdr-name">QE<em style={{ color: "#2D5A7B", fontStyle: "normal" }}>Pilot</em></div><div className="hdr-tag">Nuevo expediente</div></div>
+        <div className="picker-brand"><div className="hdr-name">Evi<em style={{ color: "#2D5A7B", fontStyle: "normal" }}>dran</em></div><div className="hdr-tag">Nuevo expediente</div></div>
         <div className="picker-q">¿Qué necesitas resolver?</div>
-        <div className="picker-sub">QEPilot adaptará la entrevista y el informe al tipo de incidencia.</div>
+        <div className="picker-sub">Evidran adaptará la entrevista y el informe al tipo de incidencia.</div>
         <div className="cards">
           <button className="card" onClick={() => startCase("d8")}>
             <div className="card-code">Reclamación de cliente</div>
@@ -497,25 +497,25 @@ export default function Workspace({ org, session, isAdmin, onChangeOrg, onSignOu
   // ===================== RENDER PRINCIPAL =====================
   if (view === "home") {
     if (expedientes === null) {
-      return (<><TopBar><div className="hdr-brand"><div className="hdr-name">QE<em>Pilot</em></div></div></TopBar><div className="home"><div className="empty-home">Cargando expedientes…</div></div></>);
+      return (<><TopBar><div className="hdr-brand"><div className="hdr-name">Evi<em>dran</em></div></div></TopBar><div className="home"><div className="empty-home">Cargando expedientes…</div></div></>);
     }
-    return (<><TopBar><div className="hdr-brand"><div className="hdr-name">QE<em>Pilot</em></div></div></TopBar><Home /></>);
+    return (<><TopBar><div className="hdr-brand"><div className="hdr-name">Evi<em>dran</em></div></div></TopBar><Home /></>);
   }
 
   if (view === "trends") {
     if (expedientes === null) {
-      return (<><TopBar><div className="hdr-brand"><div className="hdr-name">QE<em>Pilot</em></div></div></TopBar><div className="home"><div className="empty-home">Cargando…</div></div></>);
+      return (<><TopBar><div className="hdr-brand"><div className="hdr-name">Evi<em>dran</em></div></div></TopBar><div className="home"><div className="empty-home">Cargando…</div></div></>);
     }
     return (
       <>
-        <TopBar><button className="hbtn back" onClick={() => setView("home")} title="Volver al panel">←</button><div className="hdr-brand"><div className="hdr-name">QE<em>Pilot</em></div><div className="hdr-tag">Tendencias</div></div></TopBar>
+        <TopBar><button className="hbtn back" onClick={() => setView("home")} title="Volver al panel">←</button><div className="hdr-brand"><div className="hdr-name">Evi<em>dran</em></div><div className="hdr-tag">Tendencias</div></div></TopBar>
         <Trends rows={expedientes} org={org} session={session} />
       </>
     );
   }
 
   if (view === "picker") {
-    return (<><TopBar><div className="hdr-brand"><div className="hdr-name">QE<em>Pilot</em></div></div></TopBar><Picker /></>);
+    return (<><TopBar><div className="hdr-brand"><div className="hdr-name">Evi<em>dran</em></div></div></TopBar><Picker /></>);
   }
 
   // ---- EDITOR ----
@@ -523,7 +523,7 @@ export default function Workspace({ org, session, isAdmin, onChangeOrg, onSignOu
     <>
       <header className="hdr">
         <button className="hbtn back" onClick={backToHome} title="Volver al panel">←</button>
-        <div className="hdr-brand"><div className="hdr-name">QE<em>Pilot</em></div><div className="hdr-tag">{cfg.nombre}{saving ? " · guardando…" : " · guardado"}</div></div>
+        <div className="hdr-brand"><div className="hdr-name">Evi<em>dran</em></div><div className="hdr-tag">{cfg.nombre}{saving ? " · guardando…" : " · guardado"}</div></div>
         <div className="hdr-spacer" />
         <select className="estado-sel" value={estado} onChange={(e) => setEstado(e.target.value)}>
           <option value="abierto">Abierto</option>

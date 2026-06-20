@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 const DEMO_EMAIL = "mailto:demo@evidran.com?subject=Solicitud%20de%20demo%20de%20Evidran";
-const LOGIN_URL = "https://ochod-demo.vercel.app";
+const LOGIN_URL = "https://app.evidran.com";
 const CTA_HREF = DEMO_EMAIL;
 const CONTACTO_HREF = "mailto:demo@evidran.com?subject=Consulta%20sobre%20planes%20de%20Evidran";
 
