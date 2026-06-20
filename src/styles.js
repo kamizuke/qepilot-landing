@@ -41,7 +41,7 @@ export const sharedStyles = `
     }
     .msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
     .msg{max-width:92%;padding:13px 16px;border-radius:10px;font-size:15.5px;line-height:1.6;white-space:pre-wrap}
-    .msg.assistant{background:var(--ink3);border-left:3px solid var(--accent);align-self:flex-start;border-top-left-radius:2px}
+    .msg.assistant{background:var(--ink3);align-self:flex-start}
     .msg.user{background:#3D4A59;align-self:flex-end;border-bottom-right-radius:2px}
     .msg img{max-width:200px;border-radius:6px;display:block;margin-bottom:6px}
     .typing{align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8C95A1;padding:6px 14px;letter-spacing:.1em}
