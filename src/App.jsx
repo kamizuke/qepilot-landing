@@ -9,12 +9,15 @@ import {
 
 const DEMO_EMAIL = "mailto:demo@evidran.com?subject=Solicitud%20de%20demo%20de%20Evidran";
 const LOGIN_URL = "https://ochod-demo.vercel.app";
+const CTA_HREF = DEMO_EMAIL;
+const CONTACTO_HREF = "mailto:demo@evidran.com?subject=Consulta%20sobre%20planes%20de%20Evidran";
 
 export default function App() {
   // Demos animadas (HTML autocontenidos servidos desde /public/mockups), con el
   // color de cada sistema: azul calidad, mostaza SST. La key fuerza el reinicio
   // de la animación al cambiar de pestaña.
   const [openDemo, setOpenDemo] = useState(null);
+  const [billing, setBilling] = useState("anual");
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" && window.innerWidth <= 820);
   useEffect(() => {
     const onR = () => setIsMobile(window.innerWidth <= 820);
@@ -293,63 +296,88 @@ export default function App() {
         <p className="uc-note">Todos los expedientes se construyen mediante entrevistas guiadas, no mediante formularios.</p>
       </section>
 
-      <section className="section wrap" id="planes">
-        <div className="eyebrow">Planes</div>
-        <h2 className="h2" style={{ maxWidth: "22ch" }}>Planes simples para equipos de calidad.</h2>
-        <p className="lead" style={{ fontSize: "1.1rem", maxWidth: "60ch", marginTop: 8 }}>
-          Desde la documentación de no conformidades hasta el análisis de tendencias y la revisión por la dirección.
+      <section className="section wrap" id="planes" data-evidran-marker="pricing-v2-anual-mensual-3planes">
+        {/* pricing-v2-anual-mensual-3planes */}
+        <div className="eyebrow">Precios</div>
+        <h2 className="h2" style={{ maxWidth: "26ch" }}>Precios claros para un sistema de calidad serio</h2>
+        <p className="lead" style={{ fontSize: "1.1rem", maxWidth: "62ch", marginTop: 10 }}>
+          Por organización, con no conformidades ilimitadas. Pagas por capacidad, no por cuántos problemas documentas.
         </p>
+
+        <div className="billing-toggle-wrap">
+          <fieldset className="billing-toggle" role="radiogroup" aria-label="Periodo de facturación">
+            <legend className="sr-only">Periodo de facturación</legend>
+            <label className={`bt-opt${billing === "anual" ? " bt-active" : ""}`}>
+              <input type="radio" name="billing" value="anual" checked={billing === "anual"} onChange={() => setBilling("anual")} className="sr-only" />
+              Anual
+            </label>
+            <label className={`bt-opt${billing === "mensual" ? " bt-active" : ""}`}>
+              <input type="radio" name="billing" value="mensual" checked={billing === "mensual"} onChange={() => setBilling("mensual")} className="sr-only" />
+              Mensual
+            </label>
+          </fieldset>
+          <span className="billing-hint">Ahorra un 20 % con facturación anual</span>
+        </div>
+
         <div className="prices">
           <div className="price">
-            <div className="pname">Starter</div>
-            <div className="pamt">99 €<small> /mes</small></div>
-            <div className="pdesc">Para pequeñas organizaciones que quieren dejar atrás Word y Excel.</div>
+            <div className="pname">Esencial</div>
+            <div className="pamt">{billing === "anual" ? "149" : "186"} €<small> /mes</small></div>
+            <div className="pbilling">{billing === "anual" ? "facturación anual · ahorras 20 %" : "facturación mensual"}</div>
+            <div className="pdesc">Para estrenar o consolidar tu sistema.</div>
             <ul>
-              <li><Check size={17} /> No conformidades internas ISO 9001</li>
-              <li><Check size={17} /> No conformidades ISO 14001</li>
-              <li><Check size={17} /> Respuesta asistida a NC de auditoría</li>
-              <li><Check size={17} /> Entrevistas guiadas por IA</li>
-              <li><Check size={17} /> Corrección vs. acción correctiva</li>
-              <li><Check size={17} /> Causa raíz asistida</li>
-              <li><Check size={17} /> Informes PDF y dashboard de seguimiento</li>
-              <li><Check size={17} /> Hasta 2 usuarios · Datos alojados en Europa</li>
+              <li><Check size={17} /> ISO 9001 · ISO 14001 · ISO 45001 · Respuesta a NC de auditoría</li>
+              <li><Check size={17} /> 3 usuarios incluidos · usuarios extra desde 15 €/mes</li>
+              <li><Check size={17} /> No conformidades ilimitadas</li>
+              <li><Check size={17} /> Entrevista guiada por IA que no acepta causas pobres</li>
+              <li><Check size={17} /> Hallazgos automáticos sobre tus datos</li>
+              <li><Check size={17} /> Evidencias privadas y exportación a PDF</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Solicitar demo</a>
+            <a className="pbtn ghost" href={CTA_HREF} target="_blank" rel="noopener">Empezar</a>
           </div>
+
           <div className="price feat">
-            <div className="pname">Professional</div>
-            <div className="pamt">199 €<small> /mes</small></div>
-            <div className="pdesc">Para organizaciones que gestionan acciones correctivas y mejora continua.</div>
-            <div className="pincl">Incluye todo lo anterior, más:</div>
+            <div className="pname">Profesional</div>
+            <div className="pamt">{billing === "anual" ? "290" : "363"} €<small> /mes</small></div>
+            <div className="pbilling">{billing === "anual" ? "facturación anual · ahorras 20 %" : "facturación mensual"}</div>
+            <div className="pdesc">Para la pyme industrial que va en serio con varias normas.</div>
+            <div className="pincl">Todo lo de Esencial, y además:</div>
             <ul>
-              <li><Check size={17} /> Trabajo no conforme ISO/IEC 17025</li>
-              <li><Check size={17} /> Análisis de tendencias</li>
-              <li><Check size={17} /> Detección de causas recurrentes</li>
-              <li><Check size={17} /> Seguimiento de eficacia</li>
-              <li><Check size={17} /> Indicadores para Revisión por la Dirección (9.3)</li>
-              <li><Check size={17} /> Informes avanzados</li>
-              <li><Check size={17} /> Hasta 5 usuarios</li>
+              <li><Check size={17} /> + ISO/IEC 17025 (trabajo no conforme) · + 8D automoción (genérico y formato OEM)</li>
+              <li><Check size={17} /> 8 usuarios incluidos · usuarios extra desde 12 €/mes</li>
+              <li><Check size={17} /> No conformidades ilimitadas</li>
+              <li><Check size={17} /> Inteligencia organizacional: análisis de causa raíz y tendencias</li>
+              <li><Check size={17} /> Historial buscable de causas y soluciones</li>
+              <li><Check size={17} /> Objetivos de calidad recomendados (ISO 6.2)</li>
             </ul>
-            <a className="pbtn dark" href={DEMO_EMAIL} target="_blank" rel="noopener">Solicitar demo</a>
+            <a className="pbtn dark" href={CTA_HREF} target="_blank" rel="noopener">Empezar</a>
           </div>
+
           <div className="price">
-            <div className="pname">Business</div>
-            <div className="pamt">Desde 399 €<small> /mes</small></div>
-            <div className="pdesc">Para grupos empresariales y organizaciones con varias sedes.</div>
-            <div className="pincl">Incluye todo lo anterior, más:</div>
+            <div className="pname">Avanzado</div>
+            <div className="pamt">{billing === "anual" ? "490" : "613"} €<small> /mes</small></div>
+            <div className="pbilling">{billing === "anual" ? "facturación anual · ahorras 20 %" : "facturación mensual"}</div>
+            <div className="pdesc">Para laboratorios y proveedores con máxima exigencia.</div>
+            <div className="pincl">Todo lo de Profesional, y además:</div>
             <ul>
-              <li><Check size={17} /> Multiempresa</li>
-              <li><Check size={17} /> Multisede</li>
-              <li><Check size={17} /> Gestión avanzada de permisos</li>
-              <li><Check size={17} /> Informes personalizados</li>
-              <li><Check size={17} /> Exportaciones avanzadas</li>
-              <li><Check size={17} /> Soporte prioritario</li>
-              <li><Check size={17} /> Acceso anticipado a nuevos módulos</li>
+              <li><Check size={17} /> 15 usuarios incluidos · usuarios extra desde 10 €/mes</li>
+              <li><Check size={17} /> No conformidades ilimitadas</li>
+              <li><Check size={17} /> Acta de Revisión por la Dirección (ISO 9001 9.3) a partir de tus datos</li>
+              <li><Check size={17} /> Prioridad en soporte y onboarding</li>
             </ul>
-            <a className="pbtn ghost" href={DEMO_EMAIL} target="_blank" rel="noopener">Solicitar demo</a>
+            <a className="pbtn ghost" href={CTA_HREF} target="_blank" rel="noopener">Empezar</a>
           </div>
         </div>
-        <p className="price-note">Usuarios adicionales: 25 €/mes · No conformidades e informes ilimitados en todos los planes · Sin costes de implantación.</p>
+
+        <div className="pricing-contact">
+          <div className="pricing-contact-text">
+            <h3>¿Gestionas varias empresas o necesitas algo a medida?</h3>
+            <p>Si eres consultor y llevas el sistema de varias organizaciones, o tu caso no encaja en estos planes, lo vemos juntos. Sin compromiso.</p>
+          </div>
+          <a className="pbtn ghost" href={CONTACTO_HREF} target="_blank" rel="noopener">Hablamos</a>
+        </div>
+
+        <p className="pricing-guarantee">Tus datos son tuyos: aislados por empresa, evidencias privadas y exportables cuando quieras. Sin permanencia oculta.</p>
       </section>
 
       <section className="section wrap">
