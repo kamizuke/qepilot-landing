@@ -247,6 +247,11 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .uc-box:hover .uc-arrow { transform: translateX(4px); color: var(--steel); }
 .uc-note { font-size: 0.9rem; color: var(--ink-faint); margin-top: 26px; text-align: center; }
 
+/* ---------- INTEL BRIDGE ---------- */
+.intel-bridge { margin-top: 56px; margin-bottom: 32px; max-width: 52ch; }
+.intel-bridge h3 { font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 12px; }
+.intel-bridge p { font-size: 1.02rem; color: var(--ink-soft); line-height: 1.6; }
+
 /* ---------- FEATURE STRIP (Tendencias) ---------- */
 .feature-strip { margin-top: 24px; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: clamp(28px, 4vw, 48px); }
 @media (min-width: 900px) { .feature-strip { grid-template-columns: 0.85fr 1.15fr; gap: 48px; } }

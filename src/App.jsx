@@ -153,9 +153,14 @@ export default function App() {
           </div>
         )}
 
+        <div className="intel-bridge">
+          <h3>Cada informe alimenta la inteligencia de tu organización</h3>
+          <p>Los datos que documentas no se quedan en un PDF. Evidran los cruza para darte lo que las normas exigen y que nadie tiene tiempo de montar a mano: tendencias, causas recurrentes, objetivos de calidad y el acta de revisión por la dirección.</p>
+        </div>
+
         <div className="feature-strip">
           <div className="fs-text">
-            <div className="fs-tag">Novedad</div>
+            <div className="fs-tag">Inteligencia organizacional</div>
             <h3>Tendencias y revisión por la dirección</h3>
             <p>Evidran reúne tus no conformidades en indicadores claros y redacta el resumen de entrada para la revisión por la dirección (ISO 9001, 9.3) con IA. Lo que antes montabas a mano en una hoja, listo en segundos.</p>
           </div>
