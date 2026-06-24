@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Términos y condiciones · Evidran</title>
+<meta name="description" content="Términos y condiciones de uso del servicio Evidran, el copiloto de calidad por IA para sistemas de gestión." />
+<meta name="robots" content="index, follow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2563EB; --blue-l: #4AA6F5; --teal: #15B8A6; --green: #46DE7E;
+    --navy: #2D5A7B; --ink: #16202B; --ink-soft: #4A5563;
+    --cream: #F7F6F2; --cream-d: #EDEAE2; --line: #DDD8CC; --white: #fff;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink); background: var(--cream); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(247,246,242,.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+  .brand .wm { white-space: nowrap; }
+  .brand em { font-style: normal; color: var(--navy); }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
+  .nav-links a:hover { color: var(--blue); }
+
+  /* BUTTONS */
+  .btn { display: inline-block; border: 0; cursor: pointer; font-weight: 700; font-size: 15px; border-radius: 12px; padding: 13px 22px; text-decoration: none; transition: transform .12s, box-shadow .12s; }
+  .btn-primary { background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; box-shadow: 0 8px 22px rgba(37,99,235,.28); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(37,99,235,.34); }
+  .btn-sm { padding: 9px 16px; font-size: 14px; }
+
+  /* LEGAL */
+  .legal-head { padding: 56px 0 28px; border-bottom: 1px solid var(--line); }
+  .legal-eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12.5px; font-weight: 700; color: var(--blue); margin-bottom: 14px; }
+  .legal-head h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 850; line-height: 1.14; letter-spacing: -0.02em; max-width: 22ch; }
+  .legal-meta { margin-top: 14px; font-size: 14px; color: var(--ink-soft); }
+  .legal-body { padding: 40px 0 16px; max-width: 760px; }
+  .legal-body .intro { font-size: 16.5px; color: var(--ink-soft); margin-bottom: 8px; }
+  .legal-body h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; margin: 38px 0 12px; }
+  .legal-body h2 .num { color: var(--blue); font-variant-numeric: tabular-nums; margin-right: 8px; }
+  .legal-body h3 { font-size: 16px; font-weight: 700; margin: 22px 0 8px; }
+  .legal-body p { color: var(--ink-soft); margin: 0 0 14px; font-size: 15.5px; }
+  .legal-body ul { margin: 0 0 14px; padding-left: 22px; }
+  .legal-body li { color: var(--ink-soft); margin-bottom: 8px; font-size: 15.5px; }
+  .legal-body a { color: var(--blue); text-decoration: underline; }
+  .legal-body strong { color: var(--ink); }
+  .callout { background: var(--white); border: 1px solid var(--line); border-left: 3px solid var(--blue); border-radius: 12px; padding: 18px 20px; margin: 22px 0; }
+  .callout p { margin-bottom: 0; }
+  .toc { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; margin: 28px 0 8px; }
+  .toc-t { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); margin-bottom: 12px; }
+  .toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  .toc li { font-size: 14px; margin-bottom: 7px; break-inside: avoid; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .toc a:hover { color: var(--blue); text-decoration: underline; }
+  .back-link { display: inline-block; margin: 32px 0 8px; font-weight: 600; color: var(--navy); text-decoration: none; font-size: 15px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: #8893A0; padding: 34px 0; font-size: 13.5px; margin-top: 48px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  footer .brand { color: #fff; }
+  footer .brand em { color: var(--blue-l); }
+  footer .foot-links { display: flex; gap: 18px; flex-wrap: wrap; }
+  footer .foot-links a { color: #AEB6C0; text-decoration: none; }
+  footer .foot-links a:hover { color: #fff; }
+
+  @media (max-width: 760px) {
+    .nav-links a:not(.btn) { display: none; }
+    .toc ol { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="brand">
+      <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Evidran">
+        <defs>
+          <linearGradient id="evb" x1="4" y1="6" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#4AA6F5"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+          <linearGradient id="evg" x1="29" y1="32" x2="38" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#46DE7E"/><stop offset="1" stop-color="#15B8A6"/></linearGradient>
+        </defs>
+        <path d="M11 7 H27 A7 7 0 0 1 34 14 V23 A7 7 0 0 1 27 30 H18 L8 38 L11 30 A7 7 0 0 1 4 23 V14 A7 7 0 0 1 11 7 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="13" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="19" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="25" cy="18.5" r="2.1" fill="url(#evb)"/>
+        <path d="M27 23 H35 L40 28 V41 H27 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M35 23 V28 H40" fill="none" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M30 33 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 36.5 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 40 H34.5" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="wm">Evi<em>dran</em></span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="https://app.evidran.com" class="btn btn-ghost btn-sm" style="border:1.5px solid var(--line);color:var(--ink);">Iniciar sesión</a>
+      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-primary btn-sm">Pide una demo</a>
+    </div>
+  </div>
+</nav>
+
+<header class="legal-head">
+  <div class="wrap">
+    <div class="legal-eyebrow">Información legal</div>
+    <h1>Términos y condiciones de uso</h1>
+    <div class="legal-meta">Última actualización: 24 de junio de 2026</div>
+  </div>
+</header>
+
+<main class="legal-body wrap">
+  <p class="intro">
+    Los presentes Términos y Condiciones (en adelante, los «Términos») regulan el acceso y uso del servicio
+    <strong>Evidran</strong>, un copiloto de calidad basado en inteligencia artificial para la documentación
+    de no conformidades, acciones correctivas y la gestión de sistemas de gestión certificados. Te rogamos
+    que los leas con atención antes de utilizar el servicio.
+  </p>
+
+  <nav class="toc" aria-label="Índice de contenidos">
+    <div class="toc-t">Contenido</div>
+    <ol>
+      <li><a href="#titular">Titular del servicio</a></li>
+      <li><a href="#objeto">Objeto y aceptación</a></li>
+      <li><a href="#servicio">Descripción del servicio</a></li>
+      <li><a href="#cuenta">Registro, cuenta y acceso</a></li>
+      <li><a href="#uso">Uso aceptable</a></li>
+      <li><a href="#planes">Planes, precios y facturación</a></li>
+      <li><a href="#ia">Naturaleza de la IA y responsabilidad</a></li>
+      <li><a href="#datos">Datos del cliente y protección de datos</a></li>
+      <li><a href="#propiedad">Propiedad intelectual</a></li>
+      <li><a href="#disponibilidad">Disponibilidad y soporte</a></li>
+      <li><a href="#responsabilidad">Limitación de responsabilidad</a></li>
+      <li><a href="#duracion">Duración, renovación y baja</a></li>
+      <li><a href="#modificaciones">Modificaciones</a></li>
+      <li><a href="#ley">Legislación y jurisdicción</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="titular"><span class="num">1.</span>Titular del servicio</h2>
+  <p>
+    El servicio Evidran es titularidad de <strong>[RAZÓN SOCIAL DEL TITULAR]</strong>, con NIF
+    <strong>[NIF]</strong> y domicilio en <strong>[DIRECCIÓN COMPLETA]</strong> (en adelante,
+    «Evidran», «nosotros» o el «Prestador»). Puedes contactar con nosotros en
+    <a href="mailto:demo@evidran.com">demo@evidran.com</a>.
+  </p>
+
+  <h2 id="objeto"><span class="num">2.</span>Objeto y aceptación</h2>
+  <p>
+    Estos Términos regulan la relación contractual entre el Prestador y cualquier persona física o jurídica
+    (el «Cliente» o el «Usuario») que acceda o utilice Evidran, ya sea durante una demostración, un periodo
+    de prueba o bajo una suscripción de pago.
+  </p>
+  <p>
+    El uso del servicio implica la aceptación plena y sin reservas de estos Términos. Si accedes en nombre de
+    una organización, declaras tener capacidad suficiente para vincularla. Si no estás de acuerdo con alguna
+    de las condiciones, debes abstenerte de utilizar el servicio.
+  </p>
+
+  <h2 id="servicio"><span class="num">3.</span>Descripción del servicio</h2>
+  <p>
+    Evidran es una aplicación en la nube (SaaS) que asiste a los equipos de calidad en la documentación de no
+    conformidades, hallazgos de auditoría, trabajos no conformes, informes 8D y acciones correctivas, así como
+    en la elaboración de indicadores y resúmenes para la revisión por la dirección. El servicio guía al Usuario
+    mediante entrevistas asistidas por IA y genera documentación estructurada a partir de la información que
+    el propio Usuario aporta.
+  </p>
+  <p>
+    El alcance funcional concreto depende del plan contratado y puede evolucionar con el tiempo. El Prestador
+    se reserva el derecho de añadir, modificar o retirar funcionalidades para mejorar el servicio, informando
+    de los cambios sustanciales con antelación razonable.
+  </p>
+
+  <h2 id="cuenta"><span class="num">4.</span>Registro, cuenta y acceso</h2>
+  <p>
+    Para utilizar Evidran es necesario disponer de una cuenta. El Usuario se compromete a facilitar información
+    veraz y a mantenerla actualizada. Las credenciales de acceso son personales e intransferibles, y el Cliente
+    es responsable de su custodia y de toda actividad realizada desde su cuenta.
+  </p>
+  <p>
+    El Cliente es responsable de gestionar los usuarios autorizados dentro de su organización y de revocar el
+    acceso cuando proceda. Debe comunicar al Prestador, sin demora, cualquier uso no autorizado o brecha de
+    seguridad de la que tenga conocimiento.
+  </p>
+
+  <h2 id="uso"><span class="num">5.</span>Uso aceptable</h2>
+  <p>El Usuario se compromete a hacer un uso lícito y diligente del servicio. En particular, se obliga a no:</p>
+  <ul>
+    <li>Utilizar Evidran con fines ilícitos o contrarios a estos Términos, a la buena fe o al orden público.</li>
+    <li>Introducir datos sobre los que no disponga de la legitimación necesaria para tratarlos.</li>
+    <li>Intentar acceder a cuentas, datos o áreas del sistema ajenos, ni vulnerar las medidas de seguridad.</li>
+    <li>Realizar ingeniería inversa, copiar, revender o explotar el servicio fuera de lo permitido por su plan.</li>
+    <li>Interferir en el funcionamiento del servicio mediante cargas abusivas, automatismos no autorizados o código malicioso.</li>
+  </ul>
+  <p>
+    El incumplimiento de estas condiciones podrá dar lugar a la suspensión o cancelación de la cuenta, sin
+    perjuicio de las demás acciones que correspondan.
+  </p>
+
+  <h2 id="planes"><span class="num">6.</span>Planes, precios y facturación</h2>
+  <p>
+    Los planes, precios y condiciones vigentes son los publicados en el sitio web o los acordados expresamente
+    por escrito. Salvo indicación en contrario, los precios se expresan sin impuestos, que se añadirán según la
+    normativa aplicable.
+  </p>
+  <p>
+    La suscripción se factura de forma anticipada según la periodicidad elegida (mensual o anual) y se renueva
+    automáticamente por periodos equivalentes, salvo cancelación conforme a la cláusula 12. El impago habilitará
+    al Prestador a suspender el acceso al servicio hasta su regularización. El Prestador podrá actualizar los
+    precios comunicándolo con antelación razonable, con efecto a partir de la siguiente renovación.
+  </p>
+
+  <h2 id="ia"><span class="num">7.</span>Naturaleza de la inteligencia artificial y responsabilidad profesional</h2>
+  <p>
+    Evidran es una <strong>herramienta de apoyo</strong>: asiste en la redacción y el análisis a partir de la
+    información que aporta el Usuario, pero <strong>no sustituye el criterio profesional</strong> del responsable
+    de calidad ni la responsabilidad del Cliente frente a auditores, entidades de certificación o acreditación,
+    administraciones u otros terceros.
+  </p>
+  <div class="callout">
+    <p>
+      Los contenidos generados por la IA pueden contener errores o imprecisiones y deben ser
+      <strong>revisados y validados por el Usuario</strong> antes de su uso. La decisión final sobre cualquier
+      no conformidad, acción correctiva, causa raíz o documento certificable corresponde exclusivamente al
+      Cliente, que es el único responsable de su contenido y de su conformidad con las normas aplicables.
+    </p>
+  </div>
+
+  <h2 id="datos"><span class="num">8.</span>Datos del cliente y protección de datos</h2>
+  <p>
+    Los datos, evidencias y documentos que el Cliente introduce en Evidran («Datos del Cliente») son y seguirán
+    siendo de su titularidad. El Prestador los trata únicamente para prestar el servicio, conforme a las
+    instrucciones del Cliente, y no reclama derechos de propiedad sobre ellos. El Cliente puede exportar sus
+    datos durante la vigencia de la suscripción.
+  </p>
+  <p>
+    El tratamiento de datos personales se realiza de acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la
+    normativa española aplicable. Cuando el Prestador trate datos personales por cuenta del Cliente, actuará
+    como encargado del tratamiento en los términos del correspondiente acuerdo. Los datos se alojan en la Unión
+    Europea y se aplican medidas técnicas y organizativas razonables para protegerlos, incluyendo el aislamiento
+    de la información entre organizaciones y el cifrado de las comunicaciones.
+  </p>
+
+  <h2 id="propiedad"><span class="num">9.</span>Propiedad intelectual</h2>
+  <p>
+    El servicio Evidran, su software, marca, diseño, interfaz y demás elementos son titularidad del Prestador o
+    de sus licenciantes y están protegidos por la normativa de propiedad intelectual e industrial. El contrato
+    otorga al Cliente una licencia de uso limitada, no exclusiva e intransferible durante la vigencia de la
+    suscripción, sin que ello suponga cesión de derecho de propiedad alguno.
+  </p>
+
+  <h2 id="disponibilidad"><span class="num">10.</span>Disponibilidad y soporte</h2>
+  <p>
+    El Prestador procurará mantener el servicio disponible de forma continuada, si bien podrá realizar tareas de
+    mantenimiento, actualización o mejora que conlleven interrupciones temporales, que se procurará programar en
+    franjas de bajo impacto. El servicio se presta «tal cual» y «según disponibilidad», sin garantizar una
+    disponibilidad ininterrumpida ni la ausencia total de errores. El soporte se prestará por los canales y con
+    el alcance correspondientes al plan contratado.
+  </p>
+
+  <h2 id="responsabilidad"><span class="num">11.</span>Limitación de responsabilidad</h2>
+  <p>
+    En la medida permitida por la legislación aplicable, el Prestador no será responsable de los daños
+    indirectos, lucro cesante, pérdida de datos derivada de causas ajenas a su control, ni de las decisiones
+    adoptadas por el Cliente sobre la base de los resultados del servicio. La responsabilidad total acumulada del
+    Prestador frente al Cliente quedará limitada al importe efectivamente abonado por este durante los doce (12)
+    meses anteriores al hecho que origine la reclamación.
+  </p>
+  <p>
+    Nada en estos Términos excluye o limita la responsabilidad que no pueda excluirse o limitarse legalmente,
+    como la derivada de dolo o negligencia grave.
+  </p>
+
+  <h2 id="duracion"><span class="num">12.</span>Duración, renovación y baja</h2>
+  <p>
+    La suscripción permanecerá vigente durante el periodo contratado y se renovará automáticamente salvo
+    cancelación por cualquiera de las partes antes del fin del periodo en curso. El Cliente puede solicitar la
+    baja a través de los canales habilitados o escribiendo a
+    <a href="mailto:demo@evidran.com">demo@evidran.com</a>. Tras la finalización, y transcurrido un periodo
+    razonable para la exportación de los datos, el Prestador podrá eliminar la información asociada conforme a su
+    política de conservación y a la normativa aplicable.
+  </p>
+
+  <h2 id="modificaciones"><span class="num">13.</span>Modificaciones de los términos</h2>
+  <p>
+    El Prestador podrá modificar estos Términos para adaptarlos a cambios legales, técnicos o del servicio. Los
+    cambios sustanciales se comunicarán con antelación razonable. El uso continuado del servicio tras la entrada
+    en vigor de la nueva versión implica su aceptación.
+  </p>
+
+  <h2 id="ley"><span class="num">14.</span>Legislación aplicable y jurisdicción</h2>
+  <p>
+    Estos Términos se rigen por la legislación española. Para la resolución de cualquier controversia, las partes
+    se someten a los Juzgados y Tribunales del domicilio del Prestador, salvo que la normativa de consumo
+    aplicable disponga otro fuero imperativo.
+  </p>
+
+  <h2 id="contacto"><span class="num">15.</span>Contacto</h2>
+  <p>
+    Para cualquier consulta relacionada con estos Términos o con el servicio, puedes escribirnos a
+    <a href="mailto:demo@evidran.com">demo@evidran.com</a>.
+  </p>
+
+  <a href="/" class="back-link">← Volver al inicio</a>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><span class="wm">Evi<em>dran</em></span></span>
+    <span class="foot-links">
+      <a href="/">Inicio</a>
+      <a href="/terminos.html">Términos y condiciones</a>
+      <a href="mailto:demo@evidran.com">demo@evidran.com</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
