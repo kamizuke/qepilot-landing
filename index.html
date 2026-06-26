@@ -35,8 +35,8 @@
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
   .brand .wm { white-space: nowrap; }
   .brand em { font-style: normal; color: var(--navy); }
+  .nav-right { display: flex; align-items: center; gap: 18px; }
   .nav-links { display: flex; gap: 26px; align-items: center; }
-  .nav-login-m { display: none; }
   .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
   .nav-links a:hover { color: var(--blue); }
 
@@ -317,7 +317,6 @@
     .shot { margin-top: 40px; }
     .mock-chat { border-right: 0; border-bottom: 1px solid var(--cream-d); }
     .nav-links { display: none; }
-    .nav-login-m { display: inline-flex; }
     .auditor .wrap { padding: 30px; }
     section { padding: 60px 0; }
     .pm { padding: 16px; }
@@ -353,15 +352,16 @@
       </svg>
       <span class="wm">Evi<em>dran</em></span>
     </a>
-    <div class="nav-links">
-      <a href="#normas">Conoce la norma</a>
-      <a href="#productos">Empresas y auditores</a>
-      <a href="#inteligencia">Inteligencia</a>
-      <a href="#obtienes">Qué obtienes</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#normas">Conoce la norma</a>
+        <a href="#productos">Empresas y auditores</a>
+        <a href="#inteligencia">Inteligencia</a>
+        <a href="#obtienes">Qué obtienes</a>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-primary btn-sm">Pide una demo</a>
+      </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
-      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-primary btn-sm">Pide una demo</a>
     </div>
-    <a href="https://app.evidran.com" class="btn btn-ghost btn-sm nav-login-m">Iniciar sesión</a>
   </div>
 </nav>
 
