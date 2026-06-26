@@ -298,6 +298,18 @@
   .res { display: flex; align-items: center; gap: 13px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 18px 20px; font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
   .res .c { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--teal)); color: #06281f; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
 
+  /* perfil de organización (dentro de la norm band) */
+  .normband-profile { max-width: 760px; margin: 30px auto 0; text-align: center; background: linear-gradient(135deg, #fff, #F4F8FF); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 26px; font-size: 15.5px; color: var(--ink-soft); }
+  .normband-profile strong { color: var(--ink); }
+
+  /* BRIDGE · auditor ↔ empresa */
+  .bridge { background: var(--cream-d); }
+  .bridge .hl { color: var(--blue); }
+  .bridge .center-head h2 { max-width: 24ch; }
+  .evcode { font-family: ui-monospace, Menlo, monospace; font-weight: 700; color: var(--navy); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px; font-size: .92em; white-space: nowrap; }
+  .bridge-note { margin-top: 30px; text-align: center; font-size: 14.5px; color: var(--ink-soft); }
+  .bridge-note b { color: var(--navy); }
+
   @media (max-width: 860px) {
     .problem .wrap, .auditor .wrap, .twocol, .intel-grid, .dual-grid { grid-template-columns: 1fr; gap: 28px; }
     .steps, .feats, .norm-list, .res-grid { grid-template-columns: 1fr; }
@@ -394,7 +406,7 @@
   <div class="wrap">
     <div class="center-head">
       <div class="eyebrow">Lo que de verdad lo diferencia</div>
-      <h2>No es una IA genérica. <span class="hl">Conoce tu norma.</span></h2>
+      <h2>No es una IA genérica. <span class="hl">Conoce tu norma — y tu negocio.</span></h2>
       <p>Cada flujo entiende el lenguaje y la lógica de su norma: te pregunta lo que esa norma exige y redacta como lo haría un experto en ese sistema — no como un chat de propósito general.</p>
     </div>
     <div class="norm-list">
@@ -405,6 +417,9 @@
       <div class="norm"><strong>UNE-EN ISO/IEC 17025:2017</strong><span>Trabajo no conforme · extensión, informes emitidos, reanudación</span></div>
       <div class="norm"><strong>8D · Reclamación de cliente</strong><span>Formato genérico y formato OEM (automoción)</span></div>
       <div class="norm"><strong>Respuesta a hallazgos de auditoría</strong><span>Certificación y acreditación</span></div>
+    </div>
+    <div class="normband-profile">
+      <strong>Y aprende a qué te dedicas.</strong> Evidran propone un perfil de tu empresa a partir de tu web pública, tú lo revisas y lo apruebas, y desde ahí la entrevista habla con el vocabulario de tu actividad — no en abstracto.
     </div>
   </div>
 </section>
@@ -454,9 +469,27 @@
           <li>Hallazgos tipados: NC mayor/menor, observación, oportunidad, punto fuerte</li>
           <li>Copiloto que sugiere norma y apartado y redacta en forma objetiva</li>
           <li>Se apoya en la documentación del cliente — sin inventar nada</li>
+          <li>Entrega hallazgos e informes en la empresa auditada con un código — sin entrar a su panel</li>
         </ul>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- BRIDGE · auditor ↔ empresa -->
+<section id="puente" class="bridge">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Novedad · Auditor ↔ Empresa</div>
+      <h2>Tu auditor externo te deja los hallazgos <span class="hl">dentro de Evidran</span>.</h2>
+      <p>El consultor o auditor que te lleva la certificación conecta con tu empresa mediante un código y deposita sus hallazgos e informes en tu cuenta — sin entrar nunca a tu panel ni ver el resto de tus datos.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Conectáis con un código</h3><p>Compartes tu código <span class="evcode">EVD-XXXXXXXX</span> con tu auditor. Con eso queda enlazado a tu empresa, sin acceso a tu panel.</p></div>
+      <div class="step"><div class="n">2</div><h3>Deposita hallazgos e informe</h3><p>Al cerrar la auditoría te envía los hallazgos y el informe firmado. Si corrige algo y reenvía, no se duplica: se actualiza.</p></div>
+      <div class="step"><div class="n">3</div><h3>Se convierten en expedientes</h3><p>Cada hallazgo entrante se transforma en un expediente que gestionas como cualquier otro. El informe queda archivado por versiones (v2, v3…).</p></div>
+    </div>
+    <p class="bridge-note">Una sola plataforma para los dos lados de la auditoría: <b>la empresa que se certifica</b> y <b>el auditor que la audita</b>.</p>
   </div>
 </section>
 
@@ -701,6 +734,7 @@
       <details><summary>Llevo varias normas a la vez.</summary><p>Una sola herramienta para UNE-EN ISO 9001:2015, 14001:2015, 45001:2023, 50001:2018 e ISO/IEC 17025:2017.</p></details>
       <details><summary>Soy yo solo para toda la calidad.</summary><p>Justo para eso está pensado Evidran.</p></details>
       <details><summary>Gestiono varias empresas como consultor.</summary><p>Un mismo usuario trabaja con varias organizaciones, cada una con sus datos aislados — y tienes un módulo de auditoría propio.</p></details>
+      <details><summary>Trabajo con un auditor o consultor externo.</summary><p>Puede conectarse a tu empresa con un código y dejarte sus hallazgos e informes directamente en tu cuenta, sin entrar a tu panel. Cada hallazgo se convierte en un expediente y el informe queda archivado por versiones.</p></details>
     </div>
   </div>
 </section>
