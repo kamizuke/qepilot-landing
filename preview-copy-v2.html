@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preview copy v2 — Evidran</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2563EB; --blue-l: #4AA6F5; --teal: #15B8A6; --green: #46DE7E;
+    --navy: #2D5A7B; --ink: #16202B; --ink-soft: #4A5563;
+    --cream: #F7F6F2; --cream-d: #EDEAE2; --line: #DDD8CC; --white: #fff;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink); background: var(--cream); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 72px 0; }
+  h1, h2, h3 { line-height: 1.18; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; }
+  p { color: var(--ink-soft); }
+  .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12.5px; font-weight: 700; color: var(--blue); margin-bottom: 14px; }
+  .banner { background: #FEF1DE; color: #B45309; text-align: center; font-weight: 700; font-size: 13.5px; padding: 10px 0; }
+
+  /* BUTTONS */
+  .btn { display: inline-block; border: 0; cursor: pointer; font-weight: 700; font-size: 15px; border-radius: 12px; padding: 13px 22px; text-decoration: none; }
+  .btn-primary { background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; box-shadow: 0 8px 22px rgba(37,99,235,.28); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+
+  /* HERO */
+  .hero { padding-top: 64px; padding-bottom: 40px; text-align: center; }
+  .hero h1 { font-size: clamp(32px, 5vw, 54px); font-weight: 850; max-width: 18ch; margin: 0 auto 20px; }
+  .hero .sub { font-size: clamp(16px, 2vw, 19px); max-width: 62ch; margin: 0 auto 28px; color: var(--ink-soft); }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .norms-micro { font-size: 13px; color: var(--ink-soft); font-weight: 600; letter-spacing: .01em; }
+
+  /* PROBLEM */
+  .problem { background: var(--ink); color: #fff; text-align: center; }
+  .problem h2 { color: #fff; max-width: 34ch; margin: 0 auto 14px; }
+  .problem p { color: #AEB6C0; max-width: 62ch; margin: 0 auto; font-size: 16px; }
+  .problem .punch { font-size: clamp(20px, 2.6vw, 26px); font-weight: 800; color: #fff; margin-top: 22px; }
+
+  .center-head { text-align: center; max-width: 62ch; margin: 0 auto 44px; }
+  .center-head p { font-size: 16px; margin-top: 12px; }
+
+  /* FULL BLOCKS */
+  .fullblock { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 40px; align-items: start; padding: 40px 0; border-bottom: 1px solid var(--line); }
+  .fullblock:last-child { border-bottom: 0; }
+  .fullblock .dolor { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #B45309; background: #FEF1DE; display: inline-block; padding: 5px 11px; border-radius: 999px; margin-bottom: 12px; }
+  .fullblock h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
+  .fullblock .num { font-size: 13px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+  .fullblock p { font-size: 15.5px; color: var(--ink); }
+  .fullblock ul { margin: 12px 0 0; padding-left: 0; list-style: none; }
+  .fullblock li { font-size: 14.5px; color: var(--ink); padding: 8px 0 8px 4px; border-top: 1px solid var(--cream-d); }
+  .fullblock li:first-child { border-top: 0; }
+  .fullblock li b { color: var(--navy); }
+  .star { background: linear-gradient(160deg, #0E2A4A, #16202B); color: #fff; border-radius: var(--radius); padding: 34px; border-bottom: 0 !important; margin: 12px 0; }
+  .star h3 { color: #fff; }
+  .star p { color: #DCE3EC; }
+  .star li { color: #DCE3EC; border-top-color: rgba(255,255,255,.12); }
+  .star li b { color: var(--green); }
+  .star .num { color: var(--green); }
+
+  /* COMPACT GRID */
+  .compact { background: var(--cream-d); }
+  .cgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .ccard { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .ccard h4 { font-size: 15.5px; font-weight: 800; margin-bottom: 7px; letter-spacing: -0.01em; }
+  .ccard p { font-size: 13.5px; }
+
+  /* FAQ */
+  details { border-bottom: 1px solid var(--line); padding: 6px 0; max-width: 720px; margin: 0 auto; }
+  summary { cursor: pointer; font-weight: 700; font-size: 15.5px; padding: 12px 0; list-style: none; color: var(--ink); }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; float: right; color: var(--blue); font-weight: 700; }
+  details[open] summary::after { content: "–"; }
+  details p { font-size: 14px; padding: 0 0 14px; }
+
+  /* FINAL */
+  .final { text-align: center; background: linear-gradient(160deg, #16202B, #0E2A4A); color: #fff; }
+  .final h2 { color: #fff; max-width: 22ch; margin: 0 auto 14px; }
+  .final p { color: #AEB6C0; font-size: 16px; max-width: 56ch; margin: 0 auto 24px; }
+  .final .hero-cta { justify-content: center; }
+  .final .btn-ghost { color: #fff; border-color: rgba(255,255,255,.3); }
+
+  @media (max-width: 860px) {
+    .fullblock { grid-template-columns: 1fr; gap: 16px; }
+    .cgrid { grid-template-columns: 1fr; }
+    section { padding: 48px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">PREVIEW — copy v2 recortado (no es la web publicada)</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Copiloto de calidad por IA</div>
+    <h1>Cuéntale qué ha pasado. Te devuelve un expediente listo para auditoría.</h1>
+    <p class="sub">Evidran es el copiloto de calidad que te entrevista como un responsable senior, redacta la no conformidad campo a campo mientras hablas, y convierte tus expedientes en riesgos evaluados, acciones con plazo y objetivos con base real.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-primary">Empieza ahora → app.evidran.com</a>
+      <a href="#" class="btn btn-ghost">Pide una demo → demo@evidran.com</a>
+    </div>
+    <p class="norms-micro">ISO 9001 · 14001 · 45001 · 50001 · ISO/IEC 17025 · 8D</p>
+  </div>
+</header>
+
+<section class="problem">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--green)">La calidad no falla por falta de conocimiento</div>
+    <h2>Falla por falta de tiempo.</h2>
+    <p>Eres una persona para calidad, medioambiente y a veces PRL. Documentar una NC te cuesta una tarde. La causa raíz se queda en "error humano" porque no hay tiempo para más — y el auditor lo sabe. Las acciones vencen sin que nadie avise. Y cuando llega la Revisión por la Dirección, toca rebuscar en carpetas lo que pasó hace once meses.</p>
+    <div class="punch">No necesitas otra plantilla. Necesitas un compañero que piense contigo.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Lo esencial</div>
+      <h2>Seis cosas que cambian de verdad tu día a día</h2>
+    </div>
+
+    <div class="fullblock">
+      <div><div class="num">01</div><span class="dolor">Rellenar formatos es lento</span><h3>Hablar en vez de rellenar.</h3></div>
+      <p>Cuentas lo que ha pasado con tus palabras: en el chat, pegando el email del cliente o adjuntando una foto del defecto. Evidran te hace una o dos preguntas cada vez, como lo haría un compañero con años de auditorías encima, y el documento formal se redacta en vivo, campo a campo, delante de ti. Tú hablas coloquial; el informe sale profesional.</p>
+    </div>
+
+    <div class="fullblock">
+      <div><div class="num">02</div><span class="dolor">"Error humano" no pasa una auditoría</span><h3>No te deja quedarte en el "error humano".</h3></div>
+      <p>Evidran no acepta causas pobres. Te sugiere la causa sistémica probable, te empuja al fallo de sistema o de control, y adapta la profundidad al caso: no pregunta lo mismo por un despiste puntual que por un problema con riesgo de repetición. También ajusta los plazos de verificación de eficacia al tipo de acción: un cambio de software se comprueba ya; una formación, en uno o dos meses.</p>
+    </div>
+
+    <div class="fullblock">
+      <div><div class="num">03</div><span class="dolor">La matriz de riesgos muere en un Excel</span><h3>Una matriz de riesgos viva, no un Excel para enseñar al auditor.</h3></div>
+      <p>Mapa de calor 5×5 con vista inherente y residual, riesgos y oportunidades separados. Evidran te entrevista partiendo del perfil real de tu empresa — no propone riesgos genéricos de manual. Cada riesgo se trata generando una acción en tu Plan de mejora, y cuando la acción se verifica, Evidran te recuerda reevaluar el residual. El ciclo 6.1 completo, cerrado de verdad.</p>
+    </div>
+
+    <div class="fullblock">
+      <div><div class="num">04</div><span class="dolor">Las acciones viven repartidas</span><h3>Todas tus acciones de mejora en una sola tabla. Vengan de donde vengan.</h3></div>
+      <p>De una NC, de un hallazgo de auditoría, de un riesgo o de una idea tuya: todo acaba en el mismo plan, con responsable, recursos, prioridad, fechas, estado y verificación de eficacia — los criterios que el apartado 10.2 te va a exigir. Semáforo de plazo en cada acción. Y si tienes prisa, se lo describes en una frase y la IA te precarga el formulario; tú confirmas.</p>
+    </div>
+
+    <div class="fullblock star">
+      <div><div class="num">05 · DIFERENCIADOR</div><h3>De decenas de no conformidades a un objetivo de calidad con base real.</h3></div>
+      <div>
+        <p>Aquí Evidran se convierte en tu analista:</p>
+        <ul>
+          <li><b>Lo que vemos en tus datos.</b> Hallazgos automáticos, calculados — no inventados por una IA: acciones fuera de plazo, expedientes vencidos, áreas que concentran problemas.</li>
+          <li><b>Análisis de causas raíz.</b> Taxonomía cerrada (formación, método, proveedor, equipo, medición…) para ver dónde se concentra el problema de verdad.</li>
+          <li><b>Objetivos recomendados (6.2).</b> Propuesta anclada a tu porcentaje real, siempre editable: <i>"Reducir un 25% las no conformidades asociadas a la formación durante 2027."</i></li>
+          <li><b>Revisión por la Dirección (9.3).</b> El apartado de NC y acciones correctivas del acta, redactado desde tus estadísticas del periodo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fullblock">
+      <div><div class="num">06</div><span class="dolor">El PDF de hallazgos, picado a mano</span><h3>Los hallazgos de tu auditor, directos a tu bandeja. Sin que él entre en tu casa.</h3></div>
+      <p>Tu empresa genera un código de conexión y se lo da al auditor. Desde su propio espacio — separado de las empresas que audita, con informe multinorma y su logo — él te envía los hallazgos y el informe cerrado directamente a tu panel, sin acceder jamás a tus datos. Tú decides hallazgo a hallazgo: abrir expediente de respuesta ya pre-cumplimentado, enviarlo al Plan de mejora, o descartarlo dejando el motivo por escrito. <b>¿Tu auditor no usa Evidran?</b> Sube el PDF de su informe: la IA extrae los hallazgos y los archiva igual.</p>
+    </div>
+  </div>
+</section>
+
+<section class="compact">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Más capacidades</div>
+      <h2>Y todo lo demás, sin que se te escape</h2>
+    </div>
+    <div class="cgrid">
+      <div class="ccard"><h4>Todas tus normas, una conversación</h4><p>Siete tipos de documento (8D, NC 9001, ambiental 14001, seguridad 45001, energía 50001, trabajo no conforme 17025, respuesta a auditoría), cada uno con la lógica de su norma.</p></div>
+      <div class="ccard"><h4>Que nada venza sin que te enteres</h4><p>Aviso al momento cuando algo pasa a "vencido" — no un email diario que ignoras. Y un resumen cada mañana por si prefieres mirarlo tú.</p></div>
+      <div class="ccard"><h4>La memoria de calidad de tu empresa</h4><p>Busca por causa, descripción o solución; filtra por tipo, área y fechas. Si vienes de Excel, importa tu histórico con un asistente de mapeo de columnas.</p></div>
+      <div class="ccard"><h4>Te conoce antes de la primera pregunta</h4><p>Perfil de negocio propuesto desde tu web pública, revisado por ti antes de guardarse. Las entrevistas usan tu vocabulario desde el primer día.</p></div>
+      <div class="ccard"><h4>Cada expediente, defendible</h4><p>Numeración NC-AAAA-NNN opcional, responsable y fecha con semáforo, evidencias privadas adjuntas, bloqueo con traza, exportación a PDF.</p></div>
+      <div class="ccard"><h4>Tus datos, solo tuyos</h4><p>Aislamiento total por empresa en base de datos, evidencias con enlaces firmados y temporales, IA con acceso mínimo.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center-head"><div class="eyebrow">Preguntas</div><h2>Lo que sueles preguntarte</h2></div>
+    <details><summary>Ya tengo mis plantillas en Word.</summary><p>Las plantillas no te entrevistan, no rechazan una causa pobre, no te avisan de un vencimiento y no te proponen objetivos. Evidran sí.</p></details>
+    <details><summary>¿La IA se inventa cosas?</summary><p>Solo redacta a partir de lo que tú cuentas. Los hallazgos y porcentajes son cálculos sobre tus datos. Y todo lo que la IA propone —causas, riesgos, acciones, perfil— lo confirmas tú antes de que se guarde.</p></details>
+    <details><summary>Llevo varias normas yo solo.</summary><p>Justo para ti está pensado: 9001, 14001, 45001, 50001 y 17025 en la misma herramienta, con avisos que no dependen de tu memoria.</p></details>
+    <details><summary>¿Y mis datos?</summary><p>Aislados por empresa, evidencias privadas, IA con acceso mínimo. Ni siquiera tu auditor conectado puede ver tu panel.</p></details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Tu próxima no conformidad puede ser la primera que no te robe la tarde.</h2>
+    <p>Para responsables de calidad de pymes industriales, proveedores de automoción, laboratorios acreditados y consultores que llevan varias empresas.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-primary">Crea tu primer expediente → app.evidran.com</a>
+      <a href="#" class="btn btn-ghost">O pide una demo → demo@evidran.com</a>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
