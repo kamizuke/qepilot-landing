@@ -183,6 +183,7 @@
   .hist-search .box { flex: 1; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--ink-soft); display: flex; gap: 8px; align-items: center; }
   .hist-search .box .q { color: var(--ink); font-weight: 600; }
   .hist-count { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+  .hist-count.hc-some { display: none; }
   .hist-res { border: 1px solid var(--line); border-radius: 12px; padding: 13px 16px; margin-bottom: 10px; }
   .hist-res:last-child { margin-bottom: 0; }
   .hist-res .top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
@@ -352,6 +353,18 @@
     .cs-card:not(.is-front) { display: none; }
     .cs-arrow { width: 38px; height: 38px; font-size: 20px; }
     .cs-caption { font-size: 13px; }
+
+    /* Recorte de contenido en móvil: cada carta muestra menos filas para
+       que quepa en una pantalla sin tanto scroll. El resto sigue intacto
+       en escritorio/tablet ancho. */
+    .cs-card[data-title="Panel de calidad"] .pm-bd .pm-card:nth-child(2) { display: none; }
+    .cs-card[data-title="Panel de calidad"] .pm-bd .pm-row:nth-child(5) { display: none; }
+    .cs-card[data-title="Panel de calidad"] .pm-table tbody tr:nth-child(n+4) { display: none; }
+    .cs-card[data-title="Tendencias e inteligencia"] .pm-find:nth-child(4) { display: none; }
+    .cs-card[data-title="Tendencias e inteligencia"] .pm-row:nth-child(n+5) { display: none; }
+    .cs-card[data-title="Buscar en el histórico"] .hist-res:nth-child(n+5) { display: none; }
+    .hc-all { display: none; }
+    .hc-some { display: inline; }
   }
 </style>
 <noscript><style>.seq{opacity:1!important;transform:none!important;}.pm-row .fill{width:var(--w)!important;}.cs-card{position:static!important;transform:none!important;opacity:1!important;margin:0 auto 28px!important;}.cs-stage{height:auto!important;}.cs-card .shot-cap{opacity:1!important;}.cs-controls,.cs-caption{display:none!important;}</style></noscript>
@@ -624,7 +637,8 @@
                 <div class="pm-head"><div class="pm-title">Historial</div><div class="pm-btns"><span>Tipo: todos</span><span>Área: todas</span></div></div>
                 <div class="hist-search">
                   <div class="box">🔎 <span class="q">calibración</span></div>
-                  <span class="hist-count">4 resultados</span>
+                  <span class="hist-count hc-all">4 resultados</span>
+                  <span class="hist-count hc-some">2 resultados</span>
                 </div>
                 <div class="hist-res">
                   <div class="top"><span class="pmcode">NCA-2024-001</span><span class="pmpill ce">Cerrado</span><span class="ttl">Vertido con pH fuera de rango</span></div>
