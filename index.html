@@ -66,6 +66,7 @@
   nav.scrolled { box-shadow: 0 4px 22px rgba(22,32,43,.08); }
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .cs-card { transition: none !important; }
     html { scroll-behavior: auto; }
   }
 
@@ -148,19 +149,34 @@
   .pmdot.r { background: #D92D20; } .pmdot.a { background: #DD8A0E; } .pmdot.g { background: #16A34A; }
   .pm-unassigned { color: #B45309; font-size: 11px; font-weight: 600; }
 
-  /* PESTAÑAS · botones a la izquierda, captura a la derecha */
-  .tabs { display: grid; grid-template-columns: 290px 1fr; gap: 24px; margin-top: 42px; align-items: start; }
-  .tab-btns { display: flex; flex-direction: column; gap: 12px; position: sticky; top: 84px; }
-  .tab-btn { text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; cursor: pointer; font: inherit; transition: border-color .2s, box-shadow .2s, transform .2s; }
-  .tab-btn b { display: block; font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; }
-  .tab-btn span { display: block; font-size: 13px; color: var(--ink-soft); margin-top: 4px; line-height: 1.4; }
-  .tab-btn:hover { border-color: var(--navy); transform: translateY(-1px); }
-  .tab-btn.active { border-color: var(--blue); box-shadow: 0 10px 26px rgba(37,99,235,.14); }
-  .tab-btn.active b { color: var(--blue); }
-  .tab-panels { min-height: 600px; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-  .tab-panel .pmwrap { margin-top: 0; max-width: none; }
+  /* CARD-STACK · utilidades apiladas como una baraja */
+  .cardstack { margin-top: 46px; }
+  .cs-stage { position: relative; max-width: 1000px; margin: 0 auto; }
+  .cs-card { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto;
+    transform-origin: 50% 50%;
+    transition: transform .55s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
+    will-change: transform, opacity; }
+  .cs-card.is-dragging { transition: none; }
+  .cs-card .pmwrap { margin: 0; max-width: none; }
+  .cs-card .browser { transition: box-shadow .45s ease; }
+  .cs-card:not(.is-front) { cursor: pointer; }
+  .cs-card:not(.is-front) .browser { box-shadow: 0 16px 34px rgba(22,32,43,.10); }
+  .cs-card:not(.is-front) .shot-cap { opacity: 0; }
+  .cs-card.is-front { cursor: default; }
+
+  .cs-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 26px; }
+  .cs-arrow { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--navy);
+    font-size: 22px; line-height: 1; cursor: pointer; display: grid; place-items: center;
+    transition: border-color .2s, box-shadow .2s, transform .2s, color .2s; }
+  .cs-arrow:hover { border-color: var(--blue); color: var(--blue); box-shadow: 0 8px 20px rgba(37,99,235,.16); transform: translateY(-1px); }
+  .cs-arrow:active { transform: translateY(0); }
+  .cs-dots { display: flex; align-items: center; gap: 10px; }
+  .cs-dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 50%; background: var(--line); cursor: pointer; transition: background .25s, transform .25s; }
+  .cs-dot:hover { background: var(--navy); }
+  .cs-dot.on { background: var(--blue); transform: scale(1.35); }
+  .cs-caption { text-align: center; margin-top: 16px; font-size: 14px; color: var(--ink-soft); }
+  .cs-caption .cs-cap-t { color: var(--ink); font-weight: 800; letter-spacing: -0.01em; }
+  .cs-caption .cs-cap-t:not(:empty)::after { content: " · "; color: var(--line); font-weight: 400; }
 
   /* MOCK · Historial (búsqueda por palabra clave) */
   .hist-search { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
@@ -326,13 +342,12 @@
     .pm-table .hide-sm { display: none; }
     .pm-row .lbl { width: 104px; font-size: 11px; }
     .pm-btns span:not(.pri) { display: none; }
-    .tabs { grid-template-columns: 1fr; gap: 14px; }
-    .tab-btns { position: static; }
-    .tab-btn { padding: 13px 15px; }
-    .tab-panels { min-height: 0; }
+    .cardstack { margin-top: 30px; }
+    .cs-arrow { width: 38px; height: 38px; font-size: 20px; }
+    .cs-caption { font-size: 13px; }
   }
 </style>
-<noscript><style>.seq{opacity:1!important;transform:none!important;}.pm-row .fill{width:var(--w)!important;}</style></noscript>
+<noscript><style>.seq{opacity:1!important;transform:none!important;}.pm-row .fill{width:var(--w)!important;}.cs-card{position:static!important;transform:none!important;opacity:1!important;margin:0 auto 28px!important;}.cs-stage{height:auto!important;}.cs-card .shot-cap{opacity:1!important;}.cs-controls,.cs-caption{display:none!important;}</style></noscript>
 </head>
 <body>
 
@@ -516,14 +531,9 @@
   <div class="wrap">
     <div class="center-head"><div class="eyebrow">Míralo por dentro</div><h2>Evidran por dentro, con datos reales</h2><p>Cada utilidad, poblada como en un día normal de trabajo.</p></div>
 
-    <div class="tabs">
-      <div class="tab-btns">
-        <button class="tab-btn active" data-tab="panel"><b>Panel de calidad</b><span>KPIs, semáforo y reparto por norma y área</span></button>
-        <button class="tab-btn" data-tab="tend"><b>Tendencias e inteligencia</b><span>Hallazgos, causas raíz y objetivo recomendado</span></button>
-        <button class="tab-btn" data-tab="hist"><b>Buscar en el histórico</b><span>Por palabra clave en causa, descripción y solución</span></button>
-      </div>
-      <div class="tab-panels">
-        <div class="tab-panel active" data-panel="panel">
+    <div class="cardstack" id="cardstack">
+      <div class="cs-stage">
+        <article class="cs-card" data-title="Panel de calidad" data-sub="KPIs, semáforo y reparto por norma y área">
     <div class="pmwrap">
       <div class="browser">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com</span></div>
@@ -570,8 +580,8 @@
       </div>
       <p class="shot-cap">Datos de ejemplo · así se ve un sistema de calidad con varias normas en marcha.</p>
     </div>
-        </div>
-        <div class="tab-panel" data-panel="tend">
+        </article>
+        <article class="cs-card" data-title="Tendencias e inteligencia" data-sub="Hallazgos, causas raíz y objetivo recomendado">
     <div class="pmwrap">
       <div class="browser">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/tendencias</span></div>
@@ -601,8 +611,8 @@
       </div>
       <p class="shot-cap">Datos de ejemplo · el reparto de causas y el objetivo se calculan sobre tus propios expedientes.</p>
     </div>
-        </div>
-        <div class="tab-panel" data-panel="hist">
+        </article>
+        <article class="cs-card" data-title="Buscar en el histórico" data-sub="Por palabra clave en causa, descripción y solución">
           <div class="pmwrap">
             <div class="browser">
               <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/historial</span></div>
@@ -628,8 +638,14 @@
             </div>
             <p class="shot-cap">Datos de ejemplo · "esto ya pasó: esta fue la causa y así se resolvió".</p>
           </div>
-        </div>
+        </article>
       </div>
+      <div class="cs-controls">
+        <button class="cs-arrow" data-dir="-1" type="button" aria-label="Utilidad anterior">‹</button>
+        <div class="cs-dots" role="tablist" aria-label="Utilidades de Evidran"></div>
+        <button class="cs-arrow" data-dir="1" type="button" aria-label="Siguiente utilidad">›</button>
+      </div>
+      <p class="cs-caption"><b class="cs-cap-t"></b><span class="cs-cap-s"></span></p>
     </div>
   </div>
 </section>
@@ -793,7 +809,7 @@
     // ---- Reveal al hacer scroll (estilo Apple) + barras que crecen ----
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduce && "IntersectionObserver" in window) {
-      var sel = [".center-head", ".shot", ".pmwrap", ".tab-btn", ".norm", ".dcard", ".step", ".icard",
+      var sel = [".center-head", ".shot", ".pmwrap", ".norm", ".dcard", ".step", ".icard",
                  ".res", ".feat", ".problem li", ".problem .punch", ".cmp table",
                  ".twocol > div", ".icp .tags span", ".icp .week", ".final .wrap > *"];
       var revealEls = [];
@@ -847,52 +863,141 @@
       }
     }
 
-    // ---- Pestañas "Evidran por dentro" (la captura cambia al pulsar) ----
-    var tabBtns = document.querySelectorAll(".tab-btn");
-    var tabPanels = document.querySelectorAll(".tab-panel");
-    function growBars(scope) {
-      scope.querySelectorAll(".pm-row .fill").forEach(function (f, i) {
-        var target = f.dataset.w || f.style.getPropertyValue("--w");
-        f.style.width = "0";
-        setTimeout(function () { f.style.width = target; }, 60 + i * 80);
-      });
-    }
-    function activarTab(name) {
-      tabBtns.forEach(function (b) { b.classList.toggle("active", b.dataset.tab === name); });
-      tabPanels.forEach(function (p) {
-        var on = p.dataset.panel === name;
-        p.classList.toggle("active", on);
-        if (on) {
-          var w = p.querySelector(".pmwrap");
-          if (w) { w.classList.add("in"); if (!reduce) growBars(w); }
-        }
-      });
-    }
-    var userTabbed = false;
-    tabBtns.forEach(function (b) {
-      b.addEventListener("click", function () { userTabbed = true; activarTab(b.dataset.tab); });
-    });
+    // ---- Card-stack "Evidran por dentro" (baraja de utilidades) ----
+    (function () {
+      var stack = document.getElementById("cardstack");
+      if (!stack) return;
+      var stage = stack.querySelector(".cs-stage");
+      var cards = Array.prototype.slice.call(stack.querySelectorAll(".cs-card"));
+      var n = cards.length;
+      if (!n) return;
+      var dotsWrap = stack.querySelector(".cs-dots");
+      var capT = stack.querySelector(".cs-cap-t");
+      var capS = stack.querySelector(".cs-cap-s");
+      var GAP = 18, SCALE = 0.05, active = 0, timer = null;
 
-    // ---- Auto-activar pestañas al bajar (si el usuario aún no las ha pulsado) ----
-    var sectionDentro = document.getElementById("dentro");
-    if (sectionDentro && tabPanels.length) {
-      var order = ["panel", "tend", "hist"];
-      var lastIdx = 0, ticking = false;
-      function autoTab() {
-        ticking = false;
-        if (userTabbed || window.innerWidth <= 860) return;
-        var r = sectionDentro.getBoundingClientRect();
-        var vh = window.innerHeight;
-        if (r.bottom < vh * 0.2 || r.top > vh * 0.8) return; // sección fuera del foco
-        var p = (vh * 0.5 - r.top) / r.height;
-        var idx = Math.max(0, Math.min(2, Math.floor(Math.max(0, Math.min(0.999, p)) * 3)));
-        if (idx !== lastIdx) { lastIdx = idx; activarTab(order[idx]); }
+      var dots = cards.map(function (c, i) {
+        var d = document.createElement("button");
+        d.className = "cs-dot" + (i === 0 ? " on" : "");
+        d.type = "button";
+        d.setAttribute("role", "tab");
+        d.setAttribute("aria-label", c.dataset.title || ("Utilidad " + (i + 1)));
+        d.addEventListener("click", function () { stop(); go(i, true); });
+        dotsWrap.appendChild(d);
+        return d;
+      });
+
+      function setHeight() {
+        var h = 0;
+        cards.forEach(function (c) { h = Math.max(h, c.offsetHeight); });
+        if (h) stage.style.height = (h + (n - 1) * GAP + 8) + "px";
       }
-      window.addEventListener("scroll", function () {
-        if (!ticking) { ticking = true; requestAnimationFrame(autoTab); }
-      }, { passive: true });
-      autoTab();
-    }
+
+      function growBars(card) {
+        if (reduce) return;
+        card.querySelectorAll(".pm-row .fill").forEach(function (f, i) {
+          var target = f.dataset.w || f.style.getPropertyValue("--w");
+          if (!target) return;
+          f.style.width = "0";
+          setTimeout(function () { f.style.width = target; }, 80 + i * 80);
+        });
+      }
+
+      function layout() {
+        cards.forEach(function (c, i) {
+          var off = (i - active + n) % n;               // 0 = carta frontal
+          c.classList.toggle("is-front", off === 0);
+          c.style.zIndex = String(n - off);
+          c.style.transform = "translateY(" + (off * GAP) + "px) scale(" + (1 - off * SCALE) + ")";
+          c.style.opacity = off >= 3 ? "0" : String(1 - off * 0.14);
+          c.style.pointerEvents = off < 3 ? "auto" : "none";
+          c.setAttribute("aria-hidden", off === 0 ? "false" : "true");
+        });
+        dots.forEach(function (d, i) { d.classList.toggle("on", i === active); });
+        var cur = cards[active];
+        if (capT) capT.textContent = cur.dataset.title || "";
+        if (capS) capS.textContent = cur.dataset.sub || "";
+      }
+
+      function go(idx, grow) {
+        active = ((idx % n) + n) % n;
+        layout();
+        if (grow) growBars(cards[active]);
+      }
+
+      cards.forEach(function (c, i) {
+        c.addEventListener("click", function () {
+          if (!c.classList.contains("is-front")) { stop(); go(i, true); }
+        });
+      });
+
+      stack.querySelectorAll(".cs-arrow").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          stop(); go(active + (parseInt(btn.dataset.dir, 10) || 1), true);
+        });
+      });
+
+      // arrastrar / swipe en la carta frontal
+      var dragCard = null, x0 = 0, dx = 0;
+      function onDown(e) {
+        if (!e.target.closest(".cs-card.is-front")) return;
+        dragCard = cards[active];
+        x0 = (e.touches ? e.touches[0].clientX : e.clientX); dx = 0;
+        dragCard.classList.add("is-dragging");
+        stop();
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", onUp);
+        window.addEventListener("touchmove", onMove, { passive: false });
+        window.addEventListener("touchend", onUp);
+      }
+      function onMove(e) {
+        if (!dragCard) return;
+        var x = (e.touches ? e.touches[0].clientX : e.clientX);
+        dx = x - x0;
+        if (e.cancelable && Math.abs(dx) > 6) e.preventDefault();
+        dragCard.style.transform = "translateX(" + dx + "px) rotate(" + (dx * 0.02) + "deg)";
+      }
+      function onUp() {
+        if (!dragCard) return;
+        var card = dragCard; dragCard = null;
+        card.classList.remove("is-dragging");
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", onUp);
+        window.removeEventListener("touchmove", onMove);
+        window.removeEventListener("touchend", onUp);
+        if (Math.abs(dx) > 70) { go(active + (dx < 0 ? 1 : -1), true); }
+        else { layout(); }
+      }
+      stage.addEventListener("mousedown", onDown);
+      stage.addEventListener("touchstart", onDown, { passive: true });
+
+      function start() {
+        if (reduce || timer) return;
+        timer = setInterval(function () { go(active + 1, true); }, 4200);
+      }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      stack.addEventListener("mouseenter", stop);
+      stack.addEventListener("mouseleave", start);
+      document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); });
+
+      layout();
+      requestAnimationFrame(function () { setHeight(); layout(); });
+      window.addEventListener("resize", setHeight);
+      window.addEventListener("load", function () { setHeight(); layout(); });
+
+      if ("IntersectionObserver" in window) {
+        var seen = false;
+        var io2 = new IntersectionObserver(function (ents) {
+          ents.forEach(function (en) {
+            if (en.isIntersecting) {
+              start();
+              if (!seen) { seen = true; setHeight(); growBars(cards[active]); }
+            } else { stop(); }
+          });
+        }, { threshold: 0.35 });
+        io2.observe(stack);
+      }
+    })();
 
     // ---- Sombra de la barra al desplazar ----
     var navEl = document.querySelector("nav");
