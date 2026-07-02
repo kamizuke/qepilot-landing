@@ -342,7 +342,14 @@
     .pm-table .hide-sm { display: none; }
     .pm-row .lbl { width: 104px; font-size: 11px; }
     .pm-btns span:not(.pri) { display: none; }
-    .cardstack { margin-top: 30px; }
+    /* En pantallas estrechas el contenido de cada mockup pasa a una sola
+       columna y crece mucho en alto: el abanico 3D deja de tener sentido
+       (se ve enorme y confuso). Se muestra solo la carta activa, a tamaño
+       normal, navegable con flechas/puntos/swipe. */
+    .cardstack { margin-top: 26px; padding: 0; overflow: visible; }
+    .cs-stage { height: auto !important; }
+    .cs-card { position: static !important; transform: none !important; opacity: 1 !important; box-shadow: none !important; }
+    .cs-card:not(.is-front) { display: none; }
     .cs-arrow { width: 38px; height: 38px; font-size: 20px; }
     .cs-caption { font-size: 13px; }
   }
