@@ -149,12 +149,12 @@
   .pmdot.r { background: #D92D20; } .pmdot.a { background: #DD8A0E; } .pmdot.g { background: #16A34A; }
   .pm-unassigned { color: #B45309; font-size: 11px; font-weight: 600; }
 
-  /* CARD-STACK · utilidades apiladas como una baraja */
-  .cardstack { margin-top: 46px; }
-  .cs-stage { position: relative; max-width: 1000px; margin: 0 auto; }
+  /* CARD-STACK · utilidades desplegadas en abanico */
+  .cardstack { margin-top: 42px; overflow: hidden; padding: 58px 0 26px; }
+  .cs-stage { position: relative; max-width: 880px; margin: 0 auto; }
   .cs-card { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto;
-    transform-origin: 50% 50%;
-    transition: transform .55s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
+    transform-origin: 50% 100%;
+    transition: transform .6s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
     will-change: transform, opacity; }
   .cs-card.is-dragging { transition: none; }
   .cs-card .pmwrap { margin: 0; max-width: none; }
@@ -874,7 +874,15 @@
       var dotsWrap = stack.querySelector(".cs-dots");
       var capT = stack.querySelector(".cs-cap-t");
       var capS = stack.querySelector(".cs-cap-s");
-      var GAP = 18, SCALE = 0.05, active = 0, timer = null;
+      var active = 0, timer = null;
+      var fan = { ang: 7, dx: 26, dy: 8, ds: 0.05 };
+      function setFan() {
+        var w = window.innerWidth;
+        if (w <= 720) fan = { ang: 5, dx: 10, dy: 6, ds: 0.04 };
+        else if (w <= 980) fan = { ang: 6, dx: 18, dy: 7, ds: 0.05 };
+        else fan = { ang: 7, dx: 26, dy: 8, ds: 0.05 };
+      }
+      setFan();
 
       var dots = cards.map(function (c, i) {
         var d = document.createElement("button");
@@ -890,7 +898,7 @@
       function setHeight() {
         var h = 0;
         cards.forEach(function (c) { h = Math.max(h, c.offsetHeight); });
-        if (h) stage.style.height = (h + (n - 1) * GAP + 8) + "px";
+        if (h) stage.style.height = (h + (n - 1) * fan.dy + 10) + "px";
       }
 
       function growBars(card) {
@@ -906,11 +914,17 @@
       function layout() {
         cards.forEach(function (c, i) {
           var off = (i - active + n) % n;               // 0 = carta frontal
+          var step = Math.ceil(off / 2);
+          var dir = (off % 2) ? 1 : -1;                 // alterna a un lado y otro
+          var ang = off === 0 ? 0 : dir * step * fan.ang;
+          var x = off === 0 ? 0 : dir * step * fan.dx;
+          var y = off * fan.dy;
+          var sc = 1 - off * fan.ds;
           c.classList.toggle("is-front", off === 0);
           c.style.zIndex = String(n - off);
-          c.style.transform = "translateY(" + (off * GAP) + "px) scale(" + (1 - off * SCALE) + ")";
-          c.style.opacity = off >= 3 ? "0" : String(1 - off * 0.14);
-          c.style.pointerEvents = off < 3 ? "auto" : "none";
+          c.style.transform = "translateX(" + x + "px) translateY(" + y + "px) rotate(" + ang + "deg) scale(" + sc + ")";
+          c.style.opacity = off >= 4 ? "0" : String(1 - off * 0.08);
+          c.style.pointerEvents = off < 4 ? "auto" : "none";
           c.setAttribute("aria-hidden", off === 0 ? "false" : "true");
         });
         dots.forEach(function (d, i) { d.classList.toggle("on", i === active); });
@@ -982,7 +996,7 @@
 
       layout();
       requestAnimationFrame(function () { setHeight(); layout(); });
-      window.addEventListener("resize", setHeight);
+      window.addEventListener("resize", function () { setFan(); setHeight(); layout(); });
       window.addEventListener("load", function () { setHeight(); layout(); });
 
       if ("IntersectionObserver" in window) {
