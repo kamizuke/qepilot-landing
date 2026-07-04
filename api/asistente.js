@@ -58,6 +58,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Método no permitido" });
   }
 
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("asistente: falta ANTHROPIC_API_KEY en las variables de entorno del proyecto Vercel");
+    return res.status(200).json({ reply: "El asistente todavía se está configurando. Mientras tanto, escríbenos a demo@evidran.com y te contamos lo que necesites 🙂" });
+  }
+
   const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "?";
   if (rateLimited(ip)) {
     return res.status(429).json({ error: "Demasiadas consultas. Escríbenos a demo@evidran.com y seguimos por email." });
@@ -96,7 +101,12 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ reply: text || "No he podido generar respuesta. Escríbenos a demo@evidran.com." });
   } catch (err) {
-    console.error("asistente:", err?.status || "", err?.message || err);
-    return res.status(502).json({ error: "El asistente no está disponible ahora mismo. Escríbenos a demo@evidran.com." });
+    // Log detallado en Vercel → Deployments → Functions/Logs para diagnosticar.
+    console.error("asistente error:", err?.status || "", err?.name || "", err?.message || err);
+    var pista = "El asistente no está disponible ahora mismo. Escríbenos a demo@evidran.com.";
+    if (err?.status === 401) pista = "El asistente no está bien configurado (clave de IA no válida). Escríbenos a demo@evidran.com.";
+    else if (err?.status === 404) pista = "El asistente no está bien configurado (modelo no disponible para esta cuenta). Escríbenos a demo@evidran.com.";
+    else if (err?.status === 429) pista = "Hay mucha demanda ahora mismo. Prueba en un minuto o escríbenos a demo@evidran.com.";
+    return res.status(502).json({ error: pista });
   }
 }
