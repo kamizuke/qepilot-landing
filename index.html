@@ -461,6 +461,28 @@
   .nchip.auto i { background: #B42318; }
   .nchip.aud i { background: var(--teal); }
 
+  /* INTELIGENCIA · puntos + mockup oscuro (fusión narrativa + visual) */
+  .intel .feat-row { margin-top: 40px; align-items: center; }
+  .intel-points { list-style: none; }
+  .intel-points li { position: relative; padding: 13px 0 13px 22px; border-top: 1px solid rgba(255,255,255,.1); font-size: 14.5px; color: #AEB6C0; }
+  .intel-points li:first-child { border-top: 0; }
+  .intel-points li::before { content: ""; position: absolute; left: 2px; top: 20px; width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--teal)); }
+  .intel-points b { color: #fff; font-weight: 700; }
+  .intel-shot { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius); padding: 20px; }
+  .is-head { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #8FA9C2; font-weight: 700; margin-bottom: 14px; }
+  .is-find { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #DCE3EC; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 11px 13px; }
+  .is-find b { color: #fff; } .is-find em { color: #8FA9C2; font-style: normal; }
+  .is-block { margin-top: 15px; }
+  .is-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #8FA9C2; font-weight: 700; margin-bottom: 10px; }
+  .is-bar { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #DCE3EC; margin: 9px 0; }
+  .is-bar .k { width: 82px; flex: 0 0 auto; }
+  .is-bar .t { flex: 1; height: 7px; background: rgba(255,255,255,.1); border-radius: 5px; overflow: hidden; }
+  .is-bar .t span { display: block; height: 100%; border-radius: 5px; background: linear-gradient(135deg, var(--green), var(--teal)); }
+  .is-bar .v { width: 34px; text-align: right; color: #fff; font-weight: 700; }
+  .is-obj { margin-top: 16px; border: 1px solid rgba(70,222,126,.35); background: rgba(70,222,126,.08); border-radius: 12px; padding: 13px 15px; }
+  .is-obj .k { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #7FE0A0; font-weight: 700; }
+  .is-obj p { font-size: 13.5px; color: #fff; font-weight: 600; margin-top: 6px; }
+
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
     .feat-row.rev .fr-visual { order: 0; }
@@ -1010,11 +1032,28 @@
     <div class="flow">
       <span>Registrar</span><span>Analizar</span><span>Detectar patrones</span><span class="hot">Proponer objetivos</span><span>Alimentar la Revisión por la Dirección</span>
     </div>
-    <div class="intel-grid">
-      <div class="icard"><h3>Lo que vemos en tus datos</h3><p>Hallazgos automáticos sobre tus expedientes: acciones cerradas fuera de plazo, vencidas sin desatascar, áreas donde se concentran los problemas, carga que se acumula. Cada uno cita el dato que lo respalda.</p></div>
-      <div class="icard"><h3>De dónde vienen tus NC, de verdad</h3><p>Evidran clasifica la causa raíz de cada expediente y te enseña el reparto. Se acabó intuir.<span class="ex">«El 37% de tus no conformidades vienen de formación.»</span></p></div>
-      <div class="icard"><h3>Objetivos recomendados por sistema · ISO 6.2</h3><p>Te propone un objetivo medible con foco real, anclado a tu porcentaje y siempre editable.<span class="ex">«Reducir un 25% las no conformidades asociadas a la formación durante 2027.»</span></p></div>
-      <div class="icard"><h3>El apartado de tu Revisión por la Dirección, redactado solo</h3><p>Genera el texto del apartado de no conformidades y acciones correctivas del acta (ISO 9001, 9.3) a partir de tus estadísticas: resumen del periodo, análisis por tipo y área, estado de las acciones y recomendaciones. Y es honesto: si hay poco volumen, te lo dice.</p></div>
+    <div class="feat-row">
+      <div class="fr-text">
+        <ul class="intel-points">
+          <li><b>Lo que vemos en tus datos.</b> Hallazgos automáticos —fuera de plazo, vencidas, concentración por área—, cada uno citando el dato que lo respalda.</li>
+          <li><b>De dónde vienen tus NC, de verdad.</b> Clasifica la causa raíz de cada expediente y te enseña el reparto. Se acabó intuir.</li>
+          <li><b>Objetivos recomendados por sistema, ISO 6.2.</b> Un objetivo medible, anclado a tu porcentaje real y siempre editable.</li>
+        </ul>
+      </div>
+      <div class="intel-shot">
+        <div class="is-head">Inteligencia · lo que Evidran ve en tus datos</div>
+        <div class="is-find">⏱ <span>El <b>42 %</b> de las acciones se cerraron fuera de plazo <em>(8 de 19)</em></span></div>
+        <div class="is-block">
+          <div class="is-lbl">De dónde vienen tus no conformidades</div>
+          <div class="is-bar"><span class="k">Formación</span><span class="t"><span style="width:100%"></span></span><span class="v">37 %</span></div>
+          <div class="is-bar"><span class="k">Método</span><span class="t"><span style="width:57%"></span></span><span class="v">21 %</span></div>
+          <div class="is-bar"><span class="k">Proveedor</span><span class="t"><span style="width:43%"></span></span><span class="v">16 %</span></div>
+        </div>
+        <div class="is-obj">
+          <div class="k">Objetivo recomendado · ISO 9001 (6.2)</div>
+          <p>Reducir un 25 % las no conformidades asociadas a la formación durante 2027.</p>
+        </div>
+      </div>
     </div>
     <p class="note"><b>Evidran te muestra los patrones; las decisiones siguen siendo tuyas.</b> Amplifica tu criterio, no lo reemplaza.</p>
   </div>
