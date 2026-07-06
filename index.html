@@ -486,12 +486,26 @@
   .is-obj .k { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #7FE0A0; font-weight: 700; }
   .is-obj p { font-size: 13.5px; color: #fff; font-weight: 600; margin-top: 6px; }
 
+  /* DETALLE DE EXPEDIENTE · captura del registro completo (carrusel) */
+  .pm-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--blue); font-weight: 700; margin-bottom: 4px; }
+  .exp-meta { display: flex; flex-wrap: wrap; gap: 26px; padding: 2px 0 14px; border-bottom: 1px solid var(--cream-d); margin-bottom: 14px; }
+  .exp-meta > div { display: flex; flex-direction: column; gap: 3px; }
+  .exp-meta .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; }
+  .exp-meta .v { font-size: 13px; color: var(--ink); font-weight: 600; display: flex; align-items: center; }
+  .exp-fields .doc-field { margin-bottom: 9px; }
+  .exp-fields .doc-field:last-child { margin-bottom: 0; }
+  .exp-ev { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--cream-d); }
+  .ev-lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; margin-right: 2px; }
+  .ev-chip { font-size: 11.5px; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 6px 11px; font-weight: 600; }
+
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
     .feat-row.rev .fr-visual { order: 0; }
     .bdiag { grid-template-columns: 1fr; }
     .bd-flow { flex-direction: row; justify-content: center; }
     .bd-flow .arr { transform: rotate(90deg); }
+    .cs-card[data-title="Detalle del expediente"] .exp-fields .doc-field:nth-child(n+4) { display: none; }
+    .cs-card[data-title="Detalle del expediente"] .exp-meta > div:nth-child(3) { display: none; }
     .problem .wrap, .auditor .wrap, .twocol, .intel-grid, .dual-grid { grid-template-columns: 1fr; gap: 28px; }
     .steps, .feats, .norm-list, .res-grid, .bridge .steps { grid-template-columns: 1fr; }
     .mock { grid-template-columns: 1fr; }
@@ -949,6 +963,40 @@
       </div>
       <p class="shot-cap">Datos de ejemplo · así se ve un sistema de calidad con varias normas en marcha.</p>
     </div>
+        </article>
+        <article class="cs-card" data-title="Detalle del expediente" data-sub="Documento, evidencias, responsable y bloqueo — listo para la certificadora">
+          <div class="pmwrap">
+            <div class="browser">
+              <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/expediente/NC-2026-014</span></div>
+              <div class="pm">
+                <div class="pm-head">
+                  <div>
+                    <div class="pm-eyebrow">No conformidad interna · UNE-EN ISO 9001:2015 (10.2)</div>
+                    <div class="pm-title" style="display:flex;align-items:center;gap:10px"><span class="pmcode">NC-2026-014</span><span class="pmpill en">En curso</span></div>
+                  </div>
+                  <div class="pm-btns"><span>🔒 Bloquear</span><span class="pri">Exportar PDF</span></div>
+                </div>
+                <div class="exp-meta">
+                  <div><span class="k">Responsable</span><span class="v">M. López</span></div>
+                  <div><span class="k">Fecha límite</span><span class="v"><span class="pmdot a"></span>02/07/2026</span></div>
+                  <div><span class="k">Detección</span><span class="v">18/06/2026</span></div>
+                </div>
+                <div class="exp-fields">
+                  <div class="doc-field"><div class="l">Descripción</div><div class="v">El turno de noche no registró los controles dimensionales del lunes.</div></div>
+                  <div class="doc-field"><div class="l">Causa raíz (5 porqués)</div><div class="v">Ausencia de instrucción específica para el turno rotativo; sin control que garantice el registro. No es un fallo de la persona, sino del sistema.</div></div>
+                  <div class="doc-field"><div class="l">Acción correctiva</div><div class="v">Crear instrucción técnica para turnos rotativos y formar a los operarios de noche.</div></div>
+                  <div class="doc-field"><div class="l">Verificación de eficacia</div><div class="v">Auditoría de registros a los 2 meses · prevista 05/09/2026.</div></div>
+                </div>
+                <div class="exp-ev">
+                  <span class="ev-lbl">Evidencias</span>
+                  <span class="ev-chip">📎 control-turno.jpg</span>
+                  <span class="ev-chip">📄 informe-cliente.pdf</span>
+                  <span class="ev-chip">📊 registros-dim.xlsx</span>
+                </div>
+              </div>
+            </div>
+            <p class="shot-cap">Datos de ejemplo · el expediente completo, con evidencias adjuntas y trazabilidad para la certificadora.</p>
+          </div>
         </article>
         <article class="cs-card" data-title="Buscar en el histórico" data-sub="Por palabra clave en causa, descripción y solución">
           <div class="pmwrap">
