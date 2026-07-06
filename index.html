@@ -287,6 +287,9 @@
   footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
   footer .brand { color: #fff; }
   footer .brand em { color: var(--blue-l); }
+  footer a.li { display: inline-flex; align-items: center; vertical-align: middle; color: #AEB6C0; margin-left: 2px; transition: color .15s; }
+  footer a.li:hover { color: var(--blue-l); }
+  footer a.li svg { width: 18px; height: 18px; }
 
   .hero .sub2 { font-size: 16px; max-width: 60ch; margin: -10px auto 30px; color: var(--ink); font-weight: 600; }
   .hero .norms-micro { font-size: 14.5px; max-width: 60ch; margin: 22px auto 0; color: var(--navy); font-weight: 600; letter-spacing: .01em; }
@@ -1170,7 +1173,7 @@
 <footer>
   <div class="wrap">
     <span class="brand"><span class="wm">Evi<em>dran</em></span></span>
-    <span>El copiloto de calidad por IA · app.evidran.com · <a href="/blog/" style="color:#AEB6C0;text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="color:#AEB6C0;text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="color:#AEB6C0;text-decoration:underline">Términos y condiciones</a></span>
+    <span>El copiloto de calidad por IA · app.evidran.com · <a href="/blog/" style="color:#AEB6C0;text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="color:#AEB6C0;text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="color:#AEB6C0;text-decoration:underline">Términos y condiciones</a> · <a class="li" href="https://www.linkedin.com/company/evidran" target="_blank" rel="noopener" aria-label="Evidran en LinkedIn" title="Evidran en LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a></span>
   </div>
 </footer>
 
