@@ -415,9 +415,43 @@
   .nd-dot.r { background: #D92D20; } .nd-dot.a { background: #DD8A0E; } .nd-dot.g { background: #16A34A; } .nd-dot.b { background: var(--blue); }
   .nd-row b { font-weight: 800; }
 
+  /* PUENTE · diagrama auditor → empresa */
+  .bdiag { display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: center; max-width: 960px; margin: 6px auto 36px; }
+  .bd-cap { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--ink-soft); margin-bottom: 9px; text-align: center; }
+  .bd-panel { background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 34px rgba(22,32,43,.09); overflow: hidden; }
+  .bd-panel .browser-bar { padding: 8px 12px; }
+  .bd-panel .browser-bar i { width: 8px; height: 8px; }
+  .bd-panel .browser-bar .url { font-size: 10px; padding: 2px 9px; margin-left: 8px; }
+  .bd-bd { padding: 12px 13px; }
+  .bd-hall { display: flex; gap: 8px; align-items: center; font-size: 11px; padding: 7px 0; border-top: 1px solid var(--cream-d); color: var(--ink); }
+  .bd-hall:first-child { border-top: 0; }
+  .bd-hall .htag { font-size: 8px; padding: 2px 6px; flex: 0 0 auto; }
+  .bd-hall span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bd-send { margin-top: 11px; text-align: center; font-size: 10.5px; font-weight: 800; letter-spacing: .02em; color: #fff; background: var(--teal); border-radius: 8px; padding: 9px; }
+  .bd-flow { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+  .bd-flow .evcode { font-size: 11px; }
+  .bd-flow .arr { font-size: 28px; color: var(--navy); line-height: 1; }
+  .bd-flow small { font-size: 10px; color: var(--ink-soft); max-width: 110px; text-align: center; line-height: 1.4; }
+  .bd-open { display: flex; gap: 9px; align-items: center; font-size: 11px; padding: 7px 0; border-top: 1px solid var(--cream-d); }
+  .bd-open:first-child { border-top: 0; }
+  .bd-open .ttl { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* REVISIÓN POR LA DIRECCIÓN 9.3 · acta redactándose */
+  .acta { padding: 18px 20px 20px; }
+  .acta-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .acta-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .09em; color: var(--blue); font-weight: 700; }
+  .acta-title { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; margin-top: 3px; }
+  .acta-ia { flex: 0 0 auto; font-size: 9.5px; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--blue-l), var(--blue)); border-radius: 20px; padding: 4px 10px; white-space: nowrap; }
+  .acta p { font-size: 12.5px; color: var(--ink-soft); line-height: 1.7; margin-bottom: 10px; }
+  .acta p b { color: var(--ink); font-weight: 700; }
+  .acta-flag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; color: #167C40; background: #E7F6EC; border-radius: 8px; padding: 6px 11px; margin-top: 4px; }
+
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
     .feat-row.rev .fr-visual { order: 0; }
+    .bdiag { grid-template-columns: 1fr; }
+    .bd-flow { flex-direction: row; justify-content: center; }
+    .bd-flow .arr { transform: rotate(90deg); }
     .problem .wrap, .auditor .wrap, .twocol, .intel-grid, .dual-grid { grid-template-columns: 1fr; gap: 28px; }
     .steps, .feats, .norm-list, .res-grid, .bridge .steps { grid-template-columns: 1fr; }
     .mock { grid-template-columns: 1fr; }
@@ -634,6 +668,39 @@
       <h2>Tus hallazgos de auditoría llegan <span class="hl">ya cubiertos</span>, listos para trabajar.</h2>
       <p>Cuando tu auditor también usa Evidran, conecta con tu empresa mediante un código y deposita sus hallazgos e informes en tu cuenta — sin entrar nunca a tu panel ni ver el resto de tus datos. Tú no transcribes nada: cada hallazgo entra como un expediente abierto y empiezas directamente por la causa y la acción.</p>
     </div>
+
+    <div class="bdiag">
+      <div>
+        <div class="bd-cap">Panel del auditor</div>
+        <div class="bd-panel">
+          <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria</span></div>
+          <div class="bd-bd">
+            <div class="bd-hall"><span class="htag may">NC Mayor</span><span>Sin registro de calibración en 3 equipos</span></div>
+            <div class="bd-hall"><span class="htag men">NC Menor</span><span>Procedimiento sin fecha de revisión</span></div>
+            <div class="bd-hall"><span class="htag obs">Observación</span><span>Trazabilidad mejorable en compras</span></div>
+            <div class="bd-send">Enviar a la empresa →</div>
+          </div>
+        </div>
+      </div>
+      <div class="bd-flow">
+        <span class="evcode">EVD-7Q4K-92XM</span>
+        <div class="arr">→</div>
+        <small>hallazgos + informe firmado</small>
+      </div>
+      <div>
+        <div class="bd-cap">Tu empresa · bandeja de triage</div>
+        <div class="bd-panel">
+          <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/triage</span></div>
+          <div class="bd-bd">
+            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-018</span><span class="ttl">Registro de calibración</span></div>
+            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-019</span><span class="ttl">Revisión de procedimiento</span></div>
+            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-020</span><span class="ttl">Trazabilidad en compras</span></div>
+            <div class="bd-send" style="background:var(--blue)">Listos para causa raíz</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>Conectáis con un código</h3><p>Compartes tu código <span class="evcode">EVD-XXXXXXXX</span> con tu auditor. Con eso queda enlazado a tu empresa, sin acceso a tu panel.</p></div>
       <div class="step"><div class="n">2</div><h3>Deposita hallazgos e informe</h3><p>Al cerrar la auditoría te envía los hallazgos y el informe firmado. Si corrige algo y reenvía, no se duplica: se actualiza.</p></div>
@@ -935,6 +1002,35 @@
       <div class="icard"><h3>El apartado de tu Revisión por la Dirección, redactado solo</h3><p>Genera el texto del apartado de no conformidades y acciones correctivas del acta (ISO 9001, 9.3) a partir de tus estadísticas: resumen del periodo, análisis por tipo y área, estado de las acciones y recomendaciones. Y es honesto: si hay poco volumen, te lo dice.</p></div>
     </div>
     <p class="note"><b>Evidran te muestra los patrones; las decisiones siguen siendo tuyas.</b> Amplifica tu criterio, no lo reemplaza.</p>
+  </div>
+</section>
+
+<!-- REVISIÓN POR LA DIRECCIÓN 9.3 -->
+<section id="revision93">
+  <div class="wrap">
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Revisión por la Dirección · 9.3</div>
+        <h3>El apartado más tedioso del año, redactado a partir de tus datos.</h3>
+        <p>Evidran genera el texto de entrada del acta —no conformidades y acciones correctivas— con tus estadísticas del periodo: resumen, análisis por tipo y área, estado de las acciones y recomendaciones. Lo revisas, lo editas y lo apruebas. Y es honesto: si aún no hay volumen para hablar de tendencias, te lo dice.</p>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/revision-direccion</span></div>
+        <div class="acta">
+          <div class="acta-head">
+            <div>
+              <div class="acta-eyebrow">Revisión por la Dirección · ISO 9001 (9.3)</div>
+              <div class="acta-title">Entrada 9.3.2 · No conformidades y acciones correctivas</div>
+            </div>
+            <span class="acta-ia">✦ Generado con IA</span>
+          </div>
+          <p>Durante el primer semestre de 2026 se registraron <b>18 no conformidades</b>, con una tasa de cierre del <b>84 %</b> y un tiempo medio de resolución de <b>21 días</b>.</p>
+          <p>Por tipología predominan las asociadas a <b>formación</b> (37 %) y a <b>método/procedimiento</b> (21 %). La concentración en el área de <b>Producción</b> (35 %) sugiere reforzar los controles de la línea de montaje y revisar las instrucciones de los turnos rotativos.</p>
+          <p>Se recomienda fijar un objetivo de reducción de las no conformidades de formación para 2027 y desatascar las <b>2 acciones vencidas</b> antes de la próxima auditoría.</p>
+          <div class="acta-flag">✓ Volumen suficiente para el análisis de tendencias</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
