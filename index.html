@@ -378,11 +378,46 @@
   .fr-cap { margin: 12px 18px 16px; font-size: 12px; color: var(--ink-soft); }
   .fr-cap b { color: var(--ink); }
 
-  .feats.trio { grid-template-columns: repeat(3, 1fr); margin-top: 22px; }
+  /* filas alternas: visual a la izquierda */
+  .feat-row.rev .fr-visual { order: -1; }
+
+  /* AUDITORÍA INTERNA 9.2 · programa anual + checklist con IA */
+  .fr-visual .pm { padding: 18px; }
+  .fr-visual .pm-title { font-size: 15px; }
+  .fr-visual .pm-btns span { font-size: 10px; padding: 5px 9px; }
+  .pm-check { margin-top: 13px; border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px; }
+  .pm-check .h { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 9px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .pm-check .h .ia { font-size: 8.5px; font-weight: 800; letter-spacing: .03em; color: #fff; background: linear-gradient(135deg, var(--blue-l), var(--blue)); border-radius: 5px; padding: 2px 6px; text-transform: none; }
+  .pm-chk { display: flex; gap: 10px; align-items: flex-start; font-size: 12px; color: var(--ink); padding: 7px 0; border-top: 1px solid var(--cream-d); }
+  .pm-chk:first-of-type { border-top: 0; }
+  .pm-chk .box { width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid var(--line); flex: 0 0 auto; margin-top: 1px; display: grid; place-items: center; font-size: 10px; color: transparent; }
+  .pm-chk .box.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+  /* PLAN DE MEJORA · chips de prioridad y eficacia */
+  .prio { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .prio.alta { background: #FDE7E7; color: #B42318; }
+  .prio.media { background: #FEF1DE; color: #B45309; }
+  .prio.baja { background: #EAF2FF; color: #1D4ED8; }
+  .efic { font-size: 11px; font-weight: 700; color: #167C40; white-space: nowrap; }
+  .efic.pend { color: var(--ink-soft); font-weight: 600; }
+
+  /* AVISOS · toast de vencimiento + resumen diario */
+  .notif { padding: 20px 18px; display: grid; gap: 14px; }
+  .notif-toast { display: flex; gap: 12px; align-items: flex-start; border: 1px solid #F3C9C4; background: linear-gradient(135deg, #fff, #FDF2F1); border-radius: 12px; padding: 13px 15px; box-shadow: 0 10px 24px rgba(180,35,24,.08); }
+  .nt-ic { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: #B42318; color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 15px; }
+  .notif-toast b { font-size: 13px; color: var(--ink); }
+  .notif-toast p { font-size: 12px; color: var(--ink-soft); margin-top: 3px; line-height: 1.55; }
+  .notif-digest { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .notif-digest .h { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 10px; }
+  .nd-row { display: flex; align-items: center; gap: 11px; font-size: 12.5px; color: var(--ink); padding: 8px 0; border-top: 1px solid var(--cream-d); }
+  .nd-row:first-of-type { border-top: 0; }
+  .nd-dot { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; }
+  .nd-dot.r { background: #D92D20; } .nd-dot.a { background: #DD8A0E; } .nd-dot.g { background: #16A34A; } .nd-dot.b { background: var(--blue); }
+  .nd-row b { font-weight: 800; }
 
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
-    .feats.trio { grid-template-columns: 1fr; }
+    .feat-row.rev .fr-visual { order: 0; }
     .problem .wrap, .auditor .wrap, .twocol, .intel-grid, .dual-grid { grid-template-columns: 1fr; gap: 28px; }
     .steps, .feats, .norm-list, .res-grid, .bridge .steps { grid-template-columns: 1fr; }
     .mock { grid-template-columns: 1fr; }
@@ -657,10 +692,80 @@
       </div>
     </div>
 
-    <div class="feats trio">
-      <div class="feat"><div class="ic">🧭</div><h3>La auditoría interna, sin Excel (9.2)</h3><p>Programa anual por procesos, checklist propuesta por la IA y hallazgos que entran directos a tu bandeja — sin transcribir nada.</p></div>
-      <div class="feat"><div class="ic">📋</div><h3>Un plan de mejora continua</h3><p>NC, hallazgos, riesgos o ideas propias en una misma tabla, con responsable, plazo y verificación de eficacia (10.2). Lo describes en una frase y la IA precarga el formulario.</p></div>
-      <div class="feat"><div class="ic">🔔</div><h3>Avisos que no dependen de tu memoria</h3><p>Aviso al momento cuando algo pasa a "vencido" y un resumen cada mañana con lo que vence pronto y los riesgos por reevaluar.</p></div>
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Auditoría interna · 9.2</div>
+        <h3>El programa anual, la checklist y los hallazgos — sin un Excel.</h3>
+        <p>Planificas la auditoría por procesos, la IA te propone la checklist según la norma y tú la editas. Cierras con informe en PDF y los hallazgos entran directos a tu bandeja como expedientes abiertos: no transcribes nada.</p>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria-interna</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">Programa 2026</div><div class="pm-btns"><span>Año: 2026</span><span class="pri">+ Auditoría</span></div></div>
+          <table class="pm-table">
+            <thead><tr><th>Proceso</th><th>Fecha</th><th>Estado</th><th>Hallazgos</th></tr></thead>
+            <tbody>
+              <tr><td>Compras y proveedores</td><td>Feb</td><td><span class="pmpill ce">Cerrada</span></td><td>2</td></tr>
+              <tr><td>Producción</td><td>Abr</td><td><span class="pmpill ce">Cerrada</span></td><td>3</td></tr>
+              <tr><td>Almacén y logística</td><td>Jun</td><td><span class="pmpill en">En curso</span></td><td>—</td></tr>
+              <tr><td>Diseño y desarrollo</td><td>Oct</td><td><span class="pmpill ab">Planificada</span></td><td>—</td></tr>
+            </tbody>
+          </table>
+          <div class="pm-check">
+            <div class="h">Checklist · Almacén y logística <span class="ia">Propuesta por IA</span></div>
+            <div class="pm-chk"><span class="box on">✓</span><span>¿Se registran las condiciones de almacenamiento de producto sensible? (8.5.4)</span></div>
+            <div class="pm-chk"><span class="box on">✓</span><span>¿Hay trazabilidad de lotes en las expediciones? (8.5.2)</span></div>
+            <div class="pm-chk"><span class="box">✓</span><span>¿Se controla la rotación del stock por caducidad, FIFO? (8.5.1)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Plan de mejora continua · 10.2</div>
+        <h3>Todas tus acciones en una tabla, con la eficacia verificada.</h3>
+        <p>No conformidades, hallazgos de auditoría, riesgos tratados o ideas propias: todo cae en el mismo plan, con responsable, prioridad, plazo y verificación de eficacia. Lo describes en una frase y la IA precarga el formulario por ti.</p>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/plan-mejora</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">Plan de mejora</div><div class="pm-btns"><span>Todas</span><span class="pri">+ Acción</span></div></div>
+          <table class="pm-table">
+            <thead><tr><th>Acción</th><th class="hide-sm">Origen</th><th>Resp.</th><th>Prioridad</th><th>Eficacia</th></tr></thead>
+            <tbody>
+              <tr><td>Instrucción de control · turno noche</td><td class="hide-sm"><span class="pmcode">NC-2026-014</span></td><td>M. López</td><td><span class="prio alta">Alta</span></td><td><span class="efic pend">Pendiente</span></td></tr>
+              <tr><td>Calibración trimestral de sondas de pH</td><td class="hide-sm"><span class="pmcode">NCA-2024-001</span></td><td>J. Ruiz</td><td><span class="prio media">Media</span></td><td><span class="efic">✓ Verificada</span></td></tr>
+              <tr><td>Formación en registro dimensional</td><td class="hide-sm">Auditoría</td><td>A. Pérez</td><td><span class="prio alta">Alta</span></td><td><span class="efic pend">Pendiente</span></td></tr>
+              <tr><td>Revisar proveedor de embalaje</td><td class="hide-sm"><span class="pmcode">8D-2026-002</span></td><td>Compras</td><td><span class="prio baja">Baja</span></td><td><span class="efic pend">Pendiente</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Avisos · no dependen de tu memoria</div>
+        <h3>Entérate antes de que el plazo te pase por encima.</h3>
+        <p>Aviso al momento cuando una acción pasa a "vencida" — no un email diario que acabas ignorando. Y cada mañana, un resumen con lo que vence pronto y los riesgos que toca reevaluar.</p>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com</span></div>
+        <div class="notif">
+          <div class="notif-toast">
+            <span class="nt-ic">!</span>
+            <div><b>Acción vencida</b><p><b>NC-2026-014</b> · «Desviación dimensional turno noche» venció ayer. Responsable: M. López.</p></div>
+          </div>
+          <div class="notif-digest">
+            <div class="h">Tu resumen · lunes, 9:00</div>
+            <div class="nd-row"><span class="nd-dot a"></span><span><b>3 acciones</b> vencen esta semana</span></div>
+            <div class="nd-row"><span class="nd-dot r"></span><span><b>2 acciones</b> vencidas sin cerrar</span></div>
+            <div class="nd-row"><span class="nd-dot g"></span><span><b>4 riesgos</b> tratados pendientes de reevaluar el residual</span></div>
+            <div class="nd-row"><span class="nd-dot b"></span><span>Auditoría de <b>Almacén</b> en curso — hallazgos por pasar al triage</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
