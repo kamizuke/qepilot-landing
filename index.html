@@ -446,6 +446,21 @@
   .acta p b { color: var(--ink); font-weight: 700; }
   .acta-flag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; color: #167C40; background: #E7F6EC; border-radius: 8px; padding: 6px 11px; margin-top: 4px; }
 
+  /* NORMAS · banda de chips con color por sistema */
+  .normchips { display: flex; flex-wrap: wrap; gap: 11px; justify-content: center; max-width: 920px; margin: 34px auto 0; }
+  .nchip { display: inline-flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 10px 17px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; box-shadow: 0 3px 10px rgba(22,32,43,.04); transition: transform .15s, box-shadow .15s; }
+  .nchip:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(22,32,43,.09); }
+  .nchip b { color: var(--ink); font-weight: 800; font-size: 13.5px; letter-spacing: -0.01em; white-space: nowrap; }
+  .nchip i { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; background: var(--navy); }
+  .nchip.q i { background: var(--blue); }
+  .nchip.env i { background: #2E7D54; }
+  .nchip.sst i { background: #B45309; }
+  .nchip.en i { background: #0E7490; }
+  .nchip.lab i { background: #6D28D9; }
+  .nchip.acc i { background: var(--navy); }
+  .nchip.auto i { background: #B42318; }
+  .nchip.aud i { background: var(--teal); }
+
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
     .feat-row.rev .fr-visual { order: 0; }
@@ -570,22 +585,22 @@
       <h2>Cada norma con su plantilla, su carpeta y su lógica. <span class="hl">Aquí, con una sola conversación.</span></h2>
       <p>No es un chat de propósito general con el logo cambiado: cada flujo entiende el lenguaje y la lógica de su norma, te pregunta lo que esa norma exige y redacta como lo haría un experto en ese sistema.</p>
     </div>
-    <div class="norm-list">
-      <div class="norm"><strong>UNE-EN ISO 9001:2015</strong><span>No conformidad interna</span></div>
-      <div class="norm"><strong>UNE-EN ISO 14001:2015</strong><span>No conformidad ambiental · aspecto, requisito legal, impacto</span></div>
-      <div class="norm"><strong>UNE-EN ISO 45001:2023</strong><span>Seguridad y salud · análisis de riesgo, jerarquía preventiva</span></div>
-      <div class="norm"><strong>UNE-EN ISO 50001:2018</strong><span>No conformidad energética · uso significativo, IDEn, impacto kWh/€/CO₂</span></div>
-      <div class="norm"><strong>UNE-EN ISO/IEC 17025:2017</strong><span>Trabajo no conforme · extensión, informes emitidos, reanudación</span></div>
-      <div class="norm"><strong>UNE-EN ISO/IEC 17020:2012</strong><span>Entidades de inspección · no conformidad del sistema de gestión</span></div>
-      <div class="norm"><strong>UNE-EN ISO/IEC 17065:2012</strong><span>Certificación de producto · no conformidad del sistema de gestión</span></div>
-      <div class="norm"><strong>8D · Reclamación de cliente</strong><span>Formato genérico y formato OEM (automoción)</span></div>
-      <div class="norm"><strong>Respuesta a hallazgos de auditoría</strong><span>Certificación y acreditación</span></div>
+    <div class="normchips">
+      <span class="nchip q"><i></i><b>ISO 9001</b> No conformidad interna</span>
+      <span class="nchip env"><i></i><b>ISO 14001</b> Ambiental</span>
+      <span class="nchip sst"><i></i><b>ISO 45001</b> Seguridad y salud</span>
+      <span class="nchip en"><i></i><b>ISO 50001</b> Energía</span>
+      <span class="nchip lab"><i></i><b>ISO/IEC 17025</b> Trabajo no conforme</span>
+      <span class="nchip acc"><i></i><b>ISO/IEC 17020</b> Inspección</span>
+      <span class="nchip acc"><i></i><b>ISO/IEC 17065</b> Certificación de producto</span>
+      <span class="nchip auto"><i></i><b>8D</b> Reclamación de cliente · OEM</span>
+      <span class="nchip aud"><i></i><b>Auditoría</b> Respuesta a hallazgos</span>
     </div>
     <div class="normband-profile">
-      <strong>¿Entidad acreditada por ENAC?</strong> En ISO/IEC 17020, 17025 y 17065, Evidran cubre la capa de gestión de tu acreditación — no conformidades, acciones correctivas y mejora continua, la parte que las tres normas comparten y que el evaluador revisa siempre. La competencia técnica de tu actividad es otra historia: esa sigue siendo tuya.
+      <strong>¿Entidad acreditada por ENAC?</strong> En 17020, 17025 y 17065 cubrimos la capa de gestión —no conformidades, acciones correctivas y mejora—, la parte que el evaluador revisa siempre. La competencia técnica de tu actividad sigue siendo tuya.
     </div>
     <div class="normband-profile">
-      <strong>Y aprende a qué te dedicas.</strong> Evidran propone un perfil de tu empresa a partir de tu web pública, tú lo revisas y lo apruebas, y desde ahí la entrevista habla con el vocabulario de tu actividad — no en abstracto.
+      <strong>Y aprende a qué te dedicas.</strong> Propone un perfil de tu empresa desde tu web pública; tú lo apruebas y la entrevista pasa a hablar con el vocabulario de tu actividad.
     </div>
   </div>
 </section>
