@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Evidran por dentro — El panel, el expediente y el histórico, con datos reales</title>
+<meta name="description" content="Mira Evidran por dentro: el panel de calidad con varias normas en marcha, el expediente completo con evidencias y trazabilidad, y el histórico de causas y soluciones consultable por palabra clave." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W6Q6L17YS9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-W6Q6L17YS9');
+</script>
+<style>
+  :root {
+    --blue: #2563EB; --blue-l: #4AA6F5; --teal: #15B8A6; --green: #46DE7E;
+    --navy: #2D5A7B; --ink: #16202B; --ink-soft: #4A5563;
+    --cream: #F7F6F2; --cream-d: #EDEAE2; --line: #DDD8CC; --white: #fff;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink); background: var(--cream); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 84px 0; }
+  h1, h2, h3 { line-height: 1.18; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; }
+  p { color: var(--ink-soft); }
+  .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12.5px; font-weight: 700; color: var(--blue); margin-bottom: 14px; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(247,246,242,.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+  .brand .wm { white-space: nowrap; }
+  .brand em { font-style: normal; color: var(--navy); }
+  .nav-right { display: flex; align-items: center; gap: 18px; }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
+  .nav-links a:hover { color: var(--blue); }
+
+  /* BUTTONS */
+  .btn { display: inline-block; border: 0; cursor: pointer; font-weight: 700; font-size: 15px; border-radius: 12px; padding: 13px 22px; text-decoration: none; transition: transform .12s, box-shadow .12s; }
+  .btn-primary { background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; box-shadow: 0 8px 22px rgba(37,99,235,.28); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(37,99,235,.34); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-sm { padding: 9px 16px; font-size: 14px; }
+
+  .center-head { text-align: center; max-width: 60ch; margin: 0 auto 50px; }
+  .center-head p { font-size: 17px; margin-top: 14px; }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* PANEL MOCKUP de alta fidelidad */
+  .pmwrap { max-width: 1000px; margin: 0 auto; }
+  .browser { background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 34px 64px rgba(22,32,43,.14); overflow: hidden; }
+  .browser-bar { display: flex; align-items: center; gap: 7px; padding: 11px 16px; background: var(--cream); border-bottom: 1px solid var(--cream-d); }
+  .browser-bar i { width: 11px; height: 11px; border-radius: 50%; background: #D7D2C6; }
+  .browser-bar .url { margin-left: 12px; font-size: 11.5px; color: var(--ink-soft); background: #fff; border: 1px solid var(--line); border-radius: 7px; padding: 3px 14px; }
+  .pm { padding: 22px; }
+  .pm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .pm-title { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; }
+  .pm-btns { display: flex; gap: 8px; }
+  .pm-btns span { font-size: 11px; font-weight: 700; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 8px; padding: 6px 11px; white-space: nowrap; }
+  .pm-btns .pri { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .pm-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .pm-kpi { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .pm-kpi b { display: block; font-size: 27px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .pm-kpi b.alert { color: #B42318; }
+  .pm-kpi b sup { font-size: 13px; font-weight: 700; }
+  .pm-kpi small { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; }
+  .pm-bd { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .pm-card { border: 1px solid var(--line); border-radius: 12px; padding: 15px 16px; }
+  .pm-card .h { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 11px; }
+  .pm-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 12px; }
+  .pm-row .lbl { width: 130px; color: var(--ink); flex: 0 0 auto; }
+  .pm-row .track { flex: 1; height: 7px; background: var(--cream-d); border-radius: 5px; overflow: hidden; }
+  .pm-row .fill { height: 100%; border-radius: 5px; background: var(--blue); width: var(--w); transition: width 1.1s cubic-bezier(.16,.84,.44,1); }
+  .pm-row .n { width: 18px; text-align: right; color: var(--ink-soft); font-weight: 700; }
+  .pm-table { width: 100%; border-collapse: collapse; }
+  .pm-table th { font-size: 9.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--cream-d); font-weight: 700; }
+  .pm-table td { font-size: 12px; padding: 11px 10px; border-bottom: 1px solid var(--cream-d); color: var(--ink); vertical-align: middle; }
+  .pmpill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .pmpill.ab { background: #EAF2FF; color: #1D4ED8; }
+  .pmpill.en { background: #FEF1DE; color: #B45309; }
+  .pmpill.ce { background: #E7F6EC; color: #167C40; }
+  .pmcode { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--navy); }
+  .pmdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .pmdot.r { background: #D92D20; } .pmdot.a { background: #DD8A0E; } .pmdot.g { background: #16A34A; }
+  .pm-unassigned { color: #B45309; font-size: 11px; font-weight: 600; }
+  .shot-cap { text-align: center; margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); }
+
+  /* documento / expediente */
+  .doc-field { border: 1px solid var(--cream-d); border-radius: 9px; padding: 8px 10px; margin-bottom: 8px; }
+  .doc-field .l { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; }
+  .doc-field .v { font-size: 12.5px; color: var(--ink); margin-top: 2px; }
+  .pm-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--blue); font-weight: 700; margin-bottom: 4px; }
+  .exp-meta { display: flex; flex-wrap: wrap; gap: 26px; padding: 2px 0 14px; border-bottom: 1px solid var(--cream-d); margin-bottom: 14px; }
+  .exp-meta > div { display: flex; flex-direction: column; gap: 3px; }
+  .exp-meta .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; }
+  .exp-meta .v { font-size: 13px; color: var(--ink); font-weight: 600; display: flex; align-items: center; }
+  .exp-fields .doc-field { margin-bottom: 9px; }
+  .exp-fields .doc-field:last-child { margin-bottom: 0; }
+  .exp-ev { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--cream-d); }
+  .ev-lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; margin-right: 2px; }
+  .ev-chip { font-size: 11.5px; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 6px 11px; font-weight: 600; }
+
+  /* historial */
+  .hist-search { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
+  .hist-search .box { flex: 1; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--ink-soft); display: flex; gap: 8px; align-items: center; }
+  .hist-search .box .q { color: var(--ink); font-weight: 600; }
+  .hist-count { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+  .hist-count.hc-some { display: none; }
+  .hist-res { border: 1px solid var(--line); border-radius: 12px; padding: 13px 16px; margin-bottom: 10px; }
+  .hist-res:last-child { margin-bottom: 0; }
+  .hist-res .top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
+  .hist-res .ttl { font-weight: 700; font-size: 13px; color: var(--ink); }
+  .hist-res .meta { font-size: 12px; color: var(--ink-soft); line-height: 1.65; }
+  .hist-res .meta b { color: var(--ink); font-weight: 700; }
+  mark { background: #FEF3C7; color: inherit; padding: 0 3px; border-radius: 3px; }
+
+  /* CARD-STACK */
+  .cardstack { margin-top: 42px; overflow: hidden; padding: 58px 0 26px; }
+  .cs-stage { position: relative; max-width: 880px; margin: 0 auto; }
+  .cs-card { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto;
+    transform-origin: 50% 100%;
+    transition: transform .6s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
+    will-change: transform, opacity; }
+  .cs-card.is-dragging { transition: none; }
+  .cs-card .pmwrap { margin: 0; max-width: none; }
+  .cs-card .browser { transition: box-shadow .45s ease; }
+  .cs-card:not(.is-front) { cursor: pointer; }
+  .cs-card:not(.is-front) .browser { box-shadow: 0 16px 34px rgba(22,32,43,.10); }
+  .cs-card:not(.is-front) .shot-cap { opacity: 0; }
+  .cs-card.is-front { cursor: default; }
+  .cs-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 26px; }
+  .cs-arrow { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--navy);
+    font-size: 22px; line-height: 1; cursor: pointer; display: grid; place-items: center;
+    transition: border-color .2s, box-shadow .2s, transform .2s, color .2s; }
+  .cs-arrow:hover { border-color: var(--blue); color: var(--blue); box-shadow: 0 8px 20px rgba(37,99,235,.16); transform: translateY(-1px); }
+  .cs-arrow:active { transform: translateY(0); }
+  .cs-dots { display: flex; align-items: center; gap: 10px; }
+  .cs-dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 50%; background: var(--line); cursor: pointer; transition: background .25s, transform .25s; }
+  .cs-dot:hover { background: var(--navy); }
+  .cs-dot.on { background: var(--blue); transform: scale(1.35); }
+  .cs-caption { text-align: center; margin-top: 16px; font-size: 14px; color: var(--ink-soft); }
+  .cs-caption .cs-cap-t { color: var(--ink); font-weight: 800; letter-spacing: -0.01em; }
+  .cs-caption .cs-cap-t:not(:empty)::after { content: " · "; color: var(--line); font-weight: 400; }
+
+  .normband-profile { max-width: 760px; margin: 30px auto 0; text-align: center; background: linear-gradient(135deg, #fff, #F4F8FF); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 26px; font-size: 15.5px; color: var(--ink-soft); }
+  .normband-profile strong { color: var(--ink); }
+
+  /* FINAL CTA */
+  .final { text-align: center; background: linear-gradient(160deg, #16202B, #0E2A4A); color: #fff; }
+  .final h2 { color: #fff; max-width: 22ch; margin: 0 auto 16px; }
+  .final p { color: #AEB6C0; font-size: 17px; max-width: 52ch; margin: 0 auto 16px; }
+  .final .hero-cta { justify-content: center; }
+  .final .btn-ghost { color: #fff; border-color: rgba(255,255,255,.3); }
+  .final .btn-ghost:hover { border-color: #fff; color: #fff; }
+
+  footer { background: var(--ink); color: #8893A0; padding: 34px 0; font-size: 13.5px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  footer .brand { color: #fff; }
+  footer .brand em { color: var(--blue-l); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cs-card { transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    section { padding: 60px 0; }
+    .pm { padding: 16px; }
+    .pm-kpis { grid-template-columns: repeat(2, 1fr); }
+    .pm-bd { grid-template-columns: 1fr; }
+    .pm-table .hide-sm { display: none; }
+    .pm-row .lbl { width: 104px; font-size: 11px; }
+    .pm-btns span:not(.pri) { display: none; }
+    .cs-card[data-title="Detalle del expediente"] .exp-fields .doc-field:nth-child(n+4) { display: none; }
+    .cs-card[data-title="Detalle del expediente"] .exp-meta > div:nth-child(3) { display: none; }
+    /* En pantallas estrechas se muestra solo la carta activa, a tamaño
+       normal, navegable con flechas/puntos/swipe. */
+    .cardstack { margin-top: 26px; padding: 0; overflow: visible; }
+    .cs-stage { height: auto !important; }
+    .cs-card { position: static !important; transform: none !important; opacity: 1 !important; box-shadow: none !important; }
+    .cs-card:not(.is-front) { display: none; }
+    .cs-arrow { width: 38px; height: 38px; font-size: 20px; }
+    .cs-caption { font-size: 13px; }
+    .cs-card[data-title="Panel de calidad"] .pm-bd .pm-card:nth-child(2) { display: none; }
+    .cs-card[data-title="Panel de calidad"] .pm-bd .pm-row:nth-child(5) { display: none; }
+    .cs-card[data-title="Panel de calidad"] .pm-table tbody tr:nth-child(n+4) { display: none; }
+    .cs-card[data-title="Buscar en el histórico"] .hist-res:nth-child(n+5) { display: none; }
+    .hc-all { display: none; }
+    .hc-some { display: inline; }
+  }
+</style>
+<noscript><style>.pm-row .fill{width:var(--w)!important;}.cs-card{position:static!important;transform:none!important;opacity:1!important;margin:0 auto 28px!important;}.cs-stage{height:auto!important;}.cs-card .shot-cap{opacity:1!important;}.cs-controls,.cs-caption{display:none!important;}</style></noscript>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="brand">
+      <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Evidran">
+        <defs>
+          <linearGradient id="evb" x1="4" y1="6" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#4AA6F5"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+          <linearGradient id="evg" x1="29" y1="32" x2="38" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#46DE7E"/><stop offset="1" stop-color="#15B8A6"/></linearGradient>
+        </defs>
+        <path d="M11 7 H27 A7 7 0 0 1 34 14 V23 A7 7 0 0 1 27 30 H18 L8 38 L11 30 A7 7 0 0 1 4 23 V14 A7 7 0 0 1 11 7 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="13" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="19" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="25" cy="18.5" r="2.1" fill="url(#evb)"/>
+        <path d="M27 23 H35 L40 28 V41 H27 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M35 23 V28 H40" fill="none" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M30 33 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 36.5 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 40 H34.5" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="wm">Evi<em>dran</em></span>
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="/">← Volver a Evidran</a>
+        <a href="/auditores.html">Para auditores</a>
+        <a href="/blog/">Blog</a>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-primary btn-sm">Pide una demo</a>
+      </div>
+      <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PANEL MOCKUP · míralo por dentro -->
+<section id="dentro" style="padding-top:52px">
+  <div class="wrap">
+    <div class="center-head"><div class="eyebrow">Míralo por dentro</div><h2 style="font-size:clamp(30px,4.4vw,48px)">Evidran por dentro, con datos reales</h2><p>Cada utilidad, poblada como en un día normal de trabajo. Pasa las cartas con las flechas o arrastrándolas.</p></div>
+
+    <div class="cardstack" id="cardstack">
+      <div class="cs-stage">
+        <article class="cs-card" data-title="Panel de calidad" data-sub="KPIs, semáforo y reparto por norma y área">
+    <div class="pmwrap">
+      <div class="browser">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com</span></div>
+        <div class="pm">
+          <div class="pm-head">
+            <div class="pm-title">Panel de calidad</div>
+            <div class="pm-btns"><span>Historial</span><span>Tendencias</span><span class="pri">+ Nuevo expediente</span></div>
+          </div>
+          <div class="pm-kpis">
+            <div class="pm-kpi"><b>12</b><small>Abiertas</small></div>
+            <div class="pm-kpi"><b class="alert">2</b><small>Vencidas</small></div>
+            <div class="pm-kpi"><b>19<sup>d</sup></b><small>Antigüedad media</small></div>
+            <div class="pm-kpi"><b>7</b><small>Cerradas este mes</small></div>
+          </div>
+          <div class="pm-bd">
+            <div class="pm-card">
+              <div class="h">Por tipo de documento</div>
+              <div class="pm-row"><span class="lbl">NC Interna · ISO 9001</span><span class="track"><span class="fill" style="--w:100%"></span></span><span class="n">9</span></div>
+              <div class="pm-row"><span class="lbl">8D Cliente</span><span class="track"><span class="fill" style="--w:56%"></span></span><span class="n">5</span></div>
+              <div class="pm-row"><span class="lbl">NC Ambiental · ISO 14001</span><span class="track"><span class="fill" style="--w:44%;background:#2E7D54"></span></span><span class="n">4</span></div>
+              <div class="pm-row"><span class="lbl">NC Energética · ISO 50001</span><span class="track"><span class="fill" style="--w:33%;background:#0E7490"></span></span><span class="n">3</span></div>
+            </div>
+            <div class="pm-card">
+              <div class="h">Por área / proceso</div>
+              <div class="pm-row"><span class="lbl">Producción</span><span class="track"><span class="fill" style="--w:100%"></span></span><span class="n">11</span></div>
+              <div class="pm-row"><span class="lbl">Logística</span><span class="track"><span class="fill" style="--w:55%"></span></span><span class="n">6</span></div>
+              <div class="pm-row"><span class="lbl">Compras</span><span class="track"><span class="fill" style="--w:45%"></span></span><span class="n">5</span></div>
+              <div class="pm-row"><span class="lbl">Mantenimiento</span><span class="track"><span class="fill" style="--w:36%"></span></span><span class="n">4</span></div>
+            </div>
+          </div>
+          <table class="pm-table">
+            <thead><tr><th>Estado</th><th>Código</th><th class="hide-sm">Tipo</th><th>Título</th><th class="hide-sm">Área</th><th>Responsable</th><th>Fecha límite</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pmpill en">En curso</span></td><td><span class="pmcode">NC-2026-014</span></td><td class="hide-sm">NC Interna</td><td>Desviación dimensional turno noche</td><td class="hide-sm">Producción</td><td>M. López</td><td><span class="pmdot a"></span>02/07/2026</td></tr>
+              <tr><td><span class="pmpill ab">Abierto</span></td><td><span class="pmcode">NCA-2026-003</span></td><td class="hide-sm">NC Ambiental</td><td>Vertido con pH fuera de rango</td><td class="hide-sm">Planta</td><td>J. Ruiz</td><td><span class="pmdot r"></span>18/06/2026</td></tr>
+              <tr><td><span class="pmpill en">En curso</span></td><td><span class="pmcode">8D-2026-002</span></td><td class="hide-sm">8D Cliente</td><td>Reclamación lote 4471</td><td class="hide-sm">Calidad</td><td>A. Pérez</td><td><span class="pmdot g"></span>15/07/2026</td></tr>
+              <tr><td><span class="pmpill ab">Abierto</span></td><td><span class="pmcode">NCE-2026-001</span></td><td class="hide-sm">NC Energética</td><td>Consumo de aire comprimido +18%</td><td class="hide-sm">Mantenimiento</td><td><span class="pm-unassigned">Sin asignar</span></td><td><span class="pmdot a"></span>09/07/2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="shot-cap">Datos de ejemplo · así se ve un sistema de calidad con varias normas en marcha.</p>
+    </div>
+        </article>
+        <article class="cs-card" data-title="Detalle del expediente" data-sub="Documento, evidencias, responsable y bloqueo — listo para la certificadora">
+          <div class="pmwrap">
+            <div class="browser">
+              <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/expediente/NC-2026-014</span></div>
+              <div class="pm">
+                <div class="pm-head">
+                  <div>
+                    <div class="pm-eyebrow">No conformidad interna · UNE-EN ISO 9001:2015 (10.2)</div>
+                    <div class="pm-title" style="display:flex;align-items:center;gap:10px"><span class="pmcode">NC-2026-014</span><span class="pmpill en">En curso</span></div>
+                  </div>
+                  <div class="pm-btns"><span>🔒 Bloquear</span><span class="pri">Exportar PDF</span></div>
+                </div>
+                <div class="exp-meta">
+                  <div><span class="k">Responsable</span><span class="v">M. López</span></div>
+                  <div><span class="k">Fecha límite</span><span class="v"><span class="pmdot a"></span>02/07/2026</span></div>
+                  <div><span class="k">Detección</span><span class="v">18/06/2026</span></div>
+                </div>
+                <div class="exp-fields">
+                  <div class="doc-field"><div class="l">Descripción</div><div class="v">El turno de noche no registró los controles dimensionales del lunes.</div></div>
+                  <div class="doc-field"><div class="l">Causa raíz (5 porqués)</div><div class="v">Ausencia de instrucción específica para el turno rotativo; sin control que garantice el registro. No es un fallo de la persona, sino del sistema.</div></div>
+                  <div class="doc-field"><div class="l">Acción correctiva</div><div class="v">Crear instrucción técnica para turnos rotativos y formar a los operarios de noche.</div></div>
+                  <div class="doc-field"><div class="l">Verificación de eficacia</div><div class="v">Auditoría de registros a los 2 meses · prevista 05/09/2026.</div></div>
+                </div>
+                <div class="exp-ev">
+                  <span class="ev-lbl">Evidencias</span>
+                  <span class="ev-chip">📎 control-turno.jpg</span>
+                  <span class="ev-chip">📄 informe-cliente.pdf</span>
+                  <span class="ev-chip">📊 registros-dim.xlsx</span>
+                </div>
+              </div>
+            </div>
+            <p class="shot-cap">Datos de ejemplo · el expediente completo, con evidencias adjuntas y trazabilidad para la certificadora.</p>
+          </div>
+        </article>
+        <article class="cs-card" data-title="Buscar en el histórico" data-sub="Por palabra clave en causa, descripción y solución">
+          <div class="pmwrap">
+            <div class="browser">
+              <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/historial</span></div>
+              <div class="pm">
+                <div class="pm-head"><div class="pm-title">Historial</div><div class="pm-btns"><span>Tipo: todos</span><span>Área: todas</span></div></div>
+                <div class="hist-search">
+                  <div class="box">🔎 <span class="q">calibración</span></div>
+                  <span class="hist-count hc-all">4 resultados</span>
+                  <span class="hist-count hc-some">2 resultados</span>
+                </div>
+                <div class="hist-res">
+                  <div class="top"><span class="pmcode">NCA-2024-001</span><span class="pmpill ce">Cerrado</span><span class="ttl">Vertido con pH fuera de rango</span></div>
+                  <div class="meta"><b>Causa:</b> Sonda de pH sin <mark>calibrar</mark> desde hace 6 meses · <b>Solución:</b> Plan de <mark>calibración</mark> trimestral de sondas.</div>
+                </div>
+                <div class="hist-res">
+                  <div class="top"><span class="pmcode">TNC-2024-001</span><span class="pmpill ce">Cerrado</span><span class="ttl">Extensómetro desviado del patrón</span></div>
+                  <div class="meta"><b>Causa:</b> Extensómetro fuera de <mark>calibración</mark> · <b>Solución:</b> Recalibración + revisión de los informes ya emitidos.</div>
+                </div>
+                <div class="hist-res">
+                  <div class="top"><span class="pmcode">NC-2024-007</span><span class="pmpill ce">Cerrado</span><span class="ttl">Calibre sin trazabilidad metrológica</span></div>
+                  <div class="meta"><b>Causa:</b> Calibre no incluido en el plan de <mark>calibración</mark> tras su compra · <b>Solución:</b> Incluir en el plan + verificar nuevos equipos.</div>
+                </div>
+                <div class="hist-res">
+                  <div class="top"><span class="pmcode">NC-2025-011</span><span class="pmpill ce">Cerrado</span><span class="ttl">Báscula de expedición fuera de tolerancia</span></div>
+                  <div class="meta"><b>Causa:</b> Báscula sin <mark>calibración</mark> tras el traslado de línea · <b>Solución:</b> Recalibrar tras cualquier traslado + registro en el plan.</div>
+                </div>
+              </div>
+            </div>
+            <p class="shot-cap">Datos de ejemplo · "esto ya pasó: esta fue la causa y así se resolvió".</p>
+          </div>
+        </article>
+      </div>
+      <div class="cs-controls">
+        <button class="cs-arrow" data-dir="-1" type="button" aria-label="Utilidad anterior">‹</button>
+        <div class="cs-dots" role="tablist" aria-label="Utilidades de Evidran"></div>
+        <button class="cs-arrow" data-dir="1" type="button" aria-label="Siguiente utilidad">›</button>
+      </div>
+      <p class="cs-caption"><b class="cs-cap-t"></b><span class="cs-cap-s"></span></p>
+      <div class="normband-profile" style="margin-top:34px">
+        <strong>¿Vienes de Excel?</strong> Importa tu histórico de no conformidades con un asistente de mapeo de columnas, y ponlo a trabajar desde el primer día.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <h2>Míralo por dentro con tus propios datos.</h2>
+    <p>Crea tu organización, abre tu primer expediente hablando y compruébalo en tu caso real.</p>
+    <div class="hero-cta">
+      <a href="https://app.evidran.com" class="btn btn-primary">Crea tu primer expediente</a>
+      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-ghost">Pide una demo</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><span class="wm">Evi<em>dran</em></span></span>
+    <span>El copiloto de calidad por IA · app.evidran.com · <a href="/" style="color:#AEB6C0;text-decoration:underline">Inicio</a> · <a href="/auditores.html" style="color:#AEB6C0;text-decoration:underline">Para auditores</a> · <a href="/blog/" style="color:#AEB6C0;text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="color:#AEB6C0;text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="color:#AEB6C0;text-decoration:underline">Términos y condiciones</a></span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ---- Card-stack "Evidran por dentro" (baraja de utilidades) ----
+    (function () {
+      var stack = document.getElementById("cardstack");
+      if (!stack) return;
+      var stage = stack.querySelector(".cs-stage");
+      var cards = Array.prototype.slice.call(stack.querySelectorAll(".cs-card"));
+      var n = cards.length;
+      if (!n) return;
+      var dotsWrap = stack.querySelector(".cs-dots");
+      var capT = stack.querySelector(".cs-cap-t");
+      var capS = stack.querySelector(".cs-cap-s");
+      var active = 0, timer = null;
+      // Valores por profundidad (no fórmula lineal) para que el abanico se abra
+      // bien sin desbordar el contenedor en ninguna anchura de pantalla.
+      var FAN_DESKTOP = { ang: [0, 14, -14, 20, -20], dx: [0, 58, -58, 84, -84], dy: [0, 12, 22, 32, 42], sc: [1, .955, .91, .875, .84] };
+      var FAN_TABLET  = { ang: [0, 10, -10, 14, -14], dx: [0, 34, -34, 48, -48], dy: [0, 10, 18, 26, 34], sc: [1, .95, .9, .86, .82] };
+      var FAN_MOBILE  = { ang: [0, 6, -6, 9, -9],     dx: [0, 14, -14, 20, -20], dy: [0, 8, 14, 20, 26], sc: [1, .94, .89, .85, .81] };
+      var fan = FAN_DESKTOP;
+      function setFan() {
+        var w = window.innerWidth;
+        fan = w <= 720 ? FAN_MOBILE : (w <= 980 ? FAN_TABLET : FAN_DESKTOP);
+      }
+      setFan();
+
+      var dots = cards.map(function (c, i) {
+        var d = document.createElement("button");
+        d.className = "cs-dot" + (i === 0 ? " on" : "");
+        d.type = "button";
+        d.setAttribute("role", "tab");
+        d.setAttribute("aria-label", c.dataset.title || ("Utilidad " + (i + 1)));
+        d.addEventListener("click", function () { stop(); go(i, true); });
+        dotsWrap.appendChild(d);
+        return d;
+      });
+
+      function setHeight() {
+        var h = 0;
+        cards.forEach(function (c) { h = Math.max(h, c.offsetHeight); });
+        var maxDy = fan.dy[Math.min(n - 1, fan.dy.length - 1)];
+        if (h) stage.style.height = (h + maxDy + 10) + "px";
+      }
+
+      function growBars(card) {
+        if (reduce) return;
+        card.querySelectorAll(".pm-row .fill").forEach(function (f, i) {
+          var target = f.dataset.w || f.style.getPropertyValue("--w");
+          if (!target) return;
+          f.style.width = "0";
+          setTimeout(function () { f.style.width = target; }, 80 + i * 80);
+        });
+      }
+
+      function layout() {
+        var last = fan.ang.length - 1;                   // profundidad máxima con valores propios
+        cards.forEach(function (c, i) {
+          var off = (i - active + n) % n;                 // 0 = carta frontal
+          var d = Math.min(off, last);
+          var ang = fan.ang[d], x = fan.dx[d], y = fan.dy[d], sc = fan.sc[d];
+          c.classList.toggle("is-front", off === 0);
+          c.style.zIndex = String(n - off);
+          c.style.transform = "translateX(" + x + "px) translateY(" + y + "px) rotate(" + ang + "deg) scale(" + sc + ")";
+          c.style.opacity = off > last ? "0" : String(1 - off * 0.08);
+          c.style.pointerEvents = off <= last ? "auto" : "none";
+          c.setAttribute("aria-hidden", off === 0 ? "false" : "true");
+        });
+        dots.forEach(function (d, i) { d.classList.toggle("on", i === active); });
+        var cur = cards[active];
+        if (capT) capT.textContent = cur.dataset.title || "";
+        if (capS) capS.textContent = cur.dataset.sub || "";
+      }
+
+      function go(idx, grow) {
+        active = ((idx % n) + n) % n;
+        layout();
+        if (grow) growBars(cards[active]);
+      }
+
+      cards.forEach(function (c, i) {
+        c.addEventListener("click", function () {
+          if (!c.classList.contains("is-front")) { stop(); go(i, true); }
+        });
+      });
+
+      stack.querySelectorAll(".cs-arrow").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          stop(); go(active + (parseInt(btn.dataset.dir, 10) || 1), true);
+        });
+      });
+
+      // arrastrar / swipe en la carta frontal
+      var dragCard = null, x0 = 0, dx = 0;
+      function onDown(e) {
+        if (!e.target.closest(".cs-card.is-front")) return;
+        dragCard = cards[active];
+        x0 = (e.touches ? e.touches[0].clientX : e.clientX); dx = 0;
+        dragCard.classList.add("is-dragging");
+        stop();
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", onUp);
+        window.addEventListener("touchmove", onMove, { passive: false });
+        window.addEventListener("touchend", onUp);
+      }
+      function onMove(e) {
+        if (!dragCard) return;
+        var x = (e.touches ? e.touches[0].clientX : e.clientX);
+        dx = x - x0;
+        if (e.cancelable && Math.abs(dx) > 6) e.preventDefault();
+        dragCard.style.transform = "translateX(" + dx + "px) rotate(" + (dx * 0.02) + "deg)";
+      }
+      function onUp() {
+        if (!dragCard) return;
+        var card = dragCard; dragCard = null;
+        card.classList.remove("is-dragging");
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", onUp);
+        window.removeEventListener("touchmove", onMove);
+        window.removeEventListener("touchend", onUp);
+        if (Math.abs(dx) > 70) { go(active + (dx < 0 ? 1 : -1), true); }
+        else { layout(); }
+      }
+      stage.addEventListener("mousedown", onDown);
+      stage.addEventListener("touchstart", onDown, { passive: true });
+
+      function start() {
+        if (reduce || timer) return;
+        timer = setInterval(function () { go(active + 1, true); }, 4200);
+      }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      stack.addEventListener("mouseenter", stop);
+      stack.addEventListener("mouseleave", start);
+      document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); });
+
+      layout();
+      requestAnimationFrame(function () { setHeight(); layout(); });
+      window.addEventListener("resize", function () { setFan(); setHeight(); layout(); });
+      window.addEventListener("load", function () { setHeight(); layout(); });
+
+      if ("IntersectionObserver" in window) {
+        var seen = false;
+        var io2 = new IntersectionObserver(function (ents) {
+          ents.forEach(function (en) {
+            if (en.isIntersecting) {
+              start();
+              if (!seen) { seen = true; setHeight(); growBars(cards[active]); }
+            } else { stop(); }
+          });
+        }, { threshold: 0.35 });
+        io2.observe(stack);
+      }
+    })();
+  })();
+</script>
+
+</body>
+</html>

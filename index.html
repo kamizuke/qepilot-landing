@@ -75,7 +75,6 @@
   nav.scrolled { box-shadow: 0 4px 22px rgba(22,32,43,.08); }
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
-    .cs-card { transition: none !important; }
     html { scroll-behavior: auto; }
   }
 
@@ -127,21 +126,6 @@
   .pm-row .track { flex: 1; height: 7px; background: var(--cream-d); border-radius: 5px; overflow: hidden; }
   .pm-row .fill { height: 100%; border-radius: 5px; background: var(--blue); width: var(--w); transition: width 1.1s cubic-bezier(.16,.84,.44,1); }
 
-  /* hallazgos / objetivo (Tendencias) y hallazgos tipados (Auditor) */
-  .pm-find { display: flex; gap: 10px; align-items: flex-start; font-size: 12px; color: var(--ink); padding: 8px 0; border-bottom: 1px solid var(--cream-d); }
-  .pm-find:last-child { border-bottom: 0; }
-  .pm-find .i { flex: 0 0 auto; }
-  .pm-obj { margin-top: 4px; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: linear-gradient(135deg, #fff, #F4F8FF); }
-  .pm-obj .k { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--blue); font-weight: 700; }
-  .pm-obj p { font-size: 13.5px; color: var(--ink); font-weight: 600; margin-top: 6px; }
-  .pm-hall { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--cream-d); font-size: 12.5px; }
-  .pm-hall:last-child { border-bottom: 0; }
-  .htag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 8px; border-radius: 6px; white-space: nowrap; flex: 0 0 auto; }
-  .htag.may { background: #FDE7E7; color: #B42318; } .htag.men { background: #FEF1DE; color: #B45309; }
-  .htag.obs { background: #EAF2FF; color: #1D4ED8; } .htag.opo { background: #E7F6EC; color: #167C40; }
-  .pm-ai { margin-top: 12px; border: 1px dashed var(--blue-l); border-radius: 10px; padding: 11px 13px; font-size: 12px; color: var(--navy); background: #F2F8FF; }
-  .pm-dict { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 5px 12px; border-radius: 8px; background: #FEF1DE; color: #B45309; }
-
   /* secuencia animada de la entrevista (hero) */
   .seq { opacity: 0; transform: translateY(8px); transition: opacity .45s ease, transform .45s ease; }
   .seq.show { opacity: 1; transform: none; }
@@ -154,52 +138,6 @@
   .pmpill.en { background: #FEF1DE; color: #B45309; }
   .pmpill.ce { background: #E7F6EC; color: #167C40; }
   .pmcode { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--navy); }
-  .pmdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
-  .pmdot.r { background: #D92D20; } .pmdot.a { background: #DD8A0E; } .pmdot.g { background: #16A34A; }
-  .pm-unassigned { color: #B45309; font-size: 11px; font-weight: 600; }
-
-  /* CARD-STACK · utilidades desplegadas en abanico */
-  .cardstack { margin-top: 42px; overflow: hidden; padding: 58px 0 26px; }
-  .cs-stage { position: relative; max-width: 880px; margin: 0 auto; }
-  .cs-card { position: absolute; left: 0; right: 0; top: 0; margin: 0 auto;
-    transform-origin: 50% 100%;
-    transition: transform .6s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
-    will-change: transform, opacity; }
-  .cs-card.is-dragging { transition: none; }
-  .cs-card .pmwrap { margin: 0; max-width: none; }
-  .cs-card .browser { transition: box-shadow .45s ease; }
-  .cs-card:not(.is-front) { cursor: pointer; }
-  .cs-card:not(.is-front) .browser { box-shadow: 0 16px 34px rgba(22,32,43,.10); }
-  .cs-card:not(.is-front) .shot-cap { opacity: 0; }
-  .cs-card.is-front { cursor: default; }
-
-  .cs-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 26px; }
-  .cs-arrow { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--navy);
-    font-size: 22px; line-height: 1; cursor: pointer; display: grid; place-items: center;
-    transition: border-color .2s, box-shadow .2s, transform .2s, color .2s; }
-  .cs-arrow:hover { border-color: var(--blue); color: var(--blue); box-shadow: 0 8px 20px rgba(37,99,235,.16); transform: translateY(-1px); }
-  .cs-arrow:active { transform: translateY(0); }
-  .cs-dots { display: flex; align-items: center; gap: 10px; }
-  .cs-dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 50%; background: var(--line); cursor: pointer; transition: background .25s, transform .25s; }
-  .cs-dot:hover { background: var(--navy); }
-  .cs-dot.on { background: var(--blue); transform: scale(1.35); }
-  .cs-caption { text-align: center; margin-top: 16px; font-size: 14px; color: var(--ink-soft); }
-  .cs-caption .cs-cap-t { color: var(--ink); font-weight: 800; letter-spacing: -0.01em; }
-  .cs-caption .cs-cap-t:not(:empty)::after { content: " · "; color: var(--line); font-weight: 400; }
-
-  /* MOCK · Historial (búsqueda por palabra clave) */
-  .hist-search { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
-  .hist-search .box { flex: 1; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--ink-soft); display: flex; gap: 8px; align-items: center; }
-  .hist-search .box .q { color: var(--ink); font-weight: 600; }
-  .hist-count { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
-  .hist-count.hc-some { display: none; }
-  .hist-res { border: 1px solid var(--line); border-radius: 12px; padding: 13px 16px; margin-bottom: 10px; }
-  .hist-res:last-child { margin-bottom: 0; }
-  .hist-res .top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
-  .hist-res .ttl { font-weight: 700; font-size: 13px; color: var(--ink); }
-  .hist-res .meta { font-size: 12px; color: var(--ink-soft); line-height: 1.65; }
-  .hist-res .meta b { color: var(--ink); font-weight: 700; }
-  mark { background: #FEF3C7; color: inherit; padding: 0 3px; border-radius: 3px; }
 
   /* PROBLEM */
   .problem { background: var(--ink); color: #fff; border-radius: 0; }
@@ -290,50 +228,10 @@
 
   /* DUAL PRODUCTS */
   .dual { background: var(--cream-d); }
-  .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 38px; }
-  .dcard { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 30px; }
-  .dcard .k { font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; margin-bottom: 10px; }
-  .dcard.emp .k { color: var(--blue); } .dcard.aud .k { color: var(--teal); }
-  .dcard h3 { font-size: 21px; margin-bottom: 14px; }
-  .dcard ul { list-style: none; }
-  .dcard li { padding: 9px 0 9px 26px; position: relative; font-size: 15px; color: var(--ink); border-bottom: 1px solid var(--cream-d); }
-  .dcard li:last-child { border-bottom: 0; }
-  .dcard li::before { content: "→"; position: absolute; left: 0; color: var(--navy); font-weight: 800; }
-  .dcard.aud li::before { color: var(--teal); }
 
   /* perfil de organización (dentro de la norm band) */
   .normband-profile { max-width: 760px; margin: 30px auto 0; text-align: center; background: linear-gradient(135deg, #fff, #F4F8FF); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 26px; font-size: 15.5px; color: var(--ink-soft); }
   .normband-profile strong { color: var(--ink); }
-
-  /* BRIDGE · auditor ↔ empresa */
-  .bridge { background: var(--cream-d); }
-  .bridge .hl { color: var(--blue); }
-  .bridge .center-head h2 { max-width: 24ch; }
-  .bridge .steps { grid-template-columns: repeat(3, 1fr); max-width: 880px; margin: 0 auto; }
-  .evcode { font-family: ui-monospace, Menlo, monospace; font-weight: 700; color: var(--navy); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px; font-size: .92em; white-space: nowrap; }
-  .bridge-note { margin-top: 30px; text-align: center; font-size: 14.5px; color: var(--ink-soft); }
-  .bridge-note b { color: var(--navy); }
-
-  /* DUAL · mini-mockup dentro de cada tarjeta (mostrar el producto, no describirlo) */
-  .dcard .d-mock { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 2px 0 18px; background: #fff; box-shadow: 0 12px 26px rgba(22,32,43,.07); }
-  .dcard .d-mock .browser-bar { padding: 8px 12px; }
-  .dcard .d-mock .browser-bar i { width: 8px; height: 8px; }
-  .dcard .d-mock .browser-bar .url { font-size: 10px; padding: 2px 10px; margin-left: 8px; }
-  .d-mock-bd { padding: 13px 14px; }
-  .d-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
-  .d-kpi { border: 1px solid var(--line); border-radius: 9px; padding: 8px 9px; }
-  .d-kpi b { display: block; font-size: 18px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
-  .d-kpi b.alert { color: #B42318; }
-  .d-kpi small { font-size: 8.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; }
-  .d-line { display: flex; align-items: center; gap: 9px; font-size: 11px; padding: 6px 0; border-top: 1px solid var(--cream-d); }
-  .d-line:first-child { border-top: 0; }
-  .d-line .lbl { width: 108px; flex: 0 0 auto; color: var(--ink); }
-  .d-line .track { flex: 1; height: 6px; background: var(--cream-d); border-radius: 4px; overflow: hidden; }
-  .d-line .track span { display: block; height: 100%; border-radius: 4px; background: var(--blue); }
-  .d-line .n { width: 16px; text-align: right; color: var(--ink-soft); font-weight: 700; }
-  .d-hall { display: flex; gap: 9px; align-items: center; font-size: 11px; color: var(--ink); padding: 8px 0; border-top: 1px solid var(--cream-d); }
-  .d-hall:first-child { border-top: 0; }
-  .d-hall .htag { font-size: 8px; padding: 2px 6px; }
 
   /* FEATURE ROW · bloque texto + visual (patrón Holded, imagen protagonista) */
   .feat-row { display: grid; grid-template-columns: 1.02fr 1.18fr; gap: 46px; align-items: center; margin-top: 44px; }
@@ -400,27 +298,6 @@
   .nd-dot.r { background: #D92D20; } .nd-dot.a { background: #DD8A0E; } .nd-dot.g { background: #16A34A; } .nd-dot.b { background: var(--blue); }
   .nd-row b { font-weight: 800; }
 
-  /* PUENTE · diagrama auditor → empresa */
-  .bdiag { display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: center; max-width: 960px; margin: 6px auto 36px; }
-  .bd-cap { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--ink-soft); margin-bottom: 9px; text-align: center; }
-  .bd-panel { background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 34px rgba(22,32,43,.09); overflow: hidden; }
-  .bd-panel .browser-bar { padding: 8px 12px; }
-  .bd-panel .browser-bar i { width: 8px; height: 8px; }
-  .bd-panel .browser-bar .url { font-size: 10px; padding: 2px 9px; margin-left: 8px; }
-  .bd-bd { padding: 12px 13px; }
-  .bd-hall { display: flex; gap: 8px; align-items: center; font-size: 11px; padding: 7px 0; border-top: 1px solid var(--cream-d); color: var(--ink); }
-  .bd-hall:first-child { border-top: 0; }
-  .bd-hall .htag { font-size: 8px; padding: 2px 6px; flex: 0 0 auto; }
-  .bd-hall span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .bd-send { margin-top: 11px; text-align: center; font-size: 10.5px; font-weight: 800; letter-spacing: .02em; color: #fff; background: var(--teal); border-radius: 8px; padding: 9px; }
-  .bd-flow { display: flex; flex-direction: column; align-items: center; gap: 9px; }
-  .bd-flow .evcode { font-size: 11px; }
-  .bd-flow .arr { font-size: 28px; color: var(--navy); line-height: 1; }
-  .bd-flow small { font-size: 10px; color: var(--ink-soft); max-width: 110px; text-align: center; line-height: 1.4; }
-  .bd-open { display: flex; gap: 9px; align-items: center; font-size: 11px; padding: 7px 0; border-top: 1px solid var(--cream-d); }
-  .bd-open:first-child { border-top: 0; }
-  .bd-open .ttl { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
   /* REVISIÓN POR LA DIRECCIÓN 9.3 · acta redactándose */
   .acta { padding: 18px 20px 20px; }
   .acta-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
@@ -468,28 +345,11 @@
   .is-obj .k { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #7FE0A0; font-weight: 700; }
   .is-obj p { font-size: 13.5px; color: #fff; font-weight: 600; margin-top: 6px; }
 
-  /* DETALLE DE EXPEDIENTE · captura del registro completo (carrusel) */
-  .pm-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--blue); font-weight: 700; margin-bottom: 4px; }
-  .exp-meta { display: flex; flex-wrap: wrap; gap: 26px; padding: 2px 0 14px; border-bottom: 1px solid var(--cream-d); margin-bottom: 14px; }
-  .exp-meta > div { display: flex; flex-direction: column; gap: 3px; }
-  .exp-meta .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; }
-  .exp-meta .v { font-size: 13px; color: var(--ink); font-weight: 600; display: flex; align-items: center; }
-  .exp-fields .doc-field { margin-bottom: 9px; }
-  .exp-fields .doc-field:last-child { margin-bottom: 0; }
-  .exp-ev { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--cream-d); }
-  .ev-lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; margin-right: 2px; }
-  .ev-chip { font-size: 11.5px; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 6px 11px; font-weight: 600; }
-
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
     .feat-row.rev .fr-visual { order: 0; }
-    .bdiag { grid-template-columns: 1fr; }
-    .bd-flow { flex-direction: row; justify-content: center; }
-    .bd-flow .arr { transform: rotate(90deg); }
-    .cs-card[data-title="Detalle del expediente"] .exp-fields .doc-field:nth-child(n+4) { display: none; }
-    .cs-card[data-title="Detalle del expediente"] .exp-meta > div:nth-child(3) { display: none; }
-    .problem .wrap, .twocol, .dual-grid { grid-template-columns: 1fr; gap: 28px; }
-    .steps, .feats, .bridge .steps { grid-template-columns: 1fr; }
+    .problem .wrap, .twocol { grid-template-columns: 1fr; gap: 28px; }
+    .steps, .feats { grid-template-columns: 1fr; }
     .mock { grid-template-columns: 1fr; }
     .shot { margin-top: 40px; }
     .mock-chat { border-right: 0; border-bottom: 1px solid var(--cream-d); }
@@ -501,31 +361,10 @@
     .pm-table .hide-sm { display: none; }
     .pm-row .lbl { width: 104px; font-size: 11px; }
     .pm-btns span:not(.pri) { display: none; }
-    /* En pantallas estrechas el contenido de cada mockup pasa a una sola
-       columna y crece mucho en alto: el abanico 3D deja de tener sentido
-       (se ve enorme y confuso). Se muestra solo la carta activa, a tamaño
-       normal, navegable con flechas/puntos/swipe. */
-    .cardstack { margin-top: 26px; padding: 0; overflow: visible; }
-    .cs-stage { height: auto !important; }
-    .cs-card { position: static !important; transform: none !important; opacity: 1 !important; box-shadow: none !important; }
-    .cs-card:not(.is-front) { display: none; }
-    .cs-arrow { width: 38px; height: 38px; font-size: 20px; }
-    .cs-caption { font-size: 13px; }
 
-    /* Recorte de contenido en móvil: cada carta muestra menos filas para
-       que quepa en una pantalla sin tanto scroll. El resto sigue intacto
-       en escritorio/tablet ancho. */
-    .cs-card[data-title="Panel de calidad"] .pm-bd .pm-card:nth-child(2) { display: none; }
-    .cs-card[data-title="Panel de calidad"] .pm-bd .pm-row:nth-child(5) { display: none; }
-    .cs-card[data-title="Panel de calidad"] .pm-table tbody tr:nth-child(n+4) { display: none; }
-    .cs-card[data-title="Tendencias e inteligencia"] .pm-find:nth-child(4) { display: none; }
-    .cs-card[data-title="Tendencias e inteligencia"] .pm-row:nth-child(n+5) { display: none; }
-    .cs-card[data-title="Buscar en el histórico"] .hist-res:nth-child(n+5) { display: none; }
-    .hc-all { display: none; }
-    .hc-some { display: inline; }
   }
 </style>
-<noscript><style>.seq{opacity:1!important;transform:none!important;}.pm-row .fill{width:var(--w)!important;}.cs-card{position:static!important;transform:none!important;opacity:1!important;margin:0 auto 28px!important;}.cs-stage{height:auto!important;}.cs-card .shot-cap{opacity:1!important;}.cs-controls,.cs-caption{display:none!important;}</style></noscript>
+<noscript><style>.seq{opacity:1!important;transform:none!important;}.pm-row .fill{width:var(--w)!important;}</style></noscript>
 </head>
 <body>
 
@@ -549,11 +388,11 @@
     <div class="nav-right">
       <div class="nav-links">
         <a href="#normas">Conoce la norma</a>
-        <a href="#productos">Empresas y auditores</a>
         <a href="#copiloto">Copiloto</a>
         <a href="#inteligencia">Inteligencia</a>
+        <a href="/producto.html">Por dentro</a>
+        <a href="/auditores.html">Para auditores</a>
         <a href="/blog/">Blog</a>
-        <a href="#cta">Qué obtienes</a>
         <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-primary btn-sm">Pide una demo</a>
       </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
@@ -646,102 +485,13 @@
   </div>
 </section>
 
-<!-- DUAL PRODUCTS -->
-<section id="productos" class="dual">
-  <div class="wrap">
-    <div class="center-head"><div class="eyebrow">Dos públicos, una herramienta</div><h2>Dos productos. Una plataforma.</h2></div>
-    <div class="dual-grid">
-      <div class="dcard emp">
-        <div class="k">Para empresas</div>
-        <h3>Documenta y mejora tu sistema de calidad</h3>
-        <div class="d-mock">
-          <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com</span></div>
-          <div class="d-mock-bd">
-            <div class="d-kpis">
-              <div class="d-kpi"><b>12</b><small>Abiertas</small></div>
-              <div class="d-kpi"><b class="alert">2</b><small>Vencidas</small></div>
-              <div class="d-kpi"><b>7</b><small>Cerradas/mes</small></div>
-            </div>
-            <div class="d-line"><span class="lbl">NC · ISO 9001</span><span class="track"><span style="width:100%"></span></span><span class="n">9</span></div>
-            <div class="d-line"><span class="lbl">8D Cliente</span><span class="track"><span style="width:56%"></span></span><span class="n">5</span></div>
-            <div class="d-line"><span class="lbl">NC · ISO 14001</span><span class="track"><span style="width:44%;background:#2E7D54"></span></span><span class="n">4</span></div>
-          </div>
-        </div>
-        <ul>
-          <li>No conformidades de ISO 9001, 14001, 45001, 50001, 17025, 17020 y 17065 — más el 8D de cliente</li>
-          <li>Auditoría interna 9.2, matriz de riesgos y plan de mejora en un solo sitio</li>
-          <li>Tendencias, objetivos y Revisión por la Dirección — con un copiloto que sabe qué te falta</li>
-        </ul>
-      </div>
-      <div class="dcard aud">
-        <div class="k">Para auditores y consultores</div>
-        <h3>Audita y asesora a varias empresas</h3>
-        <div class="d-mock">
-          <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria</span></div>
-          <div class="d-mock-bd">
-            <div class="d-hall"><span class="htag may">NC Mayor</span><span>Sin registro de calibración en 3 equipos</span></div>
-            <div class="d-hall"><span class="htag men">NC Menor</span><span>Procedimiento sin fecha de revisión</span></div>
-            <div class="d-hall"><span class="htag obs">Observación</span><span>Trazabilidad mejorable en compras</span></div>
-            <div class="d-hall"><span class="htag opo">Oportunidad</span><span>Automatizar el aviso de vencimientos</span></div>
-          </div>
-        </div>
-        <ul>
-          <li>Cartera de auditorías con informe profesional y dictamen</li>
-          <li>Hallazgos tipados: NC mayor/menor, observación, oportunidad, punto fuerte</li>
-          <li>Entrega los hallazgos en la empresa con un código — sin entrar a su panel</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- BRIDGE · auditor ↔ empresa -->
-<section id="puente" class="bridge">
-  <div class="wrap">
-    <div class="center-head">
-      <div class="eyebrow">Novedad · Auditor ↔ Empresa</div>
-      <h2>Tus hallazgos de auditoría llegan <span class="hl">ya cubiertos</span>, listos para trabajar.</h2>
-      <p>Cuando tu auditor también usa Evidran, conecta con tu empresa mediante un código y deposita sus hallazgos e informes en tu cuenta — sin entrar nunca a tu panel ni ver el resto de tus datos. Tú no transcribes nada: cada hallazgo entra como un expediente abierto y empiezas directamente por la causa y la acción.</p>
-    </div>
-
-    <div class="bdiag">
-      <div>
-        <div class="bd-cap">Panel del auditor</div>
-        <div class="bd-panel">
-          <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria</span></div>
-          <div class="bd-bd">
-            <div class="bd-hall"><span class="htag may">NC Mayor</span><span>Sin registro de calibración en 3 equipos</span></div>
-            <div class="bd-hall"><span class="htag men">NC Menor</span><span>Procedimiento sin fecha de revisión</span></div>
-            <div class="bd-hall"><span class="htag obs">Observación</span><span>Trazabilidad mejorable en compras</span></div>
-            <div class="bd-send">Enviar a la empresa →</div>
-          </div>
-        </div>
-      </div>
-      <div class="bd-flow">
-        <span class="evcode">EVD-7Q4K-92XM</span>
-        <div class="arr">→</div>
-        <small>hallazgos + informe firmado</small>
-      </div>
-      <div>
-        <div class="bd-cap">Tu empresa · bandeja de triage</div>
-        <div class="bd-panel">
-          <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/triage</span></div>
-          <div class="bd-bd">
-            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-018</span><span class="ttl">Registro de calibración</span></div>
-            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-019</span><span class="ttl">Revisión de procedimiento</span></div>
-            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-020</span><span class="ttl">Trazabilidad en compras</span></div>
-            <div class="bd-send" style="background:var(--blue)">Listos para causa raíz</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="steps">
-      <div class="step"><div class="n">1</div><h3>Conectáis con un código</h3><p>Compartes tu código <span class="evcode">EVD-XXXXXXXX</span> con tu auditor. Con eso queda enlazado a tu empresa, sin acceso a tu panel.</p></div>
-      <div class="step"><div class="n">2</div><h3>Deposita hallazgos e informe</h3><p>Al cerrar la auditoría te envía los hallazgos y el informe firmado. Si corrige algo y reenvía, no se duplica: se actualiza.</p></div>
-      <div class="step"><div class="n">3</div><h3>Cero transcripción</h3><p>Cada hallazgo entra ya redactado como expediente abierto. No reescribes nada: arrancas directamente por la causa raíz y la acción correctiva.</p></div>
-    </div>
-    <p class="bridge-note"><b>¿Tu auditor no usa Evidran?</b> Sube el PDF de su informe: la IA extrae los hallazgos y te los deja en la misma bandeja, y el documento queda archivado en tus Auditorías. Si tu auditor sí lo usa, el proceso es automático de extremo a extremo — sin ningún PDF de por medio.</p>
+<!-- BANDA · AUDITORES Y CONSULTORES -->
+<section id="auditores" class="dual" style="padding:58px 0">
+  <div class="wrap" style="text-align:center">
+    <div class="eyebrow" style="color:var(--teal)">También para auditores y consultores</div>
+    <h2 style="max-width:28ch;margin:0 auto">¿Auditas o asesoras a varias empresas?</h2>
+    <p style="max-width:60ch;margin:14px auto 24px;font-size:16.5px">Evidran tiene un módulo propio para ti: cartera de auditorías con informe y dictamen, hallazgos tipados y entrega directa en la cuenta de tu cliente con un código — sin entrar a su panel. Y si eres la empresa, los hallazgos de tu auditor te llegan como expedientes abiertos: cero transcripción.</p>
+    <a href="/auditores.html" class="btn btn-ghost">Evidran para auditores →</a>
   </div>
 </section>
 
@@ -869,6 +619,30 @@
         </div>
       </div>
     </div>
+
+    <div class="feat-row" id="revision93">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Revisión por la Dirección · 9.3</div>
+        <h3>El apartado más tedioso del año, redactado a partir de tus datos.</h3>
+        <p>Evidran genera el texto de entrada del acta —no conformidades y acciones correctivas— con tus estadísticas del periodo: resumen, análisis por tipo y área, estado de las acciones y recomendaciones. Lo revisas, lo editas y lo apruebas. Y es honesto: si aún no hay volumen para hablar de tendencias, te lo dice.</p>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/revision-direccion</span></div>
+        <div class="acta">
+          <div class="acta-head">
+            <div>
+              <div class="acta-eyebrow">Revisión por la Dirección · ISO 9001 (9.3)</div>
+              <div class="acta-title">Entrada 9.3.2 · No conformidades y acciones correctivas</div>
+            </div>
+            <span class="acta-ia">✦ Generado con IA</span>
+          </div>
+          <p>Durante el primer semestre de 2026 se registraron <b>18 no conformidades</b>, con una tasa de cierre del <b>84 %</b> y un tiempo medio de resolución de <b>21 días</b>.</p>
+          <p>Por tipología predominan las asociadas a <b>formación</b> (37 %) y a <b>método/procedimiento</b> (21 %). La concentración en el área de <b>Producción</b> (35 %) sugiere reforzar los controles de la línea de montaje y revisar las instrucciones de los turnos rotativos.</p>
+          <p>Se recomienda fijar un objetivo de reducción de las no conformidades de formación para 2027 y desatascar las <b>2 acciones vencidas</b> antes de la próxima auditoría.</p>
+          <div class="acta-flag">✓ Volumen suficiente para el análisis de tendencias</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -890,138 +664,7 @@
       </div>
     </div>
     <p class="shot-cap" style="margin-top:14px">Cada cifra sale de una consulta real a tus datos. El copiloto nunca inventa recuentos — y quien decide eres tú.</p>
-  </div>
-</section>
-
-<!-- PANEL MOCKUP · míralo por dentro -->
-<section id="dentro">
-  <div class="wrap">
-    <div class="center-head"><div class="eyebrow">Míralo por dentro</div><h2>Evidran por dentro, con datos reales</h2><p>Cada utilidad, poblada como en un día normal de trabajo.</p></div>
-
-    <div class="cardstack" id="cardstack">
-      <div class="cs-stage">
-        <article class="cs-card" data-title="Panel de calidad" data-sub="KPIs, semáforo y reparto por norma y área">
-    <div class="pmwrap">
-      <div class="browser">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com</span></div>
-        <div class="pm">
-          <div class="pm-head">
-            <div class="pm-title">Panel de calidad</div>
-            <div class="pm-btns"><span>Historial</span><span>Tendencias</span><span class="pri">+ Nuevo expediente</span></div>
-          </div>
-          <div class="pm-kpis">
-            <div class="pm-kpi"><b>12</b><small>Abiertas</small></div>
-            <div class="pm-kpi"><b class="alert">2</b><small>Vencidas</small></div>
-            <div class="pm-kpi"><b>19<sup>d</sup></b><small>Antigüedad media</small></div>
-            <div class="pm-kpi"><b>7</b><small>Cerradas este mes</small></div>
-          </div>
-          <div class="pm-bd">
-            <div class="pm-card">
-              <div class="h">Por tipo de documento</div>
-              <div class="pm-row"><span class="lbl">NC Interna · ISO 9001</span><span class="track"><span class="fill" style="--w:100%"></span></span><span class="n">9</span></div>
-              <div class="pm-row"><span class="lbl">8D Cliente</span><span class="track"><span class="fill" style="--w:56%"></span></span><span class="n">5</span></div>
-              <div class="pm-row"><span class="lbl">NC Ambiental · ISO 14001</span><span class="track"><span class="fill" style="--w:44%;background:#2E7D54"></span></span><span class="n">4</span></div>
-              <div class="pm-row"><span class="lbl">NC Energética · ISO 50001</span><span class="track"><span class="fill" style="--w:33%;background:#0E7490"></span></span><span class="n">3</span></div>
-            </div>
-            <div class="pm-card">
-              <div class="h">Por área / proceso</div>
-              <div class="pm-row"><span class="lbl">Producción</span><span class="track"><span class="fill" style="--w:100%"></span></span><span class="n">11</span></div>
-              <div class="pm-row"><span class="lbl">Logística</span><span class="track"><span class="fill" style="--w:55%"></span></span><span class="n">6</span></div>
-              <div class="pm-row"><span class="lbl">Compras</span><span class="track"><span class="fill" style="--w:45%"></span></span><span class="n">5</span></div>
-              <div class="pm-row"><span class="lbl">Mantenimiento</span><span class="track"><span class="fill" style="--w:36%"></span></span><span class="n">4</span></div>
-            </div>
-          </div>
-          <table class="pm-table">
-            <thead><tr><th>Estado</th><th>Código</th><th class="hide-sm">Tipo</th><th>Título</th><th class="hide-sm">Área</th><th>Responsable</th><th>Fecha límite</th></tr></thead>
-            <tbody>
-              <tr><td><span class="pmpill en">En curso</span></td><td><span class="pmcode">NC-2026-014</span></td><td class="hide-sm">NC Interna</td><td>Desviación dimensional turno noche</td><td class="hide-sm">Producción</td><td>M. López</td><td><span class="pmdot a"></span>02/07/2026</td></tr>
-              <tr><td><span class="pmpill ab">Abierto</span></td><td><span class="pmcode">NCA-2026-003</span></td><td class="hide-sm">NC Ambiental</td><td>Vertido con pH fuera de rango</td><td class="hide-sm">Planta</td><td>J. Ruiz</td><td><span class="pmdot r"></span>18/06/2026</td></tr>
-              <tr><td><span class="pmpill en">En curso</span></td><td><span class="pmcode">8D-2026-002</span></td><td class="hide-sm">8D Cliente</td><td>Reclamación lote 4471</td><td class="hide-sm">Calidad</td><td>A. Pérez</td><td><span class="pmdot g"></span>15/07/2026</td></tr>
-              <tr><td><span class="pmpill ab">Abierto</span></td><td><span class="pmcode">NCE-2026-001</span></td><td class="hide-sm">NC Energética</td><td>Consumo de aire comprimido +18%</td><td class="hide-sm">Mantenimiento</td><td><span class="pm-unassigned">Sin asignar</span></td><td><span class="pmdot a"></span>09/07/2026</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <p class="shot-cap">Datos de ejemplo · así se ve un sistema de calidad con varias normas en marcha.</p>
-    </div>
-        </article>
-        <article class="cs-card" data-title="Detalle del expediente" data-sub="Documento, evidencias, responsable y bloqueo — listo para la certificadora">
-          <div class="pmwrap">
-            <div class="browser">
-              <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/expediente/NC-2026-014</span></div>
-              <div class="pm">
-                <div class="pm-head">
-                  <div>
-                    <div class="pm-eyebrow">No conformidad interna · UNE-EN ISO 9001:2015 (10.2)</div>
-                    <div class="pm-title" style="display:flex;align-items:center;gap:10px"><span class="pmcode">NC-2026-014</span><span class="pmpill en">En curso</span></div>
-                  </div>
-                  <div class="pm-btns"><span>🔒 Bloquear</span><span class="pri">Exportar PDF</span></div>
-                </div>
-                <div class="exp-meta">
-                  <div><span class="k">Responsable</span><span class="v">M. López</span></div>
-                  <div><span class="k">Fecha límite</span><span class="v"><span class="pmdot a"></span>02/07/2026</span></div>
-                  <div><span class="k">Detección</span><span class="v">18/06/2026</span></div>
-                </div>
-                <div class="exp-fields">
-                  <div class="doc-field"><div class="l">Descripción</div><div class="v">El turno de noche no registró los controles dimensionales del lunes.</div></div>
-                  <div class="doc-field"><div class="l">Causa raíz (5 porqués)</div><div class="v">Ausencia de instrucción específica para el turno rotativo; sin control que garantice el registro. No es un fallo de la persona, sino del sistema.</div></div>
-                  <div class="doc-field"><div class="l">Acción correctiva</div><div class="v">Crear instrucción técnica para turnos rotativos y formar a los operarios de noche.</div></div>
-                  <div class="doc-field"><div class="l">Verificación de eficacia</div><div class="v">Auditoría de registros a los 2 meses · prevista 05/09/2026.</div></div>
-                </div>
-                <div class="exp-ev">
-                  <span class="ev-lbl">Evidencias</span>
-                  <span class="ev-chip">📎 control-turno.jpg</span>
-                  <span class="ev-chip">📄 informe-cliente.pdf</span>
-                  <span class="ev-chip">📊 registros-dim.xlsx</span>
-                </div>
-              </div>
-            </div>
-            <p class="shot-cap">Datos de ejemplo · el expediente completo, con evidencias adjuntas y trazabilidad para la certificadora.</p>
-          </div>
-        </article>
-        <article class="cs-card" data-title="Buscar en el histórico" data-sub="Por palabra clave en causa, descripción y solución">
-          <div class="pmwrap">
-            <div class="browser">
-              <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/historial</span></div>
-              <div class="pm">
-                <div class="pm-head"><div class="pm-title">Historial</div><div class="pm-btns"><span>Tipo: todos</span><span>Área: todas</span></div></div>
-                <div class="hist-search">
-                  <div class="box">🔎 <span class="q">calibración</span></div>
-                  <span class="hist-count hc-all">4 resultados</span>
-                  <span class="hist-count hc-some">2 resultados</span>
-                </div>
-                <div class="hist-res">
-                  <div class="top"><span class="pmcode">NCA-2024-001</span><span class="pmpill ce">Cerrado</span><span class="ttl">Vertido con pH fuera de rango</span></div>
-                  <div class="meta"><b>Causa:</b> Sonda de pH sin <mark>calibrar</mark> desde hace 6 meses · <b>Solución:</b> Plan de <mark>calibración</mark> trimestral de sondas.</div>
-                </div>
-                <div class="hist-res">
-                  <div class="top"><span class="pmcode">TNC-2024-001</span><span class="pmpill ce">Cerrado</span><span class="ttl">Extensómetro desviado del patrón</span></div>
-                  <div class="meta"><b>Causa:</b> Extensómetro fuera de <mark>calibración</mark> · <b>Solución:</b> Recalibración + revisión de los informes ya emitidos.</div>
-                </div>
-                <div class="hist-res">
-                  <div class="top"><span class="pmcode">NC-2024-007</span><span class="pmpill ce">Cerrado</span><span class="ttl">Calibre sin trazabilidad metrológica</span></div>
-                  <div class="meta"><b>Causa:</b> Calibre no incluido en el plan de <mark>calibración</mark> tras su compra · <b>Solución:</b> Incluir en el plan + verificar nuevos equipos.</div>
-                </div>
-                <div class="hist-res">
-                  <div class="top"><span class="pmcode">NC-2025-011</span><span class="pmpill ce">Cerrado</span><span class="ttl">Báscula de expedición fuera de tolerancia</span></div>
-                  <div class="meta"><b>Causa:</b> Báscula sin <mark>calibración</mark> tras el traslado de línea · <b>Solución:</b> Recalibrar tras cualquier traslado + registro en el plan.</div>
-                </div>
-              </div>
-            </div>
-            <p class="shot-cap">Datos de ejemplo · "esto ya pasó: esta fue la causa y así se resolvió".</p>
-          </div>
-        </article>
-      </div>
-      <div class="cs-controls">
-        <button class="cs-arrow" data-dir="-1" type="button" aria-label="Utilidad anterior">‹</button>
-        <div class="cs-dots" role="tablist" aria-label="Utilidades de Evidran"></div>
-        <button class="cs-arrow" data-dir="1" type="button" aria-label="Siguiente utilidad">›</button>
-      </div>
-      <p class="cs-caption"><b class="cs-cap-t"></b><span class="cs-cap-s"></span></p>
-      <div class="normband-profile" style="margin-top:34px">
-        <strong>¿Vienes de Excel?</strong> Importa tu histórico de no conformidades con un asistente de mapeo de columnas, y ponlo a trabajar desde el primer día.
-      </div>
-    </div>
+    <p style="text-align:center;margin-top:26px"><a href="/producto.html" class="btn btn-ghost">Mira Evidran por dentro, con datos reales →</a></p>
   </div>
 </section>
 
@@ -1057,35 +700,6 @@
       </div>
     </div>
     <p class="note"><b>Evidran te muestra los patrones; las decisiones siguen siendo tuyas.</b> Amplifica tu criterio, no lo reemplaza.</p>
-  </div>
-</section>
-
-<!-- REVISIÓN POR LA DIRECCIÓN 9.3 -->
-<section id="revision93">
-  <div class="wrap">
-    <div class="feat-row">
-      <div class="fr-text">
-        <div class="fr-eyebrow">Revisión por la Dirección · 9.3</div>
-        <h3>El apartado más tedioso del año, redactado a partir de tus datos.</h3>
-        <p>Evidran genera el texto de entrada del acta —no conformidades y acciones correctivas— con tus estadísticas del periodo: resumen, análisis por tipo y área, estado de las acciones y recomendaciones. Lo revisas, lo editas y lo apruebas. Y es honesto: si aún no hay volumen para hablar de tendencias, te lo dice.</p>
-      </div>
-      <div class="fr-visual">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/revision-direccion</span></div>
-        <div class="acta">
-          <div class="acta-head">
-            <div>
-              <div class="acta-eyebrow">Revisión por la Dirección · ISO 9001 (9.3)</div>
-              <div class="acta-title">Entrada 9.3.2 · No conformidades y acciones correctivas</div>
-            </div>
-            <span class="acta-ia">✦ Generado con IA</span>
-          </div>
-          <p>Durante el primer semestre de 2026 se registraron <b>18 no conformidades</b>, con una tasa de cierre del <b>84 %</b> y un tiempo medio de resolución de <b>21 días</b>.</p>
-          <p>Por tipología predominan las asociadas a <b>formación</b> (37 %) y a <b>método/procedimiento</b> (21 %). La concentración en el área de <b>Producción</b> (35 %) sugiere reforzar los controles de la línea de montaje y revisar las instrucciones de los turnos rotativos.</p>
-          <p>Se recomienda fijar un objetivo de reducción de las no conformidades de formación para 2027 y desatascar las <b>2 acciones vencidas</b> antes de la próxima auditoría.</p>
-          <div class="acta-flag">✓ Volumen suficiente para el análisis de tendencias</div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1148,7 +762,7 @@
       <details><summary>Aún no estamos certificados.</summary><p>Mejor: montas el sistema ya ordenado. Documentas tus primeras no conformidades, levantas la matriz de riesgos con ayuda de la IA, planificas la auditoría interna y llegas a la certificación con registros trazables desde el día uno.</p></details>
       <details><summary>¿Qué es el copiloto?</summary><p>Un chat disponible en toda la app al que le preguntas por tu sistema: «¿qué vence esta semana?», «¿estoy listo para la auditoría?». No inventa: consulta tus datos reales y te enlaza al registro exacto que lo resuelve.</p></details>
       <details><summary>Gestiono varias empresas como consultor.</summary><p>Un mismo usuario trabaja con varias organizaciones, cada una con sus datos aislados — y tienes un módulo de auditoría propio.</p></details>
-      <details><summary>Trabajo con un auditor o consultor externo.</summary><p>Si tu auditor también usa Evidran, se conecta a tu empresa con un código y te deja sus hallazgos e informes directamente en tu cuenta, sin entrar a tu panel. Cada hallazgo entra ya redactado como expediente abierto —no transcribes nada— y el informe queda archivado por versiones.</p></details>
+      <details><summary>Trabajo con un auditor o consultor externo.</summary><p>Si tu auditor también usa Evidran, se conecta a tu empresa con un código y te deja sus hallazgos e informes directamente en tu cuenta, sin entrar a tu panel. Cada hallazgo entra ya redactado como expediente abierto —no transcribes nada— y el informe queda archivado por versiones. ¿Y si no lo usa? Sube el PDF de su informe: la IA extrae los hallazgos y te los deja en la misma bandeja.</p></details>
     </div>
   </div>
 </section>
@@ -1207,8 +821,8 @@
     // ---- Reveal al hacer scroll (estilo Apple) + barras que crecen ----
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduce && "IntersectionObserver" in window) {
-      var sel = [".center-head", ".shot", ".pmwrap", ".dcard", ".step",
-                 ".feat", ".problem li", ".problem .punch", ".cmp table",
+      var sel = [".center-head", ".shot", ".step",
+                 ".problem li", ".problem .punch", ".cmp table",
                  ".twocol > div", ".icp .tags span", ".icp .week", ".final .wrap > *"];
       var revealEls = [];
       sel.forEach(function (s) {
@@ -1260,157 +874,6 @@
         });
       }
     }
-
-    // ---- Card-stack "Evidran por dentro" (baraja de utilidades) ----
-    (function () {
-      var stack = document.getElementById("cardstack");
-      if (!stack) return;
-      var stage = stack.querySelector(".cs-stage");
-      var cards = Array.prototype.slice.call(stack.querySelectorAll(".cs-card"));
-      var n = cards.length;
-      if (!n) return;
-      var dotsWrap = stack.querySelector(".cs-dots");
-      var capT = stack.querySelector(".cs-cap-t");
-      var capS = stack.querySelector(".cs-cap-s");
-      var active = 0, timer = null;
-      // Valores por profundidad (no fórmula lineal) para que el abanico se abra
-      // bien sin desbordar el contenedor en ninguna anchura de pantalla.
-      var FAN_DESKTOP = { ang: [0, 14, -14, 20, -20], dx: [0, 58, -58, 84, -84], dy: [0, 12, 22, 32, 42], sc: [1, .955, .91, .875, .84] };
-      var FAN_TABLET  = { ang: [0, 10, -10, 14, -14], dx: [0, 34, -34, 48, -48], dy: [0, 10, 18, 26, 34], sc: [1, .95, .9, .86, .82] };
-      var FAN_MOBILE  = { ang: [0, 6, -6, 9, -9],     dx: [0, 14, -14, 20, -20], dy: [0, 8, 14, 20, 26], sc: [1, .94, .89, .85, .81] };
-      var fan = FAN_DESKTOP;
-      function setFan() {
-        var w = window.innerWidth;
-        fan = w <= 720 ? FAN_MOBILE : (w <= 980 ? FAN_TABLET : FAN_DESKTOP);
-      }
-      setFan();
-
-      var dots = cards.map(function (c, i) {
-        var d = document.createElement("button");
-        d.className = "cs-dot" + (i === 0 ? " on" : "");
-        d.type = "button";
-        d.setAttribute("role", "tab");
-        d.setAttribute("aria-label", c.dataset.title || ("Utilidad " + (i + 1)));
-        d.addEventListener("click", function () { stop(); go(i, true); });
-        dotsWrap.appendChild(d);
-        return d;
-      });
-
-      function setHeight() {
-        var h = 0;
-        cards.forEach(function (c) { h = Math.max(h, c.offsetHeight); });
-        var maxDy = fan.dy[Math.min(n - 1, fan.dy.length - 1)];
-        if (h) stage.style.height = (h + maxDy + 10) + "px";
-      }
-
-      function growBars(card) {
-        if (reduce) return;
-        card.querySelectorAll(".pm-row .fill").forEach(function (f, i) {
-          var target = f.dataset.w || f.style.getPropertyValue("--w");
-          if (!target) return;
-          f.style.width = "0";
-          setTimeout(function () { f.style.width = target; }, 80 + i * 80);
-        });
-      }
-
-      function layout() {
-        var last = fan.ang.length - 1;                   // profundidad máxima con valores propios
-        cards.forEach(function (c, i) {
-          var off = (i - active + n) % n;                 // 0 = carta frontal
-          var d = Math.min(off, last);
-          var ang = fan.ang[d], x = fan.dx[d], y = fan.dy[d], sc = fan.sc[d];
-          c.classList.toggle("is-front", off === 0);
-          c.style.zIndex = String(n - off);
-          c.style.transform = "translateX(" + x + "px) translateY(" + y + "px) rotate(" + ang + "deg) scale(" + sc + ")";
-          c.style.opacity = off > last ? "0" : String(1 - off * 0.08);
-          c.style.pointerEvents = off <= last ? "auto" : "none";
-          c.setAttribute("aria-hidden", off === 0 ? "false" : "true");
-        });
-        dots.forEach(function (d, i) { d.classList.toggle("on", i === active); });
-        var cur = cards[active];
-        if (capT) capT.textContent = cur.dataset.title || "";
-        if (capS) capS.textContent = cur.dataset.sub || "";
-      }
-
-      function go(idx, grow) {
-        active = ((idx % n) + n) % n;
-        layout();
-        if (grow) growBars(cards[active]);
-      }
-
-      cards.forEach(function (c, i) {
-        c.addEventListener("click", function () {
-          if (!c.classList.contains("is-front")) { stop(); go(i, true); }
-        });
-      });
-
-      stack.querySelectorAll(".cs-arrow").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          stop(); go(active + (parseInt(btn.dataset.dir, 10) || 1), true);
-        });
-      });
-
-      // arrastrar / swipe en la carta frontal
-      var dragCard = null, x0 = 0, dx = 0;
-      function onDown(e) {
-        if (!e.target.closest(".cs-card.is-front")) return;
-        dragCard = cards[active];
-        x0 = (e.touches ? e.touches[0].clientX : e.clientX); dx = 0;
-        dragCard.classList.add("is-dragging");
-        stop();
-        window.addEventListener("mousemove", onMove);
-        window.addEventListener("mouseup", onUp);
-        window.addEventListener("touchmove", onMove, { passive: false });
-        window.addEventListener("touchend", onUp);
-      }
-      function onMove(e) {
-        if (!dragCard) return;
-        var x = (e.touches ? e.touches[0].clientX : e.clientX);
-        dx = x - x0;
-        if (e.cancelable && Math.abs(dx) > 6) e.preventDefault();
-        dragCard.style.transform = "translateX(" + dx + "px) rotate(" + (dx * 0.02) + "deg)";
-      }
-      function onUp() {
-        if (!dragCard) return;
-        var card = dragCard; dragCard = null;
-        card.classList.remove("is-dragging");
-        window.removeEventListener("mousemove", onMove);
-        window.removeEventListener("mouseup", onUp);
-        window.removeEventListener("touchmove", onMove);
-        window.removeEventListener("touchend", onUp);
-        if (Math.abs(dx) > 70) { go(active + (dx < 0 ? 1 : -1), true); }
-        else { layout(); }
-      }
-      stage.addEventListener("mousedown", onDown);
-      stage.addEventListener("touchstart", onDown, { passive: true });
-
-      function start() {
-        if (reduce || timer) return;
-        timer = setInterval(function () { go(active + 1, true); }, 4200);
-      }
-      function stop() { if (timer) { clearInterval(timer); timer = null; } }
-      stack.addEventListener("mouseenter", stop);
-      stack.addEventListener("mouseleave", start);
-      document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); });
-
-      layout();
-      requestAnimationFrame(function () { setHeight(); layout(); });
-      window.addEventListener("resize", function () { setFan(); setHeight(); layout(); });
-      window.addEventListener("load", function () { setHeight(); layout(); });
-
-      if ("IntersectionObserver" in window) {
-        var seen = false;
-        var io2 = new IntersectionObserver(function (ents) {
-          ents.forEach(function (en) {
-            if (en.isIntersecting) {
-              start();
-              if (!seen) { seen = true; setHeight(); growBars(cards[active]); }
-            } else { stop(); }
-          });
-        }, { threshold: 0.35 });
-        io2.observe(stack);
-      }
-    })();
 
     // ---- Sombra de la barra al desplazar ----
     var navEl = document.querySelector("nav");
