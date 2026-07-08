@@ -4,7 +4,7 @@ import {
   Zap, GitBranch, PenLine, TrendingUp, Search, Check,
   ShieldCheck, Lock, Users, Download, Eye, Server,
   ClipboardCheck, FlaskConical, Car, Leaf, HardHat, ShieldHalf,
-  ChevronDown, Play, X,
+  ChevronDown, Play, X, Menu,
 } from "lucide-react";
 
 const DEMO_EMAIL = "mailto:demo@evidran.com?subject=Solicitud%20de%20demo%20de%20Evidran";
@@ -19,11 +19,24 @@ export default function App() {
   const [openDemo, setOpenDemo] = useState(null);
   const [billing, setBilling] = useState("anual");
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" && window.innerWidth <= 820);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
-    const onR = () => setIsMobile(window.innerWidth <= 820);
+    const onR = () => {
+      setIsMobile(window.innerWidth <= 820);
+      if (window.innerWidth > 860) setMenuOpen(false);
+    };
     window.addEventListener("resize", onR);
     return () => window.removeEventListener("resize", onR);
   }, []);
+  // Menú móvil: cierra con Esc y bloquea el scroll del fondo mientras está abierto.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e) => e.key === "Escape" && setMenuOpen(false);
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [menuOpen]);
+  const closeMenu = () => setMenuOpen(false);
   const DEMOS = {
     nc9001: { src: "/mockups/editor-demo-nc9001.html", label: "Calidad · ISO 9001", color: "#2563EB", alto: 1000 },
     sst: { src: "/mockups/editor-demo-sst.html", label: "Seguridad y salud · ISO 45001", color: "#B45309", alto: 1140 },
@@ -48,12 +61,33 @@ export default function App() {
               <a href="#casos">Casos de uso</a>
               <a href="#planes">Planes</a>
               <a href="#faq">FAQ</a>
+              <a href="/blog/">Blog</a>
             </div>
             <div className="nav-actions">
               <a className="nav-login" href={LOGIN_URL} target="_blank" rel="noopener">Acceder</a>
               <a className="nav-cta" href={DEMO_EMAIL}>Pedir demo</a>
             </div>
+            <button
+              className="nav-toggle"
+              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
+          {menuOpen && (
+            <div className="mobile-menu">
+              <a href="#como" onClick={closeMenu}>Cómo funciona</a>
+              <a href="#porque" onClick={closeMenu}>Por qué</a>
+              <a href="#casos" onClick={closeMenu}>Casos de uso</a>
+              <a href="#planes" onClick={closeMenu}>Planes</a>
+              <a href="#faq" onClick={closeMenu}>FAQ</a>
+              <a href="/blog/" onClick={closeMenu}>Blog</a>
+              <a href={LOGIN_URL} target="_blank" rel="noopener" onClick={closeMenu}>Acceder</a>
+              <a className="nav-cta" href={DEMO_EMAIL} onClick={closeMenu}>Pedir demo</a>
+            </div>
+          )}
         </nav>
         <div className="hero-pad">
           <div className="hero-card hero">

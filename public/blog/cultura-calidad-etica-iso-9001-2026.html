@@ -54,7 +54,10 @@
       </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
     </div>
-  </div>
+  <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</div>
 </nav>
 
 <article class="post">
@@ -109,5 +112,26 @@
 </footer>
 
 <script defer src="/asistente.js"></script>
+<script>
+  // ---- Menú móvil (hamburguesa) ----
+  (function () {
+    var navEl = document.querySelector("nav");
+    var navBurger = document.getElementById("navBurger");
+    if (!navEl || !navBurger) return;
+    var closeMenu = function () {
+      navEl.classList.remove("nav-open");
+      navBurger.setAttribute("aria-expanded", "false");
+    };
+    navBurger.addEventListener("click", function () {
+      var open = navEl.classList.toggle("nav-open");
+      navBurger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    Array.prototype.forEach.call(navEl.querySelectorAll(".nav-links a"), function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+    window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
+  })();
+</script>
 </body>
 </html>

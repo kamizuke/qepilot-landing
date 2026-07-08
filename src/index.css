@@ -36,7 +36,15 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .nav-actions { display: flex; align-items: center; gap: 16px; }
 .nav-login { font-size: 0.95rem; font-weight: 500; color: var(--ink); transition: color 0.2s; }
 .nav-login:hover { color: var(--steel); }
-@media (min-width: 860px) { .nav-links { display: flex; } }
+.nav-toggle { display: flex; align-items: center; justify-content: center; background: transparent; color: var(--ink); padding: 4px; }
+.mobile-menu { display: flex; flex-direction: column; gap: 2px; max-width: 88rem; margin: 0 auto; padding: 8px 28px 20px; background: var(--card); border-radius: 0 0 16px 16px; box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
+.mobile-menu a { padding: 12px 4px; font-size: 1rem; font-weight: 500; color: var(--ink); border-bottom: 1px solid var(--line); }
+.mobile-menu a:last-child { border-bottom: none; margin-top: 8px; }
+.mobile-menu .nav-cta { text-align: center; }
+@media (min-width: 860px) {
+  .nav-links { display: flex; }
+  .nav-toggle, .mobile-menu { display: none; }
+}
 
 /* ---------- HERO ---------- */
 .hero-outer { display: flex; flex-direction: column; }
