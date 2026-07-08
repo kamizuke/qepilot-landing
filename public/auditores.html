@@ -47,6 +47,11 @@
   .nav-links { display: flex; gap: 26px; align-items: center; }
   .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
   .nav-links a:hover { color: var(--blue); }
+  .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px; padding: 8px; background: transparent; border: 0; cursor: pointer; }
+  .nav-burger span { display: block; width: 100%; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .2s, opacity .2s; }
+  nav.nav-open .nav-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  nav.nav-open .nav-burger span:nth-child(2) { opacity: 0; }
+  nav.nav-open .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   /* BUTTONS */
   .btn { display: inline-block; border: 0; cursor: pointer; font-weight: 700; font-size: 15px; border-radius: 12px; padding: 13px 22px; text-decoration: none; transition: transform .12s, box-shadow .12s; }
@@ -144,7 +149,16 @@
   footer .brand em { color: var(--blue-l); }
 
   @media (max-width: 860px) {
+    .nav-burger { display: flex; }
     .nav-links { display: none; }
+    nav.nav-open .nav-links {
+      display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+      position: absolute; top: 64px; left: 0; right: 0;
+      background: var(--cream); border-bottom: 1px solid var(--line);
+      padding: 8px 24px 20px; box-shadow: 0 12px 24px rgba(22,32,43,.1);
+    }
+    nav.nav-open .nav-links a { padding: 12px 4px; border-bottom: 1px solid var(--cream-d); }
+    nav.nav-open .nav-links a:last-child { border-bottom: 0; margin-top: 8px; }
     section { padding: 60px 0; }
     .steps, .feats { grid-template-columns: 1fr; }
     .bdiag { grid-template-columns: 1fr; }
@@ -182,6 +196,9 @@
       </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
     </div>
+    <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -321,5 +338,26 @@
   </div>
 </footer>
 
+<script>
+  // ---- Menú móvil (hamburguesa) ----
+  (function () {
+    var navEl = document.querySelector("nav");
+    var navBurger = document.getElementById("navBurger");
+    if (!navEl || !navBurger) return;
+    var closeMenu = function () {
+      navEl.classList.remove("nav-open");
+      navBurger.setAttribute("aria-expanded", "false");
+    };
+    navBurger.addEventListener("click", function () {
+      var open = navEl.classList.toggle("nav-open");
+      navBurger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    Array.prototype.forEach.call(navEl.querySelectorAll(".nav-links a"), function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+    window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
+  })();
+</script>
 </body>
 </html>
