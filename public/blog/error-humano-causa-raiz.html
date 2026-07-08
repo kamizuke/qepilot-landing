@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Error humano como causa raíz: por qué el auditor lo rechaza y qué escribir — Evidran</title>
+<meta name="description" content="Poner «error humano» como causa raíz de una no conformidad es hallazgo casi seguro. Por qué no vale según ISO 9001 (10.2) y cómo llegar a la causa sistémica." />
+<link rel="canonical" href="https://evidran.com/blog/error-humano-causa-raiz.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Por qué el auditor rechaza «error humano» como causa raíz (y qué escribir en su lugar)" />
+<meta property="og:description" content="El error humano existe. Como causa raíz final, no: es el punto donde empieza el análisis, no donde termina." />
+<meta property="og:url" content="https://evidran.com/blog/error-humano-causa-raiz.html" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Por qué el auditor rechaza «error humano» como causa raíz (y qué escribir en su lugar)",
+  "description": "Por qué «error humano» no vale como causa raíz de una no conformidad según ISO 9001 (10.2) y cómo redirigir el análisis hacia el fallo de sistema o de control.",
+  "datePublished": "2026-07-08",
+  "dateModified": "2026-07-08",
+  "inLanguage": "es-ES",
+  "author": { "@type": "Organization", "name": "Evidran", "url": "https://evidran.com" },
+  "publisher": { "@type": "Organization", "name": "Evidran", "url": "https://evidran.com" },
+  "mainEntityOfPage": "https://evidran.com/blog/error-humano-causa-raiz.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="brand">
+      <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Evidran">
+        <defs>
+          <linearGradient id="evb" x1="4" y1="6" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#4AA6F5"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+          <linearGradient id="evg" x1="29" y1="32" x2="38" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#46DE7E"/><stop offset="1" stop-color="#15B8A6"/></linearGradient>
+        </defs>
+        <path d="M11 7 H27 A7 7 0 0 1 34 14 V23 A7 7 0 0 1 27 30 H18 L8 38 L11 30 A7 7 0 0 1 4 23 V14 A7 7 0 0 1 11 7 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="13" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="19" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="25" cy="18.5" r="2.1" fill="url(#evb)"/>
+        <path d="M27 23 H35 L40 28 V41 H27 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M35 23 V28 H40" fill="none" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M30 33 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 36.5 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 40 H34.5" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="wm">Evi<em>dran</em></span>
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-primary btn-sm">Pide una demo</a>
+      </div>
+      <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
+    </div>
+  <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+</nav>
+
+<article class="post">
+  <p class="crumbs"><a href="/blog/">← Blog</a></p>
+  <h1>Por qué el auditor rechaza «error humano» como causa raíz (y qué escribir en su lugar)</h1>
+  <p class="meta">Serie · Causa raíz y NC · Publicado en julio de 2026 · Lectura: 7 min</p>
+
+  <p>La escena se repite en miles de auditorías: el auditor abre un expediente de no conformidad, baja hasta el campo de causa raíz y lee <strong>"error humano"</strong>. O sus variantes: "despiste del operario", "falta de atención", "fallo puntual de la persona". Lo siguiente que escribes en tu sistema es la respuesta al hallazgo que te acaba de levantar.</p>
+  <p>No es manía del auditor. Hay tres razones de fondo, y entenderlas es lo que te permite escribir causas que se sostengan — no solo esta vez, sino siempre.</p>
+
+  <h2>Razón 1: el error humano es el síntoma, no la causa</h2>
+  <p>Que una persona se equivocó es, casi siempre, <strong>un hecho verdadero</strong>. Por eso engaña tanto: no es mentira, es insuficiente. La pregunta de la causa raíz no es "¿qué pasó?" sino <strong>"¿por qué el sistema permitió que eso pasara — y por qué no lo detectó?"</strong>.</p>
+  <p>Las personas se equivocan. Hoy, mañana y dentro de diez años, con esta plantilla o con la siguiente. Un sistema de gestión que funciona no aspira a personas infalibles: aspira a métodos claros y a controles que atrapen el error antes de que llegue al cliente. Si tu análisis termina en la persona, no has analizado el sistema — has descrito el accidente.</p>
+
+  <h2>Razón 2: de una causa pobre solo salen acciones pobres</h2>
+  <p>Este es el test más rápido para saber si tu causa raíz vale. Mira la acción correctiva que sale de ella:</p>
+  <ul>
+    <li>Causa: "error humano" → Acción: "amonestar / recordar al operario que preste atención".</li>
+    <li>Causa: "falta de formación" → Acción: "reformar al operario" (por tercera vez).</li>
+    <li>Causa: "despiste" → Acción: "sensibilizar al personal".</li>
+  </ul>
+  <p>Ninguna de esas acciones cambia nada del sistema. La probabilidad de recurrencia queda exactamente igual que antes del expediente. Y eso es precisamente lo que exige el apartado 10.2 de UNE-EN ISO 9001:2015: evaluar la necesidad de acciones para <strong>eliminar las causas</strong> de la no conformidad, con el fin de que <strong>no vuelva a ocurrir</strong>. Una acción que no puede prevenir la recurrencia delata que la causa que tiene encima no era la raíz.</p>
+
+  <h2>Razón 3: documenta una cultura que te penaliza entera</h2>
+  <p>Expediente a expediente, "error humano" va dejando por escrito que en tu empresa los problemas se cierran señalando a alguien. Eso tiene un efecto silencioso y carísimo: <strong>la gente deja de contar los problemas</strong>. Nadie quiere ser la causa raíz del próximo expediente. Y un sistema al que no le llegan los problemas no mejora — actúa. Lo desarrollamos en detalle en <a href="/blog/cultura-calidad-etica-iso-9001-2026.html">cultura de calidad: el requisito que no se cumple con un cartel</a>.</p>
+
+  <h2>Qué escribir en su lugar: las dos preguntas</h2>
+  <p>Cuando aparezca el error humano en tu análisis — y aparecerá, porque es real — no lo taches: <strong>úsalo como punto de partida</strong> y hazle dos preguntas.</p>
+  <h3>1. ¿Por qué el sistema permitió el error? (ocurrencia)</h3>
+  <p>Busca el eslabón del sistema que dejó la puerta abierta. Las familias habituales:</p>
+  <ul>
+    <li><strong>Método / procedimiento:</strong> la instrucción era ambigua, estaba desactualizada, no contemplaba ese caso, o directamente no existía.</li>
+    <li><strong>Información:</strong> el cambio no llegó a quien ejecutaba (revisión de plano, cambio de referencia, modificación del cliente).</li>
+    <li><strong>Planificación:</strong> prisas estructurales, carga mal repartida, pasos que invitan al atajo.</li>
+    <li><strong>Equipo / mantenimiento:</strong> útil desgastado, equipo descalibrado, software que permite el valor erróneo.</li>
+    <li><strong>Condiciones del puesto:</strong> dos referencias casi idénticas en el mismo estante, etiquetas confusas, iluminación pobre.</li>
+  </ul>
+  <h3>2. ¿Por qué no se detectó? (no detección)</h3>
+  <p>Es la pregunta que casi nadie responde y la que más valora un auditor con oficio. El error ocurrió — vale. Pero entre ese momento y el cliente había (¿o no había?) inspecciones, verificaciones, autocontroles. ¿Por qué ninguno lo paró? ¿No existía el control, no cubría ese caso, o existía y no se aplicó — y entonces por qué?</p>
+  <p>Una causa raíz completa suele tener las dos ramas. La metodología 8D de automoción lo exige explícitamente en la D4; para una NC interna de ISO 9001 no es obligatorio formalmente, pero responderla es lo que diferencia un expediente del montón de uno defendible.</p>
+
+  <h2>Un ejemplo, antes y después</h2>
+  <p><strong>La NC:</strong> un cliente recibe 200 piezas con la etiqueta de otra referencia.</p>
+  <p><strong>Causa raíz pobre:</strong> "Error humano del operario de expediciones al etiquetar el palé."</p>
+  <p><strong>Causa raíz sistémica:</strong> "La instrucción de etiquetado no contempla el caso de dos pedidos del mismo cliente preparados simultáneamente: las etiquetas se imprimen juntas y se asignan de memoria (ocurrencia). El control final de expedición verifica cantidad y embalaje, pero no coteja etiqueta contra albarán (no detección)."</p>
+  <p>De la primera sale "llamar la atención al operario". De la segunda salen dos acciones con sustancia: imprimir etiquetas por pedido en el momento del cierre del palé, y añadir el cotejo etiqueta–albarán al control final. Ambas verificables, y con un plazo razonable para <strong>verificar su eficacia</strong> después de implantarlas.</p>
+
+  <h2>Cómo llegar hasta ahí sin perderte</h2>
+  <p>La herramienta clásica son <a href="/blog/5-porques-ejemplos-pyme.html">los 5 porqués</a> — preguntarle "¿por qué?" a cada respuesta hasta tocar el fallo de sistema. Bien usados llegan a la causa en la mayoría de NC de pyme; mal usados producen cadenas inventadas que terminan, otra vez, en la persona. En ese artículo lo desmontamos con tres casos reales completos.</p>
+  <p>Y una regla práctica para tu día a día: <strong>prohíbe "error humano" como causa final en tu sistema</strong>. No como postureo — como disciplina. Cada vez que aparezca, las dos preguntas. Al principio cuesta; a las pocas semanas el equipo las hace solo.</p>
+
+  <div class="cta-box">
+    <h2>Un copiloto que no te deja cerrar en falso</h2>
+    <p>La entrevista de Evidran nunca acepta "error humano", "despiste" o "falta de formación" como causa raíz final: te redirige al fallo de sistema o de control, pregunta por la no detección y la extensión, y sugiere la causa sistémica probable para que tú la confirmes o la corrijas. El criterio de este artículo, aplicado en cada expediente.</p>
+    <div class="btns">
+      <a href="https://app.evidran.com" class="btn btn-primary">Pruébalo con un caso real — 30 días</a>
+      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-ghost">Pide una demo</a>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><span class="wm">Evi<em>dran</em></span></span>
+    <span>El copiloto de calidad por IA · <a href="https://app.evidran.com">app.evidran.com</a> · <a href="mailto:demo@evidran.com">demo@evidran.com</a> · <a href="/terminos.html">Términos y condiciones</a></span>
+  </div>
+</footer>
+
+<script defer src="/asistente.js"></script>
+<script>
+  // ---- Menú móvil (hamburguesa) ----
+  (function () {
+    var navEl = document.querySelector("nav");
+    var navBurger = document.getElementById("navBurger");
+    if (!navEl || !navBurger) return;
+    var closeMenu = function () {
+      navEl.classList.remove("nav-open");
+      navBurger.setAttribute("aria-expanded", "false");
+    };
+    navBurger.addEventListener("click", function () {
+      var open = navEl.classList.toggle("nav-open");
+      navBurger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    Array.prototype.forEach.call(navEl.querySelectorAll(".nav-links a"), function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+    window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
+  })();
+</script>
+</body>
+</html>

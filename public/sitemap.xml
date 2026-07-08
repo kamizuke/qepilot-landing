@@ -20,9 +20,45 @@
   </url>
   <url>
     <loc>https://evidran.com/blog/</loc>
-    <lastmod>2026-07-04</lastmod>
+    <lastmod>2026-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://evidran.com/blog/error-humano-causa-raiz.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://evidran.com/blog/5-porques-ejemplos-pyme.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://evidran.com/blog/como-redactar-no-conformidad-iso-9001.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://evidran.com/blog/correccion-vs-accion-correctiva.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://evidran.com/blog/auditoria-interna-iso-9001-paso-a-paso.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://evidran.com/blog/como-responder-no-conformidad-auditoria.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://evidran.com/blog/iso-9001-2026-que-cambia.html</loc>
@@ -56,7 +92,7 @@
   </url>
   <url>
     <loc>https://evidran.com/blog/cultura-calidad-etica-iso-9001-2026.html</loc>
-    <lastmod>2026-07-04</lastmod>
+    <lastmod>2026-07-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
