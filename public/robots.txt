@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://evidran.com/sitemap.xml
+Sitemap: https://www.evidran.com/sitemap.xml
