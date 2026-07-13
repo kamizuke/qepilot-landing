@@ -51,86 +51,96 @@
 </header>
 
 <main class="wrap">
+  <div class="tag-cloud" id="tagCloud" role="tablist" aria-label="Filtrar artículos por tema">
+    <button class="tag is-active" data-tag="all">Todo <span class="tag-n">14</span></button>
+    <button class="tag" data-tag="iso2026">ISO 9001:2026 <span class="tag-n">7</span></button>
+    <button class="tag" data-tag="nis2">NIS2 <span class="tag-n">1</span></button>
+    <button class="tag" data-tag="causa-raiz">Causa raíz <span class="tag-n">3</span></button>
+    <button class="tag" data-tag="nc">No conformidades <span class="tag-n">4</span></button>
+    <button class="tag" data-tag="auditorias">Auditorías <span class="tag-n">2</span></button>
+    <button class="tag" data-tag="requisitos">Requisitos de la norma <span class="tag-n">2</span></button>
+  </div>
+  <p class="tag-empty" id="tagEmpty" hidden>No hay artículos con ese filtro todavía. <button class="tag-reset" type="button">Ver todos</button></p>
   <div class="post-list">
-    <a class="post-card featured" href="/blog/nis2-que-es-responsable-calidad.html">
+    <a class="post-card featured" data-tags="nis2" href="/blog/nis2-que-es-responsable-calidad.html">
       <span class="k">Serie · Calidad sin humo</span>
       <h2>NIS2 sin humo: te ha caído encima y no es tuya</h2>
       <p>La directiva de ciberseguridad que acaba en la mesa del responsable de calidad. Si te aplica, qué tienes que documentar y qué hacer cuando hay un incidente. Spoiler: el ciclo del incidente es un 8D.</p>
       <span class="more">Leer la guía →</span>
     </a>
-    <a class="post-card featured" href="/blog/iso-9001-2026-que-cambia.html">
+    <a class="post-card featured" data-tags="iso2026" href="/blog/iso-9001-2026-que-cambia.html">
       <span class="k">Serie · Transición ISO 9001:2026</span>
       <h2>ISO 9001:2026: qué cambia de verdad (y qué no)</h2>
       <p>Los cambios reales del borrador, explicados sin alarmismo: clima, riesgos y oportunidades, digitalización y cultura de calidad. Y lo más importante: todo lo que NO cambia.</p>
       <span class="more">Leer la guía →</span>
     </a>
-    <a class="post-card" href="/blog/requisito-6-1-iso-9001.html">
+    <a class="post-card" data-tags="iso2026 requisitos" href="/blog/requisito-6-1-iso-9001.html">
       <span class="k">Requisitos de la norma</span>
       <h2>Requisito 6.1 de ISO 9001: qué pide de verdad (con ejemplos)</h2>
       <p>Qué exige, qué no exige aunque te lo vendan, de dónde salen los riesgos, ejemplos reales de pyme y el apartado que casi todos dejan vacío: las oportunidades.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/auditoria-interna-iso-9001-paso-a-paso.html">
+    <a class="post-card" data-tags="requisitos auditorias" href="/blog/auditoria-interna-iso-9001-paso-a-paso.html">
       <span class="k">Requisitos de la norma</span>
       <h2>Auditoría interna ISO 9001 paso a paso (9.2)</h2>
       <p>El programa anual, la independencia del auditor, la checklist, cómo ejecutar sin interrogatorio y qué hacer con los hallazgos.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/como-responder-no-conformidad-auditoria.html">
+    <a class="post-card" data-tags="nc auditorias" href="/blog/como-responder-no-conformidad-auditoria.html">
       <span class="k">Causa raíz y NC</span>
       <h2>Cómo responder a una no conformidad de auditoría (sin que te la devuelvan)</h2>
       <p>Leer bien el hallazgo, la estructura de seis piezas que la certificadora acepta a la primera y los plazos creíbles.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/error-humano-causa-raiz.html">
+    <a class="post-card" data-tags="causa-raiz nc" href="/blog/error-humano-causa-raiz.html">
       <span class="k">Causa raíz y NC</span>
       <h2>Por qué el auditor rechaza «error humano» como causa raíz</h2>
       <p>Es el síntoma, no la causa: de ahí solo salen acciones pobres. Las dos preguntas que llevan al fallo de sistema, con un ejemplo antes/después.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/5-porques-ejemplos-pyme.html">
+    <a class="post-card" data-tags="causa-raiz" href="/blog/5-porques-ejemplos-pyme.html">
       <span class="k">Causa raíz y NC</span>
       <h2>Los 5 porqués con ejemplos reales de pyme industrial</h2>
       <p>Tres cadenas completas — mecanizado, expedición, plazos — con la doble rama ocurrencia/no detección y los errores que convierten el método en teatro.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/como-redactar-no-conformidad-iso-9001.html">
+    <a class="post-card" data-tags="nc" href="/blog/como-redactar-no-conformidad-iso-9001.html">
       <span class="k">Causa raíz y NC</span>
       <h2>Cómo redactar una no conformidad ISO 9001 (que no te tumben en auditoría)</h2>
       <p>La anatomía en seis campos, los tres puntos donde el auditor va directo y un ejemplo completo, antes y después.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/correccion-vs-accion-correctiva.html">
+    <a class="post-card" data-tags="nc causa-raiz" href="/blog/correccion-vs-accion-correctiva.html">
       <span class="k">Causa raíz y NC</span>
       <h2>Corrección vs. acción correctiva: la diferencia que decide tu auditoría</h2>
       <p>El caso trampa de "reformar al operario", cuándo la norma permite no hacer AC, y el plazo de eficacia según el tipo de acción.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/transicion-iso-9001-2026-calendario.html">
+    <a class="post-card" data-tags="iso2026" href="/blog/transicion-iso-9001-2026-calendario.html">
       <span class="k">Transición 2026</span>
       <h2>El calendario real de la transición (y un plan sin agobios)</h2>
       <p>Cuándo sale la norma, cuántos años tienes y cómo elegir el momento según tu ciclo de auditorías.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/riesgos-oportunidades-iso-9001-2026.html">
+    <a class="post-card" data-tags="iso2026" href="/blog/riesgos-oportunidades-iso-9001-2026.html">
       <span class="k">Transición 2026</span>
       <h2>Riesgos y oportunidades: el punto donde más sistemas van a sufrir</h2>
       <p>El borrador separa riesgos y oportunidades y pide metodología formal. Cómo montar un 6.1 que aguante.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/cambio-climatico-iso-9001-contexto.html">
+    <a class="post-card" data-tags="iso2026" href="/blog/cambio-climatico-iso-9001-contexto.html">
       <span class="k">Transición 2026</span>
       <h2>Cambio climático en el contexto (4.1): qué te pedirán de verdad</h2>
       <p>No es un plan de descarbonización: es haber analizado la pregunta y poder demostrarlo. Con ejemplos de pyme.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/inteligencia-artificial-iso-9001-2026.html">
+    <a class="post-card" data-tags="iso2026" href="/blog/inteligencia-artificial-iso-9001-2026.html">
       <span class="k">Transición 2026</span>
       <h2>IA y digitalización en la 2026: qué significa para una pyme (sin humo)</h2>
       <p>La norma no te obliga a "implantar IA". Te pide control, trazabilidad y que la responsabilidad siga siendo humana.</p>
       <span class="more">Leer →</span>
     </a>
-    <a class="post-card" href="/blog/cultura-calidad-etica-iso-9001-2026.html">
+    <a class="post-card" data-tags="iso2026" href="/blog/cultura-calidad-etica-iso-9001-2026.html">
       <span class="k">Transición 2026</span>
       <h2>Cultura de calidad y ética: el requisito que no se cumple con un cartel</h2>
       <p>La evidencia número uno de tu cultura ya está escrita en tus expedientes: la causa raíz. Cómo dejar de documentar una cultura de culpables.</p>
@@ -166,6 +176,52 @@
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
     window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
+  })();
+
+  // ---- Nube de filtros por tema ----
+  (function () {
+    var cloud = document.getElementById("tagCloud");
+    if (!cloud) return;
+    var tags = Array.prototype.slice.call(cloud.querySelectorAll(".tag"));
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".post-card"));
+    var empty = document.getElementById("tagEmpty");
+
+    function apply(tag) {
+      var shown = 0;
+      cards.forEach(function (card) {
+        var list = (card.getAttribute("data-tags") || "").split(/\s+/);
+        var match = tag === "all" || list.indexOf(tag) !== -1;
+        card.hidden = !match;
+        if (match) shown++;
+      });
+      tags.forEach(function (b) {
+        var on = b.getAttribute("data-tag") === tag;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      if (empty) empty.hidden = shown !== 0;
+    }
+
+    function tagFromHash() {
+      var h = (location.hash || "").replace(/^#tema=/, "");
+      return h && tags.some(function (b) { return b.getAttribute("data-tag") === h; }) ? h : "all";
+    }
+
+    cloud.addEventListener("click", function (e) {
+      var btn = e.target.closest(".tag");
+      if (!btn) return;
+      var tag = btn.getAttribute("data-tag");
+      if (tag === "all") { history.replaceState(null, "", location.pathname); }
+      else { location.hash = "tema=" + tag; }
+      apply(tag);
+    });
+
+    if (empty) empty.addEventListener("click", function (e) {
+      if (e.target.closest(".tag-reset")) { history.replaceState(null, "", location.pathname); apply("all"); }
+    });
+
+    window.addEventListener("hashchange", function () { apply(tagFromHash()); });
+    apply(tagFromHash());
   })();
 </script>
 </body>
