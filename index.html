@@ -157,6 +157,8 @@
   /* STEPS */
   .center-head { text-align: center; max-width: 60ch; margin: 0 auto 50px; }
   .center-head p { font-size: 17px; margin-top: 14px; }
+  .human-shot { max-width: 900px; margin: 0 auto 50px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(22,32,43,.14); }
+  .human-shot img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; object-position: center 35%; }
   .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .step { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
   .step .n { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 14px; }
@@ -521,6 +523,9 @@
       <h2>No hablas con una IA. Trabajas con un responsable de calidad digital.</h2>
       <p>Evidran te entrevista como lo haría un compañero senior: pregunta lo justo, te propone hipótesis y no te deja cerrar con una causa pobre. Tú mandas; él te ayuda a hacerlo mejor y más rápido.</p>
     </div>
+    <figure class="human-shot">
+      <img src="/equipo-calidad.webp" alt="Responsable de calidad revisando un expediente junto a su equipo frente a un portátil" loading="lazy" width="1600" height="900" />
+    </figure>
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>Cuéntalo con tus palabras</h3><p>Eliges el tipo de expediente y le cuentas qué pasó. Pega el email del cliente o el hallazgo del auditor; adjunta una foto y la incorpora como evidencia.</p></div>
       <div class="step"><div class="n">2</div><h3>Te entrevista, no te interroga</h3><p>Una o dos preguntas por turno. Sugiere la causa sistémica probable, autocompleta lo administrativo y te lleva más allá del "error humano".</p></div>
@@ -849,7 +854,7 @@
     // ---- Reveal al hacer scroll (estilo Apple) + barras que crecen ----
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduce && "IntersectionObserver" in window) {
-      var sel = [".center-head", ".shot", ".step",
+      var sel = [".center-head", ".shot", ".human-shot", ".step",
                  ".problem li", ".problem .punch", ".cmp table",
                  ".twocol > div", ".icp .tags span", ".icp .week", ".final .wrap > *"];
       var revealEls = [];
