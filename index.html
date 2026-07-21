@@ -409,7 +409,7 @@
         <a href="/producto.html">Por dentro</a>
         <a href="/auditores.html">Para auditores</a>
         <a href="/blog/">Blog</a>
-        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-primary btn-sm">Pide una demo</a>
+        <a href="https://app.evidran.com/?alta=1" class="btn btn-primary btn-sm">Prueba gratis</a>
       </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
     </div>
@@ -427,7 +427,6 @@
     <p class="sub">Planifica auditorías, vigila los plazos y documenta hablando: la IA te entrevista como un responsable senior y redacta el expediente listo para auditoría.</p>
     <div class="hero-cta">
       <a href="https://app.evidran.com/?alta=1" class="btn btn-primary">Empieza gratis — 30 días, sin tarjeta</a>
-      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-ghost">Pide una demo</a>
     </div>
     <p class="amplify">Evidran no sustituye el criterio del responsable de calidad. <b><span class="amp" data-word="Lo amplifica"></span>.</b></p>
 
@@ -809,7 +808,6 @@
     <p class="amplify">No sustituye tu criterio. <span class="amp" data-word="Lo amplifica"></span>.</p>
     <div class="hero-cta">
       <a href="https://app.evidran.com/?alta=1" class="btn btn-primary">Crea tu primer expediente gratis</a>
-      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran" class="btn btn-ghost">Pide una demo</a>
       <a href="https://app.evidran.com" class="btn btn-ghost">Iniciar sesión</a>
     </div>
   </div>
@@ -934,27 +932,27 @@
       window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
     }
 
-    // ---- Evento clave: solicitud de demo ----
-    Array.prototype.forEach.call(document.querySelectorAll('a[href^="mailto:demo@evidran.com"]'), function (link) {
+    // ---- Evento clave: alta de cuenta de prueba (self-service) ----
+    Array.prototype.forEach.call(document.querySelectorAll('a[href^="https://app.evidran.com/?alta"]'), function (link) {
       link.addEventListener("click", function (event) {
         if (typeof window.gtag !== "function") return;
 
         event.preventDefault();
         var href = link.href;
-        var opened = false;
-        var openMail = function () {
-          if (opened) return;
-          opened = true;
+        var navegado = false;
+        var ir = function () {
+          if (navegado) return;
+          navegado = true;
           window.location.href = href;
         };
 
         window.gtag("event", "generate_lead", {
           event_category: "lead",
-          event_label: link.textContent.trim() || "demo@evidran.com",
-          method: "email",
-          event_callback: openMail
+          event_label: link.textContent.trim() || "Prueba gratis",
+          method: "signup",
+          event_callback: ir
         });
-        window.setTimeout(openMail, 700);
+        window.setTimeout(ir, 700);
       });
     });
   })();
