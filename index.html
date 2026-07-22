@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Evidran — El sistema de calidad que trabaja contigo</title>
-<meta name="description" content="Planifica auditorías internas, mantén riesgos y acciones al día y llega a la revisión por la dirección con los datos hechos. Y cuando algo falla, lo documentas hablando: la IA te entrevista y redacta el expediente listo para auditoría." />
+<title>Evidran — El sistema de gestión que aprende · Calidad, auditorías y mejora continua</title>
+<meta name="description" content="Evidran convierte no conformidades, auditorías y acciones de mejora en conocimiento reutilizable: causas que se repiten, acciones que funcionaron, decisiones con base real. Y documentarlo cuesta una conversación, no una tarde." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
     --radius: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 78px; }
   body {
     font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink); background: var(--cream); line-height: 1.6;
@@ -39,15 +39,39 @@
   .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12.5px; font-weight: 700; color: var(--blue); margin-bottom: 14px; }
 
   /* NAV */
-  nav { position: sticky; top: 0; z-index: 50; background: rgba(247,246,242,.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(247,246,242,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .nav-in { display: flex; align-items: center; justify-content: space-between; height: 64px; }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
   .brand .wm { white-space: nowrap; }
   .brand em { font-style: normal; color: var(--navy); }
-  .nav-right { display: flex; align-items: center; gap: 18px; }
-  .nav-links { display: flex; gap: 26px; align-items: center; }
-  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
-  .nav-links a:hover { color: var(--blue); }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-links { display: flex; gap: 22px; align-items: center; }
+  .nav-links > a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
+  .nav-links > a:hover { color: var(--blue); }
+  .nav-item { height: 64px; display: flex; align-items: center; }
+  .nav-item.rel { position: relative; }
+  .nav-item.mega-item { position: static; }
+  .nav-drop-btn { background: none; border: 0; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 14.5px; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 7px; padding: 0; }
+  .nav-drop-btn:hover { color: var(--blue); }
+  .nav-drop-btn .car { width: 7px; height: 7px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .15s; }
+  .nav-item.open .nav-drop-btn .car { transform: rotate(225deg) translateY(-1px); }
+  .drop { position: absolute; top: 64px; background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 60px rgba(22,32,43,.16); padding: 14px; display: none; z-index: 60; text-align: left; }
+  .drop a { display: block; padding: 8px 10px; border-radius: 9px; text-decoration: none; }
+  .drop a b { display: block; font-size: 14px; color: var(--ink); font-weight: 700; letter-spacing: -0.01em; }
+  .drop a small { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 1px; line-height: 1.45; }
+  .drop a:hover { background: var(--cream); }
+  .drop.small { left: 50%; transform: translateX(-50%); width: 280px; }
+  .drop.mega { left: 50%; transform: translateX(-50%); width: min(900px, calc(100vw - 40px)); padding: 20px 22px 16px; grid-template-columns: repeat(3, 1fr); gap: 4px 20px; }
+  .mg-t { font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--blue); padding: 4px 10px 7px; }
+  .mg-foot { grid-column: 1 / -1; border-top: 1px solid var(--cream-d); margin-top: 12px; padding: 12px 10px 0; display: flex; gap: 20px; flex-wrap: wrap; }
+  .mg-foot a { font-size: 12.5px; color: var(--ink-soft); text-decoration: none; font-weight: 600; padding: 0; }
+  .mg-foot a:hover { color: var(--blue); background: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .nav-item:hover > .drop.small { display: block; }
+    .nav-item:hover > .drop.mega { display: grid; }
+  }
+  .nav-item.open > .drop.small { display: block; }
+  .nav-item.open > .drop.mega { display: grid; }
   .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px; padding: 8px; background: transparent; border: 0; cursor: pointer; }
   .nav-burger span { display: block; width: 100%; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .2s, opacity .2s; }
   nav.nav-open .nav-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -64,17 +88,31 @@
 
   /* HERO */
   .hero { padding-top: 44px; padding-bottom: 46px; text-align: center; }
-  .hero h1 { font-size: clamp(34px, 5.4vw, 60px); font-weight: 850; max-width: 16ch; margin: 0 auto 16px; }
-  .hero .sub { font-size: clamp(17px, 2vw, 21px); max-width: 60ch; margin: 0 auto 22px; color: var(--ink-soft); }
+  .hero h1 { font-size: clamp(34px, 5.2vw, 58px); font-weight: 850; max-width: 21ch; margin: 0 auto 16px; }
+  .hero .sub { font-size: clamp(17px, 2vw, 21px); max-width: 62ch; margin: 0 auto 22px; color: var(--ink-soft); }
   .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
   .hero .amplify { margin-top: 14px; font-size: 14.5px; color: var(--navy); font-weight: 600; }
   .hero .amplify b { color: var(--teal); }
-  /* "Lo amplifica" tecleado letra a letra */
   .amp { font-size: 1.28em; font-weight: 800; letter-spacing: .01em; padding-right: 1px; white-space: nowrap; }
   .amp.typing { border-right: 2px solid currentColor; animation: ampcaret .7s step-end infinite; }
   @keyframes ampcaret { 50% { border-color: transparent; } }
+  .hero .norms-micro { font-size: 14.5px; max-width: 60ch; margin: 22px auto 0; color: var(--navy); font-weight: 600; letter-spacing: .01em; }
 
-  /* reveal al hacer scroll (estilo Apple) */
+  /* CADENA DE TRANSFORMACIÓN (visual del hero) */
+  .chainbox { max-width: 880px; margin: 34px auto 0; background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 30px 60px rgba(22,32,43,.10); padding: 26px 28px 20px; text-align: left; }
+  .chain + .chain { margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--cream-d); }
+  .ch-lab { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--ink-soft); margin-bottom: 10px; }
+  .chain.live .ch-lab { color: var(--blue); }
+  .ch-row { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+  .ch { font-size: 13px; font-weight: 600; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--cream); color: var(--ink); white-space: nowrap; }
+  .chain.dim .ch { background: #fff; color: var(--ink-soft); }
+  .ch.ghost { border-style: dashed; color: #A9A294; background: transparent; }
+  .ch.hot { background: linear-gradient(135deg, var(--green), var(--teal)); border-color: transparent; color: #06281f; font-weight: 800; }
+  .ch-row i { color: #C9C3B6; font-style: normal; font-size: 12px; }
+  .ch-cap { margin-top: 18px; font-size: 13px; color: var(--ink-soft); text-align: center; }
+  .ch-cap b { color: var(--ink); }
+
+  /* reveal al hacer scroll */
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.16,.84,.44,1), transform .8s cubic-bezier(.16,.84,.44,1); will-change: opacity, transform; }
   .reveal.in { opacity: 1; transform: none; }
   nav.scrolled { box-shadow: 0 4px 22px rgba(22,32,43,.08); }
@@ -83,8 +121,8 @@
     html { scroll-behavior: auto; }
   }
 
-  /* mock chat preview */
-  .mock { max-width: 840px; margin: 52px auto 0; background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 30px 60px rgba(22,32,43,.10); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
+  /* mock chat (entrevista) */
+  .mock { max-width: 840px; margin: 44px auto 0; background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 30px 60px rgba(22,32,43,.10); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
   .mock-bar { grid-column: 1 / -1; display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--cream-d); background: var(--cream); }
   .mock-bar i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; background: #D7D2C6; }
   .mock-bar span { margin-left: 10px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
@@ -99,53 +137,13 @@
   .doc-field .l { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; }
   .doc-field .v { font-size: 12.5px; color: var(--ink); margin-top: 2px; }
   .doc-field.fresh { border-color: var(--blue-l); background: #F2F8FF; }
-
-  /* CONTENEDOR DEL MOCKUP DEL HERO */
-  .shot { max-width: 940px; margin: 30px auto 0; }
-  .shot > .mock { margin-top: 0; }
+  .shot { max-width: 940px; margin: 0 auto; }
   .shot-cap { text-align: center; margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); }
-
-  /* PANEL MOCKUP de alta fidelidad (panel de calidad en uso) */
-  .pmwrap { max-width: 1000px; margin: 40px auto 0; }
-  .browser { background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 34px 64px rgba(22,32,43,.14); overflow: hidden; }
-  .browser-bar { display: flex; align-items: center; gap: 7px; padding: 11px 16px; background: var(--cream); border-bottom: 1px solid var(--cream-d); }
-  .browser-bar i { width: 11px; height: 11px; border-radius: 50%; background: #D7D2C6; }
-  .browser-bar .url { margin-left: 12px; font-size: 11.5px; color: var(--ink-soft); background: #fff; border: 1px solid var(--line); border-radius: 7px; padding: 3px 14px; }
-  .pm { padding: 22px; }
-  .pm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-  .pm-title { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; }
-  .pm-btns { display: flex; gap: 8px; }
-  .pm-btns span { font-size: 11px; font-weight: 700; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 8px; padding: 6px 11px; white-space: nowrap; }
-  .pm-btns .pri { background: var(--blue); color: #fff; border-color: var(--blue); }
-  .pm-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-  .pm-kpi { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-  .pm-kpi b { display: block; font-size: 27px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
-  .pm-kpi b.alert { color: #B42318; }
-  .pm-kpi b sup { font-size: 13px; font-weight: 700; }
-  .pm-kpi small { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; }
-  .pm-bd { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-  .pm-card { border: 1px solid var(--line); border-radius: 12px; padding: 15px 16px; }
-  .pm-card .h { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 11px; }
-  .pm-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 12px; }
-  .pm-row .lbl { width: 130px; color: var(--ink); flex: 0 0 auto; }
-  .pm-row .track { flex: 1; height: 7px; background: var(--cream-d); border-radius: 5px; overflow: hidden; }
-  .pm-row .fill { height: 100%; border-radius: 5px; background: var(--blue); width: var(--w); transition: width 1.1s cubic-bezier(.16,.84,.44,1); }
-
-  /* secuencia animada de la entrevista (hero) */
   .seq { opacity: 0; transform: translateY(8px); transition: opacity .45s ease, transform .45s ease; }
   .seq.show { opacity: 1; transform: none; }
-  .pm-row .n { width: 18px; text-align: right; color: var(--ink-soft); font-weight: 700; }
-  .pm-table { width: 100%; border-collapse: collapse; }
-  .pm-table th { font-size: 9.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--cream-d); font-weight: 700; }
-  .pm-table td { font-size: 12px; padding: 11px 10px; border-bottom: 1px solid var(--cream-d); color: var(--ink); vertical-align: middle; }
-  .pmpill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
-  .pmpill.ab { background: #EAF2FF; color: #1D4ED8; }
-  .pmpill.en { background: #FEF1DE; color: #B45309; }
-  .pmpill.ce { background: #E7F6EC; color: #167C40; }
-  .pmcode { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--navy); }
 
   /* PROBLEM */
-  .problem { background: var(--ink); color: #fff; border-radius: 0; }
+  .problem { background: var(--ink); color: #fff; }
   .problem h2 { color: #fff; max-width: 22ch; }
   .problem .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; }
   .problem ul { list-style: none; margin: 18px 0 0; }
@@ -154,98 +152,64 @@
   .problem .punch { font-size: clamp(22px, 3vw, 30px); font-weight: 800; color: #fff; margin-top: 26px; letter-spacing: -0.02em; }
   .problem .lead { color: #AEB6C0; font-size: 17px; }
 
-  /* STEPS */
+  /* ACTOS */
+  .acto-kick { display: inline-flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-size: 12.5px; font-weight: 800; color: var(--blue); margin-bottom: 14px; }
+  .acto-kick .n { background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; border-radius: 7px; padding: 2px 8px; font-size: 11.5px; letter-spacing: .04em; }
   .center-head { text-align: center; max-width: 60ch; margin: 0 auto 50px; }
   .center-head p { font-size: 17px; margin-top: 14px; }
-  .human-shot { max-width: 900px; margin: 0 auto 50px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(22,32,43,.14); }
+  .human-shot { max-width: 900px; margin: 50px auto; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(22,32,43,.14); }
   .human-shot img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; object-position: center 35%; }
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 50px; }
   .step { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
   .step .n { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 14px; }
   .step h3 { font-size: 16px; margin-bottom: 7px; }
   .step p { font-size: 14px; }
 
-  /* INTELLIGENCE (featured) */
-  .intel { background: linear-gradient(160deg, #0E2A4A, #16202B); color: #fff; }
-  .intel h2 { color: #fff; max-width: 26ch; }
-  .intel .flow { display: inline-flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 40px; }
-  .intel .flow span { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); padding: 7px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: #DCE3EC; }
-  .intel .flow span.hot { background: linear-gradient(135deg, var(--green), var(--teal)); color: #06281f; border-color: transparent; }
-  .intel .note { margin-top: 34px; font-size: 14.5px; color: #8FA9C2; }
-  .intel .note b { color: #fff; }
-
-  /* ICP */
-  .icp { text-align: center; background: var(--cream-d); }
-  .icp h2 { max-width: 24ch; margin: 0 auto; }
-  .icp .tags { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 30px 0 22px; }
-  .icp .tags span { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 11px 20px; font-weight: 700; font-size: 15px; color: var(--navy); }
-  .icp .week { font-weight: 800; font-size: 18px; color: var(--ink); }
-
-  /* FEATURES */
-  .feats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .feat { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
-  .feat .ic { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 21px; margin-bottom: 14px; background: linear-gradient(135deg, #EAF2FF, #DCEBFF); }
-  .feat h3 { font-size: 17px; margin-bottom: 8px; }
-  .feat p { font-size: 14.5px; }
-
-  /* COMPARE */
-  .cmp table { width: 100%; border-collapse: collapse; margin-top: 34px; background: #fff; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
-  .cmp th, .cmp td { padding: 15px 18px; text-align: left; font-size: 14.5px; border-bottom: 1px solid var(--cream-d); }
-  .cmp thead th { background: var(--cream); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
-  .cmp thead th:last-child { color: var(--blue); }
-  .cmp td:first-child { font-weight: 700; color: var(--ink); }
-  .cmp td:last-child { font-weight: 600; color: var(--ink); }
-  .cmp tr td:nth-child(2) { color: var(--ink-soft); }
-
-  /* SECURITY + FAQ split */
-  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-  .sec-list { list-style: none; margin-top: 22px; }
-  .sec-list li { padding: 13px 0 13px 32px; position: relative; border-bottom: 1px solid var(--line); font-size: 15px; }
-  .sec-list li::before { content: "🔒"; position: absolute; left: 0; font-size: 15px; }
-  details { border-bottom: 1px solid var(--line); padding: 6px 0; }
-  summary { cursor: pointer; font-weight: 700; font-size: 16px; padding: 12px 0; list-style: none; color: var(--ink); }
-  summary::-webkit-details-marker { display: none; }
-  summary::after { content: "+"; float: right; color: var(--blue); font-weight: 700; }
-  details[open] summary::after { content: "–"; }
-  details p { font-size: 14.5px; padding: 0 0 14px; }
-
-  /* FINAL CTA */
-  .final { text-align: center; background: linear-gradient(160deg, #16202B, #0E2A4A); color: #fff; }
-  .final h2 { color: #fff; max-width: 20ch; margin: 0 auto 16px; }
-  .final p { color: #AEB6C0; font-size: 17px; max-width: 52ch; margin: 0 auto 16px; }
-  .final .amplify { color: var(--green); font-weight: 700; margin-bottom: 28px; }
-  .final .hero-cta { justify-content: center; }
-  .final .btn-ghost { color: #fff; border-color: rgba(255,255,255,.3); }
-  .final .btn-ghost:hover { border-color: #fff; color: #fff; }
-
-  footer { background: var(--ink); color: #8893A0; padding: 34px 0; font-size: 13.5px; }
-  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
-  footer .brand { color: #fff; }
-  footer .brand em { color: var(--blue-l); }
-  footer a.li { display: inline-flex; align-items: center; vertical-align: middle; color: #AEB6C0; margin-left: 2px; transition: color .15s; }
-  footer a.li:hover { color: var(--blue-l); }
-  footer a.li svg { width: 18px; height: 18px; }
-
-  .hero .norms-micro { font-size: 14.5px; max-width: 60ch; margin: 22px auto 0; color: var(--navy); font-weight: 600; letter-spacing: .01em; }
-
-  /* NORM BAND (la IA conoce la norma) */
-  .normband { background: #fff; }
-  .normband .center-head h2 { max-width: 30ch; }
-  .normband .hl { color: var(--blue); }
-
-  /* DUAL PRODUCTS */
-  .dual { background: var(--cream-d); }
-
-  /* perfil de organización (dentro de la norm band) */
-  .normband-profile { max-width: 760px; margin: 30px auto 0; text-align: center; background: linear-gradient(135deg, #fff, #F4F8FF); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 26px; font-size: 15.5px; color: var(--ink-soft); }
+  /* NORMAS (dentro de Capturar) */
+  .normhead { text-align: center; max-width: 62ch; margin: 84px auto 0; }
+  .normhead .hl { color: var(--blue); }
+  .normhead p { font-size: 16px; margin-top: 12px; }
+  .normchips { display: flex; flex-wrap: wrap; gap: 11px; justify-content: center; max-width: 920px; margin: 30px auto 0; }
+  .nchip { display: inline-flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 10px 17px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; box-shadow: 0 3px 10px rgba(22,32,43,.04); transition: transform .15s, box-shadow .15s; }
+  .nchip:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(22,32,43,.09); }
+  .nchip b { color: var(--ink); font-weight: 800; font-size: 13.5px; letter-spacing: -0.01em; white-space: nowrap; }
+  .nchip i { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; background: var(--navy); }
+  .nchip.q i { background: var(--blue); }
+  .nchip.env i { background: #2E7D54; }
+  .nchip.sst i { background: #B45309; }
+  .nchip.en i { background: #0E7490; }
+  .nchip.lab i { background: #6D28D9; }
+  .nchip.acc i { background: var(--navy); }
+  .nchip.auto i { background: #B42318; }
+  .nchip.aud i { background: var(--teal); }
+  .normband-profile { max-width: 760px; margin: 26px auto 0; text-align: center; background: linear-gradient(135deg, #fff, #F4F8FF); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 26px; font-size: 15.5px; color: var(--ink-soft); }
   .normband-profile strong { color: var(--ink); }
 
-  /* FEATURE ROW · bloque texto + visual (patrón Holded, imagen protagonista) */
+  /* PUERTAS DE ENTRADA (planta / auditor / PDF) */
+  .entryhead { text-align: center; margin: 84px auto 0; max-width: 56ch; }
+  .entryhead h3 { font-size: clamp(20px, 2.4vw, 25px); }
+  .entry3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1000px; margin: 30px auto 0; }
+  .entry { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .entry .k { font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--teal); margin-bottom: 9px; }
+  .entry h4 { font-size: 15.5px; margin-bottom: 7px; letter-spacing: -0.01em; }
+  .entry p { font-size: 13.5px; }
+
+  /* LA IA EN SU SITIO */
+  .iasec { background: #fff; text-align: center; }
+  .iasec h2 { max-width: 16ch; margin: 0 auto 18px; }
+  .iasec p { max-width: 64ch; margin: 0 auto; font-size: 17px; }
+  .iasec .valor { margin: 22px auto 0; font-size: clamp(18px, 2.4vw, 24px); font-weight: 800; color: var(--ink); letter-spacing: -0.015em; max-width: 34ch; line-height: 1.35; }
+
+  /* FEATURE ROW · texto + visual */
   .feat-row { display: grid; grid-template-columns: 1.02fr 1.18fr; gap: 46px; align-items: center; margin-top: 44px; }
   .feat-row .fr-eyebrow { font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--blue); margin-bottom: 12px; }
   .feat-row h3 { font-size: clamp(22px, 2.6vw, 27px); letter-spacing: -0.02em; margin-bottom: 12px; }
   .feat-row p { font-size: 15.5px; }
   .fr-visual { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 24px 48px rgba(22,32,43,.11); overflow: hidden; }
+  .feat-row.rev .fr-visual { order: -1; }
+  .browser-bar { display: flex; align-items: center; gap: 7px; padding: 11px 16px; background: var(--cream); border-bottom: 1px solid var(--cream-d); }
+  .browser-bar i { width: 11px; height: 11px; border-radius: 50%; background: #D7D2C6; }
+  .browser-bar .url { margin-left: 12px; font-size: 11.5px; color: var(--ink-soft); background: #fff; border: 1px solid var(--line); border-radius: 7px; padding: 3px 14px; }
 
   /* MATRIZ DE RIESGOS · mapa de calor 5×5 */
   .riskmap { padding: 18px 18px 16px; }
@@ -268,13 +232,21 @@
   .fr-cap { margin: 12px 18px 16px; font-size: 12px; color: var(--ink-soft); }
   .fr-cap b { color: var(--ink); }
 
-  /* filas alternas: visual a la izquierda */
-  .feat-row.rev .fr-visual { order: -1; }
-
-  /* AUDITORÍA INTERNA 9.2 · programa anual + checklist con IA */
-  .fr-visual .pm { padding: 18px; }
-  .fr-visual .pm-title { font-size: 15px; }
-  .fr-visual .pm-btns span { font-size: 10px; padding: 5px 9px; }
+  /* PANEL / TABLAS mock */
+  .pm { padding: 18px; }
+  .pm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .pm-title { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; }
+  .pm-btns { display: flex; gap: 8px; }
+  .pm-btns span { font-size: 10px; font-weight: 700; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; white-space: nowrap; }
+  .pm-btns .pri { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .pm-table { width: 100%; border-collapse: collapse; }
+  .pm-table th { font-size: 9.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--cream-d); font-weight: 700; }
+  .pm-table td { font-size: 12px; padding: 11px 10px; border-bottom: 1px solid var(--cream-d); color: var(--ink); vertical-align: middle; }
+  .pmpill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .pmpill.ab { background: #EAF2FF; color: #1D4ED8; }
+  .pmpill.en { background: #FEF1DE; color: #B45309; }
+  .pmpill.ce { background: #E7F6EC; color: #167C40; }
+  .pmcode { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--navy); }
   .pm-check { margin-top: 13px; border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px; }
   .pm-check .h { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 9px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .pm-check .h .ia { font-size: 8.5px; font-weight: 800; letter-spacing: .03em; color: #fff; background: linear-gradient(135deg, var(--blue-l), var(--blue)); border-radius: 5px; padding: 2px 6px; text-transform: none; }
@@ -282,8 +254,6 @@
   .pm-chk:first-of-type { border-top: 0; }
   .pm-chk .box { width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid var(--line); flex: 0 0 auto; margin-top: 1px; display: grid; place-items: center; font-size: 10px; color: transparent; }
   .pm-chk .box.on { background: var(--blue); border-color: var(--blue); color: #fff; }
-
-  /* PLAN DE MEJORA · chips de prioridad y eficacia */
   .prio { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
   .prio.alta { background: #FDE7E7; color: #B42318; }
   .prio.media { background: #FEF1DE; color: #B45309; }
@@ -291,7 +261,7 @@
   .efic { font-size: 11px; font-weight: 700; color: #167C40; white-space: nowrap; }
   .efic.pend { color: var(--ink-soft); font-weight: 600; }
 
-  /* AVISOS · toast de vencimiento + resumen diario */
+  /* AVISOS */
   .notif { padding: 20px 18px; display: grid; gap: 14px; }
   .notif-toast { display: flex; gap: 12px; align-items: flex-start; border: 1px solid #F3C9C4; background: linear-gradient(135deg, #fff, #FDF2F1); border-radius: 12px; padding: 13px 15px; box-shadow: 0 10px 24px rgba(180,35,24,.08); }
   .nt-ic { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: #B42318; color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 15px; }
@@ -305,7 +275,7 @@
   .nd-dot.r { background: #D92D20; } .nd-dot.a { background: #DD8A0E; } .nd-dot.g { background: #16A34A; } .nd-dot.b { background: var(--blue); }
   .nd-row b { font-weight: 800; }
 
-  /* REVISIÓN POR LA DIRECCIÓN 9.3 · acta redactándose */
+  /* REVISIÓN 9.3 · acta */
   .acta { padding: 18px 20px 20px; }
   .acta-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
   .acta-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .09em; color: var(--blue); font-weight: 700; }
@@ -315,23 +285,20 @@
   .acta p b { color: var(--ink); font-weight: 700; }
   .acta-flag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; color: #167C40; background: #E7F6EC; border-radius: 8px; padding: 6px 11px; margin-top: 4px; }
 
-  /* NORMAS · banda de chips con color por sistema */
-  .normchips { display: flex; flex-wrap: wrap; gap: 11px; justify-content: center; max-width: 920px; margin: 34px auto 0; }
-  .nchip { display: inline-flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 10px 17px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; box-shadow: 0 3px 10px rgba(22,32,43,.04); transition: transform .15s, box-shadow .15s; }
-  .nchip:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(22,32,43,.09); }
-  .nchip b { color: var(--ink); font-weight: 800; font-size: 13.5px; letter-spacing: -0.01em; white-space: nowrap; }
-  .nchip i { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; background: var(--navy); }
-  .nchip.q i { background: var(--blue); }
-  .nchip.env i { background: #2E7D54; }
-  .nchip.sst i { background: #B45309; }
-  .nchip.en i { background: #0E7490; }
-  .nchip.lab i { background: #6D28D9; }
-  .nchip.acc i { background: var(--navy); }
-  .nchip.auto i { background: #B42318; }
-  .nchip.aud i { background: var(--teal); }
-
-  /* INTELIGENCIA · puntos + mockup oscuro (fusión narrativa + visual) */
-  .intel .feat-row { margin-top: 40px; align-items: center; }
+  /* MEMORIA (sección oscura) */
+  .intel { background: linear-gradient(160deg, #0E2A4A, #16202B); color: #fff; }
+  .intel h2 { color: #fff; max-width: 26ch; }
+  .intel .feat-row { margin-top: 44px; align-items: center; }
+  .intel .feat-row h3 { color: #fff; }
+  .intel .feat-row .fr-eyebrow { color: #7FE0A0; }
+  .intel .feat-row p { color: #AEB6C0; }
+  .intel .note { margin-top: 40px; font-size: 15px; color: #8FA9C2; max-width: 72ch; }
+  .intel .note b { color: #fff; }
+  .qs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 34px 0 10px; list-style: none; }
+  .qs li { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.13); border-radius: 14px; padding: 18px; }
+  .qs b { display: block; color: #fff; font-size: 15.5px; letter-spacing: -0.01em; margin-bottom: 8px; line-height: 1.35; }
+  .qs span, .qs a { font-size: 11px; font-weight: 700; color: #7FE0A0; text-transform: uppercase; letter-spacing: .06em; text-decoration: none; }
+  .qs a:hover { text-decoration: underline; }
   .intel-points { list-style: none; }
   .intel-points li { position: relative; padding: 13px 0 13px 22px; border-top: 1px solid rgba(255,255,255,.1); font-size: 14.5px; color: #AEB6C0; }
   .intel-points li:first-child { border-top: 0; }
@@ -352,38 +319,111 @@
   .is-obj .k { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #7FE0A0; font-weight: 700; }
   .is-obj p { font-size: 13.5px; color: #fff; font-weight: 600; margin-top: 6px; }
 
+  /* HISTORIAL mock (oscuro) */
+  .hs-search { display: flex; align-items: center; gap: 9px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 10px; padding: 10px 13px; font-size: 13px; color: #fff; font-weight: 600; }
+  .hs-search .lens { color: #8FA9C2; }
+  .hs-res { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); border-radius: 12px; padding: 13px 15px; margin-top: 11px; }
+  .hs-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .hist-shot .pmcode { color: #8FC1F5; }
+  .hs-pill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; background: rgba(70,222,126,.15); color: #7FE0A0; border-radius: 20px; padding: 3px 9px; }
+  .hs-date { margin-left: auto; font-size: 11px; color: #8FA9C2; }
+  .hs-res > b { color: #fff; font-size: 13px; display: block; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .hs-res p { font-size: 12.5px; color: #AEB6C0; margin: 4px 0 0; line-height: 1.55; }
+  .hs-res p em { color: #8FA9C2; font-style: normal; font-weight: 700; }
+
+  /* NIVEL DE EXIGENCIA */
+  .exgsec { background: #fff; }
+  .exg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
+  .exg-card { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .exg-card h3 { font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 9px; }
+  .exg-card h3 i { width: 9px; height: 9px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-l), var(--blue)); flex: 0 0 auto; }
+  .exg-card p { font-size: 13.5px; }
+  .exg-card .mod { display: inline-block; margin-top: 10px; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--navy); background: var(--cream-d); border-radius: 6px; padding: 3px 8px; }
+
+  /* SEGMENTOS */
+  .segsec { background: var(--cream-d); }
+  .segs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
+  .seg { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .seg .k { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--blue); margin-bottom: 9px; }
+  .seg h3 { font-size: 16.5px; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .seg p { font-size: 13.5px; }
+  .seg a { display: inline-block; margin-top: 10px; font-size: 13.5px; font-weight: 700; color: var(--blue); text-decoration: none; }
+
+  /* COMPARE */
+  .cmp table { width: 100%; border-collapse: collapse; margin-top: 34px; background: #fff; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+  .cmp th, .cmp td { padding: 15px 18px; text-align: left; font-size: 14.5px; border-bottom: 1px solid var(--cream-d); }
+  .cmp thead th { background: var(--cream); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  .cmp thead th:last-child { color: var(--blue); }
+  .cmp td:first-child { font-weight: 700; color: var(--ink); }
+  .cmp td:last-child { font-weight: 600; color: var(--ink); }
+  .cmp tr td:nth-child(2) { color: var(--ink-soft); }
+
+  /* SECURITY + FAQ */
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .sec-list { list-style: none; margin-top: 22px; }
+  .sec-list li { padding: 13px 0 13px 32px; position: relative; border-bottom: 1px solid var(--line); font-size: 15px; }
+  .sec-list li::before { content: "🔒"; position: absolute; left: 0; font-size: 15px; }
+  details { border-bottom: 1px solid var(--line); padding: 6px 0; }
+  summary { cursor: pointer; font-weight: 700; font-size: 16px; padding: 12px 0; list-style: none; color: var(--ink); }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; float: right; color: var(--blue); font-weight: 700; }
+  details[open] summary::after { content: "–"; }
+  details p { font-size: 14.5px; padding: 0 0 14px; }
+
+  /* FINAL CTA */
+  .final { text-align: center; background: linear-gradient(160deg, #16202B, #0E2A4A); color: #fff; }
+  .final h2 { color: #fff; max-width: 26ch; margin: 0 auto 16px; }
+  .final p { color: #AEB6C0; font-size: 17px; max-width: 56ch; margin: 0 auto 16px; }
+  .final .amplify { color: var(--green); font-weight: 700; margin-bottom: 28px; }
+  .final .hero-cta { justify-content: center; }
+  .final .btn-ghost { color: #fff; border-color: rgba(255,255,255,.3); }
+  .final .btn-ghost:hover { border-color: #fff; color: #fff; }
+
+  footer { background: var(--ink); color: #8893A0; padding: 34px 0; font-size: 13.5px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  footer .brand { color: #fff; }
+  footer .brand em { color: var(--blue-l); }
+  footer a.li { display: inline-flex; align-items: center; vertical-align: middle; color: #AEB6C0; margin-left: 2px; transition: color .15s; }
+  footer a.li:hover { color: var(--blue-l); }
+  footer a.li svg { width: 18px; height: 18px; }
+
+  /* NAV móvil (≤980) */
+  @media (max-width: 980px) {
+    .nav-burger { display: flex; }
+    .nav-links { display: none; }
+    nav.nav-open .nav-links {
+      display: flex; flex-direction: column; align-items: stretch; gap: 0;
+      position: absolute; top: 64px; left: 0; right: 0;
+      background: var(--cream); border-bottom: 1px solid var(--line);
+      padding: 8px 24px 20px; box-shadow: 0 12px 24px rgba(22,32,43,.1);
+      max-height: calc(100vh - 64px); overflow-y: auto;
+    }
+    .nav-item, .nav-item.rel, .nav-item.mega-item { height: auto; display: block; position: static; }
+    .nav-drop-btn { width: 100%; justify-content: space-between; display: flex; padding: 13px 4px; font-size: 15px; border-bottom: 1px solid var(--cream-d); }
+    .drop, .drop.small, .drop.mega { position: static; transform: none; width: auto; box-shadow: none; border: 0; border-radius: 0; padding: 2px 0 10px; background: transparent; }
+    .nav-item.open > .drop.mega { display: block; }
+    .mg-t { padding: 10px 4px 4px; }
+    .mg-foot { border-top: 0; margin-top: 4px; padding: 6px 4px 0; gap: 14px; }
+    nav.nav-open .nav-links > a.btn { margin-top: 14px; text-align: center; }
+  }
+
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
     .feat-row.rev .fr-visual { order: 0; }
     .problem .wrap, .twocol { grid-template-columns: 1fr; gap: 28px; }
-    .steps, .feats { grid-template-columns: 1fr; }
+    .steps, .entry3, .qs, .exg, .segs { grid-template-columns: 1fr; }
     .mock { grid-template-columns: 1fr; }
-    .shot { margin-top: 40px; }
     .mock-chat { border-right: 0; border-bottom: 1px solid var(--cream-d); }
-    .nav-burger { display: flex; }
-    .nav-links { display: none; }
-    nav.nav-open .nav-links {
-      display: flex; flex-direction: column; align-items: stretch; gap: 2px;
-      position: absolute; top: 64px; left: 0; right: 0;
-      background: var(--cream); border-bottom: 1px solid var(--line);
-      padding: 8px 24px 20px; box-shadow: 0 12px 24px rgba(22,32,43,.1);
-    }
-    nav.nav-open .nav-links a { padding: 12px 4px; border-bottom: 1px solid var(--cream-d); }
-    nav.nav-open .nav-links a:last-child { border-bottom: 0; margin-top: 8px; }
     section { padding: 60px 0; }
     .pm { padding: 16px; }
-    .pm-kpis { grid-template-columns: repeat(2, 1fr); }
-    .pm-bd { grid-template-columns: 1fr; }
     .pm-table .hide-sm { display: none; }
-    .pm-row .lbl { width: 104px; font-size: 11px; }
     .pm-btns span:not(.pri) { display: none; }
-
+    .chainbox { padding: 20px 18px 16px; }
   }
 </style>
-<noscript><style>.seq{opacity:1!important;transform:none!important;}.pm-row .fill{width:var(--w)!important;}</style></noscript>
+<noscript><style>.seq{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
-
 <!-- NAV -->
 <nav>
   <div class="wrap nav-in">
@@ -403,13 +443,61 @@
     </a>
     <div class="nav-right">
       <div class="nav-links">
-        <a href="#normas">Conoce la norma</a>
-        <a href="#copiloto">Copiloto</a>
-        <a href="#inteligencia">Inteligencia</a>
-        <a href="/producto.html">Por dentro</a>
-        <a href="/auditores.html">Para auditores</a>
-        <a href="/blog/">Blog</a>
-        <a href="https://app.evidran.com/?alta=1" class="btn btn-primary btn-sm">Prueba gratis</a>
+        <div class="nav-item mega-item">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Plataforma <span class="car"></span></button>
+          <div class="drop mega">
+            <div class="mg-col">
+              <div class="mg-t">Capturar con criterio</div>
+              <a href="#capturar"><b>La entrevista</b><small>Hablas; el informe se redacta en vivo, con causa de verdad.</small></a>
+              <a href="#normas"><b>No conformidades y 8D</b><small>Nueve tipos de expediente, cada uno con su norma.</small></a>
+              <a href="#auditorias"><b>Auditorías</b><small>Bandeja de hallazgos, auditoría interna 9.2 y programa.</small></a>
+              <a href="#campo"><b>App de campo</b><small>QR por punto de control, foto y captura sin cobertura.</small></a>
+              <a href="/auditores.html"><b>Puente auditor ↔ empresa</b><small>Los hallazgos llegan ya estructurados, con un código.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Gobernar el ciclo</div>
+              <a href="#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
+              <a href="#riesgos"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva, del inherente al residual · 6.1.</small></a>
+              <a href="#avisos"><b>Avisos y plazos</b><small>La herramienta se acuerda para que tú no tengas que hacerlo.</small></a>
+              <a href="#exigencia"><b>Aprobación y firma</b><small>Firma del responsable con huella SHA-256 y traza.</small></a>
+              <a href="#exigencia"><b>Identidad documental</b><small>Tus Word y PDF con tu logo y tu código de formato.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Aprender de todo</div>
+              <a href="#tendencias"><b>Inteligencia y tendencias</b><small>Causas que se repiten y hallazgos con su dato.</small></a>
+              <a href="#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
+              <a href="#revision93"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
+              <a href="#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
+              <a href="#exigencia"><b>Conexión MCP</b><small>Tu propio agente de IA, conectado en solo lectura.</small></a>
+            </div>
+            <div class="mg-foot">
+              <a href="#exigencia">Vigilancia normativa</a>
+              <a href="#exigencia">On-premise</a>
+              <a href="#seguridad">Seguridad y privacidad</a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-item rel">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Soluciones <span class="car"></span></button>
+          <div class="drop small">
+            <a href="#segmentos"><b>Industria multi-norma</b></a>
+            <a href="#segmentos"><b>Automoción · 8D y OEM</b></a>
+            <a href="#segmentos"><b>Laboratorios · ISO/IEC 17025</b></a>
+            <a href="#segmentos"><b>Inspección y certificación</b></a>
+            <a href="/auditores.html"><b>Auditores y consultores</b></a>
+            <a href="#segmentos"><b>En proceso de certificación</b></a>
+          </div>
+        </div>
+        <div class="nav-item rel">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Recursos <span class="car"></span></button>
+          <div class="drop small">
+            <a href="/blog/"><b>Blog</b></a>
+            <a href="/producto.html"><b>Evidran por dentro</b></a>
+            <a href="/auditores.html"><b>Para auditores</b></a>
+            <a href="#seguridad"><b>Seguridad y privacidad</b></a>
+          </div>
+        </div>
+        <a href="mailto:demo@evidran.com" class="btn btn-primary btn-sm">Pide una demo</a>
       </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
     </div>
@@ -422,17 +510,78 @@
 <!-- HERO -->
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">El sistema de calidad que trabaja contigo</div>
-    <h1>No es donde archivas tu calidad. Es donde la trabajas.</h1>
-    <p class="sub">Planifica auditorías, vigila los plazos y documenta hablando: la IA te entrevista como un responsable senior y redacta el expediente listo para auditoría.</p>
+    <div class="eyebrow">El sistema de conocimiento de calidad</div>
+    <h1>Cada problema resuelto hace más inteligente a tu empresa.</h1>
+    <p class="sub">Evidran convierte no conformidades, auditorías y acciones de mejora en conocimiento reutilizable: causas que se repiten, acciones que funcionaron, decisiones con base real. Y documentarlo cuesta una conversación, no una tarde.</p>
     <div class="hero-cta">
-      <a href="https://app.evidran.com/?alta=1" class="btn btn-primary">Empieza gratis — 30 días, sin tarjeta</a>
+      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
+      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O pruébalo por tu cuenta — 30 días gratis</a>
     </div>
     <p class="amplify">Evidran no sustituye el criterio del responsable de calidad. <b><span class="amp" data-word="Lo amplifica"></span>.</b></p>
 
+    <!-- la cadena de transformación -->
+    <div class="chainbox" data-seqgroup data-seqstep="220" data-seqstart="300">
+      <div class="chain dim">
+        <span class="ch-lab">La mayoría del software</span>
+        <div class="ch-row">
+          <span class="ch seq" data-seq="1">Incidente</span><i>→</i>
+          <span class="ch seq" data-seq="2">Documento</span><i>→</i>
+          <span class="ch seq" data-seq="3">Archivo</span><i>→</i>
+          <span class="ch ghost seq" data-seq="4">Olvido</span>
+        </div>
+      </div>
+      <div class="chain live">
+        <span class="ch-lab">Evidran</span>
+        <div class="ch-row">
+          <span class="ch seq" data-seq="5">Incidente</span><i>→</i>
+          <span class="ch seq" data-seq="6">Investigación</span><i>→</i>
+          <span class="ch seq" data-seq="7">Causa raíz</span><i>→</i>
+          <span class="ch seq" data-seq="8">Acciones</span><i>→</i>
+          <span class="ch seq" data-seq="9">Verificación</span><i>→</i>
+          <span class="ch hot seq" data-seq="10">Conocimiento reutilizable</span><i>→</i>
+          <span class="ch seq" data-seq="11">Tendencias</span><i>→</i>
+          <span class="ch seq" data-seq="12">Mejora continua</span>
+        </div>
+      </div>
+      <p class="ch-cap">Un expediente es la puerta de entrada. <b>Lo que construyes es la memoria de tu organización.</b></p>
+    </div>
+    <p class="norms-micro">ISO 9001 · 14001 · 45001 · 50001 · ISO/IEC 17025 · 17020 · 17065 · 8D</p>
+  </div>
+</header>
+
+<!-- PROBLEMA · el conocimiento fragmentado -->
+<section class="problem">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow" style="color:var(--green)">El problema</div>
+      <h2>El conocimiento de calidad existe. Está en todas partes — y no está en ninguna.</h2>
+      <p class="lead" style="margin-top:16px">Vive en informes de auditoría, no conformidades, 8D, hojas de Excel, carpetas de red, correos… y en la cabeza de quien lleva veinte años en la casa.</p>
+    </div>
+    <div>
+      <ul>
+        <li>Cada incidente se resuelve… y se archiva. Casi ninguno se vuelve a usar.</li>
+        <li>«Esto ya nos pasó» — pero nadie encuentra cómo se resolvió la última vez.</li>
+        <li>Las causas se intuyen; nadie las tiene medidas.</li>
+        <li>Los hallazgos del auditor se transcriben a mano desde un PDF.</li>
+        <li>Cuando alguien se va, su experiencia se va con él.</li>
+        <li>Y en la Revisión por la Dirección, toca reconstruir el año rebuscando en carpetas.</li>
+      </ul>
+      <div class="punch">La organización mejora mucho menos de lo que podría.</div>
+    </div>
+  </div>
+</section>
+<!-- ACTO 1 · CAPTURAR CON CRITERIO -->
+<section id="capturar">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="acto-kick"><span class="n">01</span> Capturar con criterio</div>
+      <h2>Nada entra como texto suelto. Entra investigado.</h2>
+      <p>Cuentas lo que ha pasado y Evidran te entrevista como un responsable de calidad senior: pregunta lo que tu norma exige, sugiere la causa sistémica y no acepta un «error humano». El informe se redacta en vivo — y lo que entra bien, mañana se puede reutilizar.</p>
+    </div>
+
     <!-- mockup animado: la entrevista en vivo -->
     <div class="shot" id="heroShot">
-      <div class="mock" id="heroMock">
+      <div class="mock" data-seqgroup data-seqstep="650" data-seqstart="400">
         <div class="mock-bar"><i></i><i></i><i></i><span>app.evidran.com — No Conformidad Interna · UNE-EN ISO 9001:2015</span></div>
         <div class="mock-chat">
           <div class="bubble ai seq" data-seq="1">Cuéntame qué se ha detectado y dónde. Si tienes el email o una foto, adjúntalos.</div>
@@ -450,17 +599,21 @@
       </div>
       <p class="shot-cap">La entrevista y el documento, lado a lado · se redacta mientras conversas.</p>
     </div>
-    <p class="norms-micro">ISO 9001 · 14001 · 45001 · 50001 · ISO/IEC 17025 · 17020 · 17065 · 8D</p>
-  </div>
-</header>
 
-<!-- NORM BAND · la IA conoce la norma -->
-<section id="normas" class="normband">
-  <div class="wrap">
-    <div class="center-head">
-      <div class="eyebrow">Lo que de verdad lo diferencia</div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Cuéntalo con tus palabras</h3><p>Eliges el tipo de expediente y le cuentas qué pasó. Pega el email del cliente o el hallazgo del auditor; adjunta una foto y la incorpora como evidencia.</p></div>
+      <div class="step"><div class="n">2</div><h3>Te entrevista, no te interroga</h3><p>Una o dos preguntas por turno. Sugiere la causa sistémica probable, autocompleta lo administrativo y te lleva más allá del «error humano».</p></div>
+      <div class="step"><div class="n">3</div><h3>Ves el documento en vivo</h3><p>A la izquierda la conversación; a la derecha, el informe formal se rellena campo a campo. Corrige cualquier texto con un clic — la última palabra es tuya.</p></div>
+      <div class="step"><div class="n">4</div><h3>Cierra y entrega</h3><p>Asigna responsable y fecha límite, adjunta evidencias, aprueba y firma el expediente y expórtalo a Word o PDF. Listo para la certificadora.</p></div>
+    </div>
+
+    <figure class="human-shot">
+      <img src="/equipo-calidad2.webp" alt="Responsable de calidad revisando un expediente junto a su equipo frente a un portátil" loading="lazy" width="1600" height="900" />
+    </figure>
+
+    <div class="normhead" id="normas">
       <h2>Cada norma con su plantilla, su carpeta y su lógica. <span class="hl">Aquí, con una sola conversación.</span></h2>
-      <p>No es un chat de propósito general con el logo cambiado: cada flujo entiende el lenguaje y la lógica de su norma, te pregunta lo que esa norma exige y redacta como lo haría un experto en ese sistema.</p>
+      <p>No es un chat de propósito general con el logo cambiado: cada flujo entiende el lenguaje de su norma, te pregunta lo que esa norma exige y redacta como lo haría un experto en ese sistema.</p>
     </div>
     <div class="normchips">
       <span class="nchip q"><i></i><b>ISO 9001</b> No conformidad interna</span>
@@ -474,72 +627,51 @@
       <span class="nchip aud"><i></i><b>Auditoría</b> Respuesta a hallazgos</span>
     </div>
     <div class="normband-profile">
-      <strong>¿Entidad acreditada por ENAC?</strong> En 17020, 17025 y 17065 cubrimos la capa de gestión —no conformidades, acciones correctivas y mejora—, la parte que el evaluador revisa siempre. Y con el módulo de <strong>Vigilancia normativa</strong>, Evidran vigila a diario que las normas y reglamentos de tu alcance siguen vigentes, te avisa de los cambios que te afectan y deja registrada la evidencia de vigilancia continua que te pide la acreditación. La competencia técnica de tu actividad sigue siendo tuya.
-    </div>
-    <div class="normband-profile">
       <strong>Y aprende a qué te dedicas.</strong> Propone un perfil de tu empresa desde tu web pública; tú lo apruebas y la entrevista pasa a hablar con el vocabulario de tu actividad.
     </div>
+
+    <div class="entryhead" id="campo">
+      <h3>El conocimiento entra por donde ocurre:</h3>
+    </div>
+    <div class="entry3">
+      <div class="entry">
+        <div class="k">Desde la planta</div>
+        <h4>App de campo</h4>
+        <p>Escaneas el QR del punto de control, cuentas qué ha pasado y adjuntas foto con la cámara. Funciona sin cobertura: la captura se envía sola al recuperar la red.</p>
+      </div>
+      <div class="entry">
+        <div class="k">Desde tu auditor</div>
+        <h4>Puente auditor ↔ empresa</h4>
+        <p>Tu auditor se conecta con un código y sus hallazgos llegan a tu bandeja como expedientes abiertos, ya redactados. Cero transcripción.</p>
+      </div>
+      <div class="entry">
+        <div class="k">Desde un PDF</div>
+        <h4>Informe de auditoría subido</h4>
+        <p>¿El informe llega en papel? Súbelo: la IA extrae los hallazgos y tú decides cuáles convertir en expediente, enviar al plan o descartar.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- PROBLEM -->
-<section class="problem">
+<!-- LA IA, EN SU SITIO -->
+<section id="ia" class="iasec">
   <div class="wrap">
-    <div>
-      <div class="eyebrow" style="color:var(--green)">El día a día</div>
-      <h2>La calidad no falla por falta de conocimiento. Falla por falta de tiempo.</h2>
-      <p class="lead" style="margin-top:16px">Eres una persona para calidad, medioambiente y a veces PRL. La causa raíz se queda en "error humano" porque no hay tiempo para más — y el auditor lo sabe.</p>
-    </div>
-    <div>
-      <ul>
-        <li>Documentar una NC te cuesta una tarde.</li>
-        <li>Las acciones vencen sin que nadie avise.</li>
-        <li>La matriz de riesgos se hace una vez al año, para el auditor.</li>
-        <li>La auditoría interna se improvisa con un Excel la semana antes.</li>
-        <li>Lo que pasa en planta se apunta en un papel — y llega tarde, o no llega.</li>
-        <li>Y en la Revisión por la Dirección toca rebuscar en carpetas lo que pasó hace once meses.</li>
-      </ul>
-      <div class="punch">No necesitas otra plantilla. Necesitas un compañero que piense contigo.</div>
-    </div>
+    <div class="eyebrow">Dónde queda la IA</div>
+    <h2>La IA no es el producto.</h2>
+    <p>Es lo que hace que capturar conocimiento cueste minutos: te entrevista, interpreta un email o una foto, redacta en el lenguaje de tu norma, clasifica causas y propone objetivos. La IA propone; tú dispones.</p>
+    <p class="valor">El valor no está en la conversación. Está en lo que queda cuando termina.</p>
   </div>
 </section>
-
-<!-- BANDA · AUDITORES Y CONSULTORES -->
-<section id="auditores" class="dual" style="padding:58px 0">
-  <div class="wrap" style="text-align:center">
-    <div class="eyebrow" style="color:var(--teal)">También para auditores y consultores</div>
-    <h2 style="max-width:28ch;margin:0 auto">¿Auditas o asesoras a varias empresas?</h2>
-    <p style="max-width:60ch;margin:14px auto 24px;font-size:16.5px">Evidran tiene un módulo propio para ti: cartera de auditorías con informe y dictamen, hallazgos tipados y entrega directa en la cuenta de tu cliente con un código — sin entrar a su panel. Y si eres la empresa, los hallazgos de tu auditor te llegan como expedientes abiertos: cero transcripción.</p>
-    <a href="/auditores.html" class="btn btn-ghost">Evidran para auditores →</a>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section id="como">
+<!-- ACTO 2 · GOBERNAR EL CICLO -->
+<section id="gobernar">
   <div class="wrap">
     <div class="center-head">
-      <div class="eyebrow">Cómo funciona</div>
-      <h2>No hablas con una IA. Trabajas con un responsable de calidad digital.</h2>
-      <p>Evidran te entrevista como lo haría un compañero senior: pregunta lo justo, te propone hipótesis y no te deja cerrar con una causa pobre. Tú mandas; él te ayuda a hacerlo mejor y más rápido.</p>
+      <div class="acto-kick"><span class="n">02</span> Gobernar el ciclo</div>
+      <h2>Entre que el dato entra y la decisión sale, el sistema vigila por ti.</h2>
+      <p>Riesgos que generan acciones, acciones con eficacia verificada, auditorías planificadas y plazos que avisan solos. Nada depende de tu memoria.</p>
     </div>
-    <figure class="human-shot">
-      <img src="/equipo-calidad2.webp" alt="Responsable de calidad revisando un expediente junto a su equipo frente a un portátil" loading="lazy" width="1600" height="900" />
-    </figure>
-    <div class="steps">
-      <div class="step"><div class="n">1</div><h3>Cuéntalo con tus palabras</h3><p>Eliges el tipo de expediente y le cuentas qué pasó. Pega el email del cliente o el hallazgo del auditor; adjunta una foto y la incorpora como evidencia.</p></div>
-      <div class="step"><div class="n">2</div><h3>Te entrevista, no te interroga</h3><p>Una o dos preguntas por turno. Sugiere la causa sistémica probable, autocompleta lo administrativo y te lleva más allá del "error humano".</p></div>
-      <div class="step"><div class="n">3</div><h3>Ves el documento en vivo</h3><p>A la izquierda la conversación; a la derecha, el informe formal se rellena campo a campo. Corrige cualquier texto con un clic — la última palabra es tuya.</p></div>
-      <div class="step"><div class="n">4</div><h3>Cierra y entrega</h3><p>Asigna responsable y fecha límite, adjunta evidencias, bloquea el expediente en solo lectura y expórtalo a PDF. Listo para la certificadora.</p></div>
-    </div>
-  </div>
-</section>
 
-<!-- MORE CAPABILITIES: matriz de riesgos 6.1, plan de mejora, avisos -->
-<section id="mas-alla">
-  <div class="wrap">
-    <div class="center-head"><div class="eyebrow">Más allá de documentar</div><h2>De la no conformidad al sistema completo</h2><p>Evidran no es solo para cuando algo va mal: es donde planificas la auditoría interna, vives la matriz de riesgos, sigues el plan de mejora y recibes el aviso antes de que venza el plazo.</p></div>
-
-    <div class="feat-row">
+    <div class="feat-row" id="riesgos">
       <div class="fr-text">
         <div class="fr-eyebrow">Matriz de riesgos viva · 6.1</div>
         <h3>Tus riesgos, en un mapa de calor que se mueve.</h3>
@@ -566,7 +698,7 @@
       </div>
     </div>
 
-    <div class="feat-row rev">
+    <div class="feat-row rev" id="auditorias">
       <div class="fr-text">
         <div class="fr-eyebrow">Auditoría interna · 9.2</div>
         <h3>El programa anual, la checklist y los hallazgos — sin un Excel.</h3>
@@ -595,7 +727,7 @@
       </div>
     </div>
 
-    <div class="feat-row">
+    <div class="feat-row" id="plan">
       <div class="fr-text">
         <div class="fr-eyebrow">Plan de mejora continua · 10.2</div>
         <h3>Todas tus acciones en una tabla, con la eficacia verificada.</h3>
@@ -618,11 +750,11 @@
       </div>
     </div>
 
-    <div class="feat-row rev">
+    <div class="feat-row rev" id="avisos">
       <div class="fr-text">
         <div class="fr-eyebrow">Avisos · no dependen de tu memoria</div>
         <h3>Entérate antes de que el plazo te pase por encima.</h3>
-        <p>Aviso al momento cuando una acción pasa a "vencida" — no un email diario que acabas ignorando. Y cada mañana, un resumen con lo que vence pronto y los riesgos que toca reevaluar.</p>
+        <p>Aviso al momento cuando una acción pasa a «vencida» — no un email diario que acabas ignorando. Y cada mañana, un resumen con lo que vence pronto y los riesgos que toca reevaluar.</p>
       </div>
       <div class="fr-visual">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com</span></div>
@@ -641,12 +773,23 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ACTO 3 · APRENDER DE TODO -->
+<section id="aprender" style="background:#fff">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="acto-kick"><span class="n">03</span> Aprender de todo</div>
+      <h2>Aquí está el activo: lo que tu organización ya sabe.</h2>
+      <p>Todo lo que entró bien y se trabajó vuelve convertido en respuestas: tendencias, causas medidas, objetivos con base real y un acta que se redacta desde tus datos.</p>
+    </div>
 
     <div class="feat-row" id="revision93">
       <div class="fr-text">
         <div class="fr-eyebrow">Revisión por la Dirección · 9.3</div>
         <h3>El apartado más tedioso del año, redactado a partir de tus datos.</h3>
-        <p>Evidran genera el texto de entrada del acta —no conformidades y acciones correctivas— con tus estadísticas del periodo: resumen, análisis por tipo y área, estado de las acciones y recomendaciones. Lo revisas, lo editas y lo apruebas. Y es honesto: si aún no hay volumen para hablar de tendencias, te lo dice.</p>
+        <p>Evidran genera el texto de entrada del acta con tus estadísticas del periodo: resumen, análisis por tipo y área, estado de las acciones y recomendaciones. Lo revisas, lo editas y lo apruebas — y queda archivada por ejercicios, un acta por año. Y es honesto: si aún no hay volumen para hablar de tendencias, te lo dice.</p>
       </div>
       <div class="fr-visual">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/revision-direccion</span></div>
@@ -660,7 +803,6 @@
           </div>
           <p>Durante el primer semestre de 2026 se registraron <b>18 no conformidades</b>, con una tasa de cierre del <b>84 %</b> y un tiempo medio de resolución de <b>21 días</b>.</p>
           <p>Por tipología predominan las asociadas a <b>formación</b> (37 %) y a <b>método/procedimiento</b> (21 %). La concentración en el área de <b>Producción</b> (35 %) sugiere reforzar los controles de la línea de montaje y revisar las instrucciones de los turnos rotativos.</p>
-          <p>Se recomienda fijar un objetivo de reducción de las no conformidades de formación para 2027 y desatascar las <b>2 acciones vencidas</b> antes de la próxima auditoría.</p>
           <div class="acta-flag">✓ Volumen suficiente para el análisis de tendencias</div>
         </div>
       </div>
@@ -676,7 +818,7 @@
       <h2>«Tengo auditoría en tres semanas. ¿Qué me falta?»</h2>
       <p>Pregúntaselo a tu sistema. El copiloto está disponible en todas las pantallas de Evidran y responde con el estado real de tu calidad: no adivina — consulta tus datos y te enlaza al registro exacto que lo resuelve.</p>
     </div>
-    <div class="mock" style="grid-template-columns:1fr;max-width:640px;">
+    <div class="mock" style="grid-template-columns:1fr;max-width:640px;margin-top:0;">
       <div class="mock-bar"><i></i><i></i><i></i><span>Copiloto · disponible en toda la app</span></div>
       <div class="mock-chat" style="border-right:0;">
         <div class="bubble me">Tengo la auditoría de seguimiento en tres semanas. ¿Cómo vamos?</div>
@@ -689,17 +831,24 @@
     <p style="text-align:center;margin-top:26px"><a href="/producto.html" class="btn btn-ghost">Mira Evidran por dentro, con datos reales →</a></p>
   </div>
 </section>
-
-<!-- INTELLIGENCE -->
-<section id="inteligencia" class="intel">
+<!-- MEMORIA DE TU ORGANIZACIÓN (clímax) -->
+<section id="memoria" class="intel">
   <div class="wrap">
-    <div class="eyebrow" style="color:var(--green)">El diferenciador</div>
-    <h2>La mayoría del software de no conformidades se detiene en "registrar y cerrar". Evidran sigue.</h2>
-    <div class="flow">
-      <span>Registrar</span><span>Analizar</span><span>Detectar patrones</span><span class="hot">Proponer objetivos</span><span>Alimentar la Revisión por la Dirección</span>
-    </div>
-    <div class="feat-row">
+    <div class="eyebrow" style="color:var(--green)">La memoria de tu organización</div>
+    <h2>Hoy, responder esto cuesta días de rebuscar. Aquí, segundos.</h2>
+    <ul class="qs">
+      <li><b>¿Qué causas se repiten de verdad?</b><span>Taxonomía de causas · Tendencias</span></li>
+      <li><b>¿Esto ya nos pasó? ¿Cómo se resolvió?</b><span>Historial buscable</span></li>
+      <li><b>¿Qué acciones funcionaron?</b><a href="#plan">Eficacia verificada · Plan de mejora</a></li>
+      <li><b>¿Dónde se concentran las no conformidades?</b><span>Hallazgos automáticos</span></li>
+      <li><b>¿Qué procesos acumulan más riesgo?</b><a href="#riesgos">Matriz 6.1</a></li>
+      <li><b>¿Estoy listo para la auditoría?</b><a href="#copiloto">Copiloto</a></li>
+    </ul>
+
+    <div class="feat-row" id="tendencias">
       <div class="fr-text">
+        <div class="fr-eyebrow">Tendencias e inteligencia</div>
+        <h3>De dónde vienen tus problemas, medido.</h3>
         <ul class="intel-points">
           <li><b>Lo que vemos en tus datos.</b> Hallazgos automáticos —fuera de plazo, vencidas, concentración por área—, cada uno citando el dato que lo respalda.</li>
           <li><b>De dónde vienen tus NC, de verdad.</b> Clasifica la causa raíz de cada expediente y te enseña el reparto. Se acabó intuir.</li>
@@ -721,53 +870,146 @@
         </div>
       </div>
     </div>
-    <p class="note"><b>Evidran te muestra los patrones; las decisiones siguen siendo tuyas.</b> Amplifica tu criterio, no lo reemplaza.</p>
-  </div>
-</section>
 
-<!-- ICP -->
-<section class="icp">
-  <div class="wrap">
-    <div class="eyebrow">Para quién es</div>
-    <h2>Diseñado para la realidad de las pymes. No para departamentos de calidad de veinte personas.</h2>
-    <p style="margin-top:14px">Para quien lleva calidad. Y muchas veces también:</p>
-    <div class="tags">
-      <span>Medioambiente</span><span>Energía</span><span>Prevención</span><span>Laboratorio</span><span>Inspección</span><span>Certificación</span><span>Auditorías</span>
+    <div class="feat-row rev" id="historial">
+      <div class="fr-text">
+        <div class="fr-eyebrow">«Esto ya nos pasó»</div>
+        <h3>La respuesta ya estaba en tu casa. Ahora, encuéntrala.</h3>
+        <p>Busca por palabra clave en las causas, descripciones y soluciones de todo tu histórico — también el que importaste de Excel. Quien llega nuevo hereda lo aprendido; quien se va, lo deja.</p>
+      </div>
+      <div class="intel-shot hist-shot">
+        <div class="is-head">Historial · tu memoria de calidad</div>
+        <div class="hs-search"><span class="lens">⌕</span> retén fuga aceite</div>
+        <div class="hs-res">
+          <div class="hs-top"><span class="pmcode">NC-2024-031</span><span class="hs-pill">Cerrada</span><span class="hs-date">mar 2024</span></div>
+          <b>Fuga de aceite en retén delantero · lote 8842</b>
+          <p><em>Causa raíz:</em> el proveedor cambió el elastómero del retén sin comunicar el cambio.</p>
+          <p><em>Solución:</em> cláusula de notificación de cambios en el acuerdo de compras + control reforzado en recepción.</p>
+        </div>
+        <div class="hs-res">
+          <div class="hs-top"><span class="pmcode">8D-2022-006</span><span class="hs-pill">Cerrada</span><span class="hs-date">nov 2022</span></div>
+          <b>Reclamación OEM · rezume en retén trasero</b>
+          <p><em>Causa raíz:</em> par de apriete fuera de especificación en el útil de montaje.</p>
+          <p><em>Solución:</em> poka-yoke en el útil y verificación de par en pauta de autocontrol.</p>
+        </div>
+      </div>
     </div>
-    <p class="week">En la misma semana. Si te suena, Evidran está hecho para ti.</p>
-    <p style="margin-top:26px;max-width:62ch;margin-left:auto;margin-right:auto;font-size:15.5px"><strong style="color:var(--ink)">¿Aún sin certificar?</strong> Mejor todavía: montas el sistema ordenado desde el primer expediente — riesgos evaluados, acciones con plazo, auditoría interna planificada y registros trazables — y llegas a la auditoría de certificación con los deberes hechos, no con carpetas por reconstruir.</p>
+
+    <p class="note">Los clientes creen que compran software. En realidad construyen un activo: cada expediente, cada auditoría y cada acción enseñan a Evidran cómo funciona tu organización. <b>Con el tiempo deja de ser una herramienta: es tu sistema de conocimiento de calidad.</b></p>
   </div>
 </section>
 
-<!-- COMPARE -->
-<section class="cmp">
+<!-- NIVEL DE EXIGENCIA -->
+<section id="exigencia" class="exgsec">
   <div class="wrap">
-    <div class="center-head"><div class="eyebrow">Por qué Evidran</div><h2>Y no Word, Excel, carpetas compartidas y correos</h2><p>Así es como hoy gestiona la calidad gran parte del mercado. Funciona… hasta que llega la auditoría.</p></div>
+    <div class="center-head">
+      <div class="eyebrow">Nivel de exigencia</div>
+      <h2>Construido para organizaciones que se examinan.</h2>
+      <p>Automoción con OEM y TISAX, laboratorios y entidades acreditadas, multi-norma con auditorías que no perdonan. Sin humo: cada punto es un hecho técnico.</p>
+    </div>
+    <div class="exg">
+      <div class="exg-card">
+        <h3><i></i>Aprobación y firma</h3>
+        <p>Cerrar es aprobar: firma del responsable con huella SHA-256 del contenido, verificada cada vez que se abre el expediente. La regla vive en la base de datos, no en la interfaz — con test de seguridad en la integración continua.</p>
+      </div>
+      <div class="exg-card">
+        <h3><i></i>Roles con aislamiento real</h3>
+        <p>Responsable, miembro y técnico de captura. Quién ve qué y quién firma se aplica a nivel de base de datos, no con botones ocultos. Los expedientes se envían a aprobación y el responsable firma o devuelve con indicaciones.</p>
+      </div>
+      <div class="exg-card">
+        <h3><i></i>Tus documentos, con tu marca</h3>
+        <p>Identidad documental: los Word y PDF salen con tu logo, tu pie y tu código de formato («F-PG-08»). El sistema es Evidran; el documento que archivas es tuyo. Incluido en todos los planes.</p>
+      </div>
+      <div class="exg-card">
+        <h3><i></i>On-premise, con IA local</h3>
+        <p>La misma aplicación, instalada en tus servidores. Con el modo de IA local, el modelo corre en tu red sin ninguna salida a internet — pensado para políticas TISAX y entornos cerrados. Licencia anual firmada.</p>
+        <span class="mod">Modalidad de despliegue</span>
+      </div>
+      <div class="exg-card">
+        <h3><i></i>Vigilancia normativa</h3>
+        <p>Un robot revisa a diario los reglamentos UNECE y la vigencia de las normas de tu alcance de acreditación, te avisa de lo que te afecta y deja registrada la evidencia de vigilancia continua que pide ENAC.</p>
+        <span class="mod">Módulo aparte</span>
+      </div>
+      <div class="exg-card">
+        <h3><i></i>Conexión MCP</h3>
+        <p>Conecta tu propio agente de IA (Claude, Cursor, VS Code…) al estado real de tu organización, en solo lectura y con el mismo aislamiento que el resto de la aplicación. Preguntas desde tu herramienta habitual.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEGMENTOS -->
+<section id="segmentos" class="segsec">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Para quién es</div>
+      <h2>El eje es el mismo. Cambia lo que entra por la puerta.</h2>
+    </div>
+    <div class="segs">
+      <div class="seg">
+        <div class="k">Industria multi-norma</div>
+        <h3>Una herramienta para todo el sistema</h3>
+        <p>Calidad, medioambiente, seguridad y energía en el mismo sitio: 9001, 14001, 45001 y 50001, cada una con su lenguaje y su lógica.</p>
+      </div>
+      <div class="seg">
+        <div class="k">Automoción</div>
+        <h3>8D con formato OEM</h3>
+        <p>Reclamaciones de cliente con contención, doble rama de ocurrencia y no detección, y plantilla OEM/SCAR. Y on-premise si TISAX manda.</p>
+      </div>
+      <div class="seg">
+        <div class="k">Laboratorios · ISO/IEC 17025</div>
+        <h3>Trabajo no conforme con su lógica</h3>
+        <p>Extensión, informes emitidos, notificación a clientes y reanudación. Y vigilancia normativa para el alcance de tu acreditación ENAC.</p>
+      </div>
+      <div class="seg">
+        <div class="k">Inspección y certificación · 17020 / 17065</div>
+        <h3>La capa de gestión de tu acreditación</h3>
+        <p>No conformidades, acciones correctivas y mejora — lo que el evaluador revisa siempre. La competencia técnica sigue siendo tuya.</p>
+      </div>
+      <div class="seg">
+        <div class="k">Auditores y consultores</div>
+        <h3>Tu cartera, con entrega directa</h3>
+        <p>Informes con dictamen, hallazgos tipados y entrega en la cuenta de tu cliente con un código — sin entrar a su panel.</p>
+        <a href="/auditores.html">Evidran para auditores →</a>
+      </div>
+      <div class="seg">
+        <div class="k">¿Aún sin certificar?</div>
+        <h3>Empieza ya ordenado</h3>
+        <p>Montas el sistema desde el primer expediente — riesgos evaluados, acciones con plazo, auditoría interna planificada — y llegas a la certificación con los deberes hechos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- COMPARE -->
+<section class="cmp" id="comparativa">
+  <div class="wrap">
+    <div class="center-head"><div class="eyebrow">Por qué Evidran</div><h2>Archivar no es aprender.</h2><p>Así gestiona hoy la calidad gran parte del mercado: Word, Excel, carpetas compartidas y correo. Funciona… hasta que alguien pregunta «¿esto ya nos pasó?».</p></div>
     <table>
-      <thead><tr><th></th><th>Word, Excel y correo</th><th>Evidran</th></tr></thead>
+      <thead><tr><th></th><th>Software que archiva</th><th>Evidran · el sistema que aprende</th></tr></thead>
       <tbody>
         <tr><td>Documentar</td><td>Rellenas tú, campo a campo</td><td>Hablas y se redacta solo</td></tr>
         <tr><td>Causa raíz</td><td>Lo que se te ocurra</td><td>Criterio de sistema, sin causas pobres</td></tr>
         <tr><td>Varias normas</td><td>Una plantilla por cada una</td><td>Una herramienta para todas</td></tr>
-        <tr><td>Plazos</td><td>Los vigilas a mano</td><td>Semáforo de vencimiento</td></tr>
+        <tr><td>Plazos</td><td>Los vigilas a mano</td><td>Semáforo de vencimiento y avisos</td></tr>
+        <tr><td>El conocimiento</td><td>Se va con las personas</td><td>Queda en la organización, buscable</td></tr>
         <tr><td>Tus datos</td><td>Duermen en carpetas</td><td>Hallazgos, causas y objetivos</td></tr>
         <tr><td>Apartado Revisión 9.3</td><td>A mano cada año</td><td>Redactado desde tus datos</td></tr>
         <tr><td>Auditoría interna</td><td>Un Excel la semana antes</td><td>Programa, checklist y hallazgos conectados</td></tr>
         <tr><td>Registrar en planta</td><td>Un papel que llega tarde</td><td>App de campo: QR, foto y captura en el momento</td></tr>
         <tr><td>Vigencia de tus normas</td><td>Se comprueba a mano, si hay tiempo</td><td>Vigilancia diaria con evidencia registrada</td></tr>
-        <tr><td>"¿Estoy listo?"</td><td>Nadie te lo dice</td><td>Se lo preguntas al copiloto</td></tr>
+        <tr><td>«¿Estoy listo?»</td><td>Nadie te lo dice</td><td>Se lo preguntas al copiloto</td></tr>
       </tbody>
     </table>
     <div style="max-width:66ch;margin:40px auto 0;text-align:center">
       <h3 style="font-size:21px;margin-bottom:12px">¿Y frente a las suites ISO de siempre?</h3>
-      <p style="font-size:15.5px">Las suites son anchas: gestor documental con flujos de aprobación, portales de proveedores, cuadros de mando, decenas de módulos que un consultor configura contigo durante semanas. Si tienes equipo y alguien que administre la plataforma, esa anchura vale.</p>
+      <p style="font-size:15.5px">Las suites son anchas: gestor documental con flujos de aprobación, portales de proveedores, decenas de módulos que un consultor configura contigo durante semanas. Si tienes equipo y alguien que administre la plataforma, esa anchura vale.</p>
       <p style="font-size:15.5px;margin-top:12px">Evidran es profundo donde se juega la auditoría: del riesgo a la no conformidad, de la causa raíz al objetivo, del objetivo a la revisión por la dirección — funcionando desde el primer día, sin proyecto de implantación. <strong style="color:var(--ink)">Ellas tocan todos los palos. Evidran toca a fondo el que te examinan.</strong></p>
     </div>
   </div>
 </section>
 
 <!-- SECURITY + FAQ -->
-<section>
+<section id="seguridad">
   <div class="wrap twocol">
     <div>
       <div class="eyebrow">Seguridad y privacidad</div>
@@ -782,9 +1024,12 @@
     <div>
       <div class="eyebrow">Preguntas frecuentes</div>
       <h2 style="margin-bottom:18px">Lo que sueles preguntarte</h2>
-      <details open><summary>¿La IA se inventa cosas?</summary><p>No. Solo redacta a partir de lo que tú le cuentas, y los porcentajes son cálculos sobre tus datos. Evidran amplifica tu criterio; no lo sustituye. La última palabra siempre es tuya.</p></details>
-      <details><summary>¿No me vale con mis plantillas de Word?</summary><p>Las plantillas no te entrevistan, no evitan causas pobres, no te avisan de vencimientos ni te dan objetivos. Evidran sí.</p></details>
+      <details open><summary>¿Esto es otro chatbot con mis datos?</summary><p>No. El chat es solo la puerta de entrada. Lo que compras es lo que queda cuando la conversación termina: el expediente estructurado, las tendencias, el historial buscable y las actas. Ese registro es tuyo y no depende de ningún chat.</p></details>
+      <details><summary>¿La IA se inventa cosas?</summary><p>No. Solo redacta a partir de lo que tú le cuentas, y los porcentajes son cálculos sobre tus datos. Evidran amplifica tu criterio; no lo sustituye. La última palabra siempre es tuya.</p></details>
+      <details><summary>¿No me vale con mis plantillas de Word?</summary><p>Las plantillas no te entrevistan, no evitan causas pobres, no te avisan de vencimientos ni te dan objetivos. Y lo que escribes en ellas no vuelve nunca: se archiva y se olvida.</p></details>
       <details><summary>Las suites ISO tienen más módulos.</summary><p>Cierto: son más anchas. La pregunta es cuántos módulos vas a usar tú solo, cuánto tarda la plataforma en estar configurada y quién la mantiene después. Evidran cubre a fondo el ciclo que decide tu auditoría — riesgos, no conformidades, acciones, auditoría interna, objetivos y revisión por la dirección — y funciona desde el primer día. Si tu núcleo es un gestor documental con flujos o un portal de proveedores, una suite encaja mejor; te lo decimos igual de claro.</p></details>
+      <details><summary>¿Qué pasa con mi conocimiento si dejo Evidran?</summary><p>Es tuyo y se va contigo: los expedientes se exportan en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan de mejora, riesgos, evidencias de vigilancia) en CSV.</p></details>
+      <details><summary>¿Podéis trabajar sin nube?</summary><p>Sí. Evidran se instala on-premise en tus servidores, con la misma aplicación que la nube. La IA puede ser local (sin ninguna salida a internet) o puedes trabajar sin IA con la gestión completa. Licencia anual.</p></details>
       <details><summary>¿Mis datos están seguros?</summary><p>Aislados por empresa, evidencias privadas y la IA recibe lo mínimo imprescindible.</p></details>
       <details><summary>Llevo varias normas a la vez.</summary><p>Una sola herramienta para UNE-EN ISO 9001:2015, 14001:2015, 45001:2023, 50001:2018 e ISO/IEC 17025:2017, 17020:2012 y 17065:2012.</p></details>
       <details><summary>Somos entidad de inspección o de certificación (17020 / 17065).</summary><p>Evidran cubre la capa de gestión de tu acreditación: no conformidades, acciones correctivas, mejora continua y respuesta a hallazgos, con la misma entrevista guiada que en el resto de normas. La parte técnica de tu actividad —las inspecciones o los esquemas de certificación en sí— es otra historia y sigue siendo tuya.</p></details>
@@ -792,7 +1037,6 @@
       <details><summary>¿Se puede registrar desde el móvil, en planta?</summary><p>Sí. Evidran se instala como app en el móvil (sin pasar por tiendas) y permite capturar una no conformidad en pocos toques: escaneas el QR del punto de control, cuentas qué ha pasado, adjuntas foto con la cámara — y funciona sin cobertura, se envía solo al recuperar la red. El detalle lo completas después con la entrevista.</p></details>
       <details><summary>Soy yo solo para toda la calidad.</summary><p>Justo para eso está pensado Evidran.</p></details>
       <details><summary>Aún no estamos certificados.</summary><p>Mejor: montas el sistema ya ordenado. Documentas tus primeras no conformidades, levantas la matriz de riesgos con ayuda de la IA, planificas la auditoría interna y llegas a la certificación con registros trazables desde el día uno.</p></details>
-      <details><summary>¿Qué es el copiloto?</summary><p>Un chat disponible en toda la app al que le preguntas por tu sistema: «¿qué vence esta semana?», «¿estoy listo para la auditoría?». No inventa: consulta tus datos reales y te enlaza al registro exacto que lo resuelve.</p></details>
       <details><summary>Gestiono varias empresas como consultor.</summary><p>Un mismo usuario trabaja con varias organizaciones, cada una con sus datos aislados — y tienes un módulo de auditoría propio.</p></details>
       <details><summary>Trabajo con un auditor o consultor externo.</summary><p>Si tu auditor también usa Evidran, se conecta a tu empresa con un código y te deja sus hallazgos e informes directamente en tu cuenta, sin entrar a tu panel. Cada hallazgo entra ya redactado como expediente abierto —no transcribes nada— y el informe queda archivado por versiones. ¿Y si no lo usa? Sube el PDF de su informe: la IA extrae los hallazgos y te los deja en la misma bandeja.</p></details>
     </div>
@@ -802,13 +1046,12 @@
 <!-- FINAL CTA -->
 <section id="cta" class="final">
   <div class="wrap">
-    <h2>Tu próxima no conformidad puede ser la primera que no te robe la tarde.</h2>
-    <p>Para responsables de calidad de pymes industriales, proveedores de automoción, laboratorios y entidades de inspección y certificación acreditados, y consultores que llevan varias empresas.</p>
-    <p style="color:#8FA9C2;font-size:14.5px;margin:-8px auto 20px">Auditorías planificadas · riesgos al día · acciones con plazo vigilado · expedientes listos para la certificadora.</p>
+    <h2>Dentro de un año, tu sistema puede ser una carpeta más grande. O una organización que aprende.</h2>
+    <p>Cada expediente que documentas hoy es una respuesta que tendrás mañana. Para industria multi-norma, automoción, laboratorios y entidades acreditadas — y para los consultores que las acompañan.</p>
     <p class="amplify">No sustituye tu criterio. <span class="amp" data-word="Lo amplifica"></span>.</p>
     <div class="hero-cta">
-      <a href="https://app.evidran.com/?alta=1" class="btn btn-primary">Crea tu primer expediente gratis</a>
-      <a href="https://app.evidran.com" class="btn btn-ghost">Iniciar sesión</a>
+      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
+      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O crea tu primer expediente por tu cuenta, gratis</a>
     </div>
   </div>
 </section>
@@ -816,12 +1059,14 @@
 <footer>
   <div class="wrap">
     <span class="brand"><span class="wm">Evi<em>dran</em></span></span>
-    <span>El copiloto de calidad por IA · app.evidran.com · <a href="/blog/" style="color:#AEB6C0;text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="color:#AEB6C0;text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="color:#AEB6C0;text-decoration:underline">Términos y condiciones</a> · <a class="li" href="https://www.linkedin.com/company/evidran" target="_blank" rel="noopener" aria-label="Evidran en LinkedIn" title="Evidran en LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a></span>
+    <span>El sistema de conocimiento de calidad · app.evidran.com · <a href="/blog/" style="color:#AEB6C0;text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="color:#AEB6C0;text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="color:#AEB6C0;text-decoration:underline">Términos y condiciones</a> · <a class="li" href="https://www.linkedin.com/company/evidran" target="_blank" rel="noopener" aria-label="Evidran en LinkedIn" title="Evidran en LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a></span>
   </div>
 </footer>
-
 <script>
   (function () {
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ---- "Lo amplifica" tecleado ----
     function teclear(el) {
       var palabra = el.getAttribute("data-word") || "";
       var i = 0;
@@ -837,24 +1082,53 @@
         }
       })();
     }
-    var els = document.querySelectorAll(".amp");
+    var amps = document.querySelectorAll(".amp");
     if (!("IntersectionObserver" in window)) {
-      els.forEach(function (e) { e.textContent = e.getAttribute("data-word"); });
-      return;
+      amps.forEach(function (e) { e.textContent = e.getAttribute("data-word"); });
+    } else {
+      var ioAmp = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { teclear(en.target); ioAmp.unobserve(en.target); }
+        });
+      }, { threshold: 0.6 });
+      amps.forEach(function (e) { ioAmp.observe(e); });
     }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { teclear(en.target); io.unobserve(en.target); }
-      });
-    }, { threshold: 0.6 });
-    els.forEach(function (e) { io.observe(e); });
 
-    // ---- Reveal al hacer scroll (estilo Apple) + barras que crecen ----
-    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // ---- Secuencias animadas (cadena del hero + entrevista) ----
+    var groups = document.querySelectorAll("[data-seqgroup]");
+    function playGroup(g) {
+      var seqEls = Array.prototype.slice.call(g.querySelectorAll(".seq"));
+      seqEls.sort(function (a, b) { return (+a.dataset.seq) - (+b.dataset.seq); });
+      var step = +g.dataset.seqstep || 650;
+      var start = +g.dataset.seqstart || 400;
+      seqEls.forEach(function (el, i) {
+        setTimeout(function () {
+          el.classList.add("show");
+          if (el.dataset.fresh) el.classList.add("fresh");
+        }, start + i * step);
+      });
+    }
+    if (reduce || !("IntersectionObserver" in window)) {
+      groups.forEach(function (g) {
+        g.querySelectorAll(".seq").forEach(function (el) {
+          el.classList.add("show");
+          if (el.dataset.fresh) el.classList.add("fresh");
+        });
+      });
+    } else {
+      var ioSeq = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { playGroup(en.target); ioSeq.unobserve(en.target); }
+        });
+      }, { threshold: 0.3 });
+      groups.forEach(function (g) { ioSeq.observe(g); });
+    }
+
+    // ---- Reveal al hacer scroll ----
     if (!reduce && "IntersectionObserver" in window) {
-      var sel = [".center-head", ".shot", ".human-shot", ".step",
+      var sel = [".center-head", ".shot", ".chainbox", ".human-shot", ".step", ".entry",
                  ".problem li", ".problem .punch", ".cmp table",
-                 ".twocol > div", ".icp .tags span", ".icp .week", ".final .wrap > *"];
+                 ".twocol > div", ".qs li", ".exg-card", ".seg", ".final .wrap > *"];
       var revealEls = [];
       sel.forEach(function (s) {
         document.querySelectorAll(s).forEach(function (el) {
@@ -869,41 +1143,14 @@
         var idx = sibs.indexOf(el);
         if (idx > 0) el.style.transitionDelay = Math.min(idx * 0.07, 0.42) + "s";
       });
-      // colapsar las barras de los mockups para que crezcan al aparecer
-      document.querySelectorAll(".pmwrap .pm-row .fill").forEach(function (f) {
-        f.dataset.w = f.style.getPropertyValue("--w");
-        f.style.width = "0";
-      });
       var ro = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
           if (!en.isIntersecting) return;
           en.target.classList.add("in");
-          if (en.target.classList.contains("pmwrap")) {
-            en.target.querySelectorAll(".pm-row .fill").forEach(function (f, i) {
-              setTimeout(function () { f.style.width = f.dataset.w || ""; }, 140 + i * 80);
-            });
-          }
           ro.unobserve(en.target);
         });
       }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
       revealEls.forEach(function (el) { ro.observe(el); });
-    }
-
-    // ---- Secuencia animada de la entrevista (hero) ----
-    var heroMock = document.getElementById("heroMock");
-    if (heroMock) {
-      var seqEls = Array.prototype.slice.call(heroMock.querySelectorAll(".seq"));
-      seqEls.sort(function (a, b) { return (+a.dataset.seq) - (+b.dataset.seq); });
-      if (reduce) {
-        seqEls.forEach(function (el) { el.classList.add("show"); if (el.dataset.fresh) el.classList.add("fresh"); });
-      } else {
-        seqEls.forEach(function (el, i) {
-          setTimeout(function () {
-            el.classList.add("show");
-            if (el.dataset.fresh) el.classList.add("fresh");
-          }, 550 + i * 650);
-        });
-      }
     }
 
     // ---- Sombra de la barra al desplazar ----
@@ -914,22 +1161,52 @@
       onScroll();
     }
 
+    // ---- Desplegables del menú (clic; el hover lo lleva el CSS en escritorio) ----
+    var navItems = Array.prototype.slice.call(document.querySelectorAll(".nav-item"));
+    function cerrarDrops() {
+      navItems.forEach(function (it) {
+        it.classList.remove("open");
+        var b = it.querySelector(".nav-drop-btn");
+        if (b) b.setAttribute("aria-expanded", "false");
+      });
+    }
+    navItems.forEach(function (it) {
+      var btn = it.querySelector(".nav-drop-btn");
+      if (!btn) return;
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var estaba = it.classList.contains("open");
+        cerrarDrops();
+        if (!estaba) {
+          it.classList.add("open");
+          btn.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".nav-item")) cerrarDrops();
+    });
+
     // ---- Menú móvil (hamburguesa) ----
     var navBurger = document.getElementById("navBurger");
     if (navEl && navBurger) {
       var closeMenu = function () {
         navEl.classList.remove("nav-open");
         navBurger.setAttribute("aria-expanded", "false");
+        cerrarDrops();
       };
       navBurger.addEventListener("click", function () {
         var open = navEl.classList.toggle("nav-open");
         navBurger.setAttribute("aria-expanded", open ? "true" : "false");
+        if (!open) cerrarDrops();
       });
       Array.prototype.forEach.call(navEl.querySelectorAll(".nav-links a"), function (a) {
         a.addEventListener("click", closeMenu);
       });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") { closeMenu(); }
+      });
+      window.addEventListener("resize", function () { if (window.innerWidth > 980) closeMenu(); });
     }
 
     // ---- Evento clave: alta de cuenta de prueba (self-service) ----
@@ -953,6 +1230,18 @@
           event_callback: ir
         });
         window.setTimeout(ir, 700);
+      });
+    });
+
+    // ---- Evento clave: petición de demo (mailto) ----
+    Array.prototype.forEach.call(document.querySelectorAll('a[href^="mailto:demo@evidran.com"]'), function (link) {
+      link.addEventListener("click", function () {
+        if (typeof window.gtag !== "function") return;
+        window.gtag("event", "demo_request", {
+          event_category: "lead",
+          event_label: link.textContent.trim() || "Pide una demo",
+          method: "email"
+        });
       });
     });
   })();
