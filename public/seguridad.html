@@ -105,7 +105,7 @@
     <p class="crumbs"><a href="/">Evidran</a> · Seguridad y privacidad</p>
     <div class="eyebrow">Seguridad y privacidad</div>
     <h1>La confianza no se declara. Se construye en la base de datos.</h1>
-    <p class="sub">Cada regla de seguridad de Evidran vive donde no se puede esquivar: aislamiento, roles y firma se aplican en la base de datos y se comprueban con tests automáticos en cada versión. Aquí está el detalle, sin humo.</p>
+    <p class="sub">Las reglas de seguridad de Evidran viven donde deben: aislamiento, roles y firma se aplican en la base de datos y se comprueban con tests automáticos en cada versión. Aquí está el detalle.</p>
   </div>
 </header>
 
@@ -115,7 +115,7 @@
     <div class="feat-row">
       <div class="fr-text">
         <div class="fr-eyebrow">Aislamiento por organización</div>
-        <h3>Cada empresa solo ve lo suyo. Por construcción.</h3>
+        <h3>Cada empresa solo ve lo suyo. Por diseño.</h3>
         <ul class="fr-list">
           <li><b>Row Level Security en todas las tablas sensibles:</b> el aislamiento se aplica en la base de datos, no en la interfaz. Aunque alguien manipulara la página, la BD no le devuelve datos ajenos.</li>
           <li><b>Frontera entre organizaciones cubierta por tests</b> de seguridad automáticos en la integración continua: cada versión los pasa antes de publicarse.</li>
@@ -220,6 +220,7 @@
         <ul class="fr-list">
           <li><b>Tus documentos son tuyos:</b> expedientes en Word y PDF con tu identidad documental, y las tablas de trabajo en CSV. Si un día te vas, el conocimiento se va contigo.</li>
           <li><b>Dossier de seguridad disponible:</b> arquitectura, tratamiento de datos e IA, subencargados, copias de seguridad y respuesta a incidentes. Pídelo en <a href="mailto:demo@evidran.com" style="color:var(--blue);font-weight:700;text-decoration:none">demo@evidran.com</a>.</li>
+          <li><b>Divulgación responsable:</b> publicamos <a href="/.well-known/security.txt" style="color:var(--blue);font-weight:700;text-decoration:none">security.txt</a> y agradecemos los reportes de vulnerabilidades.</li>
         </ul>
       </div>
     </div>
@@ -273,7 +274,7 @@
         <ul class="fr-list">
           <li><b>Solo lectura:</b> no crea, no edita, no cierra nada.</li>
           <li><b>El token se muestra una sola vez</b> y en la base de datos solo se guarda su hash. Cada conexión registra sus usos y se revoca en un clic.</li>
-          <li><b>Mismo aislamiento que la app:</b> cada consulta corre con los permisos del usuario que creó el token — la RLS de siempre decide qué ve. Otra organización es inalcanzable por construcción.</li>
+          <li><b>Mismo aislamiento que la app:</b> cada consulta corre con los permisos del usuario que creó el token — la RLS de siempre decide qué ve, y otra organización queda fuera de su alcance, por diseño.</li>
           <li><b>El modelo que razona es el tuyo:</b> Evidran solo ejecuta consultas; tus datos no pasan por ninguna IA de Evidran en este canal.</li>
         </ul>
       </div>
@@ -297,14 +298,15 @@
     <details><summary>¿Qué ve exactamente la IA?</summary><p>Lo que cada función necesita y nada más: la entrevista ve lo que tú le cuentas en ese expediente; la Revisión 9.3 se genera con estadísticas agregadas; el copiloto ejecuta consultas deterministas con los permisos de tu sesión. La clave y los prompts viven en el servidor.</p></details>
     <details><summary>¿Qué pasa con mis datos si dejo Evidran?</summary><p>Son tuyos y se van contigo: expedientes en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan, riesgos, evidencias de vigilancia) en CSV.</p></details>
     <details><summary>Ya firmamos con otra herramienta (Adobe, FNMT…).</summary><p>Perfecto: firma el expediente en Evidran, exporta el PDF, fírmalo donde ya firméis y súbelo al expediente. Evidran comprueba que la huella impresa corresponde al expediente y te avisa si el documento firma una versión anterior.</p></details>
+    <details><summary>¿Tenéis ISO 27001 o SOC 2?</summary><p>Aún no — y preferimos decírtelo a lucir un sello que no tenemos. Lo que sí tenemos son controles verificables: aislamiento, roles y firma aplicados en la base de datos y comprobados con tests en cada versión, un dossier de seguridad que te enseñamos sin vueltas, y la opción on-premise si tus datos no pueden salir de tu red.</p></details>
   </div>
 </section>
 
 <!-- CTA FINAL -->
 <section class="final">
   <div class="wrap">
-    <h2>Las preguntas difíciles de tu IT, respondidas antes de que las haga.</h2>
-    <p>Y si quiere más detalle, el dossier de seguridad completo está a un email.</p>
+    <h2>Las preguntas de tu IT tienen respuesta por escrito.</h2>
+    <p>Lo que has leído aquí, ampliado en el dossier de seguridad — a un email de distancia.</p>
     <div class="hero-cta">
       <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
       <a href="mailto:demo@evidran.com?subject=Solicito%20el%20dossier%20de%20seguridad" class="btn btn-ghost">Pide el dossier de seguridad</a>
