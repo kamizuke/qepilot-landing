@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Política de cookies — Evidran</title>
+<meta name="robots" content="noindex,follow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/plataforma.css">
+<style>
+  .legal { max-width: 760px; margin: 0 auto; padding: 48px 24px 72px; }
+  .legal h1 { font-size: clamp(26px, 3.4vw, 36px); margin-bottom: 8px; }
+  .legal .fecha { font-size: 13px; color: var(--ink-soft); margin-bottom: 34px; }
+  .legal h2 { font-size: 19px; margin: 34px 0 10px; }
+  .legal p, .legal li { font-size: 15px; color: var(--ink-soft); }
+  .legal ul { margin: 10px 0 10px 22px; }
+  .legal a { color: var(--blue); font-weight: 600; text-decoration: none; }
+  .legal a:hover { text-decoration: underline; }
+  .legal table { width: 100%; border-collapse: collapse; margin: 16px 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .legal th, .legal td { padding: 11px 14px; text-align: left; font-size: 13.5px; border-bottom: 1px solid var(--cream-d); }
+  .legal th { background: var(--cream); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  .legal .btns { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="brand"><span class="wm">Evi<em>dran</em></span></a>
+    <a href="/" class="btn btn-ghost btn-sm">← Volver a evidran.com</a>
+  </div>
+</nav>
+
+<div class="legal">
+  <h1>Política de cookies</h1>
+  <p class="fecha">Última actualización: julio de 2026</p>
+
+  <h2>Qué cookies usa esta web</h2>
+  <p>Muy pocas. Esta web no usa cookies publicitarias ni de perfilado. Solo hay una cookie no técnica —la de analítica— y <strong>no se instala salvo que la aceptes</strong> en el aviso que aparece al visitarnos.</p>
+
+  <table>
+    <thead><tr><th>Nombre</th><th>Proveedor</th><th>Finalidad</th><th>Duración</th><th>Base</th></tr></thead>
+    <tbody>
+      <tr><td>_ga, _ga_*</td><td>Google Analytics (Google LLC)</td><td>Estadística de uso de la web: páginas visitadas, origen de la visita</td><td>Hasta 2 años</td><td>Tu consentimiento</td></tr>
+      <tr><td>evd_consent_v1</td><td>Evidran (almacenamiento local)</td><td>Recordar tu elección sobre las cookies</td><td>12 meses</td><td>Exenta (técnica)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Cambiar tu elección</h2>
+  <p>Puedes aceptar, rechazar o cambiar tu decisión cuando quieras:</p>
+  <div class="btns">
+    <button type="button" class="btn btn-primary btn-sm" onclick="if(window.evdCookies){window.evdCookies.aceptar();this.textContent='✓ Aceptadas';}">Aceptar la analítica</button>
+    <button type="button" class="btn btn-ghost btn-sm" onclick="if(window.evdCookies){window.evdCookies.rechazar();this.textContent='✓ Rechazadas';}">Rechazar la analítica</button>
+  </div>
+  <p>Si rechazas, Google Analytics no se carga: ni cookie ni envío de datos.</p>
+
+  <h2>Borrarlas del navegador</h2>
+  <p>También puedes eliminar o bloquear cookies desde la configuración de tu navegador (Chrome, Safari, Firefox, Edge) o instalar el <a href="https://tools.google.com/dlpage/gaoptout?hl=es" rel="noopener" target="_blank">complemento de inhabilitación de Google Analytics</a>.</p>
+
+  <h2>Quién es el responsable</h2>
+  <p>El titular de esta web, identificado en el <a href="/aviso-legal.html">aviso legal</a> y en la <a href="/privacidad.html">política de privacidad</a>.</p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><span class="wm">Evi<em>dran</em></span></span>
+    <span><a href="/aviso-legal.html" style="text-decoration:underline">Aviso legal</a> · <a href="/privacidad.html" style="text-decoration:underline">Privacidad</a> · <a href="/terminos.html" style="text-decoration:underline">Términos y condiciones</a></span>
+  </div>
+</footer>
+
+<script defer src="/consent.js"></script>
+</body>
+</html>
