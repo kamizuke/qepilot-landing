@@ -339,6 +339,16 @@
   .exg-card h3 i { width: 9px; height: 9px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-l), var(--blue)); flex: 0 0 auto; }
   .exg-card p { font-size: 13.5px; }
   .exg-card .mod { display: inline-block; margin-top: 10px; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--navy); background: var(--cream-d); border-radius: 6px; padding: 3px 8px; }
+  .exg-card a.more { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--blue); text-decoration: none; }
+  .exg-card a.more:hover { text-decoration: underline; }
+
+  /* tarjetas-enlace a páginas de plataforma */
+  .plinks { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 44px; }
+  .plink { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+  .plink:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(22,32,43,.1); }
+  .plink .k { font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+  .plink b { display: block; font-size: 15.5px; color: var(--ink); margin-bottom: 5px; letter-spacing: -0.01em; }
+  .plink span { font-size: 13px; color: var(--ink-soft); }
 
   /* SEGMENTOS */
   .segsec { background: var(--cream-d); }
@@ -411,7 +421,7 @@
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
     .feat-row.rev .fr-visual { order: 0; }
     .problem .wrap, .twocol { grid-template-columns: 1fr; gap: 28px; }
-    .steps, .entry3, .qs, .exg, .segs { grid-template-columns: 1fr; }
+    .steps, .entry3, .qs, .exg, .segs, .plinks { grid-template-columns: 1fr; }
     .mock { grid-template-columns: 1fr; }
     .mock-chat { border-right: 0; border-bottom: 1px solid var(--cream-d); }
     section { padding: 60px 0; }
@@ -459,7 +469,7 @@
               <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
               <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva, del inherente al residual · 6.1.</small></a>
               <a href="#avisos"><b>Avisos y plazos</b><small>La herramienta se acuerda para que tú no tengas que hacerlo.</small></a>
-              <a href="#exigencia"><b>Aprobación y firma</b><small>Firma del responsable con huella SHA-256 y traza.</small></a>
+              <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
               <a href="#exigencia"><b>Identidad documental</b><small>Tus Word y PDF con tu logo y tu código de formato.</small></a>
             </div>
             <div class="mg-col">
@@ -468,12 +478,12 @@
               <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
               <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
               <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
-              <a href="#exigencia"><b>Conexión MCP</b><small>Tu propio agente de IA, conectado en solo lectura.</small></a>
+              <a href="/seguridad.html#mcp"><b>Conexión MCP</b><small>Tu propio agente de IA, conectado en solo lectura.</small></a>
             </div>
             <div class="mg-foot">
-              <a href="#exigencia">Vigilancia normativa</a>
-              <a href="#exigencia">On-premise</a>
-              <a href="#seguridad">Seguridad y privacidad</a>
+              <a href="/vigilancia-normativa.html">Vigilancia normativa</a>
+              <a href="/seguridad.html#onpremise">On-premise</a>
+              <a href="/seguridad.html">Seguridad y privacidad</a>
             </div>
           </div>
         </div>
@@ -494,7 +504,7 @@
             <a href="/blog/"><b>Blog</b></a>
             <a href="/producto.html"><b>Evidran por dentro</b></a>
             <a href="/auditores.html"><b>Para auditores</b></a>
-            <a href="#seguridad"><b>Seguridad y privacidad</b></a>
+            <a href="/seguridad.html"><b>Seguridad y privacidad</b></a>
           </div>
         </div>
         <a href="mailto:demo@evidran.com" class="btn btn-primary btn-sm">Pide una demo</a>
@@ -607,10 +617,6 @@
       <div class="step"><div class="n">4</div><h3>Cierra y entrega</h3><p>Asigna responsable y fecha límite, adjunta evidencias, aprueba y firma el expediente y expórtalo a Word o PDF. Listo para la certificadora.</p></div>
     </div>
 
-    <figure class="human-shot">
-      <img src="/equipo-calidad2.webp" alt="Responsable de calidad revisando un expediente junto a su equipo frente a un portátil" loading="lazy" width="1600" height="900" />
-    </figure>
-
     <div class="normhead" id="normas">
       <h2>Cada norma con su plantilla, su carpeta y su lógica. <span class="hl">Aquí, con una sola conversación.</span></h2>
       <p>No es un chat de propósito general con el logo cambiado: cada flujo entiende el lenguaje de su norma, te pregunta lo que esa norma exige y redacta como lo haría un experto en ese sistema.</p>
@@ -698,58 +704,6 @@
       </div>
     </div>
 
-    <div class="feat-row rev" id="auditorias">
-      <div class="fr-text">
-        <div class="fr-eyebrow">Auditoría interna · 9.2</div>
-        <h3>El programa anual, la checklist y los hallazgos — sin un Excel.</h3>
-        <p>Planificas la auditoría por procesos, la IA te propone la checklist según la norma y tú la editas. Cierras con informe en PDF y los hallazgos entran directos a tu bandeja como expedientes abiertos: no transcribes nada.</p>
-      </div>
-      <div class="fr-visual">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria-interna</span></div>
-        <div class="pm">
-          <div class="pm-head"><div class="pm-title">Programa 2026</div><div class="pm-btns"><span>Año: 2026</span><span class="pri">+ Auditoría</span></div></div>
-          <table class="pm-table">
-            <thead><tr><th>Proceso</th><th>Fecha</th><th>Estado</th><th>Hallazgos</th></tr></thead>
-            <tbody>
-              <tr><td>Compras y proveedores</td><td>Feb</td><td><span class="pmpill ce">Cerrada</span></td><td>2</td></tr>
-              <tr><td>Producción</td><td>Abr</td><td><span class="pmpill ce">Cerrada</span></td><td>3</td></tr>
-              <tr><td>Almacén y logística</td><td>Jun</td><td><span class="pmpill en">En curso</span></td><td>—</td></tr>
-              <tr><td>Diseño y desarrollo</td><td>Oct</td><td><span class="pmpill ab">Planificada</span></td><td>—</td></tr>
-            </tbody>
-          </table>
-          <div class="pm-check">
-            <div class="h">Checklist · Almacén y logística <span class="ia">Propuesta por IA</span></div>
-            <div class="pm-chk"><span class="box on">✓</span><span>¿Se registran las condiciones de almacenamiento de producto sensible? (8.5.4)</span></div>
-            <div class="pm-chk"><span class="box on">✓</span><span>¿Hay trazabilidad de lotes en las expediciones? (8.5.2)</span></div>
-            <div class="pm-chk"><span class="box">✓</span><span>¿Se controla la rotación del stock por caducidad, FIFO? (8.5.1)</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="feat-row" id="plan">
-      <div class="fr-text">
-        <div class="fr-eyebrow">Plan de mejora continua · 10.2</div>
-        <h3>Todas tus acciones en una tabla, con la eficacia verificada.</h3>
-        <p>No conformidades, hallazgos de auditoría, riesgos tratados o ideas propias: todo cae en el mismo plan, con responsable, prioridad, plazo y verificación de eficacia. Lo describes en una frase y la IA precarga el formulario por ti.</p>
-      </div>
-      <div class="fr-visual">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/plan-mejora</span></div>
-        <div class="pm">
-          <div class="pm-head"><div class="pm-title">Plan de mejora</div><div class="pm-btns"><span>Todas</span><span class="pri">+ Acción</span></div></div>
-          <table class="pm-table">
-            <thead><tr><th>Acción</th><th class="hide-sm">Origen</th><th>Resp.</th><th>Prioridad</th><th>Eficacia</th></tr></thead>
-            <tbody>
-              <tr><td>Instrucción de control · turno noche</td><td class="hide-sm"><span class="pmcode">NC-2026-014</span></td><td>M. López</td><td><span class="prio alta">Alta</span></td><td><span class="efic pend">Pendiente</span></td></tr>
-              <tr><td>Calibración trimestral de sondas de pH</td><td class="hide-sm"><span class="pmcode">NCA-2024-001</span></td><td>J. Ruiz</td><td><span class="prio media">Media</span></td><td><span class="efic">✓ Verificada</span></td></tr>
-              <tr><td>Formación en registro dimensional</td><td class="hide-sm">Auditoría</td><td>A. Pérez</td><td><span class="prio alta">Alta</span></td><td><span class="efic pend">Pendiente</span></td></tr>
-              <tr><td>Revisar proveedor de embalaje</td><td class="hide-sm"><span class="pmcode">8D-2026-002</span></td><td>Compras</td><td><span class="prio baja">Baja</span></td><td><span class="efic pend">Pendiente</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
     <div class="feat-row rev" id="avisos">
       <div class="fr-text">
         <div class="fr-eyebrow">Avisos · no dependen de tu memoria</div>
@@ -772,6 +726,11 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="plinks">
+      <a class="plink" href="/auditorias.html"><span class="k">El ciclo sigue</span><b>Auditorías: bandeja, interna 9.2 y calendario</b><span>El programa anual, la checklist con IA y los hallazgos directos al triage — sin un Excel.</span></a>
+      <a class="plink" href="/riesgos-plan.html#plan"><span class="k">El ciclo sigue</span><b>Plan de mejora continua · 10.2</b><span>Todas las acciones en una tabla, con bitácora de seguimiento y eficacia verificada.</span></a>
     </div>
   </div>
 </section>
@@ -839,7 +798,7 @@
     <ul class="qs">
       <li><b>¿Qué causas se repiten de verdad?</b><span>Taxonomía de causas · Tendencias</span></li>
       <li><b>¿Esto ya nos pasó? ¿Cómo se resolvió?</b><span>Historial buscable</span></li>
-      <li><b>¿Qué acciones funcionaron?</b><a href="#plan">Eficacia verificada · Plan de mejora</a></li>
+      <li><b>¿Qué acciones funcionaron?</b><a href="/riesgos-plan.html#plan">Eficacia verificada · Plan de mejora</a></li>
       <li><b>¿Dónde se concentran las no conformidades?</b><span>Hallazgos automáticos</span></li>
       <li><b>¿Qué procesos acumulan más riesgo?</b><a href="#riesgos">Matriz 6.1</a></li>
       <li><b>¿Estoy listo para la auditoría?</b><a href="#copiloto">Copiloto</a></li>
@@ -905,34 +864,37 @@
     <div class="center-head">
       <div class="eyebrow">Nivel de exigencia</div>
       <h2>Construido para organizaciones que se examinan.</h2>
-      <p>Automoción con OEM y TISAX, laboratorios y entidades acreditadas, multi-norma con auditorías que no perdonan. Sin humo: cada punto es un hecho técnico.</p>
+      <p>Automoción con OEM y TISAX, laboratorios y entidades acreditadas, multi-norma con auditorías que no perdonan. Cada señal tiene su prueba, a un clic.</p>
     </div>
     <div class="exg">
       <div class="exg-card">
         <h3><i></i>Aprobación y firma</h3>
-        <p>Cerrar es aprobar: firma del responsable con huella SHA-256 del contenido, verificada cada vez que se abre el expediente. La regla vive en la base de datos, no en la interfaz — con test de seguridad en la integración continua.</p>
+        <p>Cerrar es aprobar: firma del responsable con huella verificada y traza que no se borra.</p>
+        <a class="more" href="/seguridad.html#firma">Cómo funciona →</a>
       </div>
       <div class="exg-card">
         <h3><i></i>Roles con aislamiento real</h3>
-        <p>Responsable, miembro y técnico de captura. Quién ve qué y quién firma se aplica a nivel de base de datos, no con botones ocultos. Los expedientes se envían a aprobación y el responsable firma o devuelve con indicaciones.</p>
+        <p>Quién ve qué y quién firma se aplica en la base de datos, no con botones.</p>
+        <a class="more" href="/seguridad.html#roles">El detalle →</a>
       </div>
       <div class="exg-card">
         <h3><i></i>Tus documentos, con tu marca</h3>
-        <p>Identidad documental: los Word y PDF salen con tu logo, tu pie y tu código de formato («F-PG-08»). El sistema es Evidran; el documento que archivas es tuyo. Incluido en todos los planes.</p>
+        <p>Los Word y PDF salen con tu logo, tu pie y tu código de formato. En todos los planes.</p>
       </div>
       <div class="exg-card">
         <h3><i></i>On-premise, con IA local</h3>
-        <p>La misma aplicación, instalada en tus servidores. Con el modo de IA local, el modelo corre en tu red sin ninguna salida a internet — pensado para políticas TISAX y entornos cerrados. Licencia anual firmada.</p>
-        <span class="mod">Modalidad de despliegue</span>
+        <p>La misma aplicación en tus servidores — sin salida a internet si tu política lo exige.</p>
+        <a class="more" href="/seguridad.html#onpremise">El despliegue →</a>
       </div>
       <div class="exg-card">
         <h3><i></i>Vigilancia normativa</h3>
-        <p>Un robot revisa a diario los reglamentos UNECE y la vigencia de las normas de tu alcance de acreditación, te avisa de lo que te afecta y deja registrada la evidencia de vigilancia continua que pide ENAC.</p>
-        <span class="mod">Módulo aparte</span>
+        <p>Vigila a diario que tus normas siguen vigentes, con evidencia para ENAC.</p>
+        <a class="more" href="/vigilancia-normativa.html">El módulo →</a>
       </div>
       <div class="exg-card">
         <h3><i></i>Conexión MCP</h3>
-        <p>Conecta tu propio agente de IA (Claude, Cursor, VS Code…) al estado real de tu organización, en solo lectura y con el mismo aislamiento que el resto de la aplicación. Preguntas desde tu herramienta habitual.</p>
+        <p>Tu propio agente de IA consulta tu sistema, en solo lectura.</p>
+        <a class="more" href="/seguridad.html#mcp">Cómo se conecta →</a>
       </div>
     </div>
   </div>
@@ -1020,6 +982,7 @@
         <li>Evidencias privadas con enlaces de descarga firmados y temporales.</li>
         <li>La clave de IA y la lógica sensible viven en el servidor, nunca en el navegador.</li>
       </ul>
+      <p style="margin-top:20px"><a href="/seguridad.html" class="btn btn-ghost btn-sm">Todo el detalle: Seguridad y privacidad →</a></p>
     </div>
     <div>
       <div class="eyebrow">Preguntas frecuentes</div>
@@ -1029,16 +992,8 @@
       <details><summary>¿No me vale con mis plantillas de Word?</summary><p>Las plantillas no te entrevistan, no evitan causas pobres, no te avisan de vencimientos ni te dan objetivos. Y lo que escribes en ellas no vuelve nunca: se archiva y se olvida.</p></details>
       <details><summary>Las suites ISO tienen más módulos.</summary><p>Cierto: son más anchas. La pregunta es cuántos módulos vas a usar tú solo, cuánto tarda la plataforma en estar configurada y quién la mantiene después. Evidran cubre a fondo el ciclo que decide tu auditoría — riesgos, no conformidades, acciones, auditoría interna, objetivos y revisión por la dirección — y funciona desde el primer día. Si tu núcleo es un gestor documental con flujos o un portal de proveedores, una suite encaja mejor; te lo decimos igual de claro.</p></details>
       <details><summary>¿Qué pasa con mi conocimiento si dejo Evidran?</summary><p>Es tuyo y se va contigo: los expedientes se exportan en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan de mejora, riesgos, evidencias de vigilancia) en CSV.</p></details>
-      <details><summary>¿Podéis trabajar sin nube?</summary><p>Sí. Evidran se instala on-premise en tus servidores, con la misma aplicación que la nube. La IA puede ser local (sin ninguna salida a internet) o puedes trabajar sin IA con la gestión completa. Licencia anual.</p></details>
-      <details><summary>¿Mis datos están seguros?</summary><p>Aislados por empresa, evidencias privadas y la IA recibe lo mínimo imprescindible.</p></details>
-      <details><summary>Llevo varias normas a la vez.</summary><p>Una sola herramienta para UNE-EN ISO 9001:2015, 14001:2015, 45001:2023, 50001:2018 e ISO/IEC 17025:2017, 17020:2012 y 17065:2012.</p></details>
-      <details><summary>Somos entidad de inspección o de certificación (17020 / 17065).</summary><p>Evidran cubre la capa de gestión de tu acreditación: no conformidades, acciones correctivas, mejora continua y respuesta a hallazgos, con la misma entrevista guiada que en el resto de normas. La parte técnica de tu actividad —las inspecciones o los esquemas de certificación en sí— es otra historia y sigue siendo tuya.</p></details>
-      <details><summary>¿Cómo sé que las normas de mi alcance siguen vigentes?</summary><p>Con el módulo de Vigilancia normativa: subes el PDF de tu alcance de acreditación (se procesa en tu navegador, no sale de tu equipo), Evidran extrae las normas y métodos, y un robot comprueba a diario si algo cambia —nueva edición, anulación, cambios de reglamento— y te avisa por email si te afecta. Cada revisión queda registrada y se exporta: la evidencia de vigilancia continua, hecha.</p></details>
-      <details><summary>¿Se puede registrar desde el móvil, en planta?</summary><p>Sí. Evidran se instala como app en el móvil (sin pasar por tiendas) y permite capturar una no conformidad en pocos toques: escaneas el QR del punto de control, cuentas qué ha pasado, adjuntas foto con la cámara — y funciona sin cobertura, se envía solo al recuperar la red. El detalle lo completas después con la entrevista.</p></details>
+      <details><summary>¿Mis datos están seguros?</summary><p>Aislados por empresa a nivel de base de datos, evidencias privadas y la IA recibe lo mínimo imprescindible. El detalle completo —firma, roles, on-premise, conexión MCP— está en <a href="/seguridad.html" style="color:var(--blue);font-weight:700">Seguridad y privacidad</a>.</p></details>
       <details><summary>Soy yo solo para toda la calidad.</summary><p>Justo para eso está pensado Evidran.</p></details>
-      <details><summary>Aún no estamos certificados.</summary><p>Mejor: montas el sistema ya ordenado. Documentas tus primeras no conformidades, levantas la matriz de riesgos con ayuda de la IA, planificas la auditoría interna y llegas a la certificación con registros trazables desde el día uno.</p></details>
-      <details><summary>Gestiono varias empresas como consultor.</summary><p>Un mismo usuario trabaja con varias organizaciones, cada una con sus datos aislados — y tienes un módulo de auditoría propio.</p></details>
-      <details><summary>Trabajo con un auditor o consultor externo.</summary><p>Si tu auditor también usa Evidran, se conecta a tu empresa con un código y te deja sus hallazgos e informes directamente en tu cuenta, sin entrar a tu panel. Cada hallazgo entra ya redactado como expediente abierto —no transcribes nada— y el informe queda archivado por versiones. ¿Y si no lo usa? Sube el PDF de su informe: la IA extrae los hallazgos y te los deja en la misma bandeja.</p></details>
     </div>
   </div>
 </section>
