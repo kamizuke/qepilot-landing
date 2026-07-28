@@ -29,74 +29,74 @@
     padding: 7px 15px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s;
   }
   .map-toggle button.on { background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; }
-  .map-hint { font-size: 12.5px; color: var(--ink-soft); margin-left: auto; }
-  .map-hint b { color: var(--ink); }
 
-  #dgWrap { position: relative; padding: 30px 22px 8px; overflow-x: auto; }
-  #dgSvg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
-  #dgNodes { position: relative; }
-
-  .boundary { position: absolute; border: 1.5px dashed var(--line); border-radius: 14px; transition: opacity .25s; }
-  .boundary .blabel {
-    position: absolute; top: -11px; left: 14px; background: #fff; padding: 0 8px;
-    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
-  }
-
-  .n {
-    position: absolute; width: 150px; background: var(--cream);
-    border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px;
-    cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s, opacity .2s, background .15s;
-  }
-  .n .nic { font-size: 18px; line-height: 1; margin-bottom: 8px; }
-  .n .nt { font-weight: 800; font-size: 13px; color: var(--ink); line-height: 1.25; letter-spacing: -.01em; }
-  .n .ns { font-size: 11px; color: var(--ink-soft); margin-top: 3px; display: block; }
-  .n:hover { transform: translateY(-2px); background: #fff; box-shadow: 0 10px 22px rgba(22,32,43,.1); border-color: var(--blue-l); }
-  .n.dim { opacity: .34; }
-  .n.active { background: #fff; border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue), 0 10px 22px rgba(22,32,43,.1); }
-  .n.step { transform: translateY(-2px) scale(1.035); z-index: 4; background: #fff; }
-  .n .stepnum {
-    position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; border-radius: 50%;
-    background: var(--blue); color: #fff; font-weight: 800; font-size: 10.5px;
-    display: none; align-items: center; justify-content: center; box-shadow: 0 0 0 2.5px #fff;
-  }
-  .n.instep .stepnum { display: flex; }
-
-  .wire { fill: none; stroke: var(--line); stroke-width: 1.5; transition: stroke .2s, stroke-width .2s, opacity .2s; }
-  .wire.dim { opacity: .3; }
-  .wire.on { stroke: var(--blue-l); stroke-width: 2; }
-  .wire.now { stroke: url(#wireGrad); stroke-width: 2.6; stroke-dasharray: 6 5; animation: flow .9s linear infinite; }
-  @keyframes flow { to { stroke-dashoffset: -22; } }
-  @media (prefers-reduced-motion: reduce) { .wire.now { animation: none; } }
-
-  #dgCaption { border-top: 1px solid var(--line); padding: 16px 22px 22px; min-height: 26px; font-size: 14px; color: var(--ink-soft); }
-  #dgCaption b { color: var(--ink); }
-
-  /* Escenarios */
-  .scen-grid { display: grid; grid-template-columns: 264px 1fr; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #fff; box-shadow: 0 24px 48px rgba(22,32,43,.11); }
+  /* El mapa y el panel que lo explica viven en la MISMA fila: cambiar de
+     caso o pasar el ratón por una pieza actualiza algo que ya está a la
+     vista, sin scroll de por medio. */
+  .map-grid { display: grid; grid-template-columns: 226px 1fr; }
   .scen-list { border-right: 1px solid var(--line); background: var(--cream); }
-  .scen-item { display: flex; align-items: flex-start; gap: 10px; width: 100%; text-align: left; border: 0; background: transparent; padding: 15px 18px; cursor: pointer; border-bottom: 1px solid var(--line); font: inherit; color: var(--ink); }
+  .scen-item { display: flex; align-items: flex-start; gap: 9px; width: 100%; text-align: left; border: 0; background: transparent; padding: 13px 16px; cursor: pointer; border-bottom: 1px solid var(--line); font: inherit; color: var(--ink); }
   .scen-item:last-child { border-bottom: 0; }
-  .scen-item i { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; background: var(--line); transition: background .15s; }
-  .scen-item .st { font-weight: 700; font-size: 14px; }
-  .scen-item .sd { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .scen-item i { flex: 0 0 auto; width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; background: var(--line); transition: background .15s; }
+  .scen-item .st { font-weight: 700; font-size: 13px; line-height: 1.3; }
+  .scen-item .sd { font-size: 11px; color: var(--ink-soft); margin-top: 2px; line-height: 1.35; }
   .scen-item.on { background: #fff; }
   .scen-item.on i { background: var(--blue); }
   .scen-item.on .st { color: var(--blue); }
   .scen-item:hover:not(.on) { background: #fff; }
 
-  .scen-detail { padding: 26px 28px; min-width: 0; }
-  .scen-detail h3 { margin: 0 0 6px; font-size: 19px; font-weight: 800; color: var(--ink); letter-spacing: -.01em; }
-  .scen-detail p.desc { margin: 0 0 20px; color: var(--ink-soft); font-size: 14px; }
-  .stepnav { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
-  .stepnav button { border: 1.5px solid var(--line); background: #fff; color: var(--ink); width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+  .map-live { min-width: 0; display: flex; flex-direction: column; }
+  #dgWrap { position: relative; padding: 22px 18px 6px; overflow-x: auto; }
+  #dgSvg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+  #dgNodes { position: relative; }
+
+  .boundary { position: absolute; border: 1.5px dashed var(--line); border-radius: 12px; transition: opacity .25s; }
+  .boundary .blabel {
+    position: absolute; top: -10px; left: 12px; background: #fff; padding: 0 7px;
+    font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
+  }
+
+  .n {
+    position: absolute; width: 112px; background: var(--cream);
+    border: 1px solid var(--line); border-radius: 11px; padding: 10px 11px;
+    cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s, opacity .2s, background .15s;
+  }
+  .n .nic { font-size: 15px; line-height: 1; margin-bottom: 6px; }
+  .n .nt { font-weight: 800; font-size: 11.5px; color: var(--ink); line-height: 1.22; letter-spacing: -.01em; }
+  .n .ns { font-size: 9.5px; color: var(--ink-soft); margin-top: 2px; display: block; line-height: 1.3; }
+  .n:hover { transform: translateY(-2px); background: #fff; box-shadow: 0 10px 22px rgba(22,32,43,.1); border-color: var(--blue-l); }
+  .n.dim { opacity: .34; }
+  .n.active { background: #fff; border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue), 0 10px 22px rgba(22,32,43,.1); }
+  .n.step { transform: translateY(-2px) scale(1.045); z-index: 4; background: #fff; }
+  .n .stepnum {
+    position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--blue); color: #fff; font-weight: 800; font-size: 9.5px;
+    display: none; align-items: center; justify-content: center; box-shadow: 0 0 0 2.5px #fff;
+  }
+  .n.instep .stepnum { display: flex; }
+
+  .wire { fill: none; stroke: var(--line); stroke-width: 1.4; transition: stroke .2s, stroke-width .2s, opacity .2s; }
+  .wire.dim { opacity: .3; }
+  .wire.on { stroke: var(--blue-l); stroke-width: 1.8; }
+  .wire.now { stroke: url(#wireGrad); stroke-width: 2.4; stroke-dasharray: 6 5; animation: flow .9s linear infinite; }
+  @keyframes flow { to { stroke-dashoffset: -22; } }
+  @media (prefers-reduced-motion: reduce) { .wire.now { animation: none; } }
+
+  #infoPanel { border-top: 1px solid var(--line); padding: 15px 20px 18px; min-height: 92px; }
+  #infoPanel .idle { font-size: 13.5px; color: var(--ink-soft); }
+  #infoPanel .idle b { color: var(--ink); }
+  #infoPanel h3 { margin: 0 0 4px; font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -.01em; }
+  #infoPanel p.desc { margin: 0 0 12px; color: var(--ink-soft); font-size: 12.5px; }
+  .stepnav { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .stepnav button { border: 1.5px solid var(--line); background: #fff; color: var(--ink); width: 26px; height: 26px; border-radius: 7px; cursor: pointer; font-size: 13px; }
   .stepnav button:hover { border-color: var(--blue); color: var(--blue); }
-  .stepnav .cnt { font-size: 12px; color: var(--ink-soft); width: 42px; text-align: center; font-weight: 700; }
-  .stepbody { font-size: 15px; color: var(--ink); }
-  .stepbody .stitle { font-weight: 800; display: block; margin-bottom: 3px; }
+  .stepnav .cnt { font-size: 11.5px; color: var(--ink-soft); width: 42px; text-align: center; font-weight: 700; }
+  .stepbody { font-size: 13.5px; color: var(--ink); }
+  .stepbody .stitle { font-weight: 800; display: block; margin-bottom: 2px; }
   .stepbody .stext { color: var(--ink-soft); }
 
-  @media (max-width: 860px) {
-    .scen-grid { grid-template-columns: 1fr; }
+  @media (max-width: 780px) {
+    .map-grid { grid-template-columns: 1fr; }
     .scen-list { display: flex; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); }
     .scen-item { border-bottom: 0; border-right: 1px solid var(--line); flex: 0 0 auto; white-space: nowrap; }
   }
@@ -207,9 +207,9 @@
   <div class="wrap">
     <div class="center-head">
       <div class="eyebrow">El mapa</div>
-      <h2>Las piezas, de un vistazo</h2>
-      <p>Pasa el ratón por cada pieza para leer qué hace. Si tu política exige que los datos no salgan
-        de tu empresa, cambia a «En tu propia red».</p>
+      <h2>Elige un caso, síguelo paso a paso</h2>
+      <p>O simplemente pasa el ratón por una pieza. Si tu política exige que los datos no salgan de tu
+        empresa, cambia a «En tu propia red».</p>
     </div>
 
     <div class="map-shell">
@@ -218,31 +218,21 @@
           <button data-mode="saas" class="on" role="tab" aria-selected="true">En la nube (SaaS)</button>
           <button data-mode="onprem" role="tab" aria-selected="false">En tu propia red</button>
         </div>
-        <span class="map-hint"><b>Truco:</b> abajo puedes seguir un caso paso a paso</span>
       </div>
-      <div id="dgWrap">
-        <svg id="dgSvg"><defs>
-          <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#15B8A6"/>
-          </linearGradient>
-        </defs></svg>
-        <div id="dgNodes"></div>
+      <div class="map-grid">
+        <div class="scen-list" id="scenList"></div>
+        <div class="map-live">
+          <div id="dgWrap">
+            <svg id="dgSvg"><defs>
+              <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#15B8A6"/>
+              </linearGradient>
+            </defs></svg>
+            <div id="dgNodes"></div>
+          </div>
+          <div id="infoPanel"></div>
+        </div>
       </div>
-      <div id="dgCaption">Pasa el ratón por una pieza del mapa, o elige un caso más abajo.</div>
-    </div>
-  </div>
-</section>
-
-<section id="casos" style="background:#fff">
-  <div class="wrap">
-    <div class="center-head">
-      <div class="eyebrow">En la práctica</div>
-      <h2>Qué pasa cuando…</h2>
-      <p>Seis situaciones reales, explicadas paso a paso sobre el mismo mapa.</p>
-    </div>
-    <div class="scen-grid">
-      <div class="scen-list" id="scenList"></div>
-      <div class="scen-detail" id="scenDetail"></div>
     </div>
   </div>
 </section>
@@ -277,28 +267,28 @@
    ============================================================ */
 const NODES = [
   { id: "user",    icon: "🧑‍💼", label: "Tú",              sub: { saas: "navegador o móvil", onprem: "en tu red interna" },
-    x: 40,  y: 150, w: 150,
+    x: 12,  y: 90,  w: 112,
     desc: "Entras con tu correo y contraseña. El alta de cuentas es solo por invitación de un administrador: nadie se registra por su cuenta." },
   { id: "app",     icon: "💬", label: "La aplicación",      sub: { saas: "lo que ves y usas", onprem: "misma app, tu red" },
-    x: 238, y: 40,  w: 150,
+    x: 148, y: 20,  w: 112,
     desc: "La pantalla donde conversas y ves tu panel de calidad. No decide nada por su cuenta: cada acción pasa por el servidor." },
   { id: "server",  icon: "🔐", label: "El servidor",        sub: { saas: "Evidran, en la nube", onprem: "dentro de tu red" },
-    x: 238, y: 262, w: 150,
+    x: 148, y: 160, w: 112,
     desc: "Aquí viven las claves y la lógica sensible — nunca en tu navegador. Valida tu sesión y con qué empresa trabajas antes de tocar un solo dato." },
   { id: "db",      icon: "🗄️", label: "Tu base de datos",   sub: { saas: "UE · Irlanda", onprem: "tu servidor" },
-    x: 436, y: 40,  w: 150,
+    x: 284, y: 20,  w: 112,
     desc: "Cada empresa tiene su propio compartimento. Aunque compartís el mismo servicio, ninguna consulta puede cruzar de una empresa a otra." },
   { id: "files",   icon: "📎", label: "Evidencias",         sub: { saas: "fotos y documentos", onprem: "tu almacenamiento" },
-    x: 436, y: 262, w: 150,
+    x: 284, y: 160, w: 112,
     desc: "Lo que adjuntas a un expediente queda privado, con enlaces de descarga que caducan al minuto." },
   { id: "ai",      icon: "✨", label: "La IA",               sub: { saas: "Claude, de Anthropic", onprem: "elegible: local o híbrida" },
-    x: 634, y: 150, w: 150,
+    x: 420, y: 90,  w: 112,
     desc: "Redacta a partir de lo que tú cuentas. No entrena modelos con tus datos: solo recibe el texto necesario para escribir ese informe." },
   { id: "mail",    icon: "✉️", label: "Avisos",              sub: { saas: "correo diario", onprem: "tu propio correo" },
-    x: 436, y: 448, w: 150,
+    x: 284, y: 270, w: 112,
     desc: "Cada mañana revisamos qué vence y te lo recordamos, para que ninguna acción se te pase de plazo." },
   { id: "auditor", icon: "🧭", label: "Tu auditor externo",  sub: { saas: "si trabajas con uno", onprem: "si trabajas con uno" },
-    x: 40,  y: 448, w: 150,
+    x: 12,  y: 270, w: 112,
     desc: "Puede enviarte hallazgos de auditoría sin entrar nunca en tu panel ni ver ningún otro dato tuyo." },
 ];
 
@@ -373,10 +363,10 @@ const byId = Object.fromEntries(NODES.map(n => [n.id, n]));
 const NS = "http://www.w3.org/2000/svg";
 const svg = document.getElementById("dgSvg");
 const nodesLayer = document.getElementById("dgNodes");
-const caption = document.getElementById("dgCaption");
+const infoPanel = document.getElementById("infoPanel");
 
-const W = Math.max(...NODES.map(n => n.x + n.w)) + 40;
-const H = Math.max(...NODES.map(n => n.y + 94)) + 20;
+const W = Math.max(...NODES.map(n => n.x + n.w)) + 30;
+const H = Math.max(...NODES.map(n => n.y + 78)) + 16;
 nodesLayer.style.width = W + "px"; nodesLayer.style.height = H + "px";
 svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", W); svg.setAttribute("height", H);
 
@@ -395,9 +385,9 @@ for (const n of NODES) {
 }
 
 function edgePath(a, b) {
-  const ax = a.x + a.w / 2, ay = a.y + 47, bx = b.x + b.w / 2, by = b.y + 47;
+  const ax = a.x + a.w / 2, ay = a.y + 37, bx = b.x + b.w / 2, by = b.y + 37;
   const dx = bx - ax, dy = by - ay;
-  const c = Math.max(30, Math.min(80, Math.hypot(dx, dy) * .35));
+  const c = Math.max(22, Math.min(60, Math.hypot(dx, dy) * .35));
   const cx = Math.abs(dx) > Math.abs(dy) ? c : 0, cy = Math.abs(dy) >= Math.abs(dx) ? c : 0;
   return `M${ax},${ay} C${ax + cx * Math.sign(dx || 1)},${ay + cy * Math.sign(dy || 1)} ${bx - cx * Math.sign(dx || 1)},${by - cy * Math.sign(dy || 1)} ${bx},${by}`;
 }
@@ -416,8 +406,8 @@ function applyMode() {
   boundary.style.opacity = mode === "onprem" ? "1" : "0";
   if (mode === "onprem") {
     const xs = ["app", "server", "db", "files", "mail"].map(id => byId[id]);
-    const minX = Math.min(...xs.map(n => n.x)) - 18, maxX = Math.max(...xs.map(n => n.x + n.w)) + 18;
-    const minY = Math.min(...xs.map(n => n.y)) - 22, maxY = Math.max(...xs.map(n => n.y + 86)) + 18;
+    const minX = Math.min(...xs.map(n => n.x)) - 14, maxX = Math.max(...xs.map(n => n.x + n.w)) + 14;
+    const minY = Math.min(...xs.map(n => n.y)) - 18, maxY = Math.max(...xs.map(n => n.y + 70)) + 14;
     boundary.style.left = minX + "px"; boundary.style.top = minY + "px";
     boundary.style.width = (maxX - minX) + "px"; boundary.style.height = (maxY - minY) + "px";
   }
@@ -472,7 +462,8 @@ function renderDiagram() {
     }
   }
   if (!scen) {
-    caption.innerHTML = hoverId ? `<b>${byId[hoverId].label}.</b> ${byId[hoverId].desc}` : "Pasa el ratón por una pieza del mapa, o elige un caso más abajo.";
+    const msg = hoverId ? `<b>${byId[hoverId].label}.</b> ${byId[hoverId].desc}` : "Pasa el ratón por una pieza del mapa, o elige un caso a la izquierda.";
+    infoPanel.innerHTML = `<p class="idle">${msg}</p>`;
   }
 }
 
@@ -486,7 +477,6 @@ nodesLayer.addEventListener("click", e => {
 });
 
 const scenList = document.getElementById("scenList");
-const scenDetail = document.getElementById("scenDetail");
 SCENARIOS.forEach(s => {
   const b = document.createElement("button");
   b.className = "scen-item"; b.dataset.id = s.id;
@@ -508,13 +498,14 @@ function selectScenario(id, silent) {
   document.querySelectorAll(".scen-item").forEach(b => b.classList.toggle("on", b.dataset.id === id));
   paintScenario();
   renderDiagram();
-  if (!silent) document.getElementById("mapa").scrollIntoView({ behavior: "smooth", block: "start" });
+  // Sin scrollIntoView a propósito: la lista de casos vive junto al mapa,
+  // así que elegir uno no debe moverte de donde ya estás mirando.
 }
 
 function paintScenario() {
   const s = activeScenario;
   const step = s.steps[stepIdx];
-  scenDetail.innerHTML = `
+  infoPanel.innerHTML = `
     <h3></h3>
     <p class="desc"></p>
     <div class="stepnav">
@@ -523,12 +514,12 @@ function paintScenario() {
       <button id="nextSt" aria-label="Paso siguiente">▶</button>
     </div>
     <div class="stepbody"><span class="stitle"></span><span class="stext"></span></div>`;
-  scenDetail.querySelector("h3").textContent = s.title;
-  scenDetail.querySelector(".desc").textContent = s.desc;
-  scenDetail.querySelector(".stitle").textContent = step.title + ". ";
-  scenDetail.querySelector(".stext").textContent = step.text;
-  scenDetail.querySelector("#prevSt").onclick = () => stepTo(-1);
-  scenDetail.querySelector("#nextSt").onclick = () => stepTo(1);
+  infoPanel.querySelector("h3").textContent = s.title;
+  infoPanel.querySelector(".desc").textContent = s.desc;
+  infoPanel.querySelector(".stitle").textContent = step.title + ". ";
+  infoPanel.querySelector(".stext").textContent = step.text;
+  infoPanel.querySelector("#prevSt").onclick = () => stepTo(-1);
+  infoPanel.querySelector("#nextSt").onclick = () => stepTo(1);
 }
 function stepTo(d) {
   const s = activeScenario; if (!s) return;
