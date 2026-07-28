@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cómo funciona Evidran por dentro — mapa interactivo de confianza</title>
+<meta name="description" content="Un mapa interactivo, sin tecnicismos, de cómo Evidran trata tus datos: aislamiento entre empresas, dónde viven los secretos, qué hace la IA con lo que le cuentas, y la opción de instalarlo en tu propia red." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/plataforma.css">
+<script defer src="/consent.js"></script>
+<style>
+  /* ---------- Mapa interactivo (solo esta página) ----------
+     Hereda tokens y tipografía de plataforma.css. Sin barras de acento
+     lateral en ningún componente (regla del sistema de diseño): el color de
+     estado se marca con relleno, punto o icono, nunca con un borde. */
+  .map-shell {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: 0 24px 48px rgba(22,32,43,.11); overflow: hidden;
+  }
+  .map-toolbar {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    padding: 16px 22px; border-bottom: 1px solid var(--line); background: var(--cream);
+  }
+  .map-toggle { display: inline-flex; padding: 3px; border-radius: 999px; background: #fff; border: 1px solid var(--line); gap: 2px; }
+  .map-toggle button {
+    border: 0; background: transparent; color: var(--ink-soft); font: inherit; font-size: 13px; font-weight: 700;
+    padding: 7px 15px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s;
+  }
+  .map-toggle button.on { background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; }
+  .map-hint { font-size: 12.5px; color: var(--ink-soft); margin-left: auto; }
+  .map-hint b { color: var(--ink); }
+
+  #dgWrap { position: relative; padding: 30px 22px 8px; overflow-x: auto; }
+  #dgSvg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+  #dgNodes { position: relative; }
+
+  .boundary { position: absolute; border: 1.5px dashed var(--line); border-radius: 14px; transition: opacity .25s; }
+  .boundary .blabel {
+    position: absolute; top: -11px; left: 14px; background: #fff; padding: 0 8px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
+  }
+
+  .n {
+    position: absolute; width: 150px; background: var(--cream);
+    border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px;
+    cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s, opacity .2s, background .15s;
+  }
+  .n .nic { font-size: 18px; line-height: 1; margin-bottom: 8px; }
+  .n .nt { font-weight: 800; font-size: 13px; color: var(--ink); line-height: 1.25; letter-spacing: -.01em; }
+  .n .ns { font-size: 11px; color: var(--ink-soft); margin-top: 3px; display: block; }
+  .n:hover { transform: translateY(-2px); background: #fff; box-shadow: 0 10px 22px rgba(22,32,43,.1); border-color: var(--blue-l); }
+  .n.dim { opacity: .34; }
+  .n.active { background: #fff; border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue), 0 10px 22px rgba(22,32,43,.1); }
+  .n.step { transform: translateY(-2px) scale(1.035); z-index: 4; background: #fff; }
+  .n .stepnum {
+    position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--blue); color: #fff; font-weight: 800; font-size: 10.5px;
+    display: none; align-items: center; justify-content: center; box-shadow: 0 0 0 2.5px #fff;
+  }
+  .n.instep .stepnum { display: flex; }
+
+  .wire { fill: none; stroke: var(--line); stroke-width: 1.5; transition: stroke .2s, stroke-width .2s, opacity .2s; }
+  .wire.dim { opacity: .3; }
+  .wire.on { stroke: var(--blue-l); stroke-width: 2; }
+  .wire.now { stroke: url(#wireGrad); stroke-width: 2.6; stroke-dasharray: 6 5; animation: flow .9s linear infinite; }
+  @keyframes flow { to { stroke-dashoffset: -22; } }
+  @media (prefers-reduced-motion: reduce) { .wire.now { animation: none; } }
+
+  #dgCaption { border-top: 1px solid var(--line); padding: 16px 22px 22px; min-height: 26px; font-size: 14px; color: var(--ink-soft); }
+  #dgCaption b { color: var(--ink); }
+
+  /* Escenarios */
+  .scen-grid { display: grid; grid-template-columns: 264px 1fr; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #fff; box-shadow: 0 24px 48px rgba(22,32,43,.11); }
+  .scen-list { border-right: 1px solid var(--line); background: var(--cream); }
+  .scen-item { display: flex; align-items: flex-start; gap: 10px; width: 100%; text-align: left; border: 0; background: transparent; padding: 15px 18px; cursor: pointer; border-bottom: 1px solid var(--line); font: inherit; color: var(--ink); }
+  .scen-item:last-child { border-bottom: 0; }
+  .scen-item i { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; background: var(--line); transition: background .15s; }
+  .scen-item .st { font-weight: 700; font-size: 14px; }
+  .scen-item .sd { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .scen-item.on { background: #fff; }
+  .scen-item.on i { background: var(--blue); }
+  .scen-item.on .st { color: var(--blue); }
+  .scen-item:hover:not(.on) { background: #fff; }
+
+  .scen-detail { padding: 26px 28px; min-width: 0; }
+  .scen-detail h3 { margin: 0 0 6px; font-size: 19px; font-weight: 800; color: var(--ink); letter-spacing: -.01em; }
+  .scen-detail p.desc { margin: 0 0 20px; color: var(--ink-soft); font-size: 14px; }
+  .stepnav { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+  .stepnav button { border: 1.5px solid var(--line); background: #fff; color: var(--ink); width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+  .stepnav button:hover { border-color: var(--blue); color: var(--blue); }
+  .stepnav .cnt { font-size: 12px; color: var(--ink-soft); width: 42px; text-align: center; font-weight: 700; }
+  .stepbody { font-size: 15px; color: var(--ink); }
+  .stepbody .stitle { font-weight: 800; display: block; margin-bottom: 3px; }
+  .stepbody .stext { color: var(--ink-soft); }
+
+  @media (max-width: 860px) {
+    .scen-grid { grid-template-columns: 1fr; }
+    .scen-list { display: flex; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    .scen-item { border-bottom: 0; border-right: 1px solid var(--line); flex: 0 0 auto; white-space: nowrap; }
+  }
+
+  .bridge { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 30px 32px; text-align: center; }
+  .bridge h2 { margin-bottom: 10px; }
+  .bridge p { max-width: 60ch; margin: 0 auto 22px; }
+  .bridge .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="brand">
+      <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Evidran">
+        <defs>
+          <linearGradient id="evb" x1="4" y1="6" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#4AA6F5"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+          <linearGradient id="evg" x1="29" y1="32" x2="38" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#46DE7E"/><stop offset="1" stop-color="#15B8A6"/></linearGradient>
+        </defs>
+        <path d="M11 7 H27 A7 7 0 0 1 34 14 V23 A7 7 0 0 1 27 30 H18 L8 38 L11 30 A7 7 0 0 1 4 23 V14 A7 7 0 0 1 11 7 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="13" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="19" cy="18.5" r="2.1" fill="url(#evb)"/><circle cx="25" cy="18.5" r="2.1" fill="url(#evb)"/>
+        <path d="M27 23 H35 L40 28 V41 H27 Z" fill="#fff" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M35 23 V28 H40" fill="none" stroke="url(#evb)" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M30 33 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 36.5 H37" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/><path d="M30 40 H34.5" stroke="url(#evg)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="wm">Evi<em>dran</em></span></a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <div class="nav-item mega-item">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Plataforma <span class="car"></span></button>
+          <div class="drop mega">
+            <div class="mg-col">
+              <div class="mg-t">Capturar con criterio</div>
+              <a href="/#capturar"><b>La entrevista</b><small>Hablas; el informe se redacta en vivo, con causa de verdad.</small></a>
+              <a href="/#normas"><b>No conformidades y 8D</b><small>Nueve tipos de expediente, cada uno con su norma.</small></a>
+              <a href="/auditorias.html"><b>Auditorías</b><small>Bandeja de hallazgos, auditoría interna 9.2 y programa.</small></a>
+              <a href="/#campo"><b>App de campo</b><small>QR por punto de control, foto y captura sin cobertura.</small></a>
+              <a href="/auditores.html"><b>Puente auditor ↔ empresa</b><small>Los hallazgos llegan ya estructurados, con un código.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Gobernar el ciclo</div>
+              <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva, del inherente al residual · 6.1.</small></a>
+              <a href="/#avisos"><b>Avisos y plazos</b><small>La herramienta se acuerda para que tú no tengas que hacerlo.</small></a>
+              <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
+              <a href="/#exigencia"><b>Identidad documental</b><small>Tus Word y PDF con tu logo y tu código de formato.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Aprender de todo</div>
+              <a href="/inteligencia.html"><b>Inteligencia y tendencias</b><small>Causas que se repiten y hallazgos con su dato.</small></a>
+              <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
+              <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
+              <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
+              <a href="/seguridad.html#mcp"><b>Conexión MCP</b><small>Tu propio agente de IA, conectado en solo lectura.</small></a>
+            </div>
+            <div class="mg-foot">
+              <a href="/vigilancia-normativa.html">Vigilancia normativa</a>
+              <a href="/seguridad.html#onpremise">On-premise</a>
+              <a href="/seguridad.html">Seguridad y privacidad</a>
+              <a href="/confianza.html">Mapa interactivo de confianza</a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-item rel">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Soluciones <span class="car"></span></button>
+          <div class="drop small">
+            <a href="/#segmentos"><b>Industria multi-norma</b></a>
+            <a href="/#segmentos"><b>Automoción · 8D y OEM</b></a>
+            <a href="/#segmentos"><b>Laboratorios · ISO/IEC 17025</b></a>
+            <a href="/#segmentos"><b>Inspección y certificación</b></a>
+            <a href="/auditores.html"><b>Auditores y consultores</b></a>
+            <a href="/#segmentos"><b>En proceso de certificación</b></a>
+          </div>
+        </div>
+        <div class="nav-item rel">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Recursos <span class="car"></span></button>
+          <div class="drop small">
+            <a href="/blog/"><b>Blog</b></a>
+            <a href="/producto.html"><b>Evidran por dentro</b></a>
+            <a href="/auditores.html"><b>Para auditores</b></a>
+            <a href="/seguridad.html"><b>Seguridad y privacidad</b></a>
+            <a href="/confianza.html"><b>Mapa interactivo de confianza</b></a>
+          </div>
+        </div>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary btn-sm">Pide una demo</a>
+      </div>
+      <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<header class="phero">
+  <div class="wrap">
+    <p class="crumbs"><a href="/">Evidran</a> · <a href="/seguridad.html">Seguridad y privacidad</a> · Mapa interactivo</p>
+    <div class="eyebrow">Cómo funciona por dentro</div>
+    <h1>Así viajan tus datos dentro de Evidran</h1>
+    <p class="sub">Sin tecnicismos: qué pasa cuando cuentas algo, quién puede llegar a verlo, y qué hace
+      la inteligencia artificial con ello. El detalle punto por punto está en
+      <a href="/seguridad.html" style="color:var(--blue);font-weight:700;text-decoration:none">seguridad y privacidad</a>.</p>
+  </div>
+</header>
+
+<section id="mapa" style="padding-top:20px">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">El mapa</div>
+      <h2>Las piezas, de un vistazo</h2>
+      <p>Pasa el ratón por cada pieza para leer qué hace. Si tu política exige que los datos no salgan
+        de tu empresa, cambia a «En tu propia red».</p>
+    </div>
+
+    <div class="map-shell">
+      <div class="map-toolbar">
+        <div class="map-toggle" role="tablist" aria-label="Dónde vive Evidran">
+          <button data-mode="saas" class="on" role="tab" aria-selected="true">En la nube (SaaS)</button>
+          <button data-mode="onprem" role="tab" aria-selected="false">En tu propia red</button>
+        </div>
+        <span class="map-hint"><b>Truco:</b> abajo puedes seguir un caso paso a paso</span>
+      </div>
+      <div id="dgWrap">
+        <svg id="dgSvg"><defs>
+          <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#15B8A6"/>
+          </linearGradient>
+        </defs></svg>
+        <div id="dgNodes"></div>
+      </div>
+      <div id="dgCaption">Pasa el ratón por una pieza del mapa, o elige un caso más abajo.</div>
+    </div>
+  </div>
+</section>
+
+<section id="casos" style="background:#fff">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">En la práctica</div>
+      <h2>Qué pasa cuando…</h2>
+      <p>Seis situaciones reales, explicadas paso a paso sobre el mismo mapa.</p>
+    </div>
+    <div class="scen-grid">
+      <div class="scen-list" id="scenList"></div>
+      <div class="scen-detail" id="scenDetail"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="bridge">
+      <h2>¿Quieres el detalle punto por punto?</h2>
+      <p>Aislamiento, firma, roles, la IA y tus datos, on-premise y la conexión MCP — con las preguntas
+        que suele hacer un equipo de seguridad, respondidas sin rodeos.</p>
+      <div class="hero-cta">
+        <a href="/seguridad.html" class="btn btn-primary">Ver el detalle completo →</a>
+        <a href="mailto:demo@evidran.com?subject=Solicito%20el%20dossier%20de%20seguridad" class="btn btn-ghost">Pide el dossier de seguridad</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><span class="wm">Evi<em>dran</em></span></span>
+    <span>El sistema de conocimiento de calidad · app.evidran.com · <a href="/blog/" style="text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="text-decoration:underline">Términos y condiciones</a> · <a href="/aviso-legal.html" style="text-decoration:underline">Aviso legal</a> · <a href="/privacidad.html" style="text-decoration:underline">Privacidad</a> · <a href="/cookies.html" style="text-decoration:underline">Cookies</a></span>
+  </div>
+</footer>
+
+<script src="/plataforma.js"></script>
+<script defer src="/asistente.js"></script>
+<script>
+/* ============================================================
+   Contenido anclado a /seguridad.html y a docs/seguridad/*.md del
+   repo del producto (ochod-demo). Nada aquí es una funcionalidad inventada.
+   ============================================================ */
+const NODES = [
+  { id: "user",    icon: "🧑‍💼", label: "Tú",              sub: { saas: "navegador o móvil", onprem: "en tu red interna" },
+    x: 40,  y: 150, w: 150,
+    desc: "Entras con tu correo y contraseña. El alta de cuentas es solo por invitación de un administrador: nadie se registra por su cuenta." },
+  { id: "app",     icon: "💬", label: "La aplicación",      sub: { saas: "lo que ves y usas", onprem: "misma app, tu red" },
+    x: 238, y: 40,  w: 150,
+    desc: "La pantalla donde conversas y ves tu panel de calidad. No decide nada por su cuenta: cada acción pasa por el servidor." },
+  { id: "server",  icon: "🔐", label: "El servidor",        sub: { saas: "Evidran, en la nube", onprem: "dentro de tu red" },
+    x: 238, y: 262, w: 150,
+    desc: "Aquí viven las claves y la lógica sensible — nunca en tu navegador. Valida tu sesión y con qué empresa trabajas antes de tocar un solo dato." },
+  { id: "db",      icon: "🗄️", label: "Tu base de datos",   sub: { saas: "UE · Irlanda", onprem: "tu servidor" },
+    x: 436, y: 40,  w: 150,
+    desc: "Cada empresa tiene su propio compartimento. Aunque compartís el mismo servicio, ninguna consulta puede cruzar de una empresa a otra." },
+  { id: "files",   icon: "📎", label: "Evidencias",         sub: { saas: "fotos y documentos", onprem: "tu almacenamiento" },
+    x: 436, y: 262, w: 150,
+    desc: "Lo que adjuntas a un expediente queda privado, con enlaces de descarga que caducan al minuto." },
+  { id: "ai",      icon: "✨", label: "La IA",               sub: { saas: "Claude, de Anthropic", onprem: "elegible: local o híbrida" },
+    x: 634, y: 150, w: 150,
+    desc: "Redacta a partir de lo que tú cuentas. No entrena modelos con tus datos: solo recibe el texto necesario para escribir ese informe." },
+  { id: "mail",    icon: "✉️", label: "Avisos",              sub: { saas: "correo diario", onprem: "tu propio correo" },
+    x: 436, y: 448, w: 150,
+    desc: "Cada mañana revisamos qué vence y te lo recordamos, para que ninguna acción se te pase de plazo." },
+  { id: "auditor", icon: "🧭", label: "Tu auditor externo",  sub: { saas: "si trabajas con uno", onprem: "si trabajas con uno" },
+    x: 40,  y: 448, w: 150,
+    desc: "Puede enviarte hallazgos de auditoría sin entrar nunca en tu panel ni ver ningún otro dato tuyo." },
+];
+
+const EDGES = [
+  ["user", "app", "abre sesión"],
+  ["app", "server", "cada acción pasa por aquí"],
+  ["server", "db", "consulta solo tu compartimento"],
+  ["server", "files", "genera un enlace temporal"],
+  ["server", "ai", "pide una redacción"],
+  ["server", "mail", "avisos cada mañana"],
+  ["auditor", "server", "deposita un hallazgo"],
+];
+
+const SCENARIOS = [
+  {
+    id: "nc", title: "Cuentas una no conformidad",
+    desc: "El caso más habitual: describes lo que ha pasado y el informe se redacta solo.",
+    steps: [
+      { path: ["user", "app"], title: "Cuentas lo que pasó", text: "Con tus palabras, como se lo dirías a un compañero — no rellenas ningún formulario." },
+      { path: ["app", "server"], title: "Se valida quién eres", text: "El servidor comprueba tu sesión y a qué empresa perteneces antes de mover un solo dato." },
+      { path: ["server", "ai"], title: "Se pide la redacción", text: "Solo se envía el texto necesario para escribir ese informe — nunca tu base de datos completa." },
+      { path: ["server", "db"], title: "Se guarda en tu compartimento", text: "El expediente queda en tu organización, aislado de cualquier otra." },
+    ],
+  },
+  {
+    id: "foto", title: "Adjuntas una foto o un documento",
+    desc: "Evidencia para el expediente: una imagen, un PDF, un Excel.",
+    steps: [
+      { path: ["user", "app"], title: "Subes el archivo", text: "Desde el móvil o el navegador, igual que adjuntarías algo a un correo." },
+      { path: ["app", "server"], title: "Pasa por el servidor", text: "Nunca se sube directo a un almacenamiento público." },
+      { path: ["server", "files"], title: "Queda privado", text: "Se guarda con un enlace de descarga que caduca al minuto: nadie puede compartir un enlace permanente por error." },
+    ],
+  },
+  {
+    id: "aislamiento", title: "Otra empresa usa Evidran a la vez que tú",
+    desc: "La pregunta que más nos hacen los equipos de seguridad.",
+    steps: [
+      { path: ["app", "server"], title: "Compartís el mismo servicio", text: "Sí, el mismo servidor atiende a todas las empresas clientes — como cualquier aplicación en la nube." },
+      { path: ["server", "db"], title: "Pero no el mismo compartimento", text: "Cada consulta lleva la identidad de tu empresa incorporada, y es la propia base de datos —no la pantalla— la que impide que una consulta cruce de una organización a otra." },
+    ],
+  },
+  {
+    id: "auditor", title: "Tu auditor externo te manda un hallazgo",
+    desc: "Frecuente si certificas con una entidad y tu auditor también usa Evidran.",
+    steps: [
+      { path: ["auditor", "server"], title: "El auditor deposita el hallazgo", text: "Con un código que tú misma generaste y le compartiste — él nunca entra en tu panel." },
+      { path: ["server", "db"], title: "Te llega a tu bandeja", text: "Aparece como un hallazgo pendiente de revisar; conviertes en expediente lo que confirmes." },
+    ],
+  },
+  {
+    id: "aviso", title: "Te avisamos antes de que algo venza",
+    desc: "Ninguna acción correctiva se te pasa de plazo sin que te enteres.",
+    steps: [
+      { path: ["server", "db"], title: "Revisión cada mañana", text: "Se comprueba qué vence, qué ya venció y qué conviene reevaluar." },
+      { path: ["server", "mail"], title: "Un correo con lo justo", text: "Solo lo que necesitas saber hoy — no un listado interminable." },
+    ],
+  },
+  {
+    id: "onprem", title: "Tu política no permite guardar datos en la nube",
+    desc: "Cambia el mapa a «En tu propia red» y sigue este caso.",
+    onprem: true,
+    steps: [
+      { path: ["app", "server"], title: "Misma aplicación", text: "El código es exactamente el mismo: cambia dónde corre, no cómo funciona." },
+      { path: ["server", "db"], title: "Todo dentro de tu red", text: "Base de datos, autenticación, almacenamiento y correo, en tus propios servidores." },
+      { path: ["server", "ai"], title: "Tú eliges la IA", text: "Un modelo local sin ninguna salida a internet, un modo híbrido que solo envía el texto de cada consulta, o directamente sin IA." },
+    ],
+  },
+];
+
+/* ============================================================ */
+const byId = Object.fromEntries(NODES.map(n => [n.id, n]));
+const NS = "http://www.w3.org/2000/svg";
+const svg = document.getElementById("dgSvg");
+const nodesLayer = document.getElementById("dgNodes");
+const caption = document.getElementById("dgCaption");
+
+const W = Math.max(...NODES.map(n => n.x + n.w)) + 40;
+const H = Math.max(...NODES.map(n => n.y + 94)) + 20;
+nodesLayer.style.width = W + "px"; nodesLayer.style.height = H + "px";
+svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", W); svg.setAttribute("height", H);
+
+const boundary = document.createElement("div");
+boundary.className = "boundary";
+boundary.innerHTML = '<span class="blabel">tu red</span>';
+nodesLayer.appendChild(boundary);
+
+for (const n of NODES) {
+  const el = document.createElement("div");
+  el.className = "n"; el.dataset.id = n.id;
+  el.style.cssText = `left:${n.x}px;top:${n.y}px;width:${n.w}px`;
+  el.innerHTML = `<div class="stepnum"></div><div class="nic">${n.icon}</div><div class="nt">${n.label}</div><span class="ns"></span>`;
+  n.el = el; n.subEl = el.querySelector(".ns"); n.stepEl = el.querySelector(".stepnum");
+  nodesLayer.appendChild(el);
+}
+
+function edgePath(a, b) {
+  const ax = a.x + a.w / 2, ay = a.y + 47, bx = b.x + b.w / 2, by = b.y + 47;
+  const dx = bx - ax, dy = by - ay;
+  const c = Math.max(30, Math.min(80, Math.hypot(dx, dy) * .35));
+  const cx = Math.abs(dx) > Math.abs(dy) ? c : 0, cy = Math.abs(dy) >= Math.abs(dx) ? c : 0;
+  return `M${ax},${ay} C${ax + cx * Math.sign(dx || 1)},${ay + cy * Math.sign(dy || 1)} ${bx - cx * Math.sign(dx || 1)},${by - cy * Math.sign(dy || 1)} ${bx},${by}`;
+}
+const edgeEls = EDGES.map(([from, to, label]) => {
+  const a = byId[from], b = byId[to];
+  const p = document.createElementNS(NS, "path");
+  p.setAttribute("d", edgePath(a, b)); p.setAttribute("class", "wire");
+  svg.appendChild(p);
+  return { from, to, label, el: p };
+});
+const edgeKey = (a, b) => a + ">" + b;
+
+let mode = "saas";
+function applyMode() {
+  for (const n of NODES) n.subEl.textContent = n.sub[mode];
+  boundary.style.opacity = mode === "onprem" ? "1" : "0";
+  if (mode === "onprem") {
+    const xs = ["app", "server", "db", "files", "mail"].map(id => byId[id]);
+    const minX = Math.min(...xs.map(n => n.x)) - 18, maxX = Math.max(...xs.map(n => n.x + n.w)) + 18;
+    const minY = Math.min(...xs.map(n => n.y)) - 22, maxY = Math.max(...xs.map(n => n.y + 86)) + 18;
+    boundary.style.left = minX + "px"; boundary.style.top = minY + "px";
+    boundary.style.width = (maxX - minX) + "px"; boundary.style.height = (maxY - minY) + "px";
+  }
+}
+document.querySelectorAll(".map-toggle button").forEach(b => b.onclick = () => {
+  mode = b.dataset.mode;
+  document.querySelectorAll(".map-toggle button").forEach(x => { x.classList.toggle("on", x === b); x.setAttribute("aria-selected", x === b); });
+  applyMode();
+  if (activeScenario) selectScenario(activeScenario.id, true);
+});
+applyMode();
+
+let hoverId = null, activeScenario = null, stepIdx = 0;
+
+function neighborsOf(id) {
+  const s = new Set([id]);
+  edgeEls.forEach(e => { if (e.from === id) s.add(e.to); if (e.to === id) s.add(e.from); });
+  return s;
+}
+
+function renderDiagram() {
+  const scen = activeScenario;
+  const step = scen ? scen.steps[stepIdx] : null;
+  const stepPairs = new Set(scen ? scen.steps.map(s => edgeKey(s.path[0], s.path[1])) : []);
+  const stepNodes = new Set();
+  if (scen) scen.steps.forEach(s => s.path.forEach(id => stepNodes.add(id)));
+  const near = hoverId ? neighborsOf(hoverId) : null;
+
+  for (const n of NODES) {
+    n.el.classList.remove("dim", "active", "step", "instep");
+    n.stepEl.textContent = "";
+    if (scen) {
+      if (!stepNodes.has(n.id)) n.el.classList.add("dim");
+      if (step && step.path.includes(n.id)) n.el.classList.add("step", "instep");
+      const order = scen.steps.findIndex(s => s.path.includes(n.id));
+      if (order > -1) n.stepEl.textContent = order + 1;
+    } else if (near) {
+      if (n.id === hoverId) n.el.classList.add("active");
+      else if (!near.has(n.id)) n.el.classList.add("dim");
+    }
+  }
+  for (const e of edgeEls) {
+    e.el.classList.remove("dim", "on", "now");
+    const k = edgeKey(e.from, e.to);
+    if (scen) {
+      if (!stepPairs.has(k)) e.el.classList.add("dim");
+      else if (step && k === edgeKey(step.path[0], step.path[1])) e.el.classList.add("now");
+      else e.el.classList.add("on");
+    } else if (near) {
+      if (e.from === hoverId || e.to === hoverId) e.el.classList.add("on");
+      else e.el.classList.add("dim");
+    }
+  }
+  if (!scen) {
+    caption.innerHTML = hoverId ? `<b>${byId[hoverId].label}.</b> ${byId[hoverId].desc}` : "Pasa el ratón por una pieza del mapa, o elige un caso más abajo.";
+  }
+}
+
+nodesLayer.addEventListener("mouseover", e => { const t = e.target.closest(".n"); if (!t || activeScenario) return; hoverId = t.dataset.id; renderDiagram(); });
+nodesLayer.addEventListener("mouseout", e => { const t = e.target.closest(".n"); if (!t || activeScenario) return; hoverId = null; renderDiagram(); });
+nodesLayer.addEventListener("click", e => {
+  const t = e.target.closest(".n"); if (!t) return;
+  activeScenario = null; hoverId = t.dataset.id;
+  document.querySelectorAll(".scen-item").forEach(b => b.classList.remove("on"));
+  renderDiagram();
+});
+
+const scenList = document.getElementById("scenList");
+const scenDetail = document.getElementById("scenDetail");
+SCENARIOS.forEach(s => {
+  const b = document.createElement("button");
+  b.className = "scen-item"; b.dataset.id = s.id;
+  b.innerHTML = `<i></i><div><div class="st"></div><div class="sd"></div></div>`;
+  b.querySelector(".st").textContent = s.title;
+  b.querySelector(".sd").textContent = s.desc;
+  b.onclick = () => selectScenario(s.id);
+  scenList.appendChild(b);
+});
+
+function selectScenario(id, silent) {
+  const s = SCENARIOS.find(x => x.id === id);
+  activeScenario = s; stepIdx = 0; hoverId = null;
+  if (s.onprem && mode !== "onprem") {
+    mode = "onprem";
+    document.querySelectorAll(".map-toggle button").forEach(b => b.classList.toggle("on", b.dataset.mode === "onprem"));
+    applyMode();
+  }
+  document.querySelectorAll(".scen-item").forEach(b => b.classList.toggle("on", b.dataset.id === id));
+  paintScenario();
+  renderDiagram();
+  if (!silent) document.getElementById("mapa").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function paintScenario() {
+  const s = activeScenario;
+  const step = s.steps[stepIdx];
+  scenDetail.innerHTML = `
+    <h3></h3>
+    <p class="desc"></p>
+    <div class="stepnav">
+      <button id="prevSt" aria-label="Paso anterior">◀</button>
+      <span class="cnt">${stepIdx + 1} / ${s.steps.length}</span>
+      <button id="nextSt" aria-label="Paso siguiente">▶</button>
+    </div>
+    <div class="stepbody"><span class="stitle"></span><span class="stext"></span></div>`;
+  scenDetail.querySelector("h3").textContent = s.title;
+  scenDetail.querySelector(".desc").textContent = s.desc;
+  scenDetail.querySelector(".stitle").textContent = step.title + ". ";
+  scenDetail.querySelector(".stext").textContent = step.text;
+  scenDetail.querySelector("#prevSt").onclick = () => stepTo(-1);
+  scenDetail.querySelector("#nextSt").onclick = () => stepTo(1);
+}
+function stepTo(d) {
+  const s = activeScenario; if (!s) return;
+  stepIdx = (stepIdx + d + s.steps.length) % s.steps.length;
+  paintScenario(); renderDiagram();
+}
+renderDiagram();
+selectScenario("nc", true);
+</script>
+</body>
+</html>
