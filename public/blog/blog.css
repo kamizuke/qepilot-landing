@@ -99,6 +99,15 @@ nav.nav-open .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(
 .note-box { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 16px 20px; margin: 22px 0; font-size: 14.5px; color: var(--ink-soft); }
 .note-box b { color: var(--ink); }
 
+/* Tabla comparativa (bordes completos, sin acentos laterales).
+   Envuélvela en <div class="tabla-wrap"> para que haga scroll en móvil. */
+.tabla-wrap { overflow-x: auto; margin: 24px 0 26px; -webkit-overflow-scrolling: touch; }
+table.cmp { width: 100%; min-width: 560px; border-collapse: collapse; background: #fff; font-size: 15.5px; }
+table.cmp th, table.cmp td { border: 1px solid var(--line); padding: 12px 15px; text-align: left; vertical-align: top; color: var(--ink-soft); }
+table.cmp thead th { background: var(--cream-d); color: var(--ink); font-weight: 800; font-size: 14.5px; }
+table.cmp tbody th { background: #fff; color: var(--ink); font-weight: 700; width: 26%; }
+table.cmp td b, table.cmp td strong { color: var(--ink); }
+
 /* CTA final del artículo */
 .cta-box { border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(135deg, #fff, #F4F8FF); padding: 28px; margin: 44px 0 0; text-align: center; }
 .cta-box h2 { font-size: 21px; margin: 0 0 10px; }
