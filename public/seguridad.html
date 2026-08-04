@@ -38,13 +38,15 @@
               <a href="/#capturar"><b>La entrevista</b><small>Hablas; el informe se redacta en vivo, con causa de verdad.</small></a>
               <a href="/#normas"><b>No conformidades y 8D</b><small>Nueve tipos de expediente, cada uno con su norma.</small></a>
               <a href="/auditorias.html"><b>Auditorías</b><small>Bandeja de hallazgos, auditoría interna 9.2 y programa.</small></a>
+              <a href="/auditorias.html#calendario"><b>Calendario de auditorías</b><small>Internas y externas en una sola agenda: lista, mes y año.</small></a>
               <a href="/#campo"><b>App de campo</b><small>QR por punto de control, foto y captura sin cobertura.</small></a>
               <a href="/auditores.html"><b>Puente auditor ↔ empresa</b><small>Los hallazgos llegan ya estructurados, con un código.</small></a>
             </div>
             <div class="mg-col">
               <div class="mg-t">Gobernar el ciclo</div>
+              <a href="/riesgos-plan.html#objetivos"><b>Objetivos de la calidad</b><small>Medibles, con indicador, meta y grado de logro · 6.2.</small></a>
               <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
-              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva, del inherente al residual · 6.1.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva y simulacros de emergencia · 6.1 y 8.2.</small></a>
               <a href="/#avisos"><b>Avisos y plazos</b><small>La herramienta se acuerda para que tú no tengas que hacerlo.</small></a>
               <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
               <a href="/#exigencia"><b>Identidad documental</b><small>Tus Word y PDF con tu logo y tu código de formato.</small></a>
@@ -53,6 +55,7 @@
               <div class="mg-t">Aprender de todo</div>
               <a href="/inteligencia.html"><b>Inteligencia y tendencias</b><small>Causas que se repiten y hallazgos con su dato.</small></a>
               <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
+              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y quién · 7.1.6.</small></a>
               <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
               <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
               <a href="/seguridad.html#mcp"><b>Conexión MCP</b><small>Tu propio agente de IA, conectado en solo lectura.</small></a>
@@ -118,6 +121,7 @@
           <li><b>Frontera entre organizaciones cubierta por tests</b> de seguridad automáticos en la integración continua: cada versión los pasa antes de publicarse.</li>
           <li><b>Conexión cifrada (TLS)</b> y datos alojados en Europa.</li>
           <li><b>Evidencias privadas:</b> los adjuntos se descargan con enlaces firmados y temporales.</li>
+          <li><b>Adjuntos comprobados al subir:</b> solo se aceptan los tipos de archivo previstos (imagen, PDF, Word, Excel) y cada organización tiene su propia cuota de espacio.</li>
         </ul>
       </div>
       <div class="fr-visual">
@@ -146,7 +150,10 @@
         <h3>Cerrar es aprobar. Y la firma se puede verificar.</h3>
         <ul class="fr-list">
           <li><b>Firma del responsable de calidad</b> con nombre, cargo, fecha y una <b>huella SHA-256 del contenido</b> del expediente, que queda en solo lectura.</li>
+          <li><b>La identidad y la hora las sella la base de datos,</b> no el navegador: nombre, cargo y fecha se toman de la sesión autenticada del que firma. En el documento exportado no puede figurar un firmante que no sea el real.</li>
+          <li><b>Un expediente firmado es inmutable:</b> queda cerrado a modificaciones y no se puede trasladar a otra organización. Lo impide un trigger en la base de datos, no una comprobación de pantalla.</li>
           <li><b>Verificación al abrir:</b> si el contenido cambiara por detrás, la huella deja de cuadrar y la app lo dice. Reaperturas con traza de quién y cuándo; una firma nunca se atribuye a quien no la dio.</li>
+          <li><b>Registro de auditoría que solo admite añadir:</b> cada firma, reapertura, anulación y borrado se anota en un ledger que escribe la propia base de datos y que <b>sobrevive al borrado del expediente</b>. La traza no se puede evaporar borrando lo que la generó.</li>
           <li><b>Miembros y técnicos envían a aprobación;</b> el responsable firma o devuelve con indicaciones escritas. La regla la impone un trigger en la base de datos — con su test de seguridad en CI.</li>
           <li><b>¿Firmáis con Adobe Sign, DocuSign o certificado FNMT?</b> Exporta el PDF, fírmalo donde ya firmáis y archívalo en el expediente: Evidran comprueba que la huella impresa corresponde y avisa si el documento firma una versión anterior.</li>
           <li>La ISO 9001 no exige firma electrónica: pide que conste la autoridad que aprueba (7.5.2 y 10.2.2). Esto lo cubre de verdad, sin depender de un tercero.</li>
@@ -295,7 +302,7 @@
     <details><summary>¿Qué ve exactamente la IA?</summary><p>Lo que cada función necesita y nada más: la entrevista ve lo que tú le cuentas en ese expediente; la Revisión 9.3 se genera con estadísticas agregadas; el copiloto ejecuta consultas deterministas con los permisos de tu sesión. La clave y los prompts viven en el servidor.</p></details>
     <details><summary>¿Qué pasa con mis datos si dejo Evidran?</summary><p>Son tuyos y se van contigo: expedientes en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan, riesgos, evidencias de vigilancia) en CSV.</p></details>
     <details><summary>Ya firmamos con otra herramienta (Adobe, FNMT…).</summary><p>Perfecto: firma el expediente en Evidran, exporta el PDF, fírmalo donde ya firméis y súbelo al expediente. Evidran comprueba que la huella impresa corresponde al expediente y te avisa si el documento firma una versión anterior.</p></details>
-    <details><summary>¿Tenéis ISO 27001 o SOC 2?</summary><p>Aún no — y preferimos decírtelo a lucir un sello que no tenemos. Lo que sí tenemos son controles verificables: aislamiento, roles y firma aplicados en la base de datos y comprobados con tests en cada versión, un dossier de seguridad que te enseñamos sin vueltas, y la opción on-premise si tus datos no pueden salir de tu red.</p></details>
+    <details><summary>¿Cómo sé que un informe firmado no se ha tocado después?</summary><p>Porque no se puede: al firmarlo queda cerrado a cambios, y quién firma y cuándo lo sella la base de datos desde la sesión autenticada, no la pantalla. Si alguien lo reabre, la firma se anula y queda registrado quién lo hizo — en un registro que solo admite añadir y que sobrevive incluso al borrado del expediente.</p></details>
   </div>
 </section>
 

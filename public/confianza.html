@@ -268,7 +268,7 @@
 const NODES = [
   { id: "user",    icon: "🧑‍💼", label: "Tú",              sub: { saas: "navegador o móvil", onprem: "en tu red interna" },
     x: 12,  y: 90,  w: 112,
-    desc: "Entras con tu correo y contraseña. El alta de cuentas es solo por invitación de un administrador: nadie se registra por su cuenta." },
+    desc: "Entras con tu correo y contraseña. Dentro de una organización, las cuentas las da de alta su administrador: nadie se añade solo a la empresa de otro. Cualquiera puede abrirse por su cuenta una organización de prueba, que nace vacía y separada de todas las demás." },
   { id: "app",     icon: "💬", label: "La aplicación",      sub: { saas: "lo que ves y usas", onprem: "misma app, tu red" },
     x: 148, y: 20,  w: 112,
     desc: "La pantalla donde conversas y ves tu panel de calidad. No decide nada por su cuenta: cada acción pasa por el servidor." },
@@ -319,7 +319,17 @@ const SCENARIOS = [
     steps: [
       { path: ["user", "app"], title: "Subes el archivo", text: "Desde el móvil o el navegador, igual que adjuntarías algo a un correo." },
       { path: ["app", "server"], title: "Pasa por el servidor", text: "Nunca se sube directo a un almacenamiento público." },
+      { path: ["server", "files"], title: "Se comprueba antes de guardarlo", text: "Solo se aceptan los tipos de archivo con los que se trabaja de verdad —imágenes, PDF, Word, Excel—, y cada empresa tiene su propio límite de espacio." },
       { path: ["server", "files"], title: "Queda privado", text: "Se guarda con un enlace de descarga que caduca al minuto: nadie puede compartir un enlace permanente por error." },
+    ],
+  },
+  {
+    id: "firma", title: "Cierras y firmas un expediente",
+    desc: "El momento en el que un documento deja de ser un borrador y pasa a ser evidencia.",
+    steps: [
+      { path: ["user", "app"], title: "Lo apruebas tú", text: "Firmar es potestad del responsable de calidad: si lo escribió otra persona, te lo envía a aprobación y decides tú." },
+      { path: ["app", "server"], title: "La firma la sella el servidor", text: "Tu nombre, tu cargo y la hora no los declara la pantalla: se toman de tu identidad ya verificada. En el papel firmado no puede aparecer otro nombre." },
+      { path: ["server", "db"], title: "Y ya no se toca", text: "Un expediente firmado queda cerrado a cambios. Si hay que reabrirlo, se puede — pero la firma se anula y queda dicho quién lo reabrió y cuándo." },
     ],
   },
   {

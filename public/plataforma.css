@@ -139,6 +139,30 @@ nav.scrolled { box-shadow: 0 4px 22px rgba(22,32,43,.08); }
 .efic { font-size: 11px; font-weight: 700; color: #167C40; white-space: nowrap; }
 .efic.pend { color: var(--ink-soft); font-weight: 600; }
 
+/* OBJETIVOS DE LA CALIDAD · 6.2 */
+.obj { padding: 16px 18px; }
+.obj-top { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.obj-cls { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--navy); background: var(--cream-d); border-radius: 6px; padding: 3px 8px; }
+.obj-name { font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.5; margin: 10px 0 13px; }
+.obj-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.obj-kpi { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; }
+.obj-kpi .k { font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 800; }
+.obj-kpi .v { font-size: 12.5px; font-weight: 700; color: var(--ink); margin-top: 4px; line-height: 1.4; }
+.obj-logro { margin-top: 15px; }
+.obj-logro .h { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 8px; }
+.obj-logro .h span { text-transform: none; letter-spacing: 0; font-size: 11px; font-weight: 600; }
+.obj-bar { height: 8px; background: var(--cream-d); border-radius: 5px; overflow: hidden; }
+.obj-bar span { display: block; height: 100%; border-radius: 5px; background: linear-gradient(135deg, var(--blue-l), var(--blue)); }
+.obj-acts { margin-top: 15px; border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px; }
+.obj-acts .h { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 9px; }
+.obj-act { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--ink); padding: 8px 0; border-top: 1px solid var(--cream-d); }
+.obj-act:first-of-type { border-top: 0; }
+
+/* MEMORIA DE DECISIONES · 7.1.6 (sobre fondo oscuro) */
+.dec-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; background: rgba(143,193,245,.16); color: #8FC1F5; border-radius: 20px; padding: 3px 9px; }
+.dec-note { margin-top: 11px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px; color: #AEB6C0; line-height: 1.55; }
+.dec-note .who { color: #7FE0A0; font-weight: 700; }
+
 /* TRIAGE de hallazgos */
 .tri { padding: 16px 18px; display: grid; gap: 12px; }
 .tri-item { border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px; }
@@ -331,4 +355,5 @@ footer a { color: #AEB6C0; }
   .pm { padding: 16px; }
   .pm-table .hide-sm { display: none; }
   .pm-btns span:not(.pri) { display: none; }
+  .obj-kpis { grid-template-columns: 1fr; }
 }
