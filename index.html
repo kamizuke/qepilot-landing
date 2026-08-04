@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Evidran — El sistema de gestión que aprende · Calidad, auditorías y mejora continua</title>
-<meta name="description" content="Evidran convierte no conformidades, auditorías y acciones de mejora en conocimiento reutilizable: causas que se repiten, acciones que funcionaron, decisiones con base real. Y documentarlo cuesta una conversación, no una tarde." />
+<title>Evidran — No conformidades que dejan conocimiento · Calidad, auditorías y mejora continua</title>
+<meta name="description" content="Evidran convierte cada no conformidad en información estructurada y reutilizable: causas medidas, acciones con eficacia verificada, decisiones con su porqué. Y documentarlo cuesta una conversación, no una tarde." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -92,6 +92,7 @@
 
   /* CADENA DE TRANSFORMACIÓN (visual del hero) */
   .chainbox { max-width: 880px; margin: 34px auto 0; background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 30px 60px rgba(22,32,43,.10); padding: 26px 28px 20px; text-align: left; }
+  .chainbox.single .ch-row { row-gap: 10px; }
   .chain + .chain { margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--cream-d); }
   .ch-lab { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--ink-soft); margin-bottom: 10px; }
   .chain.live .ch-lab { color: var(--blue); }
@@ -451,7 +452,7 @@
             <div class="mg-col">
               <div class="mg-t">Capturar con criterio</div>
               <a href="#capturar"><b>La entrevista</b><small>Hablas; el informe se redacta en vivo, con causa de verdad.</small></a>
-              <a href="#normas"><b>No conformidades y 8D</b><small>Nueve tipos de expediente, cada uno con su norma.</small></a>
+              <a href="/producto.html#normas"><b>No conformidades y 8D</b><small>Nueve tipos de expediente, cada uno con su norma.</small></a>
               <a href="/auditorias.html"><b>Auditorías</b><small>Bandeja de hallazgos, auditoría interna 9.2 y programa.</small></a>
               <a href="/auditorias.html#calendario"><b>Calendario de auditorías</b><small>Internas y externas en una sola agenda: lista, mes y año.</small></a>
               <a href="#campo"><b>App de campo</b><small>QR por punto de control, foto y captura sin cobertura.</small></a>
@@ -496,12 +497,12 @@
         <div class="nav-item rel">
           <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Recursos <span class="car"></span></button>
           <div class="drop small">
-            <a href="/blog/"><b>Blog</b></a>
             <a href="/producto.html"><b>Evidran por dentro</b></a>
             <a href="/auditores.html"><b>Para auditores</b></a>
             <a href="/seguridad.html"><b>Seguridad y privacidad</b></a>
           </div>
         </div>
+        <a href="/blog/">Blog</a>
         <a href="mailto:demo@evidran.com" class="btn btn-primary btn-sm">Pide una demo</a>
       </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
@@ -515,73 +516,64 @@
 <!-- HERO -->
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">El sistema de conocimiento de calidad</div>
-    <h1>Cada problema resuelto hace más inteligente a tu empresa.</h1>
-    <p class="sub">Evidran convierte no conformidades, auditorías y acciones de mejora en conocimiento reutilizable: causas que se repiten, acciones que funcionaron, decisiones con base real. Y documentarlo cuesta una conversación, no una tarde.</p>
+    <div class="eyebrow">No conformidades que dejan conocimiento, no papeleo</div>
+    <h1>La próxima no conformidad no empezará de cero.</h1>
+    <p class="sub">Evidran te entrevista como un responsable de calidad senior —no acepta un «error humano»— y convierte cada expediente en información que vuelves a usar: qué pasó, por qué, qué se decidió y si funcionó.</p>
     <div class="hero-cta">
-      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
-      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O pruébalo por tu cuenta — 30 días gratis</a>
+      <a href="/producto.html" class="btn btn-primary">Ver una NC de principio a fin</a>
+      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">Crea tu primer expediente — 30 días gratis</a>
     </div>
     <p class="amplify">Evidran no sustituye el criterio del responsable de calidad. <b><span class="amp" data-word="Lo amplifica"></span>.</b></p>
 
-    <!-- la cadena de transformación -->
-    <div class="chainbox" data-seqgroup data-seqstep="220" data-seqstart="300">
-      <div class="chain dim">
-        <span class="ch-lab">La mayoría del software</span>
-        <div class="ch-row">
-          <span class="ch seq" data-seq="1">Incidente</span><i>→</i>
-          <span class="ch seq" data-seq="2">Documento</span><i>→</i>
-          <span class="ch seq" data-seq="3">Archivo</span><i>→</i>
-          <span class="ch ghost seq" data-seq="4">Olvido</span>
-        </div>
-      </div>
+    <!-- la cadena de transformación, ahora única -->
+    <div class="chainbox single" data-seqgroup data-seqstep="220" data-seqstart="300">
       <div class="chain live">
-        <span class="ch-lab">Evidran</span>
+        <span class="ch-lab">El recorrido de un expediente en Evidran</span>
         <div class="ch-row">
-          <span class="ch seq" data-seq="5">Incidente</span><i>→</i>
-          <span class="ch seq" data-seq="6">Investigación</span><i>→</i>
-          <span class="ch seq" data-seq="7">Causa raíz</span><i>→</i>
-          <span class="ch seq" data-seq="8">Acciones</span><i>→</i>
-          <span class="ch seq" data-seq="9">Verificación</span><i>→</i>
-          <span class="ch hot seq" data-seq="10">Conocimiento reutilizable</span><i>→</i>
-          <span class="ch seq" data-seq="11">Tendencias</span><i>→</i>
-          <span class="ch seq" data-seq="12">Mejora continua</span>
+          <span class="ch seq" data-seq="1">NC-2026-014</span><i>→</i>
+          <span class="ch seq" data-seq="2">Causa: método</span><i>→</i>
+          <span class="ch seq" data-seq="3">Acción correctiva</span><i>→</i>
+          <span class="ch seq" data-seq="4">Eficacia verificada</span><i>→</i>
+          <span class="ch hot seq" data-seq="5">Conocimiento reutilizable</span><i>→</i>
+          <span class="ch seq" data-seq="6">Tendencias</span><i>→</i>
+          <span class="ch seq" data-seq="7">Decisión con su porqué</span>
         </div>
       </div>
       <p class="ch-cap">Un expediente es la puerta de entrada. <b>Lo que construyes es la memoria de tu organización.</b></p>
     </div>
-    <p class="norms-micro">ISO 9001 · 14001 · 45001 · 50001 · ISO/IEC 17025 · 17020 · 17065 · 8D</p>
+    <p class="norms-micro">ISO 9001 · 14001 · 45001 · 50001 · ISO/IEC 17025 · 17020 · 17065 · 8D · Exportación Word y PDF · Cloud u on-premise</p>
   </div>
 </header>
 
-<!-- PROBLEMA · el conocimiento fragmentado -->
+<!-- PROBLEMA -->
 <section class="problem">
   <div class="wrap">
     <div>
       <div class="eyebrow" style="color:var(--green)">El problema</div>
-      <h2>El conocimiento de calidad existe. Está en todas partes — y no está en ninguna.</h2>
-      <p class="lead" style="margin-top:16px">Vive en informes de auditoría, no conformidades, 8D, hojas de Excel, carpetas de red, correos… y en la cabeza de quien lleva veinte años en la casa.</p>
+      <h2>Cerrar una no conformidad no significa que la organización haya aprendido.</h2>
+      <p class="lead" style="margin-top:16px">En muchas empresas, resolver una NC es rellenar la plantilla, enviarla, archivarla y seguir trabajando. Meses después aparece un problema parecido — y nadie recuerda dónde estaba el expediente, qué causa se identificó ni si la acción funcionó.</p>
     </div>
     <div>
       <ul>
-        <li>Cada incidente se resuelve… y se archiva. Casi ninguno se vuelve a usar.</li>
-        <li>«Esto ya nos pasó» — pero nadie encuentra cómo se resolvió la última vez.</li>
-        <li>Las causas se intuyen; nadie las tiene medidas.</li>
-        <li>Los hallazgos del auditor se transcriben a mano desde un PDF.</li>
-        <li>Cuando alguien se va, su experiencia se va con él.</li>
-        <li>Y en la Revisión por la Dirección, toca reconstruir el año rebuscando en carpetas.</li>
+        <li>«Esto ya nos pasó» — pero nadie encuentra el caso.</li>
+        <li>La causa acaba siendo «error humano» porque no hay tiempo de investigar.</li>
+        <li>Las acciones tienen responsable y fecha; la eficacia, no siempre.</li>
+        <li>Cada área describe las mismas causas con palabras distintas.</li>
+        <li>Las decisiones importantes viven en correos o en la cabeza de alguien.</li>
+        <li>Y en la Revisión por la Dirección toca reconstruir el año a mano.</li>
       </ul>
-      <div class="punch">La organización mejora mucho menos de lo que podría.</div>
+      <div class="punch">Así se cumple con el papel. Archivar no es aprender.</div>
     </div>
   </div>
 </section>
-<!-- ACTO 1 · CAPTURAR CON CRITERIO -->
+
+<!-- UNA NC DE PRINCIPIO A FIN -->
 <section id="capturar">
   <div class="wrap">
     <div class="center-head">
-      <div class="acto-kick"><span class="n">01</span> Capturar con criterio</div>
-      <h2>Nada entra como texto suelto. Entra investigado.</h2>
-      <p>Cuentas lo que ha pasado y Evidran te entrevista como un responsable de calidad senior: pregunta lo que tu norma exige, sugiere la causa sistémica y no acepta un «error humano». El informe se redacta en vivo — y lo que entra bien, mañana se puede reutilizar.</p>
+      <div class="eyebrow">Una NC, de principio a fin</div>
+      <h2>Una NC entra una vez. Su información trabaja durante años.</h2>
+      <p>Sigue el caso NC-2026-014: de un aviso del turno de noche a una causa medida, una acción verificada y una decisión que no se olvida.</p>
     </div>
 
     <!-- mockup animado: la entrevista en vivo -->
@@ -605,51 +597,16 @@
       <p class="shot-cap">La entrevista y el documento, lado a lado · se redacta mientras conversas.</p>
     </div>
 
-    <div class="steps">
-      <div class="step"><div class="n">1</div><h3>Cuéntalo con tus palabras</h3><p>Eliges el tipo de expediente y le cuentas qué pasó. Pega el email del cliente o el hallazgo del auditor; adjunta una foto y la incorpora como evidencia.</p></div>
-      <div class="step"><div class="n">2</div><h3>Te entrevista, no te interroga</h3><p>Una o dos preguntas por turno. Sugiere la causa sistémica probable, autocompleta lo administrativo y te lleva más allá del «error humano».</p></div>
-      <div class="step"><div class="n">3</div><h3>Ves el documento en vivo</h3><p>A la izquierda la conversación; a la derecha, el informe formal se rellena campo a campo. Corrige cualquier texto con un clic — la última palabra es tuya.</p></div>
-      <div class="step"><div class="n">4</div><h3>Cierra y entrega</h3><p>Asigna responsable y fecha límite, adjunta evidencias, aprueba y firma el expediente y expórtalo a Word o PDF. Listo para la certificadora.</p></div>
+    <div class="steps" id="campo">
+      <div class="step"><div class="n">1</div><h3>Se captura donde ocurre</h3><p>El técnico lo cuenta con sus palabras, pega el email del cliente o escanea el QR del punto de control y adjunta una foto. Los hallazgos de tu auditor entran solos por el puente auditor, y un informe en PDF se sube y se convierte en expedientes.</p></div>
+      <div class="step"><div class="n">2</div><h3>Se investiga con criterio</h3><p>Evidran separa el hecho de la causa, sugiere la causa sistémica probable y no acepta explicaciones pobres. El documento formal se redacta mientras conversas; la última palabra es tuya.</p></div>
+      <div class="step" id="avisos"><div class="n">3</div><h3>Se trata y se verifica</h3><p>La acción queda con responsable, plazo, evidencia y verificación de eficacia. Y los plazos avisan solos: alerta al vencer y resumen cada mañana. Nada depende de tu memoria.</p></div>
+      <div class="step"><div class="n">4</div><h3>Se vuelve reutilizable</h3><p>La causa alimenta las tendencias, la solución queda en el historial, la decisión conserva su porqué y el resultado llega a la Revisión por la Dirección.</p></div>
     </div>
 
-    <div class="normhead" id="normas">
-      <h2>Cada norma con su plantilla, su carpeta y su lógica. <span class="hl">Aquí, con una sola conversación.</span></h2>
-      <p>No es un chat de propósito general con el logo cambiado: cada flujo entiende el lenguaje de su norma, te pregunta lo que esa norma exige y redacta como lo haría un experto en ese sistema.</p>
-    </div>
-    <div class="normchips">
-      <span class="nchip q"><i></i><b>ISO 9001</b> No conformidad interna</span>
-      <span class="nchip env"><i></i><b>ISO 14001</b> Ambiental</span>
-      <span class="nchip sst"><i></i><b>ISO 45001</b> Seguridad y salud</span>
-      <span class="nchip en"><i></i><b>ISO 50001</b> Energía</span>
-      <span class="nchip lab"><i></i><b>ISO/IEC 17025</b> Trabajo no conforme</span>
-      <span class="nchip acc"><i></i><b>ISO/IEC 17020</b> Inspección</span>
-      <span class="nchip acc"><i></i><b>ISO/IEC 17065</b> Certificación de producto</span>
-      <span class="nchip auto"><i></i><b>8D</b> Reclamación de cliente · OEM</span>
-      <span class="nchip aud"><i></i><b>Auditoría</b> Respuesta a hallazgos</span>
-    </div>
-    <div class="normband-profile">
-      <strong>Y aprende a qué te dedicas.</strong> Propone un perfil de tu empresa desde tu web pública; tú lo apruebas y la entrevista pasa a hablar con el vocabulario de tu actividad.
-    </div>
-
-    <div class="entryhead" id="campo">
-      <h3>El conocimiento entra por donde ocurre:</h3>
-    </div>
-    <div class="entry3">
-      <div class="entry">
-        <div class="k">Desde la planta</div>
-        <h4>App de campo</h4>
-        <p>Escaneas el QR del punto de control, cuentas qué ha pasado y adjuntas foto con la cámara. Funciona sin cobertura: la captura se envía sola al recuperar la red.</p>
-      </div>
-      <div class="entry">
-        <div class="k">Desde tu auditor</div>
-        <h4>Puente auditor ↔ empresa</h4>
-        <p>Tu auditor se conecta con un código y sus hallazgos llegan a tu bandeja como expedientes abiertos, ya redactados. Cero transcripción.</p>
-      </div>
-      <div class="entry">
-        <div class="k">Desde un PDF</div>
-        <h4>Informe de auditoría subido</h4>
-        <p>¿El informe llega en papel? Súbelo: la IA extrae los hallazgos y tú decides cuáles convertir en expediente, enviar al plan o descartar.</p>
-      </div>
+    <div class="plinks">
+      <a class="plink" href="/auditorias.html#calendario"><span class="k">El ciclo sigue</span><b>Auditorías: bandeja, interna 9.2 y calendario</b><span>El programa anual y las visitas externas en una agenda —lista, mes y año—, con los hallazgos directos al triage.</span></a>
+      <a class="plink" href="/riesgos-plan.html#objetivos"><span class="k">El ciclo sigue</span><b>Objetivos de la calidad y plan de mejora · 6.2 y 10.2</b><span>Objetivos medibles con indicador, meta y grado de logro real — y las acciones que los ejecutan, con eficacia verificada.</span></a>
     </div>
   </div>
 </section>
@@ -663,144 +620,19 @@
     <p class="valor">El valor no está en la conversación. Está en lo que queda cuando termina.</p>
   </div>
 </section>
-<!-- ACTO 2 · GOBERNAR EL CICLO -->
-<section id="gobernar">
-  <div class="wrap">
-    <div class="center-head">
-      <div class="acto-kick"><span class="n">02</span> Gobernar el ciclo</div>
-      <h2>Entre que el dato entra y la decisión sale, el sistema vigila por ti.</h2>
-      <p>Riesgos que generan acciones, acciones que ejecutan objetivos medibles, auditorías en calendario y plazos que avisan solos. Nada depende de tu memoria.</p>
-    </div>
 
-    <div class="feat-row" id="riesgos">
-      <div class="fr-text">
-        <div class="fr-eyebrow">Matriz de riesgos viva · 6.1</div>
-        <h3>Tus riesgos, en un mapa de calor que se mueve.</h3>
-        <p>Mapa 5×5 con vista inherente y residual. Cada riesgo tratado genera una acción en tu plan de mejora, y al verificarla Evidran te recuerda reevaluar el residual — el riesgo baja del rojo al verde y queda la traza.</p>
-        <p style="margin-top:12px">Y los <b>simulacros de emergencia</b> que exigen la 14001 y la 45001 (8.2) viven aquí mismo: se planifican, se registran con su resultado y, si hubo desviaciones, generan acción. <a href="/riesgos-plan.html#simulacros" style="color:var(--navy);font-weight:600">Cómo funcionan →</a></p>
-      </div>
-      <div class="fr-visual">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/riesgos</span></div>
-        <div class="riskmap">
-          <div class="rm-top"><b>Matriz de riesgos 6.1</b><span>Inherente → residual</span></div>
-          <div class="rm-plot">
-            <div class="rm-yttl">Probabilidad</div>
-            <div class="rm-grid">
-              <div class="rm-cell med"></div><div class="rm-cell high"></div><div class="rm-cell crit"></div><div class="rm-cell crit"></div><div class="rm-cell crit"></div>
-              <div class="rm-cell low"></div><div class="rm-cell med"></div><div class="rm-cell high"></div><div class="rm-cell crit"><span class="rm-mk inh">R-04</span></div><div class="rm-cell crit"></div>
-              <div class="rm-cell low"></div><div class="rm-cell med"></div><div class="rm-cell med"></div><div class="rm-cell high"></div><div class="rm-cell crit"></div>
-              <div class="rm-cell low"></div><div class="rm-cell low"></div><div class="rm-cell med"><span class="rm-mk res">R-04</span></div><div class="rm-cell med"></div><div class="rm-cell high"></div>
-              <div class="rm-cell low"></div><div class="rm-cell low"></div><div class="rm-cell low"></div><div class="rm-cell low"></div><div class="rm-cell med"></div>
-            </div>
-          </div>
-          <div class="rm-xttl">Severidad / impacto</div>
-          <div class="rm-legend"><span><i class="low"></i>Bajo</span><span><i class="med"></i>Medio</span><span><i class="high"></i>Alto</span><span><i class="crit"></i>Crítico</span></div>
-        </div>
-        <p class="fr-cap"><b>R-04</b> tratado: del rojo (inherente) al verde (residual), con la reevaluación registrada.</p>
-      </div>
-    </div>
-
-    <div class="feat-row rev" id="avisos">
-      <div class="fr-text">
-        <div class="fr-eyebrow">Avisos · no dependen de tu memoria</div>
-        <h3>Entérate antes de que el plazo te pase por encima.</h3>
-        <p>Aviso al momento cuando una acción pasa a «vencida» — no un email diario que acabas ignorando. Y cada mañana, un resumen con lo que vence pronto y los riesgos que toca reevaluar.</p>
-      </div>
-      <div class="fr-visual">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com</span></div>
-        <div class="notif">
-          <div class="notif-toast">
-            <span class="nt-ic">!</span>
-            <div><b>Acción vencida</b><p><b>NC-2026-014</b> · «Desviación dimensional turno noche» venció ayer. Responsable: M. López.</p></div>
-          </div>
-          <div class="notif-digest">
-            <div class="h">Tu resumen · lunes, 9:00</div>
-            <div class="nd-row"><span class="nd-dot a"></span><span><b>3 acciones</b> vencen esta semana</span></div>
-            <div class="nd-row"><span class="nd-dot r"></span><span><b>2 acciones</b> vencidas sin cerrar</span></div>
-            <div class="nd-row"><span class="nd-dot g"></span><span><b>4 riesgos</b> tratados pendientes de reevaluar el residual</span></div>
-            <div class="nd-row"><span class="nd-dot b"></span><span>Auditoría de <b>Almacén</b> en curso — hallazgos por pasar al triage</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="plinks">
-      <a class="plink" href="/auditorias.html#calendario"><span class="k">El ciclo sigue</span><b>Auditorías: bandeja, interna 9.2 y calendario</b><span>El programa anual y las visitas externas en una agenda —lista, mes y año—, con los hallazgos directos al triage.</span></a>
-      <a class="plink" href="/riesgos-plan.html#objetivos"><span class="k">El ciclo sigue</span><b>Objetivos de la calidad y plan de mejora · 6.2 y 10.2</b><span>Objetivos medibles con indicador, meta y grado de logro real — y las acciones que los ejecutan, con eficacia verificada.</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ACTO 3 · APRENDER DE TODO -->
-<section id="aprender" style="background:#fff">
-  <div class="wrap">
-    <div class="center-head">
-      <div class="acto-kick"><span class="n">03</span> Aprender de todo</div>
-      <h2>Aquí está el activo: lo que tu organización ya sabe.</h2>
-      <p>Todo lo que entró bien y se trabajó vuelve convertido en respuestas: tendencias, causas medidas, objetivos con base real, las decisiones que tomasteis con su porqué y un acta que se redacta desde tus datos.</p>
-    </div>
-
-    <div class="feat-row" id="revision93">
-      <div class="fr-text">
-        <div class="fr-eyebrow">Revisión por la Dirección · 9.3</div>
-        <h3>El apartado más tedioso del año, redactado a partir de tus datos.</h3>
-        <p>Evidran genera el texto de entrada del acta con tus estadísticas del periodo: resumen, análisis por tipo y área, estado de las acciones y recomendaciones. Lo revisas, lo editas y lo apruebas — y queda archivada por ejercicios, un acta por año. Y es honesto: si aún no hay volumen para hablar de tendencias, te lo dice.</p>
-      </div>
-      <div class="fr-visual">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/revision-direccion</span></div>
-        <div class="acta">
-          <div class="acta-head">
-            <div>
-              <div class="acta-eyebrow">Revisión por la Dirección · ISO 9001 (9.3)</div>
-              <div class="acta-title">Entrada 9.3.2 · No conformidades y acciones correctivas</div>
-            </div>
-            <span class="acta-ia">✦ Generado con IA</span>
-          </div>
-          <p>Durante el primer semestre de 2026 se registraron <b>18 no conformidades</b>, con una tasa de cierre del <b>84 %</b> y un tiempo medio de resolución de <b>21 días</b>.</p>
-          <p>Por tipología predominan las asociadas a <b>formación</b> (37 %) y a <b>método/procedimiento</b> (21 %). La concentración en el área de <b>Producción</b> (35 %) sugiere reforzar los controles de la línea de montaje y revisar las instrucciones de los turnos rotativos.</p>
-          <div class="acta-flag">✓ Volumen suficiente para el análisis de tendencias</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COPILOTO GLOBAL -->
-<section id="copiloto">
-  <div class="wrap">
-    <div class="center-head">
-      <div class="eyebrow">El copiloto</div>
-      <h2>«Tengo auditoría en tres semanas. ¿Qué me falta?»</h2>
-      <p>Pregúntaselo a tu sistema. El copiloto está disponible en todas las pantallas de Evidran y responde con el estado real de tu calidad: no adivina — consulta tus datos y te enlaza al registro exacto que lo resuelve.</p>
-    </div>
-    <div class="mock" style="grid-template-columns:1fr;max-width:640px;margin-top:0;">
-      <div class="mock-bar"><i></i><i></i><i></i><span>Copiloto · disponible en toda la app</span></div>
-      <div class="mock-chat" style="border-right:0;">
-        <div class="bubble me">Tengo la auditoría de seguimiento en tres semanas. ¿Cómo vamos?</div>
-        <div class="bubble ai">Te faltan 3 cosas: cerrar <b>NC-2026-014</b> y <b>NCA-2026-003</b>, y verificar la eficacia de una acción del plan. Además hay 3 riesgos tratados pendientes de reevaluar. Te enlazo cada uno →</div>
-        <div class="bubble me">¿Y la auditoría interna?</div>
-        <div class="bubble ai">El programa de este año va al día: 4 de 4 procesos auditados. Sus hallazgos ya están en tu bandeja de triage.</div>
-      </div>
-    </div>
-    <p class="shot-cap" style="margin-top:14px">Cada cifra sale de una consulta real a tus datos. El copiloto nunca inventa recuentos — y quien decide eres tú.</p>
-    <p style="text-align:center;margin-top:26px"><a href="/producto.html" class="btn btn-ghost">Mira Evidran por dentro, con datos reales →</a></p>
-  </div>
-</section>
-<!-- MEMORIA DE TU ORGANIZACIÓN (clímax) -->
+<!-- LAS PREGUNTAS · memoria de la organización -->
 <section id="memoria" class="intel">
   <div class="wrap">
     <div class="eyebrow" style="color:var(--green)">La memoria de tu organización</div>
-    <h2>Hoy, responder esto cuesta días de rebuscar. Aquí, segundos.</h2>
+    <h2>Lo importante no es lo que Evidran guarda. Es lo que después puedes preguntarle.</h2>
     <ul class="qs">
-      <li><b>¿Qué causas se repiten de verdad?</b><span>Taxonomía de causas · Tendencias</span></li>
-      <li><b>¿Esto ya nos pasó? ¿Cómo se resolvió?</b><span>Historial buscable</span></li>
-      <li><b>¿Por qué decidimos aquello? ¿Y quién?</b><a href="/inteligencia.html#decisiones">Memoria de decisiones · 7.1.6</a></li>
+      <li><b>¿Esto ya nos pasó? ¿Cómo se resolvió?</b><a href="/inteligencia.html#historial">Historial buscable</a></li>
+      <li><b>¿Qué causas se repiten de verdad?</b><a href="/inteligencia.html">Taxonomía de causas · Tendencias</a></li>
       <li><b>¿Qué acciones funcionaron?</b><a href="/riesgos-plan.html#plan">Eficacia verificada · Plan de mejora</a></li>
+      <li><b>¿Qué decidimos y por qué? ¿Y quién?</b><a href="/inteligencia.html#decisiones">Memoria de decisiones · 7.1.6</a></li>
       <li><b>¿Vamos a cumplir los objetivos del año?</b><a href="/riesgos-plan.html#objetivos">Objetivos medibles · 6.2</a></li>
-      <li><b>¿Dónde se concentran las no conformidades?</b><span>Hallazgos automáticos</span></li>
-      <li><b>¿Qué procesos acumulan más riesgo?</b><a href="#riesgos">Matriz 6.1</a></li>
-      <li><b>¿Cuándo nos toca la próxima auditoría?</b><a href="/auditorias.html#calendario">Calendario de auditorías</a></li>
-      <li><b>¿Estoy listo para la auditoría?</b><a href="#copiloto">Copiloto</a></li>
+      <li><b>¿Qué falta antes de la auditoría?</b><a href="#copiloto">Copiloto</a></li>
     </ul>
 
     <div class="feat-row" id="tendencias">
@@ -829,65 +661,55 @@
       </div>
     </div>
 
-    <div class="feat-row rev" id="historial">
-      <div class="fr-text">
-        <div class="fr-eyebrow">«Esto ya nos pasó»</div>
-        <h3>La respuesta ya estaba en tu casa. Ahora, encuéntrala.</h3>
-        <p>Busca por palabra clave en las causas, descripciones y soluciones de todo tu histórico — también el que importaste de Excel. Quien llega nuevo hereda lo aprendido; quien se va, lo deja.</p>
-      </div>
-      <div class="intel-shot hist-shot">
-        <div class="is-head">Historial · tu memoria de calidad</div>
-        <div class="hs-search"><span class="lens">⌕</span> retén fuga aceite</div>
-        <div class="hs-res">
-          <div class="hs-top"><span class="pmcode">NC-2024-031</span><span class="hs-pill">Cerrada</span><span class="hs-date">mar 2024</span></div>
-          <b>Fuga de aceite en retén delantero · lote 8842</b>
-          <p><em>Causa raíz:</em> el proveedor cambió el elastómero del retén sin comunicar el cambio.</p>
-          <p><em>Solución:</em> cláusula de notificación de cambios en el acuerdo de compras + control reforzado en recepción.</p>
-        </div>
-        <div class="hs-res">
-          <div class="hs-top"><span class="pmcode">8D-2022-006</span><span class="hs-pill">Cerrada</span><span class="hs-date">nov 2022</span></div>
-          <b>Reclamación OEM · rezume en retén trasero</b>
-          <p><em>Causa raíz:</em> par de apriete fuera de especificación en el útil de montaje.</p>
-          <p><em>Solución:</em> poka-yoke en el útil y verificación de par en pauta de autocontrol.</p>
+    <div id="copiloto" style="margin-top:44px">
+      <div class="mock" style="grid-template-columns:1fr;max-width:640px;margin-top:0;">
+        <div class="mock-bar"><i></i><i></i><i></i><span>Copiloto · disponible en toda la app</span></div>
+        <div class="mock-chat" style="border-right:0;">
+          <div class="bubble me">Tengo la auditoría de seguimiento en tres semanas. ¿Cómo vamos?</div>
+          <div class="bubble ai">Te faltan 3 cosas: cerrar <b>NC-2026-014</b> y <b>NCA-2026-003</b>, y verificar la eficacia de una acción del plan. Además hay 3 riesgos tratados pendientes de reevaluar. Te enlazo cada uno →</div>
+          <div class="bubble me">¿Y la auditoría interna?</div>
+          <div class="bubble ai">El programa de este año va al día: 4 de 4 procesos auditados. Sus hallazgos ya están en tu bandeja de triage.</div>
         </div>
       </div>
+      <p class="shot-cap" style="margin-top:14px">Cada cifra sale de una consulta real a tus datos. El copiloto nunca inventa recuentos — y quien decide eres tú.</p>
     </div>
 
-    <p class="note">Los clientes creen que compran software. En realidad construyen un activo: cada expediente, cada auditoría y cada acción enseñan a Evidran cómo funciona tu organización. <b>Con el tiempo deja de ser una herramienta: es tu sistema de conocimiento de calidad.</b></p>
+    <p class="note">Los clientes creen que compran software. En realidad construyen un activo: una memoria consultable y reutilizable de cómo tu organización resuelve sus problemas. <b>Quien llega nuevo la hereda; quien se va, la deja.</b></p>
   </div>
 </section>
 
-<!-- NIVEL DE EXIGENCIA -->
+<!-- CONFIANZA + PERFILES -->
 <section id="exigencia" class="exgsec">
   <div class="wrap">
     <div class="center-head">
-      <div class="eyebrow">Nivel de exigencia</div>
-      <h2>Construido para organizaciones que se examinan.</h2>
-      <p>Automoción con OEM y TISAX, laboratorios y entidades acreditadas, multi-norma con auditorías que no perdonan. Cada señal tiene su prueba, a un clic.</p>
+      <div class="eyebrow">Confianza</div>
+      <h2>Preparado para trabajar. Preparado para que te auditen.</h2>
+      <p>Cada señal tiene su prueba, a un clic.</p>
     </div>
     <div class="exg">
       <div class="exg-card">
-        <h3><i></i>Aprobación y firma</h3>
-        <p>Cerrar es aprobar: firma del responsable con huella verificada y traza que no se borra.</p>
+        <h3><i></i>Aprobación y firma verificable</h3>
+        <p>Cerrar es aprobar: firma del responsable con traza que no se borra.</p>
         <a class="more" href="/seguridad.html#firma">Cómo funciona →</a>
       </div>
       <div class="exg-card">
-        <h3><i></i>Roles con aislamiento real</h3>
-        <p>Quién ve qué y quién firma se aplica en la base de datos, no con botones.</p>
+        <h3><i></i>Roles y aislamiento por organización</h3>
+        <p>Quién ve qué se aplica en la base de datos, no con botones.</p>
         <a class="more" href="/seguridad.html#roles">El detalle →</a>
       </div>
       <div class="exg-card">
         <h3><i></i>Tus documentos, con tu marca</h3>
-        <p>Los Word y PDF salen con tu logo, tu pie y tu código de formato. En todos los planes.</p>
+        <p>Word y PDF con tu logo, tu pie y tu código de formato.</p>
+        <a class="more" href="/seguridad.html">Ver ejemplo →</a>
       </div>
       <div class="exg-card">
-        <h3><i></i>On-premise, con IA local</h3>
-        <p>La misma aplicación en tus servidores — sin salida a internet si tu política lo exige.</p>
+        <h3><i></i>Cloud u on-premise, con IA local</h3>
+        <p>La misma aplicación en tus servidores si tu política lo exige.</p>
         <a class="more" href="/seguridad.html#onpremise">El despliegue →</a>
       </div>
       <div class="exg-card">
         <h3><i></i>Vigilancia normativa</h3>
-        <p>Vigila a diario que tus normas siguen vigentes, con evidencia para ENAC.</p>
+        <p>Comprueba a diario que tus normas siguen vigentes, con evidencia para ENAC.</p>
         <a class="more" href="/vigilancia-normativa.html">El módulo →</a>
       </div>
       <div class="exg-card">
@@ -896,116 +718,53 @@
         <a class="more" href="/seguridad.html#mcp">Cómo se conecta →</a>
       </div>
     </div>
+
+    <div id="segmentos">
+      <h3 style="text-align:center;margin-top:60px;font-size:clamp(20px,2.4vw,25px);letter-spacing:-0.01em">Para quién es</h3>
+      <div class="segs">
+        <div class="seg">
+          <div class="k">Industria multi-norma</div>
+          <h3>Todo el sistema en una herramienta</h3>
+          <p>Calidad, medioambiente, seguridad y energía: 9001, 14001, 45001 y 50001, cada una con su lenguaje y su lógica.</p>
+        </div>
+        <div class="seg">
+          <div class="k">Automoción</div>
+          <h3>8D con formato OEM</h3>
+          <p>Reclamaciones de cliente con contención, doble rama de ocurrencia y no detección, y plantilla OEM/SCAR. On-premise si TISAX manda.</p>
+        </div>
+        <div class="seg">
+          <div class="k">Laboratorios y entidades acreditadas</div>
+          <h3>La capa de gestión de tu acreditación</h3>
+          <p>Trabajo no conforme 17025 con su lógica; en 17020 y 17065, las NC, acciones y mejora que el evaluador revisa siempre.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:30px;font-size:14.5px;color:var(--ink-soft)">¿Auditor o consultor? <a href="/auditores.html" style="color:var(--blue);font-weight:700">Evidran para auditores →</a> · ¿Aún sin certificar? <a href="/producto.html" style="color:var(--blue);font-weight:700">Empieza ya ordenado →</a></p>
   </div>
 </section>
 
-<!-- SEGMENTOS -->
-<section id="segmentos" class="segsec">
-  <div class="wrap">
-    <div class="center-head">
-      <div class="eyebrow">Para quién es</div>
-      <h2>El eje es el mismo. Cambia lo que entra por la puerta.</h2>
-    </div>
-    <div class="segs">
-      <div class="seg">
-        <div class="k">Industria multi-norma</div>
-        <h3>Una herramienta para todo el sistema</h3>
-        <p>Calidad, medioambiente, seguridad y energía en el mismo sitio: 9001, 14001, 45001 y 50001, cada una con su lenguaje y su lógica.</p>
-      </div>
-      <div class="seg">
-        <div class="k">Automoción</div>
-        <h3>8D con formato OEM</h3>
-        <p>Reclamaciones de cliente con contención, doble rama de ocurrencia y no detección, y plantilla OEM/SCAR. Y on-premise si TISAX manda.</p>
-      </div>
-      <div class="seg">
-        <div class="k">Laboratorios · ISO/IEC 17025</div>
-        <h3>Trabajo no conforme con su lógica</h3>
-        <p>Extensión, informes emitidos, notificación a clientes y reanudación. Y vigilancia normativa para el alcance de tu acreditación ENAC.</p>
-      </div>
-      <div class="seg">
-        <div class="k">Inspección y certificación · 17020 / 17065</div>
-        <h3>La capa de gestión de tu acreditación</h3>
-        <p>No conformidades, acciones correctivas y mejora — lo que el evaluador revisa siempre. La competencia técnica sigue siendo tuya.</p>
-      </div>
-      <div class="seg">
-        <div class="k">Auditores y consultores</div>
-        <h3>Tu cartera, con entrega directa</h3>
-        <p>Informes con dictamen, hallazgos tipados y entrega en la cuenta de tu cliente con un código — sin entrar a su panel.</p>
-        <a href="/auditores.html">Evidran para auditores →</a>
-      </div>
-      <div class="seg">
-        <div class="k">¿Aún sin certificar?</div>
-        <h3>Empieza ya ordenado</h3>
-        <p>Montas el sistema desde el primer expediente — riesgos evaluados, acciones con plazo, auditoría interna planificada — y llegas a la certificación con los deberes hechos.</p>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- COMPARE -->
-<section class="cmp" id="comparativa">
-  <div class="wrap">
-    <div class="center-head"><div class="eyebrow">Por qué Evidran</div><h2>Archivar no es aprender.</h2><p>Así gestiona hoy la calidad gran parte del mercado: Word, Excel, carpetas compartidas y correo. Funciona… hasta que alguien pregunta «¿esto ya nos pasó?».</p></div>
-    <table>
-      <thead><tr><th></th><th>Software que archiva</th><th>Evidran · el sistema que aprende</th></tr></thead>
-      <tbody>
-        <tr><td>Documentar</td><td>Rellenas tú, campo a campo</td><td>Hablas y se redacta solo</td></tr>
-        <tr><td>Causa raíz</td><td>Lo que se te ocurra</td><td>Criterio de sistema, sin causas pobres</td></tr>
-        <tr><td>Varias normas</td><td>Una plantilla por cada una</td><td>Una herramienta para todas</td></tr>
-        <tr><td>Plazos</td><td>Los vigilas a mano</td><td>Semáforo de vencimiento y avisos</td></tr>
-        <tr><td>El conocimiento</td><td>Se va con las personas</td><td>Queda en la organización, buscable</td></tr>
-        <tr><td>Tus datos</td><td>Duermen en carpetas</td><td>Hallazgos, causas y objetivos</td></tr>
-        <tr><td>Apartado Revisión 9.3</td><td>A mano cada año</td><td>Redactado desde tus datos</td></tr>
-        <tr><td>Auditoría interna</td><td>Un Excel la semana antes</td><td>Programa, checklist y hallazgos conectados</td></tr>
-        <tr><td>Registrar en planta</td><td>Un papel que llega tarde</td><td>App de campo: QR, foto y captura en el momento</td></tr>
-        <tr><td>Vigencia de tus normas</td><td>Se comprueba a mano, si hay tiempo</td><td>Vigilancia diaria con evidencia registrada</td></tr>
-        <tr><td>«¿Estoy listo?»</td><td>Nadie te lo dice</td><td>Se lo preguntas al copiloto</td></tr>
-      </tbody>
-    </table>
-    <div style="max-width:66ch;margin:40px auto 0;text-align:center">
-      <h3 style="font-size:21px;margin-bottom:12px">¿Y frente a las suites ISO de siempre?</h3>
-      <p style="font-size:15.5px">Las suites son anchas: gestor documental con flujos de aprobación, portales de proveedores, decenas de módulos que un consultor configura contigo durante semanas. Si tienes equipo y alguien que administre la plataforma, esa anchura vale.</p>
-      <p style="font-size:15.5px;margin-top:12px">Evidran es profundo donde se juega la auditoría: del riesgo a la no conformidad, de la causa raíz al objetivo, del objetivo a la revisión por la dirección — funcionando desde el primer día, sin proyecto de implantación. <strong style="color:var(--ink)">Ellas tocan todos los palos. Evidran toca a fondo el que te examinan.</strong></p>
-    </div>
+<!-- FAQ BREVE -->
+<section>
+  <div class="wrap" style="max-width:640px">
+    <div class="eyebrow" style="text-align:center">Preguntas frecuentes</div>
+    <h2 style="text-align:center;margin-bottom:18px">Lo que sueles preguntarte</h2>
+    <details open><summary>¿Esto es otro chatbot con mis datos?</summary><p>No. El chat es solo la puerta de entrada. Lo que compras es lo que queda cuando la conversación termina: el expediente estructurado, las tendencias, el historial buscable y las actas. Ese registro es tuyo y no depende de ningún chat.</p></details>
+    <details><summary>¿La IA se inventa cosas?</summary><p>No — y el sistema está diseñado para que no pueda. Evidran no toma decisiones ni inventa datos operativos: redacta a partir de la información que tú aportas, y los porcentajes son cálculos sobre tus datos, no estimaciones. Cuando propone algo —una causa probable, una checklist, un objetivo—, lo identifica claramente como propuesta. Y nada se da por bueno solo: cada contenido queda sujeto a tu revisión, y el expediente lo aprueba y firma el responsable de calidad.</p></details>
+    <details><summary>¿Qué pasa con mi conocimiento si dejo Evidran?</summary><p>Es tuyo y se va contigo: los expedientes se exportan en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan de mejora, riesgos, evidencias de vigilancia) en CSV.</p></details>
+    <p style="text-align:center;margin-top:24px;font-size:14.5px;color:var(--ink-soft)">Más preguntas —suites ISO, plantillas de Word, seguridad— en <a href="/producto.html#faq" style="color:var(--blue);font-weight:700">Evidran por dentro</a>.</p>
   </div>
 </section>
 
-<!-- SECURITY + FAQ -->
-<section id="seguridad">
-  <div class="wrap twocol">
-    <div>
-      <div class="eyebrow">Seguridad y privacidad</div>
-      <h2>Tus datos, aislados y bajo control.</h2>
-      <ul class="sec-list">
-        <li>Aislamiento total por empresa: cada organización solo ve lo suyo, a nivel de base de datos.</li>
-        <li>La IA recibe solo lo necesario — el apartado de la Revisión 9.3 se genera con estadísticas agregadas, no con tus expedientes.</li>
-        <li>Evidencias privadas con enlaces de descarga firmados y temporales.</li>
-        <li>La clave de IA y la lógica sensible viven en el servidor, nunca en el navegador.</li>
-      </ul>
-      <p style="margin-top:20px"><a href="/seguridad.html" class="btn btn-ghost btn-sm">Todo el detalle: Seguridad y privacidad →</a></p>
-    </div>
-    <div>
-      <div class="eyebrow">Preguntas frecuentes</div>
-      <h2 style="margin-bottom:18px">Lo que sueles preguntarte</h2>
-      <details open><summary>¿Esto es otro chatbot con mis datos?</summary><p>No. El chat es solo la puerta de entrada. Lo que compras es lo que queda cuando la conversación termina: el expediente estructurado, las tendencias, el historial buscable y las actas. Ese registro es tuyo y no depende de ningún chat.</p></details>
-      <details><summary>¿La IA se inventa cosas?</summary><p>No — y el sistema está diseñado para que no pueda. Evidran no toma decisiones ni inventa datos operativos: redacta a partir de la información que tú aportas, y los porcentajes son cálculos sobre tus datos, no estimaciones. Cuando propone algo —una causa probable, una checklist, un objetivo—, lo identifica claramente como propuesta. Y nada se da por bueno solo: cada contenido queda sujeto a tu revisión, y el expediente lo aprueba y firma el responsable de calidad.</p></details>
-      <details><summary>¿No me vale con mis plantillas de Word?</summary><p>Las plantillas no te entrevistan, no evitan causas pobres, no te avisan de vencimientos ni te dan objetivos. Y lo que escribes en ellas no vuelve nunca: se archiva y se olvida.</p></details>
-      <details><summary>Las suites ISO tienen más módulos.</summary><p>Cierto: son más anchas. La pregunta es cuántos módulos vas a usar tú solo, cuánto tarda la plataforma en estar configurada y quién la mantiene después. Evidran cubre a fondo el ciclo que decide tu auditoría — riesgos, no conformidades, acciones, auditoría interna, objetivos y revisión por la dirección — y funciona desde el primer día. Si tu núcleo es un gestor documental con flujos o un portal de proveedores, una suite encaja mejor; te lo decimos igual de claro.</p></details>
-      <details><summary>¿Qué pasa con mi conocimiento si dejo Evidran?</summary><p>Es tuyo y se va contigo: los expedientes se exportan en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan de mejora, riesgos, evidencias de vigilancia) en CSV.</p></details>
-      <details><summary>¿Mis datos están seguros?</summary><p>Aislados por empresa a nivel de base de datos, evidencias privadas y la IA recibe lo mínimo imprescindible. El detalle completo —firma, roles, on-premise, conexión MCP— está en <a href="/seguridad.html" style="color:var(--blue);font-weight:700">Seguridad y privacidad</a>.</p></details>
-      <details><summary>Soy yo solo para toda la calidad.</summary><p>Justo para eso está pensado Evidran.</p></details>
-    </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
+<!-- CIERRE -->
 <section id="cta" class="final">
   <div class="wrap">
-    <h2>Dentro de un año, tu sistema puede ser una carpeta más grande. O una organización que aprende.</h2>
-    <p>Cada expediente que documentas hoy es una respuesta que tendrás mañana. Para industria multi-norma, automoción, laboratorios y entidades acreditadas — y para los consultores que las acompañan.</p>
+    <h2>La próxima NC puede ser la primera que no se pierda al cerrarla.</h2>
+    <p>Trae un caso de los que gestiona tu organización y te enseñamos cómo pasa de incidencia a causa, acción, eficacia y conocimiento reutilizable.</p>
     <p class="amplify">No sustituye tu criterio. <span class="amp" data-word="Lo amplifica"></span>.</p>
     <div class="hero-cta">
-      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
-      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O crea tu primer expediente por tu cuenta, gratis</a>
+      <a href="mailto:demo@evidran.com?subject=Quiero%20verlo%20con%20un%20caso%20real" class="btn btn-primary">Verlo con un caso real</a>
+      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">Crea tu primer expediente gratis</a>
     </div>
   </div>
 </section>

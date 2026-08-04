@@ -44,10 +44,16 @@
   style.textContent = css;
   document.head.appendChild(style);
 
+  // Rastrear si el asistente fue abierto por el usuario en esta sesión
+  var SESS_KEY = "evd_asst_was_open";
+  var wasOpenBefore = sessionStorage.getItem(SESS_KEY) === "true";
+
   var btn = document.createElement("button");
   btn.id = "evd-asst-btn";
   btn.type = "button";
   btn.innerHTML = "💬 ¿Dudas? Pregúntame";
+  // Si no estaba abierto antes, ocultar inicialmente el botón hasta scroll/tiempo
+  btn.style.display = wasOpenBefore ? "flex" : "none";
   document.body.appendChild(btn);
 
   var panel = document.createElement("div");
@@ -59,6 +65,8 @@
     '<div class="ft"><textarea rows="1" placeholder="Escribe tu duda…" maxlength="1400"></textarea>' +
     '<button class="send" type="button">→</button></div>' +
     '<div class="note">Asistente con IA: puede equivocarse. Para hablar con una persona: demo@evidran.com</div>';
+  // Si estaba abierto antes, mostrar el panel inmediatamente
+  if (wasOpenBefore) panel.classList.add("open");
   document.body.appendChild(panel);
 
   var log = panel.querySelector(".log");
@@ -150,15 +158,38 @@
       });
   }
 
+  // Control para diferir la aparición del botón hasta scroll >= 600px o 30 seg
+  var canShowBtn = wasOpenBefore; // Si estaba abierto, el botón ya está visible
+  var scrollListener = function () {
+    if (!canShowBtn && window.scrollY >= 600) {
+      canShowBtn = true;
+      if (btn.style.display === "none") btn.style.display = "flex";
+      document.removeEventListener("scroll", scrollListener);
+    }
+  };
+  var timerHandle = setTimeout(function () {
+    if (!canShowBtn) {
+      canShowBtn = true;
+      if (btn.style.display === "none") btn.style.display = "flex";
+      document.removeEventListener("scroll", scrollListener);
+    }
+  }, 30000); // 30 segundos
+
+  if (!wasOpenBefore) {
+    document.addEventListener("scroll", scrollListener);
+  }
+
   btn.addEventListener("click", function () {
     panel.classList.add("open");
     btn.style.display = "none";
+    sessionStorage.setItem(SESS_KEY, "true");
     greet();
     input.focus();
   });
   panel.querySelector(".hd button").addEventListener("click", function () {
     panel.classList.remove("open");
     btn.style.display = "flex";
+    // Mantener el estado en sessionStorage, el botón se sigue mostrando
   });
   sendBtn.addEventListener("click", send);
   input.addEventListener("keydown", function (e) {

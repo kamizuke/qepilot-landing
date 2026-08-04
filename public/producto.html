@@ -175,6 +175,42 @@
     html { scroll-behavior: auto; }
   }
 
+  /* NORMAS */
+  .normhead { text-align: center; max-width: 62ch; margin: 84px auto 0; }
+  .normhead .hl { color: var(--blue); }
+  .normhead p { font-size: 16px; margin-top: 12px; }
+  .normchips { display: flex; flex-wrap: wrap; gap: 11px; justify-content: center; max-width: 920px; margin: 30px auto 0; }
+  .nchip { display: inline-flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 10px 17px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; box-shadow: 0 3px 10px rgba(22,32,43,.04); transition: transform .15s, box-shadow .15s; }
+  .nchip:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(22,32,43,.09); }
+  .nchip b { color: var(--ink); font-weight: 800; font-size: 13.5px; letter-spacing: -0.01em; white-space: nowrap; }
+  .nchip i { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; background: var(--navy); }
+  .nchip.q i { background: var(--blue); }
+  .nchip.env i { background: #2E7D54; }
+  .nchip.sst i { background: #B45309; }
+  .nchip.en i { background: #0E7490; }
+  .nchip.lab i { background: #6D28D9; }
+  .nchip.acc i { background: var(--navy); }
+  .nchip.auto i { background: #B42318; }
+  .nchip.aud i { background: var(--teal); }
+
+  /* COMPARATIVA */
+  .cmp { background: #fff; }
+  .cmp table { width: 100%; border-collapse: collapse; margin-top: 34px; background: #fff; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+  .cmp th, .cmp td { padding: 15px 18px; text-align: left; font-size: 14.5px; border-bottom: 1px solid var(--cream-d); }
+  .cmp thead th { background: var(--cream); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  .cmp thead th:last-child { color: var(--blue); }
+  .cmp td:first-child { font-weight: 700; color: var(--ink); }
+  .cmp td:last-child { font-weight: 600; color: var(--ink); }
+  .cmp tr td:nth-child(2) { color: var(--ink-soft); }
+
+  /* FAQ */
+  details { border-bottom: 1px solid var(--line); padding: 6px 0; }
+  summary { cursor: pointer; font-weight: 700; font-size: 16px; padding: 12px 0; list-style: none; color: var(--ink); }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; float: right; color: var(--blue); font-weight: 700; }
+  details[open] summary::after { content: "–"; }
+  details p { font-size: 14.5px; padding: 0 0 14px; }
+
   @media (max-width: 860px) {
     .nav-burger { display: flex; }
     .nav-links { display: none; }
@@ -376,6 +412,69 @@
         <strong>¿Vienes de Excel?</strong> Importa tu histórico de no conformidades con un asistente de mapeo de columnas, y ponlo a trabajar desde el primer día.
       </div>
     </div>
+  </div>
+</section>
+
+<!-- LAS NORMAS -->
+<section id="normas">
+  <div class="wrap">
+    <div class="normhead">
+      <h2>Cada norma con su plantilla, su carpeta y su lógica. <span class="hl">Aquí, con una sola conversación.</span></h2>
+      <p>No es un chat de propósito general con el logo cambiado: cada flujo entiende el lenguaje de su norma, te pregunta lo que esa norma exige y redacta como lo haría un experto en ese sistema.</p>
+    </div>
+    <div class="normchips">
+      <span class="nchip q"><i></i><b>ISO 9001</b> No conformidad interna</span>
+      <span class="nchip env"><i></i><b>ISO 14001</b> Ambiental</span>
+      <span class="nchip sst"><i></i><b>ISO 45001</b> Seguridad y salud</span>
+      <span class="nchip en"><i></i><b>ISO 50001</b> Energía</span>
+      <span class="nchip lab"><i></i><b>ISO/IEC 17025</b> Trabajo no conforme</span>
+      <span class="nchip acc"><i></i><b>ISO/IEC 17020</b> Inspección</span>
+      <span class="nchip acc"><i></i><b>ISO/IEC 17065</b> Certificación de producto</span>
+      <span class="nchip auto"><i></i><b>8D</b> Reclamación de cliente · OEM</span>
+      <span class="nchip aud"><i></i><b>Auditoría</b> Respuesta a hallazgos</span>
+    </div>
+    <div class="normband-profile">
+      <strong>Y aprende a qué te dedicas.</strong> Propone un perfil de tu empresa desde tu web pública; tú lo apruebas y la entrevista pasa a hablar con el vocabulario de tu actividad.
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVA -->
+<section class="cmp" id="comparativa">
+  <div class="wrap">
+    <div class="center-head"><div class="eyebrow">Por qué Evidran</div><h2>Archivar no es aprender.</h2><p>Así gestiona hoy la calidad gran parte del mercado: Word, Excel, carpetas compartidas y correo. Funciona… hasta que alguien pregunta «¿esto ya nos pasó?».</p></div>
+    <table>
+      <thead><tr><th></th><th>Software que archiva</th><th>Evidran · el sistema que aprende</th></tr></thead>
+      <tbody>
+        <tr><td>Documentar</td><td>Rellenas tú, campo a campo</td><td>Hablas y se redacta solo</td></tr>
+        <tr><td>Causa raíz</td><td>Lo que se te ocurra</td><td>Criterio de sistema, sin causas pobres</td></tr>
+        <tr><td>Varias normas</td><td>Una plantilla por cada una</td><td>Una herramienta para todas</td></tr>
+        <tr><td>Plazos</td><td>Los vigilas a mano</td><td>Semáforo de vencimiento y avisos</td></tr>
+        <tr><td>El conocimiento</td><td>Se va con las personas</td><td>Queda en la organización, buscable</td></tr>
+        <tr><td>Tus datos</td><td>Duermen en carpetas</td><td>Hallazgos, causas y objetivos</td></tr>
+        <tr><td>Apartado Revisión 9.3</td><td>A mano cada año</td><td>Redactado desde tus datos</td></tr>
+        <tr><td>Auditoría interna</td><td>Un Excel la semana antes</td><td>Programa, checklist y hallazgos conectados</td></tr>
+        <tr><td>Registrar en planta</td><td>Un papel que llega tarde</td><td>App de campo: QR, foto y captura en el momento</td></tr>
+        <tr><td>Vigencia de tus normas</td><td>Se comprueba a mano, si hay tiempo</td><td>Vigilancia diaria con evidencia registrada</td></tr>
+        <tr><td>«¿Estoy listo?»</td><td>Nadie te lo dice</td><td>Se lo preguntas al copiloto</td></tr>
+      </tbody>
+    </table>
+    <div style="max-width:66ch;margin:40px auto 0;text-align:center">
+      <h3 style="font-size:21px;margin-bottom:12px">¿Y frente a las suites ISO de siempre?</h3>
+      <p style="font-size:15.5px">Las suites son anchas: gestor documental con flujos de aprobación, portales de proveedores, decenas de módulos que un consultor configura contigo durante semanas. Si tienes equipo y alguien que administre la plataforma, esa anchura vale.</p>
+      <p style="font-size:15.5px;margin-top:12px">Evidran es profundo donde se juega la auditoría: del riesgo a la no conformidad, de la causa raíz al objetivo, del objetivo a la revisión por la dirección — funcionando desde el primer día, sin proyecto de implantación. <strong style="color:var(--ink)">Ellas tocan todos los palos. Evidran toca a fondo el que te examinan.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap" style="max-width: 640px; margin: 0 auto;">
+    <div class="center-head"><div class="eyebrow">Preguntas frecuentes</div><h2>Lo que sueles preguntarte</h2></div>
+    <details><summary>¿No me vale con mis plantillas de Word?</summary><p>Las plantillas no te entrevistan, no evitan causas pobres, no te avisan de vencimientos ni te dan objetivos. Y lo que escribes en ellas no vuelve nunca: se archiva y se olvida.</p></details>
+    <details><summary>Las suites ISO tienen más módulos.</summary><p>Cierto: son más anchas. La pregunta es cuántos módulos vas a usar tú solo, cuánto tarda la plataforma en estar configurada y quién la mantiene después. Evidran cubre a fondo el ciclo que decide tu auditoría — riesgos, no conformidades, acciones, auditoría interna, objetivos y revisión por la dirección — y funciona desde el primer día. Si tu núcleo es un gestor documental con flujos o un portal de proveedores, una suite encaja mejor; te lo decimos igual de claro.</p></details>
+    <details><summary>¿Mis datos están seguros?</summary><p>Aislados por empresa a nivel de base de datos, evidencias privadas y la IA recibe lo mínimo imprescindible. El detalle completo —firma, roles, on-premise, conexión MCP— está en <a href="/seguridad.html" style="color:var(--blue);font-weight:700">Seguridad y privacidad</a>.</p></details>
+    <details><summary>Soy yo solo para toda la calidad.</summary><p>Justo para eso está pensado Evidran.</p></details>
   </div>
 </section>
 

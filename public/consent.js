@@ -44,14 +44,15 @@
     if (document.getElementById("evdCookies")) return;
     var css = document.createElement("style");
     css.textContent =
-      "#evdCookies{position:fixed;left:16px;right:16px;bottom:16px;z-index:200;max-width:560px;margin:0 auto;" +
-      "background:#fff;border:1px solid #DDD8CC;border-radius:16px;box-shadow:0 24px 60px rgba(22,32,43,.22);" +
-      "padding:18px 20px;font-family:'Inter Tight',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}" +
-      "#evdCookies p{margin:0 0 12px;font-size:13.5px;line-height:1.55;color:#4A5563;}" +
+      "#evdCookies{position:fixed;left:16px;right:16px;bottom:16px;z-index:200;max-width:600px;margin:0 auto;" +
+      "background:#fff;border:1px solid #DDD8CC;border-radius:12px;box-shadow:0 24px 60px rgba(22,32,43,.22);" +
+      "padding:10px 14px;font-family:'Inter Tight',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" +
+      "display:flex;align-items:center;gap:12px;flex-wrap:wrap;}" +
+      "#evdCookies p{margin:0;flex:1;font-size:13px;line-height:1.4;color:#4A5563;min-width:200px;}" +
       "#evdCookies p a{color:#2563EB;font-weight:700;text-decoration:none;}" +
       "#evdCookies p a:hover{text-decoration:underline;}" +
-      "#evdCookies .b{display:flex;gap:10px;flex-wrap:wrap;}" +
-      "#evdCookies button{cursor:pointer;font-family:inherit;font-weight:700;font-size:13.5px;border-radius:10px;padding:10px 18px;}" +
+      "#evdCookies .b{display:flex;gap:8px;flex-shrink:0;}" +
+      "#evdCookies button{cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;border-radius:8px;padding:7px 14px;white-space:nowrap;}" +
       "#evdCookies .si{border:0;background:linear-gradient(135deg,#4AA6F5,#2563EB);color:#fff;}" +
       "#evdCookies .no{background:transparent;color:#16202B;border:1.5px solid #DDD8CC;}" +
       "#evdCookies .no:hover{border-color:#2D5A7B;}";
@@ -62,7 +63,7 @@
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", "Aviso de cookies");
     d.innerHTML =
-      "<p>Usamos una cookie de analítica (Google Analytics) para saber qué partes de la web ayudan y cuáles no. Solo se activa si aceptas. <a href=\"/cookies.html\">Más información</a></p>" +
+      "<p>Analítica con Google Analytics (solo si aceptas). <a href=\"/cookies.html\">Más info</a></p>" +
       "<div class=\"b\"><button type=\"button\" class=\"si\">Aceptar</button><button type=\"button\" class=\"no\">Rechazar</button></div>";
     d.querySelector(".si").addEventListener("click", aceptar);
     d.querySelector(".no").addEventListener("click", rechazar);
