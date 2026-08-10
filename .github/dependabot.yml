@@ -8,15 +8,26 @@ updates:
       day: monday
     open-pull-requests-limit: 5
     groups:
-      # react y react-dom tienen que subir SIEMPRE juntos: react-dom declara a react
-      # como peer dependency, así que un PR que suba solo uno de los dos no instala
-      # (npm install falla con ERESOLVE y la preview de Vercel se cae).
+      # react, react-dom y lucide-react suben SIEMPRE juntos. react-dom declara a
+      # react como peer dependency, y lucide-react declara el rango de react que
+      # soporta: con lucide-react 0.383 el tope era react 18, así que un PR que
+      # subiera react a 19 en solitario no instalaba (ERESOLVE, preview caída).
+      # lucide-react 1.x ya admite react 19, por eso los tres van en el mismo PR.
       # El orden importa: Dependabot asigna cada dependencia al primer grupo que
-      # la encaja, por eso este va antes que minor-and-patch.
+      # la encaja, por eso estos grupos van antes que minor-and-patch.
       react:
         patterns:
           - react
           - react-dom
+          - lucide-react
+
+      # vite y su plugin de react van del mismo modo: cada versión mayor del plugin
+      # fija el rango de vite que acepta (plugin-react 6 exige vite ^8), así que
+      # subir uno sin el otro rompe la instalación en los dos sentidos.
+      vite:
+        patterns:
+          - vite
+          - "@vitejs/plugin-react"
       # Agrupa actualizaciones menores/parches en un solo PR para no llenar la bandeja
       minor-and-patch:
         update-types:
