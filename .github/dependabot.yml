@@ -1,0 +1,24 @@
+version: 2
+updates:
+  # Dependencias de la landing (npm)
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # react y react-dom tienen que subir SIEMPRE juntos: react-dom declara a react
+      # como peer dependency, así que un PR que suba solo uno de los dos no instala
+      # (npm install falla con ERESOLVE y la preview de Vercel se cae).
+      # El orden importa: Dependabot asigna cada dependencia al primer grupo que
+      # la encaja, por eso este va antes que minor-and-patch.
+      react:
+        patterns:
+          - react
+          - react-dom
+      # Agrupa actualizaciones menores/parches en un solo PR para no llenar la bandeja
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
