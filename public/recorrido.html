@@ -29,6 +29,11 @@
   .product-shot { background: #f7f7f5; }
   .product-shot img { display: block; width: 100%; height: auto; }
   #entrevista .feat-row { grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr); gap: 40px; }
+  .real-intel-shot { margin: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: var(--radius); background: #141e29; box-shadow: 0 24px 48px rgba(0,0,0,.22); }
+  .real-intel-shot picture, .real-intel-shot img { display: block; width: 100%; }
+  .real-intel-shot img { height: auto; }
+  .real-intel-shot figcaption { padding: 11px 15px 13px; color: #AEB6C0; background: rgba(255,255,255,.05); font-size: 11.5px; line-height: 1.5; }
+  .real-intel-shot figcaption strong { display: block; color: #fff; font-size: 12.5px; font-weight: 700; margin-bottom: 2px; }
   .doc-eyebrow { font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--blue); font-weight: 700; }
   .doc-title { font-size: 15px; font-weight: 800; margin: 2px 0 12px; letter-spacing: -0.01em; }
   .doc-field { border: 1px solid var(--cream-d); border-radius: 9px; padding: 8px 10px; margin-bottom: 8px; }
@@ -273,24 +278,22 @@
 
     <div class="feat-row" id="memoria" style="margin-top:0">
       <div class="fr-text">
-        <div class="fr-eyebrow">Desde entonces · Lo que queda</div>
-        <h3>La NC deja de ser un documento. Ahora es un dato.</h3>
-        <p>La causa alimenta las tendencias: «método/procedimiento» queda medido y la dirección lo ve. La solución queda en el historial. Y la decisión — por qué una instrucción y no más supervisión — conserva su porqué en la memoria de decisiones.</p>
+        <div class="fr-eyebrow">Durante el análisis · El histórico entra en juego</div>
+        <h3>No responde solo con el caso de hoy.</h3>
+        <p>Mientras documentas, Evidran contrasta lo que cuentas con el histórico de tu organización. Detecta patrones —como causas de método o procedimiento que se repiten— y los pone sobre la mesa antes de proponer acciones. El conocimiento acumulado participa en la decisión.</p>
       </div>
-      <div class="intel-shot">
-        <div class="is-head">Inteligencia · lo que Evidran ve en tus datos</div>
-        <div class="is-block">
-          <div class="is-lbl">De dónde vienen tus no conformidades</div>
-          <div class="is-bar"><span class="k">Formación</span><span class="t"><span style="width:100%"></span></span><span class="v">37 %</span></div>
-          <div class="is-bar"><span class="k">Método</span><span class="t"><span style="width:57%"></span></span><span class="v">21 %</span></div>
-          <div class="is-bar"><span class="k">Proveedor</span><span class="t"><span style="width:43%"></span></span><span class="v">16 %</span></div>
-        </div>
-        <div class="hs-res">
-          <div class="hs-top"><span class="dec-tag">Decisión registrada</span></div>
-          <b>Instrucción de trabajo en lugar de supervisión reforzada</b>
-          <p>Motivo: la causa era de método, no de personas — refuerzo de supervisión no la elimina.</p>
-        </div>
-      </div>
+      <figure class="real-intel-shot">
+        <picture>
+          <source media="(max-width: 640px)" srcset="/media/evidran-historico-real-mobile.png" />
+          <img src="/media/evidran-historico-real.png"
+               alt="Evidran identifica durante una entrevista que la causa de método se repite en el histórico de los dos últimos años"
+               width="1500" height="940" loading="lazy" decoding="async" />
+        </picture>
+        <figcaption>
+          <strong>«En vuestro histórico es una de las causas más repetidas en los últimos dos años.»</strong>
+          Respuesta real de Evidran durante el análisis.
+        </figcaption>
+      </figure>
     </div>
 
     <div class="feat-row rev" id="busqueda">
