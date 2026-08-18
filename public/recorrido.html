@@ -25,11 +25,10 @@
 <link rel="stylesheet" href="/plataforma.css">
 <script defer src="/consent.js"></script>
 <style>
-  /* mock de dos columnas (entrevista + expediente), como en la home */
-  .fr-visual.mock2col { display: grid; grid-template-columns: 1fr 1fr; }
-  .fr-visual.mock2col .mock-bar { grid-column: 1 / -1; }
-  .fr-visual.mock2col .mock-chat { border-right: 1px solid var(--cream-d); }
-  .mock-doc { padding: 20px; text-align: left; background: #fff; }
+  /* Captura real del producto: panorámica para conservar conversación e informe. */
+  .product-shot { background: #f7f7f5; }
+  .product-shot img { display: block; width: 100%; height: auto; }
+  #entrevista .feat-row { grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr); gap: 40px; }
   .doc-eyebrow { font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--blue); font-weight: 700; }
   .doc-title { font-size: 15px; font-weight: 800; margin: 2px 0 12px; letter-spacing: -0.01em; }
   .doc-field { border: 1px solid var(--cream-d); border-radius: 9px; padding: 8px 10px; margin-bottom: 8px; }
@@ -51,8 +50,7 @@
   /* línea de adjunto bajo una burbuja de chat */
   .mc-att { font-size: 11.5px; color: var(--ink-soft); margin: -4px 0 10px 4px; }
   @media (max-width: 860px) {
-    .fr-visual.mock2col { grid-template-columns: 1fr; }
-    .fr-visual.mock2col .mock-chat { border-right: 0; border-bottom: 1px solid var(--cream-d); }
+    #entrevista .feat-row { grid-template-columns: 1fr; }
   }
 </style>
 <script type="application/ld+json">
@@ -208,22 +206,11 @@
         <h3>La entrevista, no el interrogatorio.</h3>
         <p>Evidran entrevista como un responsable senior: una o dos preguntas por turno, sugiere la causa sistémica probable y no acepta un «error humano». A la izquierda conversas; a la derecha, el informe formal se redacta campo a campo. La última palabra es tuya.</p>
       </div>
-      <div class="fr-visual mock2col">
-        <div class="mock-bar"><i></i><i></i><i></i><span>app.evidran.com — No Conformidad Interna · UNE-EN ISO 9001:2015</span></div>
-        <div class="mock-chat">
-          <div class="bubble ai">Cuéntame qué se ha detectado y dónde. Si tienes el email o una foto, adjúntalos.</div>
-          <div class="bubble me">El turno de noche no registró los controles dimensionales del lunes.</div>
-          <div class="bubble ai">Veo que el procedimiento existía. En estos casos la causa suele estar en la falta de un control que asegure que se cumple, no en la persona. ¿Encaja?</div>
-          <div class="bubble me">Sí, no había instrucción para el turno rotativo.</div>
-        </div>
-        <div class="mock-doc">
-          <div class="doc-eyebrow">No conformidad interna · UNE-EN ISO 9001:2015 (10.2)</div>
-          <div class="doc-title">INFORME DE NO CONFORMIDAD</div>
-          <div class="doc-field"><div class="l">Descripción</div><div class="v">No se registran los controles dimensionales del turno de noche.</div></div>
-          <div class="doc-field fresh"><div class="l">Causa raíz (5 porqués)</div><div class="v">Ausencia de instrucción específica para el turno rotativo; sin control que garantice el registro.</div></div>
-          <div class="doc-field"><div class="l">Acción correctiva</div><div class="v">Crear IT y formar a operarios de noche.</div></div>
-        </div>
-      </div>
+      <figure class="fr-visual product-shot">
+        <img src="/media/evidran-entrevista-real.png"
+             alt="Captura real de Evidran entrevistando al responsable de calidad mientras redacta una no conformidad"
+             width="1600" height="824" loading="lazy" decoding="async" />
+      </figure>
     </div>
   </div>
 </section>
