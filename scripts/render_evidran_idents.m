@@ -140,15 +140,15 @@ static BOOL Render(NSURL *outputURL, CGImageRef logoFrame, BOOL isOutro, NSError
 int main(void) {
     @autoreleasepool {
         NSString *workspace = [[NSFileManager defaultManager] currentDirectoryPath];
-        NSURL *sourceURL = [NSURL fileURLWithPath:[workspace stringByAppendingPathComponent:@"evidran-brand-frame-16x9.png"]];
+        NSURL *sourceURL = [NSURL fileURLWithPath:[workspace stringByAppendingPathComponent:@"material-video/identidad/fuentes/evidran-brand-frame-16x9.png"]];
         CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)sourceURL, NULL);
         if (!imageSource) return 1;
         CGImageRef logoFrame = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
         CFRelease(imageSource);
         if (!logoFrame) return 1;
 
-        NSURL *introURL = [NSURL fileURLWithPath:[workspace stringByAppendingPathComponent:@"evidran-entrada-puntos.mp4"]];
-        NSURL *outroURL = [NSURL fileURLWithPath:[workspace stringByAppendingPathComponent:@"evidran-salida-puntos.mp4"]];
+        NSURL *introURL = [NSURL fileURLWithPath:[workspace stringByAppendingPathComponent:@"material-video/identidad/actual/evidran-entrada-puntos.mp4"]];
+        NSURL *outroURL = [NSURL fileURLWithPath:[workspace stringByAppendingPathComponent:@"material-video/identidad/actual/evidran-salida-puntos.mp4"]];
         NSError *error = nil;
         BOOL introOK = Render(introURL, logoFrame, NO, &error);
         if (!introOK) {

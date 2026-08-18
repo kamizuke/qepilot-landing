@@ -36,6 +36,13 @@
   .doc-field .l { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; }
   .doc-field .v { font-size: 12.5px; color: var(--ink); margin-top: 2px; }
   .doc-field.fresh { border-color: var(--blue-l); background: #F2F8FF; }
+  /* vídeo del recorrido */
+  .vidsec { padding-top: 20px; }
+  .vidsec .center-head { margin-bottom: 26px; }
+  .vidfig { margin: 0 auto; max-width: 980px; }
+  .vidfig video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--ink); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 24px 48px rgba(22,32,43,.11); }
+  .vidfig figcaption { text-align: center; margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); }
+  .vidfig figcaption b { color: var(--ink); }
   /* línea de adjunto bajo una burbuja de chat */
   .mc-att { font-size: 11.5px; color: var(--ink-soft); margin: -4px 0 10px 4px; }
   @media (max-width: 860px) {
@@ -43,6 +50,20 @@
     .fr-visual.mock2col .mock-chat { border-right: 0; border-bottom: 1px solid var(--cream-d); }
   }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Una NC de principio a fin: de la plantilla de Word a Evidran",
+  "description": "63 segundos: la plantilla de no conformidad en Word con sus 87 huecos, y la misma NC resuelta conversando con Evidran — descripción, corrección, causa raíz, acción correctiva, eficacia y cierre.",
+  "thumbnailUrl": "https://www.evidran.com/media/nc-de-principio-a-fin-poster.jpg",
+  "contentUrl": "https://www.evidran.com/media/nc-de-principio-a-fin.mp4",
+  "uploadDate": "2026-08-18",
+  "duration": "PT1M3S",
+  "inLanguage": "es",
+  "publisher": { "@type": "Organization", "name": "Evidran", "url": "https://www.evidran.com/" }
+}
+</script>
 </head>
 <body>
 
@@ -130,6 +151,25 @@
     </div>
   </div>
 </header>
+
+<!-- VÍDEO · EL RECORRIDO, GRABADO -->
+<section id="video" class="vidsec">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Grabado en el producto</div>
+      <h2>La misma no conformidad, de dos maneras.</h2>
+      <p>63 segundos sin sonido: primero la plantilla de Word —4 páginas, 87 huecos, 23 casillas y los cinco porqués en blanco—, y después la misma NC resuelta conversando, con el informe redactándose solo hasta la eficacia y el cierre.</p>
+    </div>
+    <figure class="vidfig">
+      <video controls playsinline preload="none" width="1280" height="720"
+             poster="/media/nc-de-principio-a-fin-poster.jpg">
+        <source src="/media/nc-de-principio-a-fin.mp4" type="video/mp4" />
+        Tu navegador no reproduce vídeo. <a href="/media/nc-de-principio-a-fin.mp4">Descarga el vídeo (MP4)</a>.
+      </video>
+      <figcaption><b>Caso real de ejemplo:</b> clips montados invertidos en el RV-330, detectados en auditoría interna. Sin audio — los rótulos van en pantalla. El recorrido escrito que sigue usa otro caso, NC-2026-014.</figcaption>
+    </figure>
+  </div>
+</section>
 
 <!-- PASO 1 · AVISO -->
 <section id="aviso">

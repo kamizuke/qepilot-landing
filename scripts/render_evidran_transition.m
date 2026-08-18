@@ -91,7 +91,7 @@ static void DrawFrame(CVPixelBufferRef pixelBuffer, double time) {
 int main(void) {
     @autoreleasepool {
         NSString *path = [[[NSFileManager defaultManager] currentDirectoryPath]
-            stringByAppendingPathComponent:@"evidran-transicion-word-a-evidran.mp4"];
+            stringByAppendingPathComponent:@"material-video/identidad/actual/evidran-transicion-word-a-evidran.mp4"];
         NSURL *outputURL = [NSURL fileURLWithPath:path];
         [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
 
