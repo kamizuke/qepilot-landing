@@ -298,6 +298,7 @@
   .intel { background: linear-gradient(160deg, #0E2A4A, #16202B); color: #fff; }
   .intel h2 { color: #fff; max-width: 26ch; }
   .intel .feat-row { margin-top: 44px; align-items: center; }
+  #tendencias { grid-template-columns: .82fr 1.38fr; }
   .intel .feat-row h3 { color: #fff; }
   .intel .feat-row .fr-eyebrow { color: #7FE0A0; }
   .intel .feat-row p { color: #AEB6C0; }
@@ -313,20 +314,10 @@
   .intel-points li:first-child { border-top: 0; }
   .intel-points li::before { content: ""; position: absolute; left: 2px; top: 20px; width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--teal)); }
   .intel-points b { color: #fff; font-weight: 700; }
-  .intel-shot { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius); padding: 20px; }
-  .is-head { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #8FA9C2; font-weight: 700; margin-bottom: 14px; }
-  .is-find { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #DCE3EC; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 11px 13px; }
-  .is-find b { color: #fff; } .is-find em { color: #8FA9C2; font-style: normal; }
-  .is-block { margin-top: 15px; }
-  .is-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #8FA9C2; font-weight: 700; margin-bottom: 10px; }
-  .is-bar { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #DCE3EC; margin: 9px 0; }
-  .is-bar .k { width: 82px; flex: 0 0 auto; }
-  .is-bar .t { flex: 1; height: 7px; background: rgba(255,255,255,.1); border-radius: 5px; overflow: hidden; }
-  .is-bar .t span { display: block; height: 100%; border-radius: 5px; background: linear-gradient(135deg, var(--green), var(--teal)); }
-  .is-bar .v { width: 34px; text-align: right; color: #fff; font-weight: 700; }
-  .is-obj { margin-top: 16px; border: 1px solid rgba(70,222,126,.35); background: rgba(70,222,126,.08); border-radius: 12px; padding: 13px 15px; }
-  .is-obj .k { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #7FE0A0; font-weight: 700; }
-  .is-obj p { font-size: 13.5px; color: #fff; font-weight: 600; margin-top: 6px; }
+  .intel-real-shot { margin: 0; overflow: hidden; background: #F7F7F4; border: 1px solid rgba(255,255,255,.2); border-radius: var(--radius); box-shadow: 0 26px 58px rgba(0,0,0,.25); }
+  .intel-real-shot picture, .intel-real-shot img { display: block; width: 100%; }
+  .intel-real-shot img { height: auto; }
+  .intel-real-shot figcaption { padding: 11px 15px 12px; border-top: 1px solid #DED9CC; color: #6F6B61; background: #fff; font-size: 11.5px; line-height: 1.45; }
 
   /* HISTORIAL mock (oscuro) */
   .hs-search { display: flex; align-items: center; gap: 9px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 10px; padding: 10px 13px; font-size: 13px; color: #fff; font-weight: 600; }
@@ -429,6 +420,7 @@
 
   @media (max-width: 860px) {
     .feat-row { grid-template-columns: 1fr; gap: 28px; }
+    #tendencias { grid-template-columns: 1fr; }
     .feat-row.rev .fr-visual { order: 0; }
     .problem .wrap, .twocol { grid-template-columns: 1fr; gap: 28px; }
     .steps, .entry3, .qs, .exg, .segs, .plinks { grid-template-columns: 1fr; }
@@ -643,27 +635,20 @@
     <div class="feat-row" id="tendencias">
       <div class="fr-text">
         <div class="fr-eyebrow">Tendencias e inteligencia</div>
-        <h3>De dónde vienen tus problemas, medido.</h3>
+        <h3>Tus datos te avisan de lo que se acumula y por qué.</h3>
         <ul class="intel-points">
           <li><b>Lo que vemos en tus datos.</b> Hallazgos automáticos —fuera de plazo, vencidas, concentración por área—, cada uno citando el dato que lo respalda.</li>
           <li><b>De dónde vienen tus NC, de verdad.</b> Clasifica la causa raíz de cada expediente y te enseña el reparto. Se acabó intuir.</li>
           <li><b>Objetivos recomendados por sistema, ISO 6.2.</b> Un objetivo medible, anclado a tu porcentaje real y siempre editable.</li>
         </ul>
       </div>
-      <div class="intel-shot">
-        <div class="is-head">Inteligencia · lo que Evidran ve en tus datos</div>
-        <div class="is-find">⏱ <span>El <b>42 %</b> de las acciones se cerraron fuera de plazo <em>(8 de 19)</em></span></div>
-        <div class="is-block">
-          <div class="is-lbl">De dónde vienen tus no conformidades</div>
-          <div class="is-bar"><span class="k">Formación</span><span class="t"><span style="width:100%"></span></span><span class="v">37 %</span></div>
-          <div class="is-bar"><span class="k">Método</span><span class="t"><span style="width:57%"></span></span><span class="v">21 %</span></div>
-          <div class="is-bar"><span class="k">Proveedor</span><span class="t"><span style="width:43%"></span></span><span class="v">16 %</span></div>
-        </div>
-        <div class="is-obj">
-          <div class="k">Objetivo recomendado · ISO 9001 (6.2)</div>
-          <p>Reducir un 25 % las no conformidades asociadas a la formación durante 2027.</p>
-        </div>
-      </div>
+      <figure class="intel-real-shot">
+        <picture>
+          <source media="(max-width: 640px)" srcset="/media/evidran-inteligencia-real-mobile.png" width="792" height="1516">
+          <img src="/media/evidran-inteligencia-real.png" alt="Cuadro de mando real de Evidran con alertas automáticas, tendencias mensuales y clasificación de causas raíz" width="1500" height="1570" loading="lazy" decoding="async">
+        </picture>
+        <figcaption>Captura real · Señales automáticas, tendencias y causas con trazabilidad al dato.</figcaption>
+      </figure>
     </div>
 
     <div id="copiloto" style="margin-top:44px">
