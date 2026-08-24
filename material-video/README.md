@@ -6,6 +6,7 @@ Esta carpeta reúne los recursos de producción y las exportaciones usadas en lo
 
 - `landing/master/`: másteres de edición y póster del vídeo para la landing.
 - `landing/web/`: exportaciones reducidas para publicación web.
+- `youtube/`: versión completa editada para YouTube, con audio y grafismos de marca.
 - `broll/`: B-roll aprobado y listo para usar directamente en CapCut.
 - `broll/archivo/`: versiones fuente, imágenes de referencia y fotogramas de revisión.
 - `identidad/actual/`: entrada, salida y transición vigentes.
