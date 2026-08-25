@@ -17,6 +17,9 @@ Esta carpeta reúne los recursos de producción y las exportaciones usadas en lo
 
 Los generadores y utilidades locales están en `scripts/`. Los recursos publicados por la web siguen en `public/`.
 
+Las animaciones de marca editables se encuentran en `remotion/`. El B-roll
+`broll/evidran-broll-conocimiento.mp4` se genera con `npm run render:knowledge` desde esa carpeta.
+
 El vídeo de la página «Una NC de principio a fin» se publica en `public/media/` y se genera desde
 `landing/web/Nc-evidran-landing-web-720p.mp4` con `scripts/compress_video_web.m` (720p a 1.500 kbps, ~11 MB)
 y su póster con `scripts/extract_video_frame.m` en el segundo 37,5.
