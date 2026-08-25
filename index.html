@@ -417,13 +417,16 @@
   .final .btn-ghost:hover { border-color: #fff; color: #fff; }
 
   footer { background: var(--ink); color: #8893A0; padding: 34px 0; font-size: 13.5px; }
-  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; }
   footer .brand { color: #fff; }
   footer .brand em { color: var(--blue-l); }
   footer .brand img { height: 28px; }
-  footer a.li { display: inline-flex; align-items: center; vertical-align: middle; color: #AEB6C0; margin-left: 2px; transition: color .15s; }
-  footer a.li:hover { color: var(--blue-l); }
-  footer a.li svg { width: 18px; height: 18px; }
+  .footer-copy { flex: 1; min-width: 280px; line-height: 1.8; }
+  .footer-copy a { color: #AEB6C0; text-decoration: underline; }
+  .footer-social { display: flex; align-items: center; gap: 8px; }
+  .footer-social span { color: #AEB6C0; font-weight: 700; margin-right: 2px; }
+  .footer-social a { color: #fff; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 7px 11px; font-weight: 700; transition: color .15s, border-color .15s, background .15s; }
+  .footer-social a:hover { color: #fff; border-color: var(--blue-l); background: rgba(36,137,220,.16); }
 
   /* NAV móvil (≤980) */
   @media (max-width: 980px) {
@@ -753,7 +756,12 @@
 <footer>
   <div class="wrap">
     <span class="brand"><img src="/brand/evidran-logo-negativo.svg" alt="Evidran" width="111" height="28" /></span>
-    <span>El sistema de conocimiento de calidad · app.evidran.com · <a href="/blog/" style="color:#AEB6C0;text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="color:#AEB6C0;text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="color:#AEB6C0;text-decoration:underline">Términos y condiciones</a> · <a href="/aviso-legal.html" style="text-decoration:underline">Aviso legal</a> · <a href="/privacidad.html" style="text-decoration:underline">Privacidad</a> · <a href="/cookies.html" style="text-decoration:underline">Cookies</a> · <a class="li" href="https://www.linkedin.com/company/evidran" target="_blank" rel="noopener" aria-label="Evidran en LinkedIn" title="Evidran en LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a></span>
+    <span class="footer-copy">El sistema de conocimiento de calidad · app.evidran.com · <a href="/blog/">Blog</a> · <a href="mailto:demo@evidran.com">demo@evidran.com</a> · <a href="/terminos.html">Términos y condiciones</a> · <a href="/aviso-legal.html">Aviso legal</a> · <a href="/privacidad.html">Privacidad</a> · <a href="/cookies.html">Cookies</a></span>
+    <div class="footer-social" role="navigation" aria-label="Canales de Evidran">
+      <span>Síguenos</span>
+      <a href="https://www.youtube.com/@Evidran" target="_blank" rel="noopener noreferrer" aria-label="Canal de Evidran en YouTube">YouTube</a>
+      <a href="https://www.linkedin.com/company/evidran" target="_blank" rel="noopener noreferrer" aria-label="Evidran en LinkedIn">LinkedIn</a>
+    </div>
   </div>
 </footer>
 <script>
