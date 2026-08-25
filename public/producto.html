@@ -92,16 +92,23 @@
     color: #fff; background: var(--blue); box-shadow: 0 7px 16px rgba(37,99,235,.22);
   }
   .tour-stage { position: relative; }
+  .tour-panel:not([hidden]) { display: flex; flex-direction: column; }
   .tour-panel[hidden] { display: none; }
   .tour-shot {
-    display: block; overflow: hidden; border: 1px solid var(--line);
+    position: relative; display: block; overflow: hidden; border: 1px solid var(--line);
     border-radius: 20px; background: #fff;
     box-shadow: 0 30px 60px rgba(22,32,43,.14);
+    order: 2;
   }
-  .tour-shot img { display: block; width: 100%; height: auto; }
+  .tour-shot::before {
+    content: "Cargando captura real…"; position: absolute; inset: 0;
+    display: grid; place-items: center; color: var(--ink-soft);
+    background: linear-gradient(135deg, #fff, #F2F6FA); font-size: 13px; font-weight: 700;
+  }
+  .tour-shot img { position: relative; z-index: 1; display: block; width: 100%; height: auto; }
   .tour-copy {
     display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 24px;
-    align-items: start; padding: 22px 4px 0;
+    align-items: start; padding: 0 4px 20px; order: 1;
   }
   .tour-kicker {
     display: block; margin-bottom: 6px; color: var(--blue);
@@ -323,10 +330,10 @@
       <span class="nchip env"><i></i><b>ISO 14001</b> Ambiental</span>
       <span class="nchip sst"><i></i><b>ISO 45001</b> Seguridad y salud</span>
       <span class="nchip en"><i></i><b>ISO 50001</b> Energía</span>
-      <span class="nchip lab"><i></i><b>ISO/IEC 17025</b> Trabajo no conforme</span>
-      <span class="nchip acc"><i></i><b>ISO/IEC 17020</b> Inspección</span>
+      <span class="nchip lab" id="norma-17025"><i></i><b>ISO/IEC 17025</b> Trabajo no conforme</span>
+      <span class="nchip acc" id="norma-17020"><i></i><b>ISO/IEC 17020</b> Inspección</span>
       <span class="nchip acc"><i></i><b>ISO/IEC 17065</b> Certificación de producto</span>
-      <span class="nchip auto"><i></i><b>8D</b> Reclamación de cliente · OEM</span>
+      <span class="nchip auto" id="norma-8d"><i></i><b>8D</b> Reclamación de cliente · OEM</span>
       <span class="nchip aud"><i></i><b>Auditoría</b> Respuesta a hallazgos</span>
     </div>
     <div class="normband-profile">
@@ -404,6 +411,9 @@
 
     function activate(tab, focusTab) {
       var target = tab.getAttribute("data-tour-target");
+      var targetPanel = tour.querySelector('[data-tour-panel="' + target + '"]');
+      var targetImage = targetPanel && targetPanel.querySelector("img");
+      if (targetImage) targetImage.loading = "eager";
       tabs.forEach(function (item) {
         var selected = item === tab;
         item.setAttribute("aria-selected", selected ? "true" : "false");
@@ -418,7 +428,15 @@
       }
     }
 
+    function prepare(tab) {
+      var target = tab.getAttribute("data-tour-target");
+      var image = tour.querySelector('[data-tour-panel="' + target + '"] img');
+      if (image) image.loading = "eager";
+    }
+
     tabs.forEach(function (tab, index) {
+      tab.addEventListener("mouseenter", function () { prepare(tab); }, { once: true });
+      tab.addEventListener("focus", function () { prepare(tab); }, { once: true });
       tab.addEventListener("click", function () { activate(tab, false); });
       tab.addEventListener("keydown", function (event) {
         var next = null;
