@@ -62,8 +62,14 @@
   </url>
   <url>
     <loc>https://www.evidran.com/blog/</loc>
-    <lastmod>2026-08-04</lastmod>
+    <lastmod>2026-08-25</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.evidran.com/blog/competencia-a-la-baja-calidad.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
