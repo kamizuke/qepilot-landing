@@ -10,3 +10,11 @@ dist/
 # sistema
 .DS_Store
 *.local
+
+# vídeo de trabajo: masters, b-roll y originales de material-video/
+# Pesan cientos de MB y la web no los sirve — el vídeo que sí publica la web vive
+# en public/media/ y ese SÍ se sube.
+material-video/**/*.mp4
+material-video/**/*.mov
+material-video/**/*.m4v
+material-video/**/*.webm
