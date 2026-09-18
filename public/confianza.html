@@ -316,7 +316,7 @@ const SCENARIOS = [
     desc: "El momento en el que un documento deja de ser un borrador y pasa a ser evidencia.",
     steps: [
       { path: ["user", "app"], title: "Lo apruebas tú", text: "Firmar es potestad del responsable de calidad: si lo escribió otra persona, te lo envía a aprobación y decides tú." },
-      { path: ["app", "server"], title: "La firma la sella el servidor", text: "Tu nombre, tu cargo y la hora no los declara la pantalla: se toman de tu identidad ya verificada. En el papel firmado no puede aparecer otro nombre." },
+      { path: ["app", "server"], title: "La firma la sella el servidor", text: "El servidor registra tu nombre, cargo y hora a partir de la sesión autenticada. En el papel firmado no puede aparecer otro nombre." },
       { path: ["server", "db"], title: "Y ya no se toca", text: "Un expediente firmado queda cerrado a cambios. Si hay que reabrirlo, se puede — pero la firma se anula y queda dicho quién lo reabrió y cuándo." },
     ],
   },
@@ -325,7 +325,7 @@ const SCENARIOS = [
     desc: "La pregunta que más nos hacen los equipos de seguridad.",
     steps: [
       { path: ["app", "server"], title: "Compartís el mismo servicio", text: "Sí, el mismo servidor atiende a todas las empresas clientes — como cualquier aplicación en la nube." },
-      { path: ["server", "db"], title: "Pero no el mismo compartimento", text: "Cada consulta lleva la identidad de tu empresa incorporada, y es la propia base de datos —no la pantalla— la que impide que una consulta cruce de una organización a otra." },
+      { path: ["server", "db"], title: "Los datos de cada empresa quedan aislados", text: "Cada consulta lleva la identidad de tu empresa incorporada, y la base de datos limita el acceso a los registros de esa organización." },
     ],
   },
   {

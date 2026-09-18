@@ -90,8 +90,8 @@
   <div class="wrap">
     <p class="crumbs"><a href="/">Evidran</a> · Seguridad y privacidad</p>
     <div class="eyebrow">Seguridad y privacidad</div>
-    <h1>La confianza no se declara. Se construye en la base de datos.</h1>
-    <p class="sub">Las reglas de seguridad de Evidran viven donde deben: aislamiento, roles y firma se aplican en la base de datos y se comprueban con tests automáticos en cada versión. Aquí está el detalle.</p>
+    <h1>Así protege Evidran tus datos y tus expedientes.</h1>
+    <p class="sub">Evidran aplica el aislamiento entre empresas, los permisos y la firma en la base de datos. Cada versión incluye pruebas automáticas de estos controles.</p>
     <p class="sub" style="margin-top:-8px"><a href="/confianza.html" style="color:var(--blue);font-weight:700;text-decoration:none">¿Prefieres verlo en un mapa interactivo? →</a></p>
   </div>
 </header>
@@ -102,9 +102,9 @@
     <div class="feat-row">
       <div class="fr-text">
         <div class="fr-eyebrow">Aislamiento por organización</div>
-        <h3>Cada empresa solo ve lo suyo. Por diseño.</h3>
+        <h3>Acceso limitado a los datos de tu empresa.</h3>
         <ul class="fr-list">
-          <li><b>Row Level Security en todas las tablas sensibles:</b> el aislamiento se aplica en la base de datos, no en la interfaz. Aunque alguien manipulara la página, la BD no le devuelve datos ajenos.</li>
+          <li><b>Row Level Security en todas las tablas sensibles:</b> la base de datos comprueba a qué organización pertenece cada usuario antes de devolver los datos. Aunque alguien manipulara la página, la BD no le devuelve datos ajenos.</li>
           <li><b>Frontera entre organizaciones cubierta por tests</b> de seguridad automáticos en la integración continua: cada versión los pasa antes de publicarse.</li>
           <li><b>Conexión cifrada (TLS)</b> y datos alojados en Europa.</li>
           <li><b>Evidencias privadas:</b> los adjuntos se descargan con enlaces firmados y temporales.</li>
@@ -112,7 +112,7 @@
         </ul>
       </div>
       <div class="fr-visual">
-        <div class="browser-bar"><i></i><i></i><i></i><span class="url">Regla, no promesa</span></div>
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">Control de acceso por organización</span></div>
         <div class="tri">
           <div class="tri-item">
             <div class="tri-top"><span class="tri-org">Base de datos</span><span class="pmpill ce">Aplicado</span></div>
@@ -134,16 +134,16 @@
     <div class="feat-row rev">
       <div class="fr-text">
         <div class="fr-eyebrow">Aprobación y firma</div>
-        <h3>Cerrar es aprobar. Y la firma se puede verificar.</h3>
+        <h3>Aprobación y firma verificable del expediente.</h3>
         <ul class="fr-list">
           <li><b>Firma del responsable de calidad</b> con nombre, cargo, fecha y una <b>huella SHA-256 del contenido</b> del expediente, que queda en solo lectura.</li>
-          <li><b>La identidad y la hora las sella la base de datos,</b> no el navegador: nombre, cargo y fecha se toman de la sesión autenticada del que firma. En el documento exportado no puede figurar un firmante que no sea el real.</li>
-          <li><b>Un expediente firmado es inmutable:</b> queda cerrado a modificaciones y no se puede trasladar a otra organización. Lo impide un trigger en la base de datos, no una comprobación de pantalla.</li>
+          <li><b>La base de datos registra la identidad y la hora de la firma:</b> nombre, cargo y fecha se toman de la sesión autenticada del que firma. En el documento exportado no puede figurar un firmante que no sea el real.</li>
+          <li><b>Un expediente firmado es inmutable:</b> queda cerrado a modificaciones y no se puede trasladar a otra organización. Un trigger en la base de datos bloquea esos cambios.</li>
           <li><b>Verificación al abrir:</b> si el contenido cambiara por detrás, la huella deja de cuadrar y la app lo dice. Reaperturas con traza de quién y cuándo; una firma nunca se atribuye a quien no la dio.</li>
-          <li><b>Registro de auditoría que solo admite añadir:</b> cada firma, reapertura, anulación y borrado se anota en un ledger que escribe la propia base de datos y que <b>sobrevive al borrado del expediente</b>. La traza no se puede evaporar borrando lo que la generó.</li>
+          <li><b>Registro de auditoría que solo admite añadir:</b> cada firma, reapertura, anulación y borrado se anota en un ledger que escribe la propia base de datos y que <b>sobrevive al borrado del expediente</b>. El historial sigue disponible después de eliminar el expediente.</li>
           <li><b>Miembros y técnicos envían a aprobación;</b> el responsable firma o devuelve con indicaciones escritas. La regla la impone un trigger en la base de datos — con su test de seguridad en CI.</li>
           <li><b>¿Firmáis con Adobe Sign, DocuSign o certificado FNMT?</b> Exporta el PDF, fírmalo donde ya firmáis y archívalo en el expediente: Evidran comprueba que la huella impresa corresponde y avisa si el documento firma una versión anterior.</li>
-          <li>La ISO 9001 no exige firma electrónica: pide que conste la autoridad que aprueba (7.5.2 y 10.2.2). Esto lo cubre de verdad, sin depender de un tercero.</li>
+          <li>La ISO 9001 no exige firma electrónica: pide que conste la autoridad que aprueba (7.5.2 y 10.2.2). El registro de aprobación conserva esa información.</li>
         </ul>
       </div>
       <div class="fr-visual">
@@ -171,7 +171,7 @@
           <li><b>Responsable:</b> ve todo su sistema, configura la empresa y es el único que aprueba, firma, reabre o devuelve.</li>
           <li><b>Miembro:</b> documenta y gestiona el día a día; envía los expedientes a aprobación.</li>
           <li><b>Técnico (captura):</b> solo ve sus propias no conformidades — pensado para quien reporta desde el móvil con los puntos QR.</li>
-          <li><b>El aislamiento del técnico se aplica en la base de datos</b> (RLS), no solo en la interfaz, y está cubierto por test de seguridad en CI.</li>
+          <li><b>El aislamiento del técnico se aplica en la base de datos</b> (RLS), con pruebas automáticas de seguridad.</li>
         </ul>
       </div>
       <div class="fr-visual">
@@ -200,10 +200,10 @@
     <div class="feat-row" style="margin-top:0">
       <div class="fr-text">
         <ul class="fr-list">
-          <li><b>Solo lo necesario:</b> la Revisión por la Dirección se genera con estadísticas agregadas, no con tus expedientes completos.</li>
+          <li><b>Solo lo necesario:</b> la Revisión por la Dirección se genera a partir de estadísticas agregadas.</li>
           <li><b>La clave de IA y los prompts viven en el servidor,</b> nunca en tu navegador. Registros de uso, de errores y control de gasto por llamada.</li>
           <li><b>Límite de peticiones real,</b> aplicado en la base de datos por usuario.</li>
-          <li><b>El copiloto consulta, no adivina:</b> responde con consultas deterministas ejecutadas con los permisos de tu propia sesión — la misma RLS decide qué ve.</li>
+          <li><b>El copiloto consulta tus registros:</b> responde con consultas deterministas ejecutadas con los permisos de tu propia sesión — la misma RLS decide qué ve.</li>
           <li><b>Proveedor de IA abstraído:</b> el sistema no depende de un modelo concreto; en on-premise puede ser un modelo local.</li>
         </ul>
       </div>
@@ -224,7 +224,7 @@
     <div class="feat-row rev">
       <div class="fr-text">
         <div class="fr-eyebrow">On-premise</div>
-        <h3>¿Sin nube? La misma aplicación, en tus servidores.</h3>
+        <h3>Instala Evidran en los servidores de tu empresa.</h3>
         <p>Para políticas que no permiten datos fuera — automoción/TISAX, centros tecnológicos, defensa—, Evidran se instala on-premise con la misma base de código que la nube: cada función nueva llega en la siguiente actualización.</p>
         <ul class="fr-list">
           <li><b>Tres modos de IA, eliges tú:</b> modelo local en tu red <b>sin ninguna salida a internet</b>; híbrido con salida cifrada solo al proveedor de IA; o sin IA, con la gestión completa funcionando.</li>
@@ -289,7 +289,7 @@
     <details><summary>¿Qué ve exactamente la IA?</summary><p>Lo que cada función necesita y nada más: la entrevista ve lo que tú le cuentas en ese expediente; la Revisión 9.3 se genera con estadísticas agregadas; el copiloto ejecuta consultas deterministas con los permisos de tu sesión. La clave y los prompts viven en el servidor.</p></details>
     <details><summary>¿Qué pasa con mis datos si dejo Evidran?</summary><p>Son tuyos y se van contigo: expedientes en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan, riesgos, evidencias de vigilancia) en CSV.</p></details>
     <details><summary>Ya firmamos con otra herramienta (Adobe, FNMT…).</summary><p>Perfecto: firma el expediente en Evidran, exporta el PDF, fírmalo donde ya firméis y súbelo al expediente. Evidran comprueba que la huella impresa corresponde al expediente y te avisa si el documento firma una versión anterior.</p></details>
-    <details><summary>¿Cómo sé que un informe firmado no se ha tocado después?</summary><p>Porque no se puede: al firmarlo queda cerrado a cambios, y quién firma y cuándo lo sella la base de datos desde la sesión autenticada, no la pantalla. Si alguien lo reabre, la firma se anula y queda registrado quién lo hizo — en un registro que solo admite añadir y que sobrevive incluso al borrado del expediente.</p></details>
+    <details><summary>¿Cómo sé que un informe firmado no se ha tocado después?</summary><p>Al firmarlo, el expediente queda bloqueado. La base de datos registra quién firma y cuándo a partir de la sesión autenticada. Si alguien lo reabre, la firma se anula y queda registrado quién lo hizo — en un registro que solo admite añadir y que sobrevive incluso al borrado del expediente.</p></details>
   </div>
 </section>
 
