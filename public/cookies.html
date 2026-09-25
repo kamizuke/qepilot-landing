@@ -35,6 +35,9 @@
   .legal th, .legal td { padding: 11px 14px; text-align: left; font-size: 13.5px; border-bottom: 1px solid var(--cream-d); }
   .legal th { background: var(--cream); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
   .legal .btns { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .legal .pref { display: flex; gap: 10px; align-items: flex-start; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 10px 0; font-size: 15px; color: var(--ink-soft); cursor: pointer; }
+  .legal .pref input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--blue); flex-shrink: 0; }
+  .legal .aviso-ok { font-size: 14px; font-weight: 600; color: var(--blue); min-height: 1.4em; }
 </style>
 </head>
 <body>
@@ -48,29 +51,34 @@
 
 <div class="legal">
   <h1>Política de cookies</h1>
-  <p class="fecha">Última actualización: julio de 2026</p>
+  <p class="fecha">Última actualización: septiembre de 2026</p>
 
   <h2>Qué cookies usa esta web</h2>
-  <p>Muy pocas. Esta web no usa cookies publicitarias ni de perfilado. Solo hay una cookie no técnica —la de analítica— y <strong>no se instala salvo que la aceptes</strong> en el aviso que aparece al visitarnos.</p>
+  <p>Muy pocas, y agrupadas en dos finalidades que decides por separado: <strong>analítica</strong> (saber qué partes de la web se visitan) y <strong>publicidad</strong> (medir si nuestros anuncios en Facebook e Instagram funcionan y mostrarlos a quien ya conoce Evidran). <strong>Ninguna se instala salvo que la aceptes</strong> en el aviso que aparece al visitarnos o en esta página.</p>
 
   <table>
     <thead><tr><th>Nombre</th><th>Proveedor</th><th>Finalidad</th><th>Duración</th><th>Base</th></tr></thead>
     <tbody>
       <tr><td>_ga, _ga_*</td><td>Google Analytics (Google LLC)</td><td>Estadística de uso de la web: páginas visitadas, origen de la visita</td><td>Hasta 2 años</td><td>Tu consentimiento</td></tr>
-      <tr><td>evd_consent_v1</td><td>Evidran (almacenamiento local)</td><td>Recordar tu elección sobre las cookies</td><td>12 meses</td><td>Exenta (técnica)</td></tr>
+      <tr><td>_fbp</td><td>Píxel de Meta (Meta Platforms Ireland Ltd.)</td><td>Publicidad: medir las visitas y peticiones que llegan desde nuestros anuncios en Facebook e Instagram, y mostrar anuncios a quien ya visitó la web</td><td>3 meses</td><td>Tu consentimiento</td></tr>
+      <tr><td>evd_consent_v2</td><td>Evidran (almacenamiento local)</td><td>Recordar tu elección sobre las cookies</td><td>12 meses</td><td>Exenta (técnica)</td></tr>
     </tbody>
   </table>
 
   <h2>Cambiar tu elección</h2>
-  <p>Puedes aceptar, rechazar o cambiar tu decisión cuando quieras:</p>
+  <p>Marca lo que aceptas y guarda. Puedes cambiarlo cuando quieras:</p>
+  <label class="pref"><input type="checkbox" id="prefAnalitica"> <span><strong>Analítica</strong> · Google Analytics</span></label>
+  <label class="pref"><input type="checkbox" id="prefPublicidad"> <span><strong>Publicidad</strong> · Píxel de Meta (Facebook e Instagram)</span></label>
   <div class="btns">
-    <button type="button" class="btn btn-primary btn-sm" onclick="if(window.evdCookies){window.evdCookies.aceptar();this.textContent='✓ Aceptadas';}">Aceptar la analítica</button>
-    <button type="button" class="btn btn-ghost btn-sm" onclick="if(window.evdCookies){window.evdCookies.rechazar();this.textContent='✓ Rechazadas';}">Rechazar la analítica</button>
+    <button type="button" class="btn btn-primary btn-sm" id="prefGuardar">Guardar mi elección</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="prefTodo">Aceptar todo</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="prefNada">Rechazar todo</button>
   </div>
-  <p>Si rechazas, Google Analytics no se carga: ni cookie ni envío de datos.</p>
+  <p class="aviso-ok" id="prefOk" aria-live="polite"></p>
+  <p>Lo que no aceptes no se carga: ni cookie ni envío de datos.</p>
 
   <h2>Borrarlas del navegador</h2>
-  <p>También puedes eliminar o bloquear cookies desde la configuración de tu navegador (Chrome, Safari, Firefox, Edge) o instalar el <a href="https://tools.google.com/dlpage/gaoptout?hl=es" rel="noopener" target="_blank">complemento de inhabilitación de Google Analytics</a>.</p>
+  <p>También puedes eliminar o bloquear cookies desde la configuración de tu navegador (Chrome, Safari, Firefox, Edge) o instalar el <a href="https://tools.google.com/dlpage/gaoptout?hl=es" rel="noopener" target="_blank">complemento de inhabilitación de Google Analytics</a>. Para los anuncios de Meta, puedes gestionar tus preferencias en la <a href="https://www.facebook.com/adpreferences" rel="noopener" target="_blank">configuración de anuncios de tu cuenta de Facebook</a>.</p>
 
   <h2>Quién es el responsable</h2>
   <p>El titular de esta web, identificado en el <a href="/aviso-legal.html">aviso legal</a> y en la <a href="/privacidad.html">política de privacidad</a>.</p>
@@ -84,5 +92,20 @@
 </footer>
 
 <script defer src="/consent.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var ck = window.evdCookies;
+  if (!ck) return;
+  var a = document.getElementById("prefAnalitica");
+  var p = document.getElementById("prefPublicidad");
+  var ok = document.getElementById("prefOk");
+  var c = ck.estado();
+  if (c) { a.checked = c.a; p.checked = c.p; }
+  function hecho() { ok.textContent = "✓ Elección guardada"; }
+  document.getElementById("prefGuardar").addEventListener("click", function () { hecho(); ck.preferencias(a.checked, p.checked); });
+  document.getElementById("prefTodo").addEventListener("click", function () { a.checked = p.checked = true; hecho(); ck.aceptar(); });
+  document.getElementById("prefNada").addEventListener("click", function () { a.checked = p.checked = false; hecho(); ck.rechazar(); });
+});
+</script>
 </body>
 </html>

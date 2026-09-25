@@ -107,35 +107,43 @@
     window.addEventListener("resize", function () { if (window.innerWidth > 980) closeMenu(); });
   }
 
-  // Analítica: alta self-service
+  // Analítica y píxel de Meta: alta self-service
   Array.prototype.forEach.call(document.querySelectorAll('a[href^="https://app.evidran.com/?alta"]'), function (link) {
     link.addEventListener("click", function (event) {
-      if (typeof window.gtag !== "function") return;
+      var ga = typeof window.gtag === "function";
+      var meta = typeof window.fbq === "function";
+      if (!ga && !meta) return;
       event.preventDefault();
       var href = link.href;
+      var etiqueta = link.textContent.trim() || "Prueba gratis";
       var navegado = false;
       var ir = function () {
         if (navegado) return;
         navegado = true;
         window.location.href = href;
       };
-      window.gtag("event", "generate_lead", {
-        event_category: "lead",
-        event_label: link.textContent.trim() || "Prueba gratis",
-        method: "signup",
-        event_callback: ir
-      });
-      window.setTimeout(ir, 700);
+      if (meta) window.fbq("track", "Lead", { content_name: etiqueta, content_category: "signup" });
+      if (ga) {
+        window.gtag("event", "generate_lead", {
+          event_category: "lead",
+          event_label: etiqueta,
+          method: "signup",
+          event_callback: ir
+        });
+      }
+      window.setTimeout(ir, ga ? 700 : 400);
     });
   });
 
-  // Analítica: petición de demo
+  // Analítica y píxel de Meta: petición de demo
   Array.prototype.forEach.call(document.querySelectorAll('a[href^="mailto:demo@evidran.com"]'), function (link) {
     link.addEventListener("click", function () {
+      var etiqueta = link.textContent.trim() || "Pide una demo";
+      if (typeof window.fbq === "function") window.fbq("track", "Contact", { content_name: etiqueta });
       if (typeof window.gtag !== "function") return;
       window.gtag("event", "demo_request", {
         event_category: "lead",
-        event_label: link.textContent.trim() || "Pide una demo",
+        event_label: etiqueta,
         method: "email"
       });
     });

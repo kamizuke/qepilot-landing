@@ -1,14 +1,18 @@
-/* Evidran · consentimiento de cookies (Google Analytics solo tras aceptar) */
+/* Evidran · consentimiento de cookies
+   Dos finalidades independientes: analítica (Google Analytics) y publicidad (píxel de Meta).
+   Nada se carga hasta que el visitante acepta esa finalidad. */
 (function () {
-  var KEY = "evd_consent_v1";
+  var KEY = "evd_consent_v2"; // v2: se añade publicidad; quien aceptó en v1 vuelve a ver el aviso
   var GA_ID = "G-W6Q6L17YS9";
+  var META_PIXEL_ID = "1080161098107328";
   var UN_ANO = 365 * 24 * 3600 * 1000;
 
+  // Devuelve { a: analítica, p: publicidad } o null si no hay decisión vigente
   function estado() {
     try {
       var v = JSON.parse(localStorage.getItem(KEY) || "null");
       if (!v || !v.c || (Date.now() - v.t) > UN_ANO) return null;
-      return v.c;
+      return { a: !!v.c.a, p: !!v.c.p };
     } catch (e) { return null; }
   }
   function guardar(c) {
@@ -33,12 +37,45 @@
     document.head.appendChild(s);
   }
 
+  // Código base del píxel de Meta (el oficial), cargado solo tras aceptar la publicidad
+  function cargarMeta() {
+    if (window.fbq) return;
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = "2.0";
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s);
+    }(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+    fbq("init", META_PIXEL_ID);
+    fbq("track", "PageView");
+  }
+
+  function aplicar(c) {
+    if (c.a) cargarGA();
+    if (c.p) cargarMeta();
+  }
+
   function quitarBanner() {
     var b = document.getElementById("evdCookies");
     if (b) b.remove();
   }
-  function aceptar() { guardar("granted"); cargarGA(); quitarBanner(); }
-  function rechazar() { guardar("denied"); quitarBanner(); }
+  // Un script ya cargado no se puede descargar: si se retira un permiso, se recarga la página
+  function decidir(c) {
+    var antes = estado();
+    guardar(c);
+    quitarBanner();
+    if (antes && ((antes.a && !c.a) || (antes.p && !c.p))) {
+      window.location.reload();
+      return;
+    }
+    aplicar(c);
+  }
+  function aceptar() { decidir({ a: true, p: true }); }
+  function rechazar() { decidir({ a: false, p: false }); }
+  function preferencias(a, p) { decidir({ a: !!a, p: !!p }); }
 
   function banner() {
     if (document.getElementById("evdCookies")) return;
@@ -63,19 +100,27 @@
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", "Aviso de cookies");
     d.innerHTML =
-      "<p>Analítica con Google Analytics (solo si aceptas). <a href=\"/cookies.html\">Más info</a></p>" +
+      "<p>Analítica (Google Analytics) y publicidad (Meta), solo si aceptas. <a href=\"/cookies.html\">Configurar</a></p>" +
       "<div class=\"b\"><button type=\"button\" class=\"si\">Aceptar</button><button type=\"button\" class=\"no\">Rechazar</button></div>";
     d.querySelector(".si").addEventListener("click", aceptar);
     d.querySelector(".no").addEventListener("click", rechazar);
     document.body.appendChild(d);
   }
 
-  window.evdCookies = { abrir: banner, aceptar: aceptar, rechazar: rechazar, estado: estado };
+  window.evdCookies = {
+    abrir: banner,
+    aceptar: aceptar,
+    rechazar: rechazar,
+    preferencias: preferencias,
+    estado: estado
+  };
 
   var c = estado();
-  if (c === "granted") {
-    cargarGA();
-  } else if (c === null) {
+  if (c) {
+    aplicar(c);
+  } else {
+    // En la página de cookies se decide con sus propios controles
+    if (/\/cookies(\.html)?$/.test(window.location.pathname)) return;
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", banner);
     } else {
