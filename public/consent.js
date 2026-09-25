@@ -81,7 +81,7 @@
     if (document.getElementById("evdCookies")) return;
     var css = document.createElement("style");
     css.textContent =
-      "#evdCookies{position:fixed;left:16px;right:16px;bottom:16px;z-index:200;max-width:600px;margin:0 auto;" +
+      "#evdCookies{position:fixed;left:16px;right:16px;bottom:16px;z-index:9500;max-width:600px;margin:0 auto;" +
       "background:#fff;border:1px solid #DDD8CC;border-radius:12px;box-shadow:0 24px 60px rgba(22,32,43,.22);" +
       "padding:10px 14px;font-family:'Inter Tight',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" +
       "display:flex;align-items:center;gap:12px;flex-wrap:wrap;}" +
