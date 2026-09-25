@@ -1,0 +1,21 @@
+await page.mouse.move(700, 1000);
+await page.waitForTimeout(500);
+await grab.start('A-crear');
+await page.waitForTimeout(1500);
+await clk(page.getByRole('button', { name: /Nuevo expediente/ }).first());
+await page.getByText('No Conformidad Interna').first().waitFor();
+await page.waitForTimeout(1200);
+await clk(page.getByText('No Conformidad Interna').first());
+const ta = page.getByPlaceholder('Cuenta qué ha pasado, con tus palabras…');
+await ta.waitFor({ timeout: 30000 });
+await page.waitForTimeout(1500);
+await clk(ta);
+await page.waitForTimeout(400);
+await page.keyboard.type('En el control final ha aparecido rebaba en el borde de unos embellecedores de puerta RV-410, unas quince piezas del lote 0925. Lo he detectado yo en la inspección visual.', { delay: 28 });
+await page.waitForTimeout(700);
+await clk(page.getByRole('button', { name: 'Enviar', exact: true }));
+await page.waitForTimeout(1500);
+const send = page.getByRole('button', { name: 'Enviar', exact: true });
+for (let i = 0; i < 90; i++) { if (!(await send.isDisabled())) break; await page.waitForTimeout(1000); }
+await page.waitForTimeout(3000);
+return await grab.stop();
