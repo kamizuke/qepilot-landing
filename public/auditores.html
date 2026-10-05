@@ -191,6 +191,77 @@
     .bd-flow { flex-direction: row; justify-content: center; }
     .bd-flow .arr { transform: rotate(90deg); }
   }
+
+  /* ---- Menú con desplegables (igual que plataforma.css) ---- */
+nav { position: sticky; top: 0; z-index: 50; background: rgba(247,246,242,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav-in { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+.brand .wm { white-space: nowrap; }
+.brand em { font-style: normal; color: var(--navy); }
+.brand img { display: block; height: 34px; width: auto; }
+@media (max-width: 560px) { .brand img { height: 28px; } }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links > a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
+.nav-links > a:hover { color: var(--blue); }
+.nav-item { height: 64px; display: flex; align-items: center; }
+.nav-item.rel { position: relative; }
+.nav-item.mega-item { position: static; }
+.nav-drop-btn { background: none; border: 0; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 14.5px; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 7px; padding: 0; }
+.nav-drop-btn:hover { color: var(--blue); }
+.nav-drop-btn .car { width: 7px; height: 7px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .15s; }
+.nav-item.open .nav-drop-btn .car { transform: rotate(225deg) translateY(-1px); }
+.drop { position: absolute; top: 64px; background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 60px rgba(22,32,43,.16); padding: 14px; display: none; z-index: 60; text-align: left; }
+.drop a { display: block; padding: 8px 10px; border-radius: 9px; text-decoration: none; }
+.drop a b { display: block; font-size: 14px; color: var(--ink); font-weight: 700; letter-spacing: -0.01em; }
+.drop a small { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 1px; line-height: 1.45; }
+.drop a:hover { background: var(--cream); }
+.drop.small { left: 50%; transform: translateX(-50%); width: 280px; }
+.drop.mega { left: 50%; transform: translateX(-50%); width: min(900px, calc(100vw - 40px)); padding: 20px 22px 16px; grid-template-columns: repeat(3, 1fr); gap: 4px 20px; }
+.mg-t { font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--blue); padding: 4px 10px 7px; }
+.mg-foot { grid-column: 1 / -1; border-top: 1px solid var(--cream-d); margin-top: 12px; padding: 12px 10px 0; display: flex; gap: 20px; flex-wrap: wrap; }
+.mg-foot a { font-size: 12.5px; color: var(--ink-soft); text-decoration: none; font-weight: 600; padding: 0; }
+.mg-foot a:hover { color: var(--blue); background: none; }
+@media (hover: hover) and (pointer: fine) {
+  .nav-item:hover > .drop.small { display: block; }
+  .nav-item:hover > .drop.mega { display: grid; }
+}
+.nav-item.open > .drop.small { display: block; }
+.nav-item.open > .drop.mega { display: grid; }
+.nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px; padding: 8px; background: transparent; border: 0; cursor: pointer; }
+.nav-burger span { display: block; width: 100%; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .2s, opacity .2s; }
+nav.nav-open .nav-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+nav.nav-open .nav-burger span:nth-child(2) { opacity: 0; }
+nav.nav-open .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+nav.scrolled { box-shadow: 0 4px 22px rgba(22,32,43,.08); }
+  .nav-links .drop a { font-size: inherit; color: inherit; }
+  .nav-links .mg-foot a { font-size: 12.5px; color: var(--ink-soft); }
+  .nav-links .mg-foot a:hover { color: var(--blue); }
+/* NAV móvil */
+@media (max-width: 980px) {
+  .nav-burger { display: flex; }
+  .nav-links { display: none; }
+  nav.nav-open .nav-links {
+    display: flex; flex-direction: column; align-items: stretch; gap: 0;
+    position: absolute; top: 64px; left: 0; right: 0;
+    background: var(--cream); border-bottom: 1px solid var(--line);
+    padding: 8px 24px 20px; box-shadow: 0 12px 24px rgba(22,32,43,.1);
+    max-height: calc(100vh - 64px); overflow-y: auto;
+  }
+  .nav-item, .nav-item.rel, .nav-item.mega-item { height: auto; display: block; position: static; }
+  .nav-drop-btn { width: 100%; justify-content: space-between; display: flex; padding: 13px 4px; font-size: 15px; border-bottom: 1px solid var(--cream-d); }
+  .drop, .drop.small, .drop.mega { position: static; transform: none; width: auto; box-shadow: none; border: 0; border-radius: 0; padding: 2px 0 10px; background: transparent; }
+  .nav-item.open > .drop.mega { display: block; }
+  .mg-t { padding: 10px 4px 4px; }
+  .mg-foot { border-top: 0; margin-top: 4px; padding: 6px 4px 0; gap: 14px; }
+  nav.nav-open .nav-links > a.btn { margin-top: 14px; text-align: center; }
+}
+  @media (max-width: 980px) {
+    nav.nav-open .nav-links .drop a { padding: 8px 10px; border-bottom: 0; margin-top: 0; }
+    nav.nav-open .nav-links .mg-foot a { padding: 0; }
+    nav.nav-open .nav-links > a:not(.btn) { padding: 0; border-bottom: 0; }
+    nav.nav-open .nav-links > a.btn { padding: 9px 16px; }
+  }
 </style>
 </head>
 <body>
@@ -201,12 +272,49 @@
     <a href="/" class="brand"><img src="/brand/evidran-logo.svg" alt="Evidran" width="135" height="34" /></a>
     <div class="nav-right">
       <div class="nav-links">
-        <a href="#modulo">Tu módulo</a>
-        <a href="#puente">Entrega al cliente</a>
-        <a href="#faq">Preguntas</a>
-        <a href="/">Evidran para empresas</a>
+        <div class="nav-item mega-item">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Plataforma <span class="car"></span></button>
+          <div class="drop mega">
+            <div class="mg-col">
+              <div class="mg-t">Capturar con criterio</div>
+              <a href="/#capturar"><b>La entrevista</b><small>Hablas; el informe se redacta en vivo, con causa de verdad.</small></a>
+              <a href="/producto.html#normas"><b>No conformidades y 8D</b><small>Diecisiete tipos de expediente, cada uno con su norma.</small></a>
+              <a href="/auditorias.html"><b>Auditorías</b><small>Bandeja de hallazgos, auditoría interna 9.2 y calendario anual.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Gobernar el ciclo</div>
+              <a href="/riesgos-plan.html#objetivos"><b>Objetivos de la calidad</b><small>Medibles, con indicador, meta y grado de logro · 6.2.</small></a>
+              <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5, aspectos ambientales y simulacros · 6.1 y 8.2.</small></a><a href="/riesgos-plan.html#cambios"><b>Cambios planificados</b><small>Se planifican, se aprueban y se vigilan después · 6.3.</small></a>
+              <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Aprender de todo</div>
+              <a href="/inteligencia.html"><b>Inteligencia del sistema</b><small>Estado diario con su regla, causas y hallazgos con su dato.</small></a>
+              <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
+              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y las lecciones que quedan · 7.1.6.</small></a>
+              <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
+              <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
+            </div>
+            <div class="mg-foot">
+              <a href="/vigilancia-normativa.html">Vigilancia normativa</a>
+              <a href="/seguridad.html#onpremise">On-premise</a>
+              <a href="/seguridad.html">Seguridad y privacidad</a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-item rel">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Recursos <span class="car"></span></button>
+          <div class="drop small">
+            <a href="/#transicion-2026"><b>Transición ISO 2026</b></a>
+            <a href="/recorrido.html"><b>Una NC de principio a fin</b></a>
+            <a href="/producto.html"><b>Evidran por dentro</b></a>
+            <a href="/producto.html#comparativa"><b>Frente a Excel, plantillas y suites</b></a>
+            <a href="/auditores.html"><b>Para auditores y consultores</b></a>
+          </div>
+        </div>
         <a href="/blog/">Blog</a>
-        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20Evidran%20para%20auditores" class="btn btn-primary btn-sm">Pide una demo</a>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary btn-sm">Pide una demo</a>
       </div>
       <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
     </div>
@@ -406,6 +514,36 @@
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
     window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
+  })();
+</script>
+
+<script>
+  // ---- Desplegables del menú (clic; hover por CSS en escritorio) ----
+  (function () {
+    var navItems = Array.prototype.slice.call(document.querySelectorAll(".nav-item"));
+    function cerrarDrops() {
+      navItems.forEach(function (it) {
+        it.classList.remove("open");
+        var b = it.querySelector(".nav-drop-btn");
+        if (b) b.setAttribute("aria-expanded", "false");
+      });
+    }
+    navItems.forEach(function (it) {
+      var btn = it.querySelector(".nav-drop-btn");
+      if (!btn) return;
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var estaba = it.classList.contains("open");
+        cerrarDrops();
+        if (!estaba) { it.classList.add("open"); btn.setAttribute("aria-expanded", "true"); }
+      });
+    });
+    document.addEventListener("click", function (e) { if (!e.target.closest(".nav-item")) cerrarDrops(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarDrops(); });
+    var burger = document.getElementById("navBurger");
+    if (burger) burger.addEventListener("click", function () {
+      if (burger.getAttribute("aria-expanded") !== "true") cerrarDrops();
+    });
   })();
 </script>
 </body>
