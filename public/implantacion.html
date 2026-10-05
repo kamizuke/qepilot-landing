@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Enseña a tu IA el criterio de tu equipo de calidad — Evidran</title>
+<meta name="description" content="Tu equipo de calidad sabe investigar una no conformidad. Te ayudamos a convertir ese criterio en reglas que tu IA aplique en cada expediente. Segunda mirada a tus NC, criterio para tu herramienta interna o arranque con Evidran." />
+<link rel="canonical" href="https://www.evidran.com/implantacion.html" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Enseña a tu IA el criterio de tu equipo de calidad — Evidran" />
+<meta property="og:description" content="Tu equipo sabe investigar una no conformidad. Tu IA todavía no. Segunda mirada a tus NC, criterio para tu herramienta interna o arranque con Evidran." />
+<meta property="og:url" content="https://www.evidran.com/implantacion.html" />
+<meta property="og:site_name" content="Evidran" />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:image" content="https://www.evidran.com/brand/evidran-og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Evidran" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script defer src="/consent.js"></script>
+<style>
+  :root {
+    --blue: #2563EB; --blue-l: #4AA6F5; --teal: #15B8A6; --green: #46DE7E;
+    --navy: #2D5A7B; --ink: #16202B; --ink-soft: #4A5563;
+    --cream: #F7F6F2; --cream-d: #EDEAE2; --line: #DDD8CC; --white: #fff;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink); background: var(--cream); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 84px 0; }
+  h1, h2, h3 { line-height: 1.18; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; }
+  p { color: var(--ink-soft); }
+  .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12.5px; font-weight: 700; color: var(--blue); margin-bottom: 14px; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(247,246,242,.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+  .nav-right { display: flex; align-items: center; gap: 18px; }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14.5px; font-weight: 600; }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px; padding: 8px; background: transparent; border: 0; cursor: pointer; }
+  .nav-burger span { display: block; width: 100%; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .2s, opacity .2s; }
+  nav.nav-open .nav-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  nav.nav-open .nav-burger span:nth-child(2) { opacity: 0; }
+  nav.nav-open .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* BUTTONS */
+  .btn { display: inline-block; border: 0; cursor: pointer; font-weight: 700; font-size: 15px; border-radius: 12px; padding: 13px 22px; text-decoration: none; transition: transform .12s, box-shadow .12s; text-align: center; }
+  .btn-primary { background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; box-shadow: 0 8px 22px rgba(37,99,235,.28); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(37,99,235,.34); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-sm { padding: 9px 16px; font-size: 14px; }
+
+  /* HERO */
+  .hero { padding-top: 56px; padding-bottom: 64px; text-align: center; }
+  .hero h1 { font-size: clamp(32px, 5vw, 54px); font-weight: 850; max-width: 21ch; margin: 0 auto 18px; }
+  .hero h1 .hl { color: var(--blue); }
+  .hero .sub { font-size: clamp(17px, 2vw, 20px); max-width: 62ch; margin: 0 auto 26px; color: var(--ink-soft); }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  .center-head { text-align: center; max-width: 62ch; margin: 0 auto 50px; }
+  .center-head p { font-size: 17px; margin-top: 14px; }
+
+  /* PROBLEMA */
+  .feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feat { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+  .feat h3 { font-size: 17px; margin-bottom: 8px; }
+  .feat p { font-size: 14.5px; }
+  .feat .quote { display: inline-block; font-size: 13px; font-weight: 700; color: #B42318; background: #FDE7E7; border-radius: 8px; padding: 4px 10px; margin-bottom: 14px; }
+
+  /* SERVICIOS */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+  .plan { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 26px; display: flex; flex-direction: column; }
+  .plan.featured { border: 2px solid var(--blue); box-shadow: 0 18px 40px rgba(37,99,235,.12); position: relative; }
+  .plan .badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; border-radius: 20px; padding: 4px 12px; white-space: nowrap; }
+  .plan .k { font-size: 11.5px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--teal); margin-bottom: 10px; }
+  .plan h3 { font-size: 20px; margin-bottom: 8px; }
+  .plan .for { font-size: 14.5px; margin-bottom: 18px; }
+  .price { font-size: 34px; font-weight: 850; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+  .price small { font-size: 14px; font-weight: 600; color: var(--ink-soft); letter-spacing: 0; }
+  .price-note { font-size: 13px; color: var(--ink-soft); margin: 4px 0 20px; }
+  .plan ul { list-style: none; margin-bottom: 22px; flex: 1; }
+  .plan li { font-size: 14.5px; color: var(--ink); padding: 8px 0 8px 26px; position: relative; border-top: 1px solid var(--cream-d); }
+  .plan li:first-child { border-top: 0; }
+  .plan li::before { content: "✓"; position: absolute; left: 2px; top: 8px; color: var(--teal); font-weight: 800; }
+  .plan .perk { font-size: 13.5px; font-weight: 600; color: var(--navy); background: var(--cream); border-radius: 10px; padding: 10px 12px; margin-bottom: 18px; }
+  .plans-foot { text-align: center; margin-top: 26px; font-size: 14px; }
+
+  /* CONSTRUIR VS USAR */
+  .compare { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .compare table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  .compare th, .compare td { padding: 14px 18px; text-align: left; vertical-align: top; border-top: 1px solid var(--cream-d); }
+  .compare thead th { border-top: 0; background: var(--cream); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); }
+  .compare thead th:last-child { color: var(--blue); }
+  .compare td:first-child { font-weight: 700; color: var(--ink); width: 26%; }
+  .compare td { color: var(--ink-soft); }
+  .compare-note { text-align: center; max-width: 60ch; margin: 26px auto 0; font-size: 15px; }
+
+  /* PASOS */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 880px; margin: 0 auto; }
+  .step { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+  .step .n { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--blue-l), var(--blue)); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 14px; }
+  .step h3 { font-size: 16px; margin-bottom: 7px; }
+  .step p { font-size: 14px; }
+
+  /* FAQ */
+  details { border-bottom: 1px solid var(--line); padding: 6px 0; }
+  summary { cursor: pointer; font-weight: 700; font-size: 16px; padding: 12px 0; list-style: none; color: var(--ink); }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; float: right; color: var(--blue); font-weight: 700; }
+  details[open] summary::after { content: "–"; }
+  details p { font-size: 14.5px; padding: 0 0 14px; }
+  .faq-wrap { max-width: 720px; margin: 0 auto; }
+
+  /* FINAL CTA */
+  .final { text-align: center; background: linear-gradient(160deg, #16202B, #0E2A4A); color: #fff; }
+  .final h2 { color: #fff; max-width: 22ch; margin: 0 auto 16px; }
+  .final p { color: #AEB6C0; font-size: 17px; max-width: 54ch; margin: 0 auto 22px; }
+  .final .btn-ghost { color: #fff; border-color: rgba(255,255,255,.3); }
+  .final .btn-ghost:hover { border-color: #fff; color: #fff; }
+
+  footer { background: var(--ink); color: #8893A0; padding: 34px 0; font-size: 13.5px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  footer a { color: #AEB6C0; text-decoration: underline; }
+
+  @media (max-width: 860px) {
+    .nav-burger { display: flex; }
+    .nav-links { display: none; }
+    nav.nav-open .nav-links {
+      display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+      position: absolute; top: 64px; left: 0; right: 0;
+      background: var(--cream); border-bottom: 1px solid var(--line);
+      padding: 8px 24px 20px; box-shadow: 0 12px 24px rgba(22,32,43,.1);
+    }
+    nav.nav-open .nav-links a { padding: 12px 4px; border-bottom: 1px solid var(--cream-d); }
+    nav.nav-open .nav-links a:last-child { border-bottom: 0; margin-top: 8px; }
+    section { padding: 60px 0; }
+    .wrap { padding: 0 16px; }
+    .feats, .plans, .steps { grid-template-columns: 1fr; }
+    .plans { gap: 28px; }
+    .compare th, .compare td { padding: 12px; font-size: 13.5px; }
+    .compare td:first-child { width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="brand"><img src="/brand/evidran-logo.svg" alt="Evidran" width="135" height="34" /></a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#servicios">Servicios</a>
+        <a href="#construir-o-usar">¿Construir o usar?</a>
+        <a href="#faq">Preguntas</a>
+        <a href="/">Evidran para empresas</a>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20la%20revisi%C3%B3n%20externa%20de%20mis%20no%20conformidades" class="btn btn-primary btn-sm">Pide la segunda mirada</a>
+      </div>
+      <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--teal)">Para empresas que quieren construirlo dentro</div>
+    <h1>Tu equipo sabe investigar una no conformidad. <span class="hl">Tu IA todavía no.</span></h1>
+    <p class="sub">Si tu empresa prefiere tener la IA en casa (Copilot, ChatGPT Enterprise o una herramienta propia), te ayudamos a convertir el criterio de tu equipo de calidad en reglas que la herramienta aplique en cada expediente: qué preguntar, qué causa no dar por buena y cuándo cerrar.</p>
+    <div class="hero-cta">
+      <a href="mailto:demo@evidran.com?subject=Quiero%20la%20revisi%C3%B3n%20externa%20de%20mis%20no%20conformidades" class="btn btn-primary">Pide la segunda mirada</a>
+      <a href="#servicios" class="btn btn-ghost">Ver los servicios</a>
+    </div>
+  </div>
+</header>
+
+<!-- PROBLEMA -->
+<section style="background:#fff">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Lo que pasa sin criterio</div>
+      <h2>Una IA genérica redacta bien. Investigar es otra cosa.</h2>
+      <p>Conectar un asistente a tus no conformidades es fácil. Lo que tu equipo hace sin pensarlo, la herramienta solo lo hace si alguien se lo escribe.</p>
+    </div>
+    <div class="feats">
+      <div class="feat">
+        <span class="quote">"Causa raíz: error humano"</span>
+        <h3>Acepta la causa que le des</h3>
+        <p>Si alguien escribe en el chat que fue un despiste, la IA lo redacta con buena prosa. Tu responsable de calidad no lo daría por bueno; la IA sí, salvo que se le enseñe a buscar el fallo de sistema.</p>
+      </div>
+      <div class="feat">
+        <span class="quote">"¿Y por qué no se detectó?"</span>
+        <h3>No pregunta lo que tu equipo sí</h3>
+        <p>Tu equipo sabe que hay que mirar la no detección, la extensión a otros procesos, la corrección frente a la acción correctiva y el plazo de eficacia. Una IA genérica no lo pregunta si nadie se lo pide.</p>
+      </div>
+      <div class="feat">
+        <span class="quote">"¿Esto ya nos pasó?"</span>
+        <h3>Cada expediente empieza de cero</h3>
+        <p>Sin una clasificación común de causas, la IA trata cada no conformidad por separado. No hay tendencias ni base para fijar objetivos de calidad (6.2) o preparar la Revisión por la Dirección (9.3).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Tres servicios cerrados</div>
+      <h2>Precio fijo, entregable concreto y sin horas sueltas.</h2>
+      <p>Empieza por la revisión o ve directo a lo que necesitas. Ninguno te obliga a contratar Evidran.</p>
+    </div>
+    <div class="plans">
+
+      <div class="plan featured">
+        <span class="badge">Por aquí se empieza</span>
+        <div class="k">01 · Segunda mirada</div>
+        <h3>Revisión externa de tus no conformidades</h3>
+        <p class="for">Una mirada de fuera, como la de un auditor pero sin consecuencias. Útil antes de la certificación o de la transición a ISO 9001:2026.</p>
+        <div class="price">490 € <small>+ IVA</small></div>
+        <p class="price-note">Entrega en 10 días hábiles.</p>
+        <ul>
+          <li>Revisamos hasta 15 no conformidades cerradas de tu último año.</li>
+          <li>Te señalamos dónde un auditor podría pedir más: causa raíz, no detección, extensión o verificación de la eficacia.</li>
+          <li>Clasificamos sus causas raíz para ver dónde se concentran.</li>
+          <li>Informe escrito y una sesión de 1 hora para repasarlo contigo.</li>
+        </ul>
+        <p class="perk">Si contratas Evidran en los 60 días siguientes, te descontamos la revisión.</p>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20la%20revisi%C3%B3n%20externa%20de%20mis%20no%20conformidades" class="btn btn-primary">Pide la segunda mirada</a>
+      </div>
+
+      <div class="plan">
+        <div class="k">02 · Construirlo dentro</div>
+        <h3>Criterio para tu herramienta interna</h3>
+        <p class="for">Para empresas con IA propia que quieren que razone como su equipo de calidad.</p>
+        <div class="price"><small>desde</small> 1.900 € <small>+ IVA</small></div>
+        <p class="price-note">Según normas y tipos de expediente.</p>
+        <ul>
+          <li>Tu forma de investigar, escrita como guion de entrevista por tipo de expediente: ISO 9001, 14001, 45001, 17025, 8D y respuesta a auditoría.</li>
+          <li>Reglas de causa raíz para que la IA no dé por buena una causa que tu equipo rechazaría.</li>
+          <li>Criterios de cierre y plazos de verificación de eficacia según el tipo de acción.</li>
+          <li>Taxonomía cerrada de causas para medir tendencias.</li>
+          <li>Casos de prueba con tus propias NC para comprobar que la herramienta responde bien.</li>
+          <li>Dos sesiones de trabajo con tu equipo de calidad e IT: el criterio lo ponéis vosotros, nosotros lo convertimos en reglas.</li>
+        </ul>
+        <a href="mailto:demo@evidran.com?subject=Criterio%20para%20nuestra%20herramienta%20interna%20de%20calidad" class="btn btn-ghost">Pide una propuesta</a>
+      </div>
+
+      <div class="plan">
+        <div class="k">03 · Usarlo ya hecho</div>
+        <h3>Arranque con Evidran</h3>
+        <p class="for">Para quien prefiere tener ese criterio funcionando esta semana, sin proyecto de IT.</p>
+        <div class="price">690 € <small>+ IVA</small></div>
+        <p class="price-note">Pago único, aparte de la suscripción.</p>
+        <ul>
+          <li>Alta de tu organización y tus usuarios, y numeración de expedientes configurada.</li>
+          <li>Documentamos contigo tus no conformidades abiertas, de principio a fin.</li>
+          <li>Sesión de formación sobre un caso real de tu empresa.</li>
+          <li>Repaso a los 30 días: tendencias, hallazgos y primeros objetivos recomendados.</li>
+        </ul>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20el%20arranque%20con%20Evidran" class="btn btn-ghost">Quiero arrancar</a>
+      </div>
+
+    </div>
+    <p class="plans-foot">¿Eres consultor y lo quieres para tus clientes? <a href="/auditores.html">Evidran para auditores y consultores →</a></p>
+  </div>
+</section>
+
+<!-- CONSTRUIR O USAR -->
+<section id="construir-o-usar" style="background:#fff">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Sin vendértelo</div>
+      <h2>¿Construirlo dentro o usar Evidran?</h2>
+      <p>Las dos opciones tienen sentido. Depende de lo que pese más en tu empresa.</p>
+    </div>
+    <div class="compare">
+      <table>
+        <thead><tr><th></th><th>Construirlo dentro</th><th>Usar Evidran</th></tr></thead>
+        <tbody>
+          <tr><td>Dónde viven los datos</td><td>En tu infraestructura, con tus políticas.</td><td>Aislados por empresa, con evidencias privadas y datos alojados en Europa.</td></tr>
+          <tr><td>Cómo aprende el criterio</td><td>Tu equipo lo escribe como reglas, solo o con nuestro servicio 02.</td><td>Ya viene incorporado: entrevista, causa raíz, extensión y eficacia.</td></tr>
+          <tr><td>Esfuerzo de IT</td><td>Integrarlo, probarlo y mantenerlo.</td><td>Ninguno. Entras en app.evidran.com y empiezas.</td></tr>
+          <tr><td>Del dato a la decisión</td><td>Tendrás que construir tú los informes y cuadros de mando.</td><td>Tendencias, hallazgos, objetivos recomendados (6.2) y borrador de la Revisión por la Dirección (9.3).</td></tr>
+          <tr><td>Tiempo hasta el primer expediente</td><td>Semanas o meses.</td><td>El mismo día.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-note">Si después de la revisión ves que construirlo cuesta más de lo que compensa, el arranque con Evidran está a un paso. Y si decides hacerlo dentro, te llevas el criterio igualmente.</p>
+  </div>
+</section>
+
+<!-- CÓMO TRABAJAMOS -->
+<section>
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Cómo trabajamos</div>
+      <h2>Tres pasos, sin sorpresas.</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Nos cuentas tu caso</h3><p>Qué normas llevas, cuántas no conformidades gestionas al año y qué herramienta usáis o queréis usar.</p></div>
+      <div class="step"><div class="n">2</div><h3>Te enviamos una propuesta cerrada</h3><p>Alcance, precio y fecha de entrega por escrito. Firmamos confidencialidad antes de ver ningún expediente.</p></div>
+      <div class="step"><div class="n">3</div><h3>Entregamos y lo repasamos contigo</h3><p>Nada de informes que se quedan en un cajón: cada entrega termina en una sesión para decidir los siguientes pasos.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:#fff">
+  <div class="wrap faq-wrap">
+    <div class="center-head">
+      <div class="eyebrow">Preguntas frecuentes</div>
+      <h2>Lo que sueles preguntarte</h2>
+    </div>
+    <details open><summary>¿Tengo que contratar Evidran?</summary><p>No. La revisión externa y el criterio para tu herramienta interna son servicios independientes. Si más adelante contratas Evidran, te descontamos la revisión.</p></details>
+    <details><summary>¿Qué pasa con la confidencialidad de mis no conformidades?</summary><p>Firmamos un acuerdo de confidencialidad antes de ver nada. Si lo prefieres, puedes anonimizar nombres de personas, clientes y proveedores antes de enviarlas: para la revisión no los necesitamos.</p></details>
+    <details><summary>¿El criterio sirve para cualquier herramienta de IA?</summary><p>Sí. Se entrega por escrito, en lenguaje claro, pensado para que tu equipo lo cargue en la herramienta que uséis. No depende de ningún proveedor concreto.</p></details>
+    <details><summary>¿Hacéis también la integración técnica?</summary><p>No. Nosotros ponemos el criterio de calidad y los casos de prueba. La conexión con vuestros sistemas la hace vuestro equipo de IT o vuestro proveedor habitual, y en las sesiones de trabajo resolvemos sus dudas sobre el criterio.</p></details>
+    <details><summary>Llevo varias normas, no solo la 9001.</summary><p>La revisión cubre las no conformidades que nos envíes, sean de calidad, medioambiente, seguridad y salud o laboratorio. El criterio se prepara para los tipos de expediente que uses.</p></details>
+    <details><summary>¿Por qué un software ofrece esto?</summary><p>Porque lo que hace útil a una IA de calidad es el criterio, no la tecnología. Evidran lo lleva dentro; estos servicios ayudan a que tu herramienta aplique el de tu equipo.</p></details>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <h2>Una segunda mirada antes de que llegue el auditor.</h2>
+    <p>Envíanos hasta 15 expedientes del último año. En 10 días hábiles tendrás una revisión externa, punto por punto, con lo que un auditor podría pedir.</p>
+    <div class="hero-cta">
+      <a href="mailto:demo@evidran.com?subject=Quiero%20la%20revisi%C3%B3n%20externa%20de%20mis%20no%20conformidades" class="btn btn-primary">Pide la segunda mirada · 490 €</a>
+      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">Prueba Evidran · 30 días gratis</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><img src="/brand/evidran-logo-negativo.svg" alt="Evidran" width="111" height="28" /></span>
+    <span>El copiloto de calidad por IA · app.evidran.com · <a href="/">Evidran para empresas</a> · <a href="/blog/">Blog</a> · <a href="mailto:demo@evidran.com">demo@evidran.com</a> · <a href="/terminos.html">Términos y condiciones</a> · <a href="/aviso-legal.html">Aviso legal</a> · <a href="/privacidad.html">Privacidad</a> · <a href="/cookies.html">Cookies</a></span>
+  </div>
+</footer>
+
+<script>
+  // ---- Menú móvil (hamburguesa) ----
+  (function () {
+    var navEl = document.querySelector("nav");
+    var navBurger = document.getElementById("navBurger");
+    if (!navEl || !navBurger) return;
+    var closeMenu = function () {
+      navEl.classList.remove("nav-open");
+      navBurger.setAttribute("aria-expanded", "false");
+    };
+    navBurger.addEventListener("click", function () {
+      var open = navEl.classList.toggle("nav-open");
+      navBurger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    Array.prototype.forEach.call(navEl.querySelectorAll(".nav-links a"), function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+    window.addEventListener("resize", function () { if (window.innerWidth > 860) closeMenu(); });
+  })();
+</script>
+</body>
+</html>
