@@ -4,13 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Evidran para auditores y consultores — Audita y asesora a varias empresas</title>
-<meta name="description" content="Cartera de auditorías con informe y dictamen, hallazgos tipados y entrega directa en la cuenta de tu cliente con un código — sin entrar a su panel. Tu cliente no transcribe nada: cada hallazgo entra como expediente abierto." />
+<meta name="description" content="Cartera de auditorías con informe en Word y dictamen, hallazgos tipados, copiloto que trabaja con tu propio catálogo de requisitos y entrega directa en la cuenta de tu cliente con un código, sin entrar a su panel." />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Evidran para auditores y consultores — Audita y asesora a varias empresas" />
-<meta property="og:description" content="Cartera de auditorías con informe y dictamen, hallazgos tipados y entrega directa en la cuenta de tu cliente con un código — sin entrar a su panel. Tu cliente no transcribe nada: cada hallazgo entra como expediente abierto." />
+<meta property="og:description" content="Cartera de auditorías con informe en Word y dictamen, hallazgos tipados, copiloto que trabaja con tu propio catálogo de requisitos y entrega directa en la cuenta de tu cliente con un código, sin entrar a su panel." />
 <meta property="og:url" content="https://www.evidran.com/auditores.html" />
 <meta property="og:site_name" content="Evidran" />
 <meta property="og:locale" content="es_ES" />
@@ -133,6 +133,24 @@
   .hero-mock .bd-hall { font-size: 12px; padding: 9px 0; }
   .shot-cap { text-align: center; margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); }
 
+  /* copiloto del auditor (au-) */
+  .pmpill.en { background: #FEF1DE; color: #B45309; } .pmpill.ce { background: #E7F6EC; color: #167C40; }
+  .au-row { display: grid; grid-template-columns: 1fr 1.05fr; gap: 44px; align-items: center; margin-top: 56px; }
+  .au-row h3 { font-size: clamp(21px, 2.5vw, 26px); margin-bottom: 10px; }
+  .au-eb { font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--teal); margin-bottom: 12px; }
+  .au-list { list-style: none; margin-top: 10px; }
+  .au-list li { position: relative; padding: 7px 0 7px 20px; font-size: 14.5px; color: var(--ink-soft); }
+  .au-list li::before { content: ""; position: absolute; left: 2px; top: 14px; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+  .au-list b { color: var(--ink); }
+  .au-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .au-chip { font-size: 11.5px; font-weight: 700; color: var(--navy); background: var(--cream); border: 1px solid var(--line); border-radius: 20px; padding: 4px 10px; white-space: nowrap; }
+  .au-obs { font-size: 12px; color: var(--ink); background: var(--cream); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+  .au-obs small { display: block; font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; }
+  .au-sug { display: flex; gap: 9px; align-items: flex-start; font-size: 11.5px; padding: 8px 0; border-top: 1px solid var(--cream-d); color: var(--ink); }
+  .au-sug .pmcode { flex: 0 0 auto; }
+  .au-note { font-size: 10.5px; color: var(--ink-soft); margin-top: 8px; }
+  .au-word { margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 11.5px; flex-wrap: wrap; }
+
   /* FAQ */
   details { border-bottom: 1px solid var(--line); padding: 6px 0; }
   summary { cursor: pointer; font-weight: 700; font-size: 16px; padding: 12px 0; list-style: none; color: var(--ink); }
@@ -169,6 +187,7 @@
     section { padding: 60px 0; }
     .steps, .feats { grid-template-columns: 1fr; }
     .bdiag { grid-template-columns: 1fr; }
+    .au-row { grid-template-columns: 1fr; gap: 28px; }
     .bd-flow { flex-direction: row; justify-content: center; }
     .bd-flow .arr { transform: rotate(90deg); }
   }
@@ -234,17 +253,50 @@
       <div class="feat">
         <div class="k">Cartera</div>
         <h3>Todas tus auditorías, con su estado</h3>
-        <p>Cada auditoría con su empresa, sus hallazgos y su informe. Cierras con un informe profesional y dictamen, y queda archivado por versiones.</p>
+        <p>Cada auditoría con su empresa, sus normas, sus hallazgos y su informe. Al cerrarla recibe su número AUD-AAAA-NNN, queda bloqueada y la descargas en Word con tu logo.</p>
       </div>
       <div class="feat">
         <div class="k">Hallazgos tipados</div>
         <h3>NC mayor, menor, observación, oportunidad y punto fuerte</h3>
-        <p>Cada hallazgo con su tipo, redactado una sola vez. Cuando lo entregas, tu cliente lo recibe listo para trabajar la causa raíz con la información de la auditoría ya incorporada.</p>
+        <p>Cada hallazgo con su tipo, redactado una sola vez. Cuando lo entregas, tu cliente lo recibe en su bandeja con la información de la auditoría ya incorporada.</p>
       </div>
       <div class="feat">
         <div class="k">Multi-empresa</div>
         <h3>Varias empresas, datos aislados</h3>
         <p>Como consultor trabajas con varias organizaciones desde un mismo usuario. Cada empresa solo ve lo suyo, con aislamiento a nivel de base de datos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COPILOTO DEL AUDITOR -->
+<section id="copiloto" style="background:#fff;padding-top:8px">
+  <div class="wrap">
+    <div class="au-row">
+      <div>
+        <div class="au-eb">Copiloto del auditor</div>
+        <h3>La IA propone; el dictamen es tuyo.</h3>
+        <ul class="au-list">
+          <li><b>Sugerir requisito:</b> desde tu observación libre propone norma y apartado (de uno a tres candidatos), sin inventar referencias a procedimientos internos del cliente.</li>
+          <li><b>Redactar:</b> pasa tu borrador a la forma objetiva de tres partes sin añadir hechos ni evidencia, y sugiere la clasificación.</li>
+          <li><b>Tu propio catálogo de requisitos:</b> para TISAX, subes el Excel oficial del catálogo VDA ISA del portal ENX una vez por cuenta y norma, y se lee entero y exacto. Desde ahí, «Sugerir requisito» solo elige identificadores de esa lista. Sin catálogo cargado, no propone nada de esa norma. Evidran no redistribuye catálogos: cada cuenta usa el suyo.</li>
+          <li><b>Informe en Word</b> con numeración AUD-AAAA-NNN al cerrar y tu logo incrustado.</li>
+        </ul>
+        <div class="au-chips">
+          <span class="au-chip">ISO 9001</span><span class="au-chip">ISO 14001</span><span class="au-chip">ISO 45001</span><span class="au-chip">ISO/IEC 17025</span><span class="au-chip">ISO/IEC 17065</span><span class="au-chip">ISO/IEC 17020</span><span class="au-chip">ISO 37001</span><span class="au-chip">ISO 14006</span><span class="au-chip">EN 9100</span><span class="au-chip">IATF 16949</span><span class="au-chip">ISO 56001</span><span class="au-chip">ISO/IEC 27001</span><span class="au-chip">TISAX · catálogo VDA ISA</span>
+        </div>
+        <p style="font-size:13px;margin-top:12px">Multinorma en el mismo informe. La ISO 50001 no está como norma auditable en este módulo. La evaluación TISAX la hace un proveedor de auditoría acreditado por ENX; Evidran no la emite ni la sustituye.</p>
+      </div>
+      <div class="bd-panel">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria · AUD-2026-007</span></div>
+        <div class="bd-bd">
+          <div class="au-obs"><small>Tu observación</small>Los prototipos fotografiados en la nave 2 no figuran en el inventario de activos.</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;font-weight:700;color:var(--navy)">Sugerir requisito <span class="pmpill ce">Catálogo VDA ISA cargado</span></div>
+          <div class="au-sug"><span class="pmcode">Control A</span><span>Título del control, copiado de tu catálogo</span></div>
+          <div class="au-sug"><span class="pmcode">Control B</span><span>Título del control, copiado de tu catálogo</span></div>
+          <p class="au-note">Solo identificadores de tu catálogo, con el título del control y su versión. Tú eliges.</p>
+          <div class="au-word"><span><b>Informe AUD-2026-007</b> · con tu logo</span><span class="pmpill ab">Descargar Word</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -256,7 +308,7 @@
     <div class="center-head">
       <div class="eyebrow">Auditor ↔ Empresa</div>
       <h2>Entregas los hallazgos <span class="hl">dentro de la cuenta</span> de tu cliente. Sin entrar a su panel.</h2>
-      <p>Tu cliente te comparte un código y quedas enlazado a su empresa. Al cerrar la auditoría, depositas los hallazgos y el informe firmado en su cuenta: cada hallazgo entra ya redactado como expediente abierto y tu cliente empieza directamente por la causa y la acción. Nadie transcribe nada.</p>
+      <p>Tu cliente te comparte un código y quedas enlazado a su empresa. Al cerrar la auditoría, depositas los hallazgos y el informe en su cuenta: cada hallazgo llega ya redactado a su bandeja y tu cliente decide si lo convierte en expediente, lo envía al plan o lo descarta. Nadie transcribe nada.</p>
     </div>
 
     <div class="bdiag">
@@ -275,17 +327,17 @@
       <div class="bd-flow">
         <span class="evcode">EVD-7Q4K-92XM</span>
         <div class="arr">→</div>
-        <small>hallazgos + informe firmado</small>
+        <small>hallazgos + informe</small>
       </div>
       <div>
         <div class="bd-cap">La empresa · bandeja de triage</div>
         <div class="bd-panel">
           <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/triage</span></div>
           <div class="bd-bd">
-            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-018</span><span class="ttl">Registro de calibración</span></div>
-            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-019</span><span class="ttl">Revisión de procedimiento</span></div>
-            <div class="bd-open"><span class="pmpill ab">Abierto</span><span class="pmcode">NC-2026-020</span><span class="ttl">Trazabilidad en compras</span></div>
-            <div class="bd-send" style="background:var(--blue)">Listos para causa raíz</div>
+            <div class="bd-open"><span class="pmpill ce">Convertido</span><span class="pmcode">NC-2026-018</span><span class="ttl">Registro de calibración</span></div>
+            <div class="bd-open"><span class="pmpill en">Pendiente</span><span class="ttl">Revisión de procedimiento</span></div>
+            <div class="bd-open"><span class="pmpill en">Pendiente</span><span class="ttl">Trazabilidad en compras</span></div>
+            <div class="bd-send" style="background:var(--blue)">Convertir · Al plan · Descartar</div>
           </div>
         </div>
       </div>
@@ -293,8 +345,8 @@
 
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>Conectáis con un código</h3><p>Tu cliente te comparte su código <span class="evcode">EVD-XXXXXXXX</span>. Con eso quedas enlazado a su empresa, sin acceso a su panel ni al resto de sus datos.</p></div>
-      <div class="step"><div class="n">2</div><h3>Depositas hallazgos e informe</h3><p>Al cerrar la auditoría envías los hallazgos y el informe firmado. Si corriges algo y reenvías, no se duplica: se actualiza.</p></div>
-      <div class="step"><div class="n">3</div><h3>Tu trabajo sigue vivo</h3><p>Cada hallazgo entra en su cuenta como expediente abierto, ya redactado. Tu cliente arranca por la causa raíz y la acción correctiva — y tu informe queda archivado por versiones.</p></div>
+      <div class="step"><div class="n">2</div><h3>Depositas hallazgos e informe</h3><p>Al cerrar la auditoría envías los hallazgos y el informe. Si corriges algo y reenvías, no se duplica: se actualiza. Si el hallazgo corregido ya era un expediente, tu cliente recibe el aviso de que la redacción cambió.</p></div>
+      <div class="step"><div class="n">3</div><h3>Tu trabajo sigue vivo</h3><p>Cada hallazgo llega a su bandeja ya redactado y, al convertirlo, tu cliente arranca por la causa raíz y la acción correctiva. Tu informe queda archivado en su cuenta por versiones (v2, v3…), en PDF o Word.</p></div>
     </div>
     <p class="bridge-note"><b>El valor para tu cliente:</b> cero transcripción, cero hallazgos olvidados en un PDF. El valor para ti: el cliente recibe cada hallazgo preparado para iniciar su investigación.</p>
   </div>
@@ -308,10 +360,11 @@
       <h2>Lo que sueles preguntarte</h2>
     </div>
     <details open><summary>Gestiono varias empresas como consultor.</summary><p>Un mismo usuario trabaja con varias organizaciones, cada una con sus datos aislados a nivel de base de datos — y tienes un módulo de auditoría propio, separado del panel de cada empresa.</p></details>
-    <details><summary>¿Necesito que mi cliente use Evidran?</summary><p>Para la entrega automática con código, sí: los hallazgos aterrizan en su cuenta como expedientes abiertos. Si tu cliente aún no lo usa, puedes seguir cerrando tus auditorías con informe y dictamen en tu módulo — y proponerle Evidran: la entrada por auditoría es la forma más natural de empezar.</p></details>
+    <details><summary>¿Necesito que mi cliente use Evidran?</summary><p>Para la entrega automática con código, sí: los hallazgos aterrizan en la bandeja de su cuenta, listos para convertirlos en expedientes. Si tu cliente aún no lo usa, puedes seguir cerrando tus auditorías con informe y dictamen en tu módulo — y proponerle Evidran: la entrada por auditoría es la forma más natural de empezar.</p></details>
     <details><summary>¿Veo los datos de la empresa al conectarme?</summary><p>No. El código te enlaza solo para depositar hallazgos e informes. No entras a su panel ni ves sus expedientes, riesgos ni datos internos.</p></details>
-    <details><summary>¿Qué pasa si corrijo el informe después de enviarlo?</summary><p>Reenvías y se actualiza — no se duplica. El informe queda archivado por versiones en la cuenta de tu cliente.</p></details>
-    <details><summary>Mis clientes son laboratorios o entidades acreditadas.</summary><p>Además de los trabajos no conformes (17025, 17020, 17065), Evidran tiene un módulo de Vigilancia normativa que puedes proponerles: lee su alcance de acreditación, comprueba a diario la vigencia de sus normas y reglamentos, y deja registrada la evidencia de vigilancia continua que revisa ENAC. Se contrata suelto, sin que cambien el resto de su sistema — una entrada fácil para el cliente que "todavía no quiere otro software".</p></details>
+    <details><summary>¿Qué pasa si corrijo el informe después de enviarlo?</summary><p>Reenvías y se actualiza, sin duplicados. Si un hallazgo que tu cliente ya convirtió llega corregido, se guarda la corrección y se le avisa de que la redacción cambió. El informe se archiva por versiones (v2, v3…) en su cuenta, en vez de sobrescribirse.</p></details>
+    <details><summary>¿Cita la IA el catálogo VDA ISA de memoria?</summary><p>No. Para TISAX subes tu catálogo (el Excel oficial del portal ENX, o un Word o PDF) una vez y queda guardado para todas tus auditorías. «Sugerir requisito» solo elige identificadores de esa lista y el servidor descarta cualquier otro. Sin catálogo cargado, no propone nada de esa norma. Evidran no redistribuye ningún catálogo.</p></details>
+    <details><summary>Mis clientes son laboratorios o entidades acreditadas.</summary><p>Además de los trabajos no conformes (17025, 17020, 17065), Evidran tiene un módulo de Vigilancia normativa que puedes proponerles: lee su alcance de acreditación, revisa los reglamentos UNECE a diario y la vigencia de sus normas cada semana, y deja registrada la evidencia de vigilancia continua que revisa ENAC. Se contrata suelto, sin que cambien el resto de su sistema — una entrada fácil para el cliente que "todavía no quiere otro software".</p></details>
   </div>
 </section>
 

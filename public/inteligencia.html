@@ -4,13 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Inteligencia y memoria de calidad — Evidran</title>
-<meta name="description" content="Tendencias con hallazgos que citan su dato, causas raíz medidas, objetivos ISO 6.2 recomendados, historial buscable, memoria de decisiones (7.1.6) y la Revisión por la Dirección redactada desde tus datos. La memoria de calidad de tu organización." />
+<meta name="description" content="El veredicto de tu sistema con su regla a la vista, tendencias que citan su dato, causas raíz medidas, casos anteriores buscables, decisiones y lecciones (7.1.6), la Transición 2026 y el acta 9.3 desde tus datos." />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Inteligencia y memoria de calidad — Evidran" />
-<meta property="og:description" content="Tendencias con hallazgos que citan su dato, causas raíz medidas, objetivos ISO 6.2 recomendados, historial buscable, memoria de decisiones (7.1.6) y la Revisión por la Dirección redactada desde tus datos. La memoria de calidad de tu organización." />
+<meta property="og:description" content="El veredicto de tu sistema con su regla a la vista, tendencias que citan su dato, causas raíz medidas, casos anteriores buscables, decisiones y lecciones (7.1.6), la Transición 2026 y el acta 9.3 desde tus datos." />
 <meta property="og:url" content="https://www.evidran.com/inteligencia.html" />
 <meta property="og:site_name" content="Evidran" />
 <meta property="og:locale" content="es_ES" />
@@ -24,6 +24,74 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/plataforma.css">
 <script defer src="/consent.js"></script>
+<style>
+/* inteligencia.html · estilos propios (prefijo ig-) */
+.ig-jump { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 26px auto 0; max-width: 760px; }
+.ig-jump a { font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 6px 13px; transition: border-color .15s; }
+.ig-jump a:hover { border-color: var(--blue); color: var(--blue); }
+.ig-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+.ig-dot.ok { background: #22A35A; } .ig-dot.at { background: #D9A23A; } .ig-dot.rk { background: #D9826B; } .ig-dot.in { background: #5FBFB0; }
+.ig-shotwrap { max-width: 980px; margin: 0 auto 30px; }
+.ig-frontwrap { text-align: center; max-width: 820px; margin: 44px auto 0; }
+.ig-frontwrap h3 { font-size: clamp(20px, 2.4vw, 24px); letter-spacing: -0.02em; margin-bottom: 8px; }
+.ig-frontwrap p { font-size: 15px; max-width: 60ch; margin: 0 auto; }
+.ig-frontwrap .ig-fronts { justify-content: center; }
+.ig-rule { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.ig-rule > div { background: var(--cream); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.ig-rule .st { display: flex; align-items: center; gap: 8px; font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; font-weight: 800; color: var(--ink); }
+.ig-rule p { font-size: 13.5px; margin-top: 7px; line-height: 1.55; }
+.ig-rule-note { text-align: center; font-size: 13px; color: var(--ink-soft); margin-top: 14px; }
+.ig-shot { display: block; border-radius: var(--radius); overflow: hidden; box-shadow: 0 24px 48px rgba(22,32,43,.16); background: #2B3A55; }
+.ig-shot img { display: block; width: 100%; height: auto; }
+.ig-cap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink-soft); margin-top: 10px; font-weight: 600; }
+.ig-cap a { color: var(--blue); text-decoration: none; }
+.ig-fronts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.ig-fronts span { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: 20px; padding: 5px 11px; }
+.ig-demo { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); background: var(--cream-d); border-radius: 20px; padding: 3px 9px; white-space: nowrap; }
+.ig-sec { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin: 16px 0 9px; }
+.ig-sec:first-of-type { margin-top: 0; }
+.ig-health { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ig-hc.wide { grid-column: 1 / -1; }
+.ig-hc { border: 1px solid var(--cream-d); border-radius: 12px; padding: 11px 12px; background: #fff; }
+.ig-hc .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--ink-soft); }
+.ig-hc .n { font-size: 22px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); line-height: 1.2; margin-top: 4px; }
+.ig-hc .s { font-size: 11.5px; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; margin-top: 3px; line-height: 1.35; }
+.ig-pace { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ig-pace > div { background: var(--cream); border-radius: 10px; padding: 10px 12px; }
+.ig-pace b { display: block; font-size: 16px; color: var(--ink); letter-spacing: -.01em; }
+.ig-pace span { font-size: 11.5px; color: var(--ink-soft); line-height: 1.4; display: block; }
+/* sección oscura: tendencias, patrones */
+.ig-lblrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.ig-lblrow .is-lbl { margin-bottom: 0; margin-right: auto; }
+.ig-chip { font-size: 10px; font-weight: 700; color: #DCE3EC; border: 1px solid rgba(255,255,255,.2); border-radius: 8px; padding: 3px 8px; white-space: nowrap; }
+.ig-fix { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 11.5px; color: #AEB6C0; margin-top: 10px; }
+.ig-fix b { color: #fff; }
+.ig-hand { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; background: rgba(255,255,255,.1); color: #DCE3EC; border-radius: 20px; padding: 2px 8px; }
+.ig-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 11px; }
+.ig-btns span { font-size: 10.5px; font-weight: 700; color: #DCE3EC; border: 1px solid rgba(255,255,255,.2); border-radius: 8px; padding: 5px 9px; }
+.ig-btns .pri { background: var(--green); color: #0E2A4A; border-color: var(--green); }
+.dec-tag.les { background: rgba(70,222,126,.15); color: #7FE0A0; }
+.ig-prec { margin-top: 11px; }
+/* transición 2026 */
+.ig-ed { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; border: 1px solid var(--cream-d); border-radius: 12px; padding: 10px 13px; margin-bottom: 8px; font-size: 12.5px; color: var(--ink); }
+.ig-ed b { font-size: 13px; }
+.ig-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.ig-seg span { font-size: 11px; font-weight: 700; padding: 4px 10px; color: var(--ink-soft); }
+.ig-seg .on { background: var(--ink); color: #fff; }
+.ig-ed small { display: block; width: 100%; font-size: 11px; color: var(--ink-soft); }
+.ig-req { display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; padding: 9px 0; border-top: 1px solid var(--cream-d); font-size: 12.5px; color: var(--ink); }
+.ig-send { font-size: 10px; font-weight: 700; color: #fff; background: var(--blue); border-radius: 8px; padding: 4px 9px; white-space: nowrap; }
+.ig-note { font-size: 11.5px; color: var(--ink-soft); margin-top: 12px; background: var(--cream); border-radius: 10px; padding: 9px 12px; line-height: 1.5; }
+.ig-more { display: inline-block; margin-top: 14px; font-size: 14px; font-weight: 700; color: var(--blue); text-decoration: none; }
+/* revisión 9.3 */
+.ig-acta-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cream-d); }
+.ig-acta-foot .f { font-size: 10px; font-weight: 700; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 8px; padding: 4px 9px; }
+.ig-acta-foot .f:first-of-type { margin-left: auto; }
+@media (max-width: 760px) {
+  .ig-rule { grid-template-columns: 1fr; gap: 10px; }
+  .ig-acta-foot .f:first-of-type { margin-left: 0; }
+}
+</style>
 </head>
 <body>
 
@@ -45,14 +113,14 @@
               <div class="mg-t">Gobernar el ciclo</div>
               <a href="/riesgos-plan.html#objetivos"><b>Objetivos de la calidad</b><small>Medibles, con indicador, meta y grado de logro · 6.2.</small></a>
               <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
-              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva y simulacros de emergencia · 6.1 y 8.2.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5, aspectos ambientales y simulacros · 6.1 y 8.2.</small></a><a href="/riesgos-plan.html#cambios"><b>Cambios planificados</b><small>Se planifican, se aprueban y se vigilan después · 6.3.</small></a>
               <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
             </div>
             <div class="mg-col">
               <div class="mg-t">Aprender de todo</div>
-              <a href="/inteligencia.html"><b>Inteligencia y tendencias</b><small>Causas que se repiten y hallazgos con su dato.</small></a>
+              <a href="/inteligencia.html"><b>Inteligencia del sistema</b><small>Estado diario con su regla, causas y hallazgos con su dato.</small></a>
               <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
-              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y quién · 7.1.6.</small></a>
+              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y las lecciones que quedan · 7.1.6.</small></a>
               <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
               <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
             </div>
@@ -89,13 +157,97 @@
     <p class="crumbs"><a href="/">Plataforma</a> · Aprender de todo</p>
     <div class="eyebrow">Inteligencia y memoria</div>
     <h1>Lo que tu organización ya sabe, por fin a mano.</h1>
-    <p class="sub">Cada expediente que cierras alimenta una memoria: causas medidas, hallazgos con su dato, objetivos con base real, un historial que responde «¿esto ya nos pasó?», las decisiones que tomasteis con su porqué y un acta que se redacta sola.</p>
+    <p class="sub">Al abrir, una frase te dice cómo está tu sistema y qué pide tu decisión hoy. Debajo, lo que ya sabéis puesto a mano: causas medidas, hallazgos con su dato, casos anteriores que responden «¿esto ya nos pasó?», decisiones con su porqué y las lecciones que tu equipo confirma.</p>
     <div class="hero-cta">
       <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
       <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O pruébalo por tu cuenta — 30 días gratis</a>
     </div>
+    <div class="ig-jump" aria-label="En esta página">
+      <a href="#estado">Veredicto del sistema</a>
+      <a href="#tendencias">Tendencias y causas</a>
+      <a href="#historial">Casos anteriores</a>
+      <a href="#decisiones">Decisiones y lecciones</a>
+      <a href="#transicion">Transición 2026</a>
+      <a href="#revision">Revisión 9.3</a>
+      <a href="#copiloto">Copiloto</a>
+    </div>
   </div>
 </header>
+
+<!-- VEREDICTO DEL SISTEMA -->
+<section id="estado" style="background:#fff">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Veredicto del sistema</div>
+      <h2 style="margin:0 auto;max-width:26ch">Una frase al abrir. Y la regla que la decide, a la vista.</h2>
+      <p>Bajo control, necesita atención o en riesgo. No lo decide la IA: es una regla fija que puedes leer, calculada con tus datos reales. Si alguna fuente no se pudo leer, no hay titular: se dice qué fuente falló.</p>
+    </div>
+
+    <div class="ig-shotwrap">
+      <a class="ig-shot" href="/media/evidran-sistema-en-riesgo-demo.png" target="_blank" rel="noopener" aria-label="Ampliar la captura del veredicto del sistema">
+        <img src="/media/evidran-sistema-en-riesgo-demo.png" width="1716" height="743" alt="Veredicto de Evidran: el sistema está en riesgo y seis frentes piden decisión, con el motivo explicado debajo. Datos de ejemplo de la cuenta de demostración." loading="lazy" decoding="async" />
+      </a>
+      <div class="ig-cap"><span>Producto real · Datos de ejemplo</span><a href="/media/evidran-sistema-en-riesgo-demo.png" target="_blank" rel="noopener">Ampliar ↗</a></div>
+    </div>
+
+    <div class="ig-rule">
+      <div><div class="st"><span class="ig-dot ok"></span>Bajo control</div><p>Ningún frente pide tu decisión hoy.</p></div>
+      <div><div class="st"><span class="ig-dot at"></span>Necesita atención</div><p>Hay frentes abiertos, pero nada lleva más de 30 días vencido. Un cambio planificado que se retrasa pide atención, no pone el sistema en riesgo.</p></div>
+      <div><div class="st"><span class="ig-dot rk"></span>En riesgo</div><p>Algún expediente, acción del plan, auditoría interna o simulacro lleva más de 30 días vencido.</p></div>
+    </div>
+
+    <div class="ig-frontwrap">
+      <h3>Debajo, los frentes que piden tu decisión hoy.</h3>
+      <p>Una pastilla por frente, con su número. Cada una te lleva a su pantalla; las colas de aprobación y desarrollo abren el Panel de calidad ya filtrado.</p>
+      <div class="ig-fronts">
+        <span><i class="ig-dot rk"></i>Expedientes vencidos</span>
+        <span><i class="ig-dot rk"></i>Acciones del plan vencidas</span>
+        <span><i class="ig-dot at"></i>Riesgos críticos sin tratamiento</span>
+        <span><i class="ig-dot at"></i>Auditorías internas fuera de fecha</span>
+        <span><i class="ig-dot in"></i>Hallazgos externos sin decidir</span>
+        <span><i class="ig-dot in"></i>Fechas de auditoría sin confirmar</span>
+        <span><i class="ig-dot at"></i>Simulacros de emergencia fuera de fecha</span>
+        <span><i class="ig-dot at"></i>Cambios planificados · 6.3</span>
+        <span><i class="ig-dot in"></i>Pendientes de aprobación</span>
+        <span><i class="ig-dot in"></i>No conformidades por desarrollar</span>
+      </div>
+    </div>
+
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Salud del sistema · Ritmo del ciclo</div>
+        <h3>Cinco tarjetas para el estado. Cuatro cifras para el ritmo.</h3>
+        <p>Expedientes, plan de mejora, riesgos y oportunidades, auditoría interna y auditorías externas: cada tarjeta con su cifra, su estado y el enlace a su pantalla. Siempre con datos reales.</p>
+        <ul class="fr-list">
+          <li><b>Ritmo del ciclo de mejora, sin IA.</b> Eficacia de las no conformidades (cerradas con la verificación escrita y verificaciones pendientes vencidas), tiempos de implantación, lag de detección y reaperturas tras la firma.</li>
+          <li><b>Las reaperturas salen del registro de firmas.</b> Si no hay registro, se muestra un guion, no un cero que no es verdad.</li>
+          <li><b>Próximos hitos al lado.</b> Acciones, expedientes, auditorías internas y externas, simulacros y cambios planificados que vencen pronto, juntos. Y debajo, el copiloto.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/inteligencia</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">Inteligencia del sistema</div><span class="ig-demo">Datos de ejemplo</span></div>
+          <div class="ig-sec">Salud del sistema</div>
+          <div class="ig-health">
+            <div class="ig-hc"><div class="k">Expedientes</div><div class="n">14</div><div class="s"><i class="ig-dot rk"></i>abiertos · 3 vencidos</div></div>
+            <div class="ig-hc"><div class="k">Plan de mejora</div><div class="n">19</div><div class="s"><i class="ig-dot rk"></i>acciones · 3 vencidas</div></div>
+            <div class="ig-hc"><div class="k">Riesgos y oport.</div><div class="n">12</div><div class="s"><i class="ig-dot at"></i>1 crítico sin tratar</div></div>
+            <div class="ig-hc"><div class="k">Auditoría interna</div><div class="n">4/6</div><div class="s"><i class="ig-dot at"></i>2 fuera de fecha</div></div>
+            <div class="ig-hc wide"><div class="k">Auditorías externas</div><div class="n">4</div><div class="s"><i class="ig-dot in"></i>hallazgos sin decidir · 1 fecha sin confirmar</div></div>
+          </div>
+          <div class="ig-sec">Ritmo del ciclo de mejora</div>
+          <div class="ig-pace">
+            <div><b>11 de 14</b><span>NC cerradas con la verificación escrita</span></div>
+            <div><b>26 días</b><span>tiempo medio de implantación</span></div>
+            <div><b>9 días</b><span>lag de detección</span></div>
+            <div><b>1</b><span>reapertura tras la firma</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- TENDENCIAS + CAUSAS + HISTORIAL (oscuro) -->
 <section class="intel" id="tendencias">
@@ -112,7 +264,10 @@
           <li><b>Lo que vemos en tus datos.</b> Fuera de plazo, vencidas sin cerrar, concentración por área, carga que se acumula — o la señal de que no hay focos.</li>
           <li><b>Gráficos a seis meses.</b> Altas y cierres por mes, tiempo medio de cierre, reparto por tipo y por proceso.</li>
           <li><b>El estado del plan y de los riesgos, integrado.</b> Acciones vencidas, tasa de eficacia verificada, riesgos pendientes de reevaluar — todo entra en la misma foto.</li>
-          <li><b>Objetivo recomendado por sistema · ISO 6.2.</b> Cuando un sistema acumula foco, Evidran propone un objetivo medible anclado a tu porcentaje real. Siempre editable: la IA propone, tú dispones.</li>
+          <li><b>La causa, corregible a mano.</b> Si la categoría que propuso la IA no es la buena, la cambias desde el desglose: queda marcada «Corregida a mano» y Evidran no la vuelve a pisar.</li>
+          <li><b>Objetivo recomendado por sistema de gestión.</b> Cuando calidad, ambiental, SST, energía o laboratorio acumulan foco, Evidran propone un objetivo medible anclado a tu porcentaje real y cita su apartado 6.2. En certificación (17065) e inspección (17020) sale sin cláusula, porque su norma no la tiene. Siempre editable: la IA propone, tú decides.</li>
+          <li><b>Desempeño ambiental y aeroespacial, cuando aplica.</b> Con actividad 14001, aspectos, simulacros y NC ambientales. Con NC de producto EN 9100, disposiciones, concesiones sin aprobación, escapes sin notificar y proveedor.</li>
+          <li><b>Cada panel, a tu informe.</b> Cópialo como tabla editable o como imagen del gráfico y pégalo donde lo necesites.</li>
         </ul>
       </div>
       <div class="intel-shot">
@@ -120,11 +275,12 @@
         <div class="is-find">⏱ <span>El <b>42 %</b> de las acciones se cerraron fuera de plazo <em>(8 de 19)</em></span></div>
         <div class="is-find">📍 <span>El <b>35 %</b> de las no conformidades se concentra en <b>Producción</b></span></div>
         <div class="is-block">
-          <div class="is-lbl">De dónde vienen tus no conformidades</div>
+          <div class="ig-lblrow"><div class="is-lbl">De dónde vienen tus no conformidades</div><span class="ig-chip">Copiar tabla</span><span class="ig-chip">Copiar imagen</span></div>
           <div class="is-bar"><span class="k">Formación</span><span class="t"><span style="width:100%"></span></span><span class="v">37 %</span></div>
           <div class="is-bar"><span class="k">Método</span><span class="t"><span style="width:57%"></span></span><span class="v">21 %</span></div>
           <div class="is-bar"><span class="k">Proveedor</span><span class="t"><span style="width:43%"></span></span><span class="v">16 %</span></div>
           <div class="is-bar"><span class="k">Medición</span><span class="t"><span style="width:30%"></span></span><span class="v">11 %</span></div>
+          <div class="ig-fix"><span class="ig-hand">Corregida a mano</span><span><b>NC-2026-009</b> · Método → Formación</span></div>
         </div>
         <div class="is-obj">
           <div class="k">Objetivo recomendado · ISO 9001 (6.2)</div>
@@ -135,9 +291,12 @@
 
     <div class="feat-row rev" id="historial">
       <div class="fr-text">
-        <div class="fr-eyebrow">«Esto ya nos pasó»</div>
+        <div class="fr-eyebrow">Casos anteriores · «esto ya nos pasó»</div>
         <h3>El historial que hereda quien llega y deja quien se va.</h3>
-        <p>Busca por palabra clave —tolerante a acentos— en las causas, descripciones y soluciones de todo tu histórico, con filtros por área y tipo. ¿Tu pasado vive en un Excel? Se importa con mapeo de columnas y también alimenta la memoria.</p>
+        <p>Busca por palabra clave —tolerante a acentos— en las causas, descripciones y soluciones de todo tu histórico, con filtros por área y tipo. ¿Tu pasado vive en un Excel? Se importa en CSV con mapeo de columnas y también alimenta la memoria.</p>
+        <ul class="intel-points" style="margin-top:12px">
+          <li><b>Los precedentes te salen al paso.</b> Al abrir un expediente con la causa clasificada y el proceso indicado, Evidran te recuerda cuántas NC hubo con esa causa en ese proceso y qué acción funcionó. Solo cita acciones con la eficacia verificada de verdad.</li>
+        </ul>
       </div>
       <div class="intel-shot hist-shot">
         <div class="is-head">Historial · tu memoria de calidad</div>
@@ -154,6 +313,7 @@
           <p><em>Causa raíz:</em> par de apriete fuera de especificación en el útil de montaje.</p>
           <p><em>Solución:</em> poka-yoke en el útil y verificación de par en pauta de autocontrol.</p>
         </div>
+        <div class="is-find ig-prec">↺ <span>Al abrir <b>NC-2026-017</b>: ya hubo otras <b>2 NC</b> con causa <b>proveedor</b> en Recepción. En NC-2024-031 la acción que funcionó fue: <em>«cláusula de notificación de cambios»</em> · eficacia verificada.</span></div>
       </div>
     </div>
 
@@ -164,7 +324,8 @@
         <p>Tu organización ya registra decisiones sin darse cuenta: un hallazgo descartado en el triage con su motivo, una acción cancelada, un riesgo con su estrategia elegida, un expediente cerrado con su causa, un acta aprobada. Evidran las reúne en una sola línea de tiempo, filtrable por tipo, año y palabra.</p>
         <ul class="intel-points">
           <li><b>Sin capturar nada nuevo.</b> Lee en vivo lo que ya está registrado: no hay un formulario más que rellenar ni un histórico que migrar.</li>
-          <li><b>El porqué que faltaba, añadido después.</b> Sobre cualquier decisión puedes anotar por qué se tomó. Nada se edita ni se borra: si hay que matizar, se añade otra nota.</li>
+          <li><b>El porqué que faltaba, añadido después.</b> Sobre cualquier decisión puedes anotar por qué se tomó. Nada se edita ni se borra: si hay que matizar, se añade otra nota. Y al cancelar una acción o aceptar un riesgo, una cajita opcional te pregunta el porqué en el momento.</li>
+          <li><b>Te sale al paso en el triage.</b> Si un hallazgo que entra se parece a uno ya decidido, la tarjeta te lo recuerda: «ya descartasteis uno muy parecido de este auditor», con su motivo. No bloquea nada: decides tú.</li>
           <li><b>El copiloto la consulta.</b> «¿Por qué cancelamos la acción del proveedor?» se responde con la decisión y su nota — también desde tu propio agente por MCP.</li>
           <li><b>Esto es lo que la 7.1.6 llama conocimiento de la organización:</b> el criterio deja de irse con la persona que decidió.</li>
         </ul>
@@ -185,6 +346,72 @@
         </div>
       </div>
     </div>
+
+    <div class="feat-row rev" id="patrones">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Patrones y lecciones</div>
+        <h3>Lo que se repite, a la vista. Lo que tu equipo confirma, guardado como lección.</h3>
+        <p>Cuatro detectores sin IA revisan tu memoria de decisiones. Señalan; no deciden. Cada patrón lo confirmas como lección o lo descartas con tu motivo, y esa decisión también queda en la memoria.</p>
+        <ul class="intel-points">
+          <li><b>Causa recurrente:</b> tres o más NC con la misma causa en el mismo proceso en 12 meses. <b>Eficacia de papel:</b> una acción verificada como eficaz cuya causa vuelve a aparecer después. <b>Criterio contradictorio:</b> dos hallazgos casi iguales con decisiones opuestas. <b>Riesgo ciego:</b> un proceso que acumula NC sin ningún riesgo en la matriz que lo cubra.</li>
+          <li><b>Las lecciones vigentes vuelven en la entrevista.</b> Al documentar una NC nueva, el asistente propone causas y acciones con lo que tu organización ya confirmó: «esto ya os pasó con…».</li>
+          <li><b>Del patrón al procedimiento, con tu revisión.</b> Cuando un patrón confirmado suma tres o más casos, puedes pedir un borrador de procedimiento redactado con IA. Se edita en pantalla y se descarga en Word como propuesta a revisar: nunca se publica solo; lo aprueba tu cauce documental.</li>
+          <li><b>Pack de conocimiento para incorporaciones.</b> Un dossier en Word, sin IA, con las lecciones vigentes por proceso y las decisiones clave con su porqué. Quien llega lo lee antes de que se lo cuente el pasillo.</li>
+        </ul>
+      </div>
+      <div class="intel-shot hist-shot">
+        <div class="is-head">Decisiones y lecciones · patrones detectados</div>
+        <div class="hs-res">
+          <div class="hs-top"><span class="dec-tag">Causa recurrente</span><span class="hs-date">3 NC · 12 meses</span></div>
+          <b>Formación · proceso de Montaje</b>
+          <p>NC-2025-041, NC-2026-009 y NC-2026-014 comparten causa y proceso.</p>
+          <div class="ig-btns"><span class="pri">Confirmar como lección</span><span>Descartar con motivo</span></div>
+        </div>
+        <div class="hs-res">
+          <div class="hs-top"><span class="dec-tag">Riesgo ciego</span><span class="hs-date">4 NC</span></div>
+          <b>Recepción acumula NC y ningún riesgo de la matriz la cubre</b>
+          <div class="ig-btns"><span class="pri">Confirmar como lección</span><span>Descartar con motivo</span></div>
+        </div>
+        <div class="hs-res">
+          <div class="hs-top"><span class="dec-tag les">Lección vigente</span><span class="hs-date">confirmada por M. López</span></div>
+          <b>En Montaje, cada cambio de referencia lleva formación en el puesto antes del primer lote.</b>
+          <div class="ig-btns"><span>Borrador de procedimiento · Word</span><span>Pack de conocimiento · Word</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSICIÓN 2026 -->
+<section id="transicion">
+  <div class="wrap">
+    <div class="feat-row" style="margin-top:0">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Transición 2026 · ISO 9001 e ISO 14001</div>
+        <h3>Cada organización trabaja con su edición. Y la IA cita esa.</h3>
+        <p>La ISO 14001:2026 se publicó en abril de 2026 y la ISO 9001:2026, el 16 de septiembre de 2026. Los certificados de la edición 2015 caducan en 2029. Tú eliges con qué edición trabaja tu organización en cada norma, y la etiqueta cambia en toda la app y en lo que cita la entrevista.</p>
+        <ul class="fr-list">
+          <li><b>Los requisitos nuevos, con la evidencia que ya tienes.</b> Cada requisito de la edición 2026 se comprueba contra tu propio sistema. «Evidencia detectada» no certifica nada: te dice dónde está la prueba en tu sistema.</li>
+          <li><b>Lo pendiente, al Plan en un clic.</b> El requisito genera su acción de mejora con la marca [Transición 2026], y su estado en el Plan se ve de vuelta en la pestaña.</li>
+          <li><b>El cambio de edición lo firma el responsable.</b> Solo ese rol puede activarlo, con una declaración que queda registrada. Si se pulsó antes de tiempo, se revierte desde el mismo sitio.</li>
+        </ul>
+        <a class="ig-more" href="/#transicion-2026">Qué cambia en cada norma →</a>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/inteligencia · Transición 2026</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">Transición 2026</div><span class="ig-demo">Datos de ejemplo</span></div>
+          <div class="ig-ed"><b>ISO 14001</b><span class="ig-seg"><span>2015</span><span class="on">2026</span></span><small>Edición 2026 activada por M. López (responsable) · declaración registrada</small></div>
+          <div class="ig-ed"><b>ISO 9001</b><span class="ig-seg"><span class="on">2015</span><span>2026</span></span><small>Trabajáis con la 2015 · preparando la transición</small></div>
+          <div class="ig-sec" style="margin-top:14px">Requisitos nuevos de la edición 2026</div>
+          <div class="ig-req"><span>El cambio climático, en el contexto de la organización</span><span class="pmpill ce">Evidencia detectada</span></div>
+          <div class="ig-req"><span>Riesgos y oportunidades, planificados por separado</span><span class="pmpill en">Implantada · eficacia pendiente</span></div>
+          <div class="ig-req"><span>Cultura de la calidad y comportamiento ético</span><span class="pmpill ab">En el Plan · [Transición 2026]</span></div>
+          <div class="ig-req"><span>Software de medición</span><span class="ig-send">Enviar al Plan →</span></div>
+          <div class="ig-note">«Evidencia detectada» indica que el sistema encuentra registros que lo respaldan. No es una certificación.</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -195,18 +422,19 @@
       <div class="fr-text">
         <div class="fr-eyebrow">Revisión por la Dirección · 9.3</div>
         <h3>El acta se redacta desde tus datos. Y se archiva por años.</h3>
-        <p>Evidran genera el texto de entrada con estadísticas agregadas del periodo: no conformidades por tipo y área, estado y eficacia de las acciones, resultados de la auditoría interna, plan de mejora, riesgos y recomendaciones. Lo editas y lo apruebas.</p>
+        <p>La IA redacta el borrador con estadísticas agregadas del ejercicio, sin datos sensibles ni expedientes completos: no conformidades por tipo, área y proceso, estado y eficacia de las acciones, resultados de la auditoría interna, plan de mejora, riesgos y oportunidades, cambios planificados, tendencias y recomendaciones. El responsable lo edita y lo aprueba; nadie más puede.</p>
         <ul class="fr-list">
           <li><b>Tus objetivos, con su grado de cumplimiento</b> (entrada 9.3.2 b): indicador, meta, valor actual y avance real de cada objetivo — sin que nadie los recopile a mano la semana antes del comité.</li>
-          <li><b>Un acta por ejercicio.</b> Regenerar el año en curso no pisa las actas anteriores: son registro obligatorio (9.3.3) y se consultan con su selector.</li>
-          <li><b>Volumen de datos disponible.</b> Evidran indica cuándo faltan datos para analizar tendencias.</li>
-          <li><b>El acta se prepara con estadísticas agregadas.</b> El acta se genera con números agregados, sin datos sensibles.</li>
+          <li><b>Un acta por ejercicio.</b> Con los datos del 1 de enero al 31 de diciembre del año revisado. Regenerar el año en curso no pisa las actas anteriores: son registro obligatorio (9.3.3).</li>
+          <li><b>Aprobada es aprobada.</b> Al aprobarla, el acta queda congelada, y eso lo impone la base de datos, no la pantalla. Reabrirla queda registrado. Guarda además la foto de las entradas con las que se redactó.</li>
+          <li><b>Declaración de cumplimiento legal ambiental</b> (14001 · 9.1.2). Evidran no evalúa requisitos legales: la dirección declara fecha, resultado y dónde consta, y el acta lo recoge «según declara la organización».</li>
+          <li><b>En Word y en PDF, con tu identidad documental.</b> Las limitaciones de los datos se declaran en el propio texto del acta, no se esconden.</li>
         </ul>
       </div>
       <div class="fr-visual">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/revision-direccion</span></div>
         <div class="acta">
-          <div class="acta-years"><span>2024</span><span>2025</span><span class="on">2026</span></div>
+          <div class="acta-years"><span>2023</span><span>2024</span><span class="on">2025</span></div>
           <div class="acta-head">
             <div>
               <div class="acta-eyebrow">Revisión por la Dirección · ISO 9001 (9.3)</div>
@@ -214,9 +442,10 @@
             </div>
             <span class="acta-ia">✦ Generado con IA</span>
           </div>
-          <p>Durante el primer semestre de 2026 se registraron <b>18 no conformidades</b>, con una tasa de cierre del <b>84 %</b> y un tiempo medio de resolución de <b>21 días</b>.</p>
-          <p>Por tipología predominan las asociadas a <b>formación</b> (37 %) y a <b>método/procedimiento</b> (21 %). El objetivo <b>OBJ-2026-001</b> —reducir un 25 % las NC de formación— presenta un grado de logro del <b>67 %</b> (2 de 3 acciones con eficacia verificada). Se recomienda desatascar las <b>2 acciones vencidas</b> antes de la próxima auditoría.</p>
+          <p>Durante el ejercicio 2025 se registraron <b>18 no conformidades</b>, con una tasa de cierre del <b>84 %</b> y un tiempo medio de resolución de <b>21 días</b>.</p>
+          <p>Por tipología predominan las asociadas a <b>formación</b> (37 %) y a <b>método/procedimiento</b> (21 %). El objetivo <b>OBJ-2026-001</b> —reducir un 25 % las NC de formación— presenta, a la fecha de generación, un grado de logro del <b>67 %</b> (2 de 3 acciones con eficacia verificada). Se recomienda desatascar las <b>acciones vencidas</b> antes de la próxima auditoría.</p>
           <div class="acta-flag">✓ Volumen suficiente para el análisis de tendencias</div>
+          <div class="ig-acta-foot"><span class="pmpill ce">Aprobada · congelada</span><span class="f">Word</span><span class="f">PDF</span></div>
         </div>
       </div>
     </div>
@@ -229,18 +458,18 @@
     <div class="center-head">
       <div class="eyebrow">El copiloto</div>
       <h2>Pregúntale a tu sistema. Responde con tus datos.</h2>
-      <p>Disponible en todas las pantallas. Consulta tus no conformidades abiertas, tu plan y tus riesgos con las mismas reglas deterministas de los avisos, y te enlaza al registro exacto que lo resuelve. Puedes consultar los registros y abrirlos para decidir el siguiente paso.</p>
+      <p>Siempre a mano en el panel, las auditorías, los casos anteriores, la inteligencia, el plan y los riesgos. Consulta tus no conformidades abiertas, el plan, los objetivos, los riesgos, la bandeja de hallazgos de auditoría y la memoria de decisiones, y te enlaza al registro exacto. Es de solo lectura: no crea, no edita y no cierra nada. Decides tú.</p>
     </div>
     <div class="mock">
-      <div class="mock-bar"><i></i><i></i><i></i><span>Copiloto · disponible en toda la app</span></div>
+      <div class="mock-bar"><i></i><i></i><i></i><span>Copiloto · solo lectura</span></div>
       <div class="mock-chat">
         <div class="bubble me">Tengo la auditoría de seguimiento en tres semanas. ¿Cómo vamos?</div>
-        <div class="bubble ai">Te faltan 3 cosas: cerrar <b>NC-2026-014</b> y <b>NCA-2026-003</b>, y verificar la eficacia de una acción del plan. Además hay 3 riesgos tratados pendientes de reevaluar. Te enlazo cada uno →</div>
-        <div class="bubble me">¿Y la auditoría interna?</div>
-        <div class="bubble ai">El programa de este año va al día: 4 de 4 procesos auditados. Sus hallazgos ya están en tu bandeja de triage.</div>
+        <div class="bubble ai">Hay 3 expedientes vencidos —el primero, <b>NC-2026-014</b>— y 3 acciones del plan vencidas. Tienes además 1 riesgo crítico sin tratar y <b>4 hallazgos externos</b> en la bandeja pendientes de decidir. Te enlazo cada uno →</div>
+        <div class="bubble me">¿Por qué cancelamos la segunda fuente del elastómero?</div>
+        <div class="bubble ai">Según la nota de <b>J. Ruiz</b> (feb 2026): se canceló al homologar la cláusula de notificación de cambios, que cubría el riesgo sin duplicar proveedor. Abrir la decisión →</div>
       </div>
     </div>
-    <p class="shot-cap">¿Prefieres preguntar desde tu propia herramienta? Con la <b>conexión MCP</b>, tu agente de IA (Claude, Cursor, VS Code…) consulta lo mismo, en solo lectura.</p>
+    <p class="shot-cap">¿Prefieres preguntar desde tu propia herramienta? Con la <b>conexión MCP</b>, tu agente de IA (Claude Code, Cursor, VS Code…) consulta el estado de tu organización en solo lectura, con un token que ves una sola vez y puedes revocar.</p>
   </div>
 </section>
 

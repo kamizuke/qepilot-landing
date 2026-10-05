@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Riesgos 6.1, objetivos de la calidad 6.2 y plan de mejora continua 10.2 — Evidran</title>
-<meta name="description" content="Matriz de riesgos 5×5 viva con vista inherente y residual, simulacros de emergencia (14001 y 45001 · 8.2), objetivos de la calidad medibles con indicador, meta y grado de logro (6.2), y un plan de mejora único con responsable, plazos, bitácora y verificación de eficacia." />
+<title>Riesgos 6.1, aspectos ambientales, cambios 6.3, objetivos 6.2 y plan de mejora 10.2 — Evidran</title>
+<meta name="description" content="Matriz de riesgos 5×5 viva con vista inherente y residual, aspectos ambientales (14001 · 6.1.2), simulacros de emergencia (8.2), cambios planificados con firma (6.3), objetivos de la calidad medibles (6.2) y un plan de mejora único con verificación de eficacia." />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Riesgos 6.1, objetivos de la calidad 6.2 y plan de mejora continua 10.2 — Evidran" />
-<meta property="og:description" content="Matriz de riesgos 5×5 viva con vista inherente y residual, simulacros de emergencia (14001 y 45001 · 8.2), objetivos de la calidad medibles con indicador, meta y grado de logro (6.2), y un plan de mejora único con responsable, plazos, bitácora y verificación de eficacia." />
+<meta property="og:title" content="Riesgos 6.1, aspectos ambientales, cambios 6.3, objetivos 6.2 y plan de mejora 10.2 — Evidran" />
+<meta property="og:description" content="Matriz de riesgos 5×5 viva con vista inherente y residual, aspectos ambientales (14001 · 6.1.2), simulacros de emergencia (8.2), cambios planificados con firma (6.3), objetivos de la calidad medibles (6.2) y un plan de mejora único con verificación de eficacia." />
 <meta property="og:url" content="https://www.evidran.com/riesgos-plan.html" />
 <meta property="og:site_name" content="Evidran" />
 <meta property="og:locale" content="es_ES" />
@@ -23,6 +23,48 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/plataforma.css">
+<style>
+/* Aspectos ambientales y cambios planificados (prefijo rp-) */
+.rp-seg { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.rp-seg span { font-size: 10.5px; font-weight: 700; border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; color: var(--ink-soft); }
+.rp-seg .on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.rp-asp td { vertical-align: top; }
+.rp-asp td:first-child { min-width: 120px; }
+.rp-asp .sub { display: block; font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
+.rp-fs { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--ink); white-space: nowrap; }
+.rp-cond { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 2px 7px; border-radius: 6px; background: var(--cream-d); color: var(--navy); white-space: nowrap; }
+.rp-cond.em { background: #FDE7E7; color: #B42318; }
+.rp-pill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; display: inline-block; }
+.rp-pill.sig { background: #FDE7E7; color: #B42318; }
+.rp-pill.no { background: var(--cream-d); color: var(--ink-soft); }
+.rp-doc { padding: 16px 18px; }
+.rp-doc-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.rp-doc-head b { font-size: 12px; color: var(--navy); letter-spacing: .02em; }
+.rp-doc-head span { font-size: 10.5px; color: var(--ink-soft); }
+.rp-doc-title { font-size: 14px; font-weight: 800; color: var(--ink); margin: 12px 0 10px; }
+.rp-doc-sec { display: flex; gap: 10px; align-items: baseline; font-size: 12px; color: var(--ink); padding: 7px 0; border-top: 1px solid var(--cream-d); }
+.rp-doc-sec:first-of-type { border-top: 0; }
+.rp-doc-sec .n { font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--ink-soft); flex: 0 0 auto; }
+.rp-bands { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 2px 26px; }
+.rp-bands span { font-size: 10px; font-weight: 700; border-radius: 6px; padding: 2px 8px; }
+.rp-bands .b1 { background: #E7F6EC; color: #167C40; } .rp-bands .b2 { background: #FEF6D8; color: #8A6A00; }
+.rp-bands .b3 { background: #FEF1DE; color: #B45309; } .rp-bands .b4 { background: #FDE7E7; color: #B42318; }
+.rp-doc-foot { margin-top: 12px; padding-top: 9px; border-top: 1px solid var(--line); font-size: 10.5px; color: var(--ink-soft); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.rp-firma { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; background: #F2F6FC; border-radius: 12px; padding: 11px 14px; font-size: 12px; color: var(--ink); line-height: 1.5; }
+.rp-firma .ok { flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 800; margin-top: 1px; }
+.rp-firma small { display: block; color: var(--ink-soft); font-size: 10.5px; margin-top: 2px; }
+.rp-hash { font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--navy); }
+.rp-vig { margin-top: 14px; border: 1px solid var(--line); border-radius: 12px; padding: 12px 15px; }
+.rp-vig .h { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 10px; }
+.rp-vig .h span { text-transform: none; letter-spacing: 0; font-size: 11px; font-weight: 600; }
+.rp-vig-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.rp-vig-n { border-radius: 10px; padding: 9px 12px; background: var(--cream-d); }
+.rp-vig-n.after { background: #E7F6EC; }
+.rp-vig-n .v { font-size: 22px; font-weight: 800; color: var(--ink); line-height: 1.1; }
+.rp-vig-n.after .v { color: #167C40; }
+.rp-vig-n .k { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+.rp-vig p { font-size: 11px; color: var(--ink-soft); margin-top: 9px; }
+</style>
 <script defer src="/consent.js"></script>
 </head>
 <body>
@@ -45,14 +87,14 @@
               <div class="mg-t">Gobernar el ciclo</div>
               <a href="/riesgos-plan.html#objetivos"><b>Objetivos de la calidad</b><small>Medibles, con indicador, meta y grado de logro · 6.2.</small></a>
               <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
-              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva y simulacros de emergencia · 6.1 y 8.2.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5, aspectos ambientales y simulacros · 6.1 y 8.2.</small></a><a href="/riesgos-plan.html#cambios"><b>Cambios planificados</b><small>Se planifican, se aprueban y se vigilan después · 6.3.</small></a>
               <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
             </div>
             <div class="mg-col">
               <div class="mg-t">Aprender de todo</div>
-              <a href="/inteligencia.html"><b>Inteligencia y tendencias</b><small>Causas que se repiten y hallazgos con su dato.</small></a>
+              <a href="/inteligencia.html"><b>Inteligencia del sistema</b><small>Estado diario con su regla, causas y hallazgos con su dato.</small></a>
               <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
-              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y quién · 7.1.6.</small></a>
+              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y las lecciones que quedan · 7.1.6.</small></a>
               <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
               <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
             </div>
@@ -89,7 +131,7 @@
     <p class="crumbs"><a href="/">Plataforma</a> · Gobernar el ciclo</p>
     <div class="eyebrow">Riesgos, objetivos y plan de mejora</div>
     <h1>Del riesgo identificado a la mejora verificada, con la traza entera.</h1>
-    <p class="sub">La matriz 6.1 se actualiza con el tratamiento y la reevaluación de cada riesgo. Cada riesgo tratado genera una acción en el plan 10.2, cada acción se verifica, y al verificarse Evidran te recuerda reevaluar el residual. Y por encima de las acciones, tus objetivos de la calidad (6.2): medibles, con indicador y grado de logro real.</p>
+    <p class="sub">La matriz 6.1 se actualiza con el tratamiento y la reevaluación de cada riesgo, y acoge también tus <a href="#aspectos" style="color:inherit;text-decoration:underline">aspectos ambientales</a> (14001 · 6.1.2). Cada riesgo tratado genera una acción en el plan 10.2, cada acción se verifica, y al verificarse Evidran te recuerda reevaluar el residual. Los <a href="#cambios" style="color:inherit;text-decoration:underline">cambios</a> se planifican y se firman antes de hacerlos (6.3). Y por encima de las acciones, tus objetivos de la calidad (6.2): medibles, con indicador y grado de logro real.</p>
     <div class="hero-cta">
       <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
       <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O pruébalo por tu cuenta — 30 días gratis</a>
@@ -107,8 +149,9 @@
         <ul class="fr-list">
           <li><b>Probabilidad × impacto</b>, con vista inherente (antes de tratar) y residual (lo que queda tras verificar las acciones).</li>
           <li><b>Riesgos y oportunidades, cada uno con su color:</b> semáforo para el riesgo, rampa azul de prioridad para la oportunidad — a más nivel, más atractiva.</li>
+          <li><b>Riesgos, oportunidades y <a href="#aspectos" style="color:var(--navy)">aspectos ambientales</a></b> en la misma matriz, con un segmentador para ver cada uno.</li>
           <li><b>Celdas clicables</b> para filtrar la lista, y contador de registros sin evaluar o sin reevaluar.</li>
-          <li><b>Alimenta Tendencias y la Revisión por la Dirección</b> como entrada 9.3.2 e).</li>
+          <li><b>Alimenta Inteligencia del sistema y la Revisión por la Dirección</b> como entrada 9.3.2 e).</li>
         </ul>
       </div>
       <div class="fr-visual">
@@ -156,8 +199,10 @@
         <div class="fr-eyebrow">Entradas asistidas</div>
         <h3>Empieza con los riesgos que muestran tus datos.</h3>
         <ul class="fr-list">
-          <li><b>Entrevista con IA</b> que recorre las fuentes de riesgo — procesos, proveedores, personas, legal, tecnología — y propone fichas que tú añades o descartas. El servidor nunca guarda nada solo.</li>
-          <li><b>Foco por proceso:</b> centra la entrevista en un proceso concreto y ve la cobertura de cada uno.</li>
+          <li><b>Entrevista con IA</b> que recorre las fuentes de riesgo y oportunidad — procesos, proveedores, personas, clientes, legal, tecnología — y propone fichas que tú añades o descartas. Nada se guarda sin que lo aceptes.</li>
+          <li><b>Foco por proceso:</b> centra la entrevista en un proceso — del mapa genérico o de los tuyos — y ve cuántos registros cubren ya cada uno.</li>
+          <li><b>Habla el idioma de tu sistema:</b> con ISO/IEC 27001 o TISAX activados pregunta por activos, amenazas, vulnerabilidades y controles; con calidad y seguridad, recorre los dos mundos sin mezclarlos.</li>
+          <li><b>Parte de tu perfil de empresa.</b> Si aún no lo tienes, empieza con unas preguntas de encuadre y te deja el perfil preparado para guardarlo.</li>
           <li><b>Sugerencias desde tus datos:</b> patrones de tus no conformidades — recurrencias, concentración por área — se ofrecen como riesgos a evaluar, con probabilidad e impacto sugeridos.</li>
           <li><b>Se reanuda donde lo dejaste,</b> desde cualquier dispositivo.</li>
         </ul>
@@ -174,19 +219,80 @@
   </div>
 </section>
 
+<!-- ASPECTOS AMBIENTALES -->
+<section id="aspectos" style="background:#fff">
+  <div class="wrap">
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Aspectos ambientales · ISO 14001 · 6.1.2</div>
+        <h3>Tus aspectos ambientales, en la misma matriz que tus riesgos.</h3>
+        <p>La 14001 pide identificar los aspectos de tus actividades, productos y servicios con perspectiva de ciclo de vida, y decidir cuáles son significativos con criterios establecidos. En Evidran el aspecto es el tercer tipo de la matriz: se evalúa, se trata en el plan y llega a la revisión como el resto.</p>
+        <ul class="fr-list">
+          <li><b>Frecuencia × severidad</b>, con sus propias escalas, en lugar de probabilidad × impacto. Mismo semáforo: a más nivel, más significativo.</li>
+          <li><b>Condición de operación</b> — normal, anómala o emergencia — y <b>fase del ciclo de vida</b>: compras, operación, uso o fin de vida.</li>
+          <li><b>Significancia automática o fijada a mano.</b> Por defecto sale del nivel; si tu criterio manda otra cosa — un requisito legal, por ejemplo — la fijas tú.</li>
+          <li><b>Los de emergencia alimentan los <a href="#simulacros" style="color:var(--navy)">simulacros</a>:</b> son la cantera de escenarios que vas a probar.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/riesgos · Aspectos</span></div>
+        <div class="pm">
+          <div class="rp-seg"><span>Riesgos</span><span>Oportunidades</span><span class="on">Aspectos</span></div>
+          <table class="pm-table rp-asp">
+            <thead><tr><th>Aspecto</th><th class="hide-sm">Condición</th><th>F × S</th><th>Significancia</th></tr></thead>
+            <tbody>
+              <tr><td>Consumo eléctrico · hornos de curado<span class="sub">Operación</span></td><td class="hide-sm"><span class="rp-cond">Normal</span></td><td><span class="rp-fs">4 × 4</span></td><td><span class="rp-pill sig">Significativo</span></td></tr>
+              <tr><td>Envases de pintura usados<span class="sub">Fin de vida</span></td><td class="hide-sm"><span class="rp-cond">Normal</span></td><td><span class="rp-fs">2 × 2</span></td><td><span class="rp-pill sig">Significativo</span><span class="sub">Fijado a mano · requisito legal</span></td></tr>
+              <tr><td>Virutas con taladrina<span class="sub">Operación</span></td><td class="hide-sm"><span class="rp-cond">Anómala</span></td><td><span class="rp-fs">2 × 2</span></td><td><span class="rp-pill no">No significativo</span></td></tr>
+              <tr><td>Derrame de aceite · zona de carga<span class="sub">Operación</span></td><td class="hide-sm"><span class="rp-cond em">Emergencia</span></td><td><span class="rp-fs">2 × 5</span></td><td><span class="rp-pill sig">Significativo</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fr-cap"><b>Envases de pintura:</b> por nivel no saldría significativo; la organización lo fija a mano por requisito legal. <b>El derrame</b>, en condición de emergencia, es escenario de simulacro.</p>
+      </div>
+    </div>
+
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Documento «Criterios de evaluación»</div>
+        <h3>Los criterios que aplicas, por escrito y defendibles.</h3>
+        <p>La herramienta pone un 4 de frecuencia, pero eres tú quien tiene que poder defender ese 4 ante el auditor. Por eso la 9001 (6.1) y la 14001 (6.1.2) piden criterios establecidos.</p>
+        <ul class="fr-list">
+          <li><b>Sale de las mismas reglas que aplica la app:</b> escalas, bandas, estrategias y estados. Lo documentado y lo aplicado no pueden divergir, porque son la misma cosa.</li>
+          <li><b>Si cambian las bandas, el documento cambia solo.</b> Los rangos se derivan de los umbrales reales, no se escriben a mano.</li>
+          <li><b>Con tu identidad documental</b> — membrete, código de formato y pie de control — para integrarlo por referencia en tu procedimiento.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">Criterios de evaluación · imprimir</span></div>
+        <div class="rp-doc">
+          <div class="rp-doc-head"><b>INDUSTRIAS MERIDIA</b><span>Procedimiento de riesgos y aspectos</span></div>
+          <div class="rp-doc-title">Criterios de evaluación</div>
+          <div class="rp-doc-sec"><span class="n">1</span><span>Escalas de probabilidad e impacto (1–5), con su descripción</span></div>
+          <div class="rp-doc-sec"><span class="n">2</span><span>Escalas de frecuencia y severidad de los aspectos ambientales</span></div>
+          <div class="rp-doc-sec"><span class="n">3</span><span>Bandas de nivel y criterio de significancia</span></div>
+          <div class="rp-bands"><span class="b1">Bajo</span><span class="b2">Medio</span><span class="b3">Alto</span><span class="b4">Crítico</span></div>
+          <div class="rp-doc-sec"><span class="n">4</span><span>Estrategias de tratamiento y estados del registro</span></div>
+          <div class="rp-doc-foot"><span>F-6.1-02 · Rev. 1</span><span>Generado desde las reglas vigentes de la app</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- SIMULACROS DE EMERGENCIA -->
-<section id="simulacros" style="background:#fff">
+<section id="simulacros">
   <div class="wrap">
     <div class="feat-row rev">
       <div class="fr-text">
         <div class="fr-eyebrow">Simulacros de emergencia · 14001 y 45001 (8.2)</div>
         <h3>Planifica el simulacro y registra el resultado.</h3>
-        <p>La 14001 y la 45001 contemplan pruebas periódicas de la respuesta ante emergencias y su revisión posterior. Aquí el ciclo entero vive junto a la matriz — porque el escenario sale de tus propios aspectos evaluados en condición de emergencia.</p>
+        <p>La 14001 y la 45001 contemplan pruebas periódicas de la respuesta ante emergencias — derrame, vertido, fuga, incendio — y la revisión de los procedimientos tras cada prueba. Aquí el ciclo entero vive junto a la matriz, porque las ideas de escenario salen de tus propios <a href="#aspectos" style="color:var(--navy)">aspectos evaluados en condición de emergencia</a>.</p>
         <ul class="fr-list">
           <li><b>Planificar, realizar, registrar.</b> Fecha (confirmada o aún tentativa), escenario, ámbito y el resultado como evidencia: satisfactorio o con desviaciones.</li>
-          <li><b>Si hubo desviaciones, hay acción.</b> Se genera en el plan de mejora con responsable y plazo con un vínculo al acta del simulacro.</li>
+          <li><b>Si hubo desviaciones, hay acción.</b> La acción correctiva se genera en el plan de mejora, con responsable y plazo.</li>
           <li><b>Te avisa si la fecha no está confirmada.</b> Mismo criterio que el calendario de auditorías: si se acerca y sigue en el aire, entra en tu resumen diario.</li>
-          <li><b>Informe imprimible del simulacro</b>, con el membrete y el código de formato de tu identidad documental.</li>
+          <li><b>Informe imprimible del simulacro</b> — fecha, escenario, ámbito, resultado y, si hubo desviaciones, la acción correctiva — con el membrete y el código de formato de tu identidad documental.</li>
         </ul>
       </div>
       <div class="fr-visual">
@@ -209,7 +315,7 @@
 </section>
 
 <!-- OBJETIVOS DE LA CALIDAD -->
-<section id="objetivos">
+<section id="objetivos" style="background:#fff">
   <div class="wrap">
     <div class="feat-row">
       <div class="fr-text">
@@ -218,8 +324,8 @@
         <p>La 6.2 pide objetivos medibles, con responsables, recursos y plazos. En Evidran un objetivo estratégico lleva <b>indicador, meta y valor actual</b>, recibe su código consecutivo <b>OBJ-AAAA-NNN</b> y agrupa las acciones que lo hacen realidad.</p>
         <ul class="fr-list">
           <li><b>Grado de logro a partir de las acciones verificadas.</b> Sale de las acciones vinculadas con la eficacia ya verificada y de sus resultados registrados.</li>
-          <li><b>Cuatro clases, una sola tabla:</b> objetivo estratégico, acción de mejora, oportunidad y acción libre. Una oportunidad se convierte en acción cuando decides abordarla, y deja rastro de que existió.</li>
-          <li><b>Evidran propone indicadores y metas.</b> Propone indicador y meta a partir de lo que le cuentas — sin inventarse cifras. Tú revisas y guardas.</li>
+          <li><b>Dos clases, una sola tabla:</b> objetivo estratégico y acción de mejora. Una idea por evaluar se queda en <b>Propuesta</b> — sin responsable ni plazo, sin vencer — hasta que decides abordarla.</li>
+          <li><b>Ayuda a que sea medible.</b> En el alta asistida, Evidran propone indicador y meta a partir de lo que le cuentas — sin inventarse cifras. Tú revisas y guardas.</li>
           <li><b>Entrada obligatoria de la Revisión por la Dirección</b> (9.3.2 b): tus objetivos y su grado de cumplimiento entran solos en el acta.</li>
         </ul>
       </div>
@@ -251,30 +357,32 @@
 </section>
 
 <!-- PLAN DE MEJORA -->
-<section id="plan" style="background:#fff">
+<section id="plan">
   <div class="wrap">
     <div class="feat-row rev">
       <div class="fr-text">
         <div class="fr-eyebrow">Plan de mejora continua · 10.2</div>
         <h3>Una sola tabla para todo lo que hay que mejorar.</h3>
-        <p>Cuatro orígenes, un mismo plan: acciones escaladas desde una no conformidad, observaciones de auditoría, tratamientos de riesgos y lo que das de alta tú. Cada acción con responsable, recursos, prioridad, plazos y <b>verificación de eficacia</b> — el hueco que casi nadie rellena y el primero que mira un auditor.</p>
+        <p>Todos los orígenes, un mismo plan: acciones escaladas desde una no conformidad, observaciones de auditoría, tratamientos de riesgos, tareas de un <a href="#cambios" style="color:var(--navy)">cambio planificado</a> y lo que das de alta tú. Cada acción con responsable, recursos, prioridad, plazos y <b>verificación de eficacia</b> — el hueco que casi nadie rellena y el primero que mira un auditor.</p>
         <ul class="fr-list">
-          <li><b>Elige qué creas antes de crearlo:</b> objetivo estratégico, acción de mejora, oportunidad o acción libre. Cada acción puede colgar del <a href="#objetivos" style="color:var(--navy)">objetivo</a> al que contribuye.</li>
+          <li><b>Elige qué creas antes de crearlo:</b> objetivo estratégico o acción de mejora. Cada acción puede colgar del <a href="#objetivos" style="color:var(--navy)">objetivo</a> al que contribuye.</li>
+          <li><b>Un camino claro:</b> propuesta → planificada → en curso → implantada → verificada, o cancelada. Una propuesta no vence ni cuenta en el % de ejecutadas.</li>
           <li><b>Cinco tarjetas de cabecera:</b> objetivos, acciones vivas, vencidas, % ejecutadas y % con eficacia verificada. Las de conteo filtran la lista al pulsarlas.</li>
-          <li><b>Dos vías de alta:</b> ficha en blanco, o se la cuentas a la IA y el formulario se rellena a la vista. Nada se guarda sin que pulses tú.</li>
-          <li><b>Vista por ejercicio:</b> lo abierto arrastra al año siguiente; lo cerrado queda en su año. Nada se borra.</li>
-          <li><b>Exporta a CSV</b> lo que tengas filtrado, listo para Excel.</li>
+          <li><b>Dos vías de alta:</b> ficha en blanco o asistida por IA. Se la cuentas y repregunta solo lo que falta — máximo 3 preguntas: quién, para cuándo y cuándo se comprobará que ha funcionado —, con el formulario rellenándose a la vista. El resultado de la eficacia nunca lo pone la IA: lo pones tú al comprobarlo.</li>
+          <li><b>Vista por ejercicio:</b> lo abierto arrastra al año siguiente; lo cerrado queda en su año. Nada se borra. Cada acción lleva su bitácora de seguimiento y sus evidencias.</li>
+          <li><b>Exporta a Excel</b> desde el cajón de Descargas.</li>
         </ul>
       </div>
       <div class="fr-visual">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/plan-mejora</span></div>
         <div class="pm">
-          <div class="pm-head"><div class="pm-title">Plan de mejora</div><div class="pm-btns"><span>2026</span><span>Exportar CSV</span><span class="pri">+ Crear</span></div></div>
+          <div class="pm-head"><div class="pm-title">Plan de mejora</div><div class="pm-btns"><span>2026</span><span>Descargas</span><span class="pri">+ Crear</span></div></div>
           <table class="pm-table">
             <thead><tr><th>Acción</th><th class="hide-sm">Origen</th><th>Resp.</th><th>Prioridad</th><th>Eficacia</th></tr></thead>
             <tbody>
               <tr><td>Instrucción de control · turno noche</td><td class="hide-sm"><span class="pmcode">NC-2026-014</span></td><td>M. López</td><td><span class="prio alta">Alta</span></td><td><span class="efic pend">Pendiente</span></td></tr>
               <tr><td>Cláusula de notificación de cambios</td><td class="hide-sm"><span class="pmcode">R-04</span></td><td>Compras</td><td><span class="prio alta">Alta</span></td><td><span class="efic">✓ Verificada</span></td></tr>
+              <tr><td>Homologar retén del nuevo proveedor</td><td class="hide-sm"><span class="pmcode">CAM-2026-003</span></td><td>J. Ruiz</td><td><span class="prio media">Media</span></td><td><span class="efic">✓ Verificada</span></td></tr>
               <tr><td>Formación en registro dimensional</td><td class="hide-sm">Auditoría</td><td>A. Pérez</td><td><span class="prio media">Media</span></td><td><span class="efic pend">Pendiente</span></td></tr>
             </tbody>
           </table>
@@ -309,6 +417,67 @@
   </div>
 </section>
 
+<!-- CAMBIOS PLANIFICADOS -->
+<section id="cambios" style="background:#fff">
+  <div class="wrap">
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Cambios planificados · ISO 9001 · 6.3</div>
+        <h3>El cambio se planifica antes de hacerlo, no se justifica después.</h3>
+        <p>Un método, un equipo, un software, un proveedor clave, una instalación, una reorganización. Cada cambio tiene su ficha con código <b>CAM-AAAA-NNN</b>: qué cambia y para qué, a qué afecta, quién, cuándo y con qué, sus riesgos, sus tareas y cómo se sabrá que funcionó.</p>
+        <ul class="fr-list">
+          <li><b>Dos vías de alta:</b> asistida por IA — una entrevista de máximo 7 preguntas — o ficha en blanco. Evidran propone; la persona crea.</li>
+          <li><b>Las preguntas de tu norma.</b> Con ISO 45001: peligros y consulta a los trabajadores. Con IATF 16949: producto o proceso, aprobación del cliente y validación. Con ISO/IEC 17025: método, equipos, competencia, trazabilidad y, si toca el alcance acreditado, el aviso de comunicarlo al organismo de acreditación.</li>
+          <li><b>No cuenta como no conformidad.</b> Un cambio tiene su propia pantalla y no ensucia tus indicadores de NC.</li>
+        </ul>
+      </div>
+      <div class="fr-visual" style="max-width:none">
+        <div class="mock-bar"><i></i><i></i><i></i><span>Nuevo cambio · asistido por IA</span></div>
+        <div class="mock-chat">
+          <div class="bubble me">Vamos a cambiar de proveedor de retenes para la línea 2. El actual no llega a los plazos.</div>
+          <div class="bubble ai">Entendido. ¿A qué afecta además de la línea 2: plano, instrucciones de montaje, plan de control?</div>
+          <div class="bubble me">Plan de control e instrucción de montaje.</div>
+          <div class="bubble ai">Como trabajáis con IATF 16949: ¿necesita el cliente aprobar el cambio antes de suministrar? ¿Y cómo se sabrá que ha funcionado?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Aprobación y seguimiento</div>
+        <h3>Firmado antes de empezar. Vigilado después.</h3>
+        <ul class="fr-list">
+          <li><b>Aprobación con firma del responsable:</b> nombre, cargo, fecha y huella del contenido aprobado. Sin firma no se pone en marcha, y si alguien toca lo aprobado, la firma se anula y vuelve a borrador — con constancia.</li>
+          <li><b>Conectado con el resto:</b> los riesgos del cambio van a la <a href="#matriz" style="color:var(--navy)">matriz</a> y sus tareas al <a href="#plan" style="color:var(--navy)">plan de mejora</a>.</li>
+          <li><b>Vigilancia de NC tras implantarlo:</b> cuenta, sin IA, las no conformidades del proceso afectado en las semanas posteriores y las compara con las mismas semanas de antes.</li>
+          <li><b>Entra en el veredicto del sistema</b> — fuera de fecha, implantado sin verificar o con más NC después que antes —, en los próximos hitos y en el acta de la Revisión por la Dirección (9.3).</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/cambios · CAM-2026-003</span></div>
+        <div class="obj">
+          <div class="obj-top"><span class="pmcode">CAM-2026-003</span><span class="pmpill en">Implantado</span><span class="obj-cls">Cambio planificado · 6.3</span></div>
+          <p class="obj-name">Cambio de proveedor de retenes · Línea 2</p>
+          <div class="obj-kpis">
+            <div class="obj-kpi"><div class="k">A qué afecta</div><div class="v">Producción · Línea 2, plan de control</div></div>
+            <div class="obj-kpi"><div class="k">Riesgos</div><div class="v">2 en la matriz</div></div>
+            <div class="obj-kpi"><div class="k">Tareas</div><div class="v">4 en el plan</div></div>
+          </div>
+          <div class="rp-firma"><span class="ok">✓</span><span><b>Aprobado por M. López</b> · Responsable de calidad · 14 jul 2026<small>Huella del contenido aprobado <span class="rp-hash">3f9a…c21e</span> · si se modifica, la firma se anula</small></span></div>
+          <div class="rp-vig">
+            <div class="h">NC del proceso <span>8 semanas antes / después</span></div>
+            <div class="rp-vig-nums">
+              <div class="rp-vig-n"><div class="v">4</div><div class="k">antes del cambio</div></div>
+              <div class="rp-vig-n after"><div class="v">1</div><div class="k">después del cambio</div></div>
+            </div>
+            <p>Recuento sin IA desde que se marcó «Implantado».</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ENLACES CRUZADOS -->
 <section style="padding-top:0">
   <div class="wrap">
@@ -324,7 +493,7 @@
 <section class="final">
   <div class="wrap">
     <h2>Que la matriz deje de ser un Excel que se abre una vez al año.</h2>
-    <p>Riesgos evaluados, objetivos medibles, acciones con plazo y eficacia comprobada — y la traza que el auditor quiere ver.</p>
+    <p>Riesgos y aspectos evaluados, cambios firmados antes de hacerlos, objetivos medibles, acciones con plazo y eficacia comprobada — y la traza que el auditor quiere ver.</p>
     <div class="hero-cta">
       <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
       <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O empieza por tu cuenta, gratis</a>

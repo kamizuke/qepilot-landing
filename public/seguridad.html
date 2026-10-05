@@ -4,13 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Seguridad y privacidad — Evidran</title>
-<meta name="description" content="Aislamiento por organización a nivel de base de datos, firma con huella SHA-256 verificada, roles reforzados con tests de seguridad, IA que recibe solo lo necesario, despliegue on-premise con IA local y conexión MCP en solo lectura." />
+<meta name="description" content="Aislamiento por organización en la base de datos, firma con huella SHA-256 verificada, roles y accesos (Microsoft, invitación, gestor delegado), trazabilidad append-only exportable, tus datos descargables, on-premise con IA local y MCP en solo lectura." />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Seguridad y privacidad — Evidran" />
-<meta property="og:description" content="Aislamiento por organización a nivel de base de datos, firma con huella SHA-256 verificada, roles reforzados con tests de seguridad, IA que recibe solo lo necesario, despliegue on-premise con IA local y conexión MCP en solo lectura." />
+<meta property="og:description" content="Aislamiento por organización en la base de datos, firma con huella SHA-256 verificada, roles y accesos (Microsoft, invitación, gestor delegado), trazabilidad append-only exportable, tus datos descargables, on-premise con IA local y MCP en solo lectura." />
 <meta property="og:url" content="https://www.evidran.com/seguridad.html" />
 <meta property="og:site_name" content="Evidran" />
 <meta property="og:locale" content="es_ES" />
@@ -45,14 +45,14 @@
               <div class="mg-t">Gobernar el ciclo</div>
               <a href="/riesgos-plan.html#objetivos"><b>Objetivos de la calidad</b><small>Medibles, con indicador, meta y grado de logro · 6.2.</small></a>
               <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
-              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva y simulacros de emergencia · 6.1 y 8.2.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5, aspectos ambientales y simulacros · 6.1 y 8.2.</small></a><a href="/riesgos-plan.html#cambios"><b>Cambios planificados</b><small>Se planifican, se aprueban y se vigilan después · 6.3.</small></a>
               <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
             </div>
             <div class="mg-col">
               <div class="mg-t">Aprender de todo</div>
-              <a href="/inteligencia.html"><b>Inteligencia y tendencias</b><small>Causas que se repiten y hallazgos con su dato.</small></a>
+              <a href="/inteligencia.html"><b>Inteligencia del sistema</b><small>Estado diario con su regla, causas y hallazgos con su dato.</small></a>
               <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
-              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y quién · 7.1.6.</small></a>
+              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y las lecciones que quedan · 7.1.6.</small></a>
               <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
               <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
             </div>
@@ -140,9 +140,9 @@
           <li><b>La base de datos registra la identidad y la hora de la firma:</b> nombre, cargo y fecha se toman de la sesión autenticada del que firma. En el documento exportado no puede figurar un firmante que no sea el real.</li>
           <li><b>Un expediente firmado es inmutable:</b> queda cerrado a modificaciones y no se puede trasladar a otra organización. Un trigger en la base de datos bloquea esos cambios.</li>
           <li><b>Verificación al abrir:</b> si el contenido cambiara por detrás, la huella deja de cuadrar y la app lo dice. Reaperturas con traza de quién y cuándo; una firma nunca se atribuye a quien no la dio.</li>
-          <li><b>Registro de auditoría que solo admite añadir:</b> cada firma, reapertura, anulación y borrado se anota en un ledger que escribe la propia base de datos y que <b>sobrevive al borrado del expediente</b>. El historial sigue disponible después de eliminar el expediente.</li>
-          <li><b>Miembros y técnicos envían a aprobación;</b> el responsable firma o devuelve con indicaciones escritas. La regla la impone un trigger en la base de datos — con su test de seguridad en CI.</li>
-          <li><b>¿Firmáis con Adobe Sign, DocuSign o certificado FNMT?</b> Exporta el PDF, fírmalo donde ya firmáis y archívalo en el expediente: Evidran comprueba que la huella impresa corresponde y avisa si el documento firma una versión anterior.</li>
+          <li><b>Cada firma, reapertura, anulación y borrado queda en la <a href="#trazabilidad" style="color:var(--blue);text-decoration:none">Trazabilidad del sistema</a>:</b> un registro que escribe la propia base de datos, que solo admite añadir y que <b>sobrevive al borrado del expediente</b>.</li>
+          <li><b>Miembros y técnicos envían a aprobación;</b> el responsable firma o devuelve con indicaciones escritas. La reserva de la firma al responsable la impone la base de datos, no la pantalla, y tiene su test de seguridad en CI: nadie más puede firmar aunque manipule la página.</li>
+          <li><b>¿Firmáis con Adobe Sign, DocuSign o certificado FNMT?</b> Firma aquí, exporta el PDF, fírmalo donde ya firmáis y archívalo en el expediente. El servidor comprueba que el PDF lleva la huella del expediente y lo marca si firma una versión anterior. Si el PDF trae firma digital incrustada, Evidran la <b>detecta</b>; no la valida.</li>
           <li>La ISO 9001 no exige firma electrónica: pide que conste la autoridad que aprueba (7.5.2 y 10.2.2). El registro de aprobación conserva esa información.</li>
         </ul>
       </div>
@@ -177,13 +177,103 @@
       <div class="fr-visual">
         <div class="pm">
           <table class="pm-table">
-            <thead><tr><th>Rol</th><th>Ve</th><th>Documenta</th><th>Firma</th></tr></thead>
+            <thead><tr><th>Rol</th><th>Ve</th><th class="hide-sm">Documenta</th><th>Firma</th></tr></thead>
             <tbody>
-              <tr><td><b>Responsable</b></td><td>Todo su sistema</td><td>✓</td><td><span class="pmpill ce">✓ Firma</span></td></tr>
-              <tr><td><b>Miembro</b></td><td>Todo su sistema</td><td>✓</td><td><span class="pmpill ab">Envía a aprobación</span></td></tr>
-              <tr><td><b>Técnico</b></td><td>Solo sus NC</td><td>✓ (las suyas)</td><td><span class="pmpill ab">Envía a aprobación</span></td></tr>
+              <tr><td><b>Responsable</b></td><td>Todo su sistema</td><td class="hide-sm">✓</td><td><span class="pmpill ce">✓ Firma</span></td></tr>
+              <tr><td><b>Miembro</b></td><td>Todo su sistema</td><td class="hide-sm">✓</td><td><span class="pmpill ab">Envía a aprobación</span></td></tr>
+              <tr><td><b>Técnico</b></td><td>Solo sus NC</td><td class="hide-sm">✓ (las suyas)</td><td><span class="pmpill ab">Envía a aprobación</span></td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESOS -->
+<section id="accesos" style="background:#fff">
+  <div class="wrap">
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Accesos</div>
+        <h3>Quién entra, cómo entra y quién da de alta.</h3>
+        <ul class="fr-list">
+          <li><b>Nadie entra en tu organización por su cuenta:</b> las altas las hace el administrador, el gestor de usuarios de tu empresa, una invitación o el acceso con Microsoft que tu organización active.</li>
+          <li><b>Alta por invitación:</b> la persona recibe un enlace firmado que caduca a los 7 días y elige su propia contraseña. Una a una o en bloque, por CSV.</li>
+          <li><b>Entrar con Microsoft:</b> botón «Entrar con Microsoft» por dominio de correo. Cada organización fija sus dominios y el rol con el que entra la gente nueva.</li>
+          <li><b>Contraseñas de mínimo 8 caracteres,</b> comprobado en el navegador y en el servidor, y recuperación de contraseña sin pasar por soporte.</li>
+          <li><b>Gestor de usuarios delegado:</b> por ejemplo, IT administra el sistema y calidad gestiona su gente (invitar, dar de alta, roles, contraseñas, deshabilitar). Nunca puede crear organizaciones ni nombrar administradores; el servidor lo acota en cada petición.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">Gestión de usuarios · Industrias Meridia</span></div>
+        <div class="tri">
+          <div class="tri-item">
+            <div class="tri-top"><span class="tri-org">Acceso con Microsoft</span><span class="pmpill ce">Activo</span></div>
+            <p>Dominio corporativo de la empresa · rol de entrada: <b>Técnico</b></p>
+          </div>
+          <div class="tri-item">
+            <div class="tri-top"><span class="tri-org">Invitaciones</span><span class="pmpill ab">Caducan a los 7 días</span></div>
+            <p><b>A. Pérez</b> · Miembro — pendiente<br><b>J. Ruiz</b> · Técnico — aceptada</p>
+          </div>
+          <div class="tri-item">
+            <div class="tri-top"><span class="tri-org">Gestor de usuarios</span><span class="pmpill en">Delegado</span></div>
+            <div class="tri-act"><span>Invitar</span><span>Roles</span><span>Contraseñas</span><span>Deshabilitar</span></div>
+            <p class="norm">Fuera de su alcance: crear organizaciones y nombrar administradores.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAZABILIDAD Y DESCARGAS -->
+<section id="trazabilidad">
+  <div class="wrap">
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Trazabilidad del sistema</div>
+        <h3>Lo que pasa con cada firma, escrito por la base de datos.</h3>
+        <ul class="fr-list">
+          <li><b>Lo escribe la base de datos, no la pantalla:</b> en cada firma, reapertura, anulación y borrado, un trigger anota quién, cuándo (con la hora del servidor) y sobre qué expediente.</li>
+          <li><b>Solo admite añadir y es de solo lectura:</b> desde la aplicación nadie puede editarlo ni borrarlo.</li>
+          <li><b>Sobrevive al borrado del expediente:</b> un expediente firmado y luego eliminado sigue dejando su rastro, marcado como eliminado.</li>
+          <li><b>Exportable a CSV,</b> para llevarlo a vuestro SIEM o adjuntarlo a una auditoría. El técnico de captura no llega a esta pantalla.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="pm">
+          <div class="pm-head"><span class="pm-title">Trazabilidad del sistema</span><span class="pmpill ab">Solo lectura</span></div>
+          <table class="pm-table">
+            <thead><tr><th>Hora del servidor</th><th>Evento</th><th>Expediente</th><th class="hide-sm">Cuenta</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pmcode">12/06/2026 10:42</span></td><td><span class="pmpill ce">Firma</span></td><td>NC-2026-014</td><td class="hide-sm">M. López</td></tr>
+              <tr><td><span class="pmcode">18/06/2026 09:15</span></td><td><span class="pmpill en">Reapertura</span></td><td>NC-2026-014</td><td class="hide-sm">M. López</td></tr>
+              <tr><td><span class="pmcode">18/06/2026 11:30</span></td><td><span class="pmpill ce">Firma</span></td><td>NC-2026-014</td><td class="hide-sm">M. López</td></tr>
+              <tr><td><span class="pmcode">02/07/2026 16:08</span></td><td><span class="pmpill rj">Borrado</span></td><td>NC-2024-031 <span class="pmcode">· eliminado</span></td><td class="hide-sm">M. López</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-row rev" id="descargas">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Descargas</div>
+        <h3>Tus datos son tuyos, y están todos en un sitio.</h3>
+        <ul class="fr-list">
+          <li><b>Todos los CSV juntos,</b> cada uno explicado: el trabajo del día a día y la trazabilidad y evidencias.</li>
+          <li><b>Por ejercicio, con «descargar todo» en ZIP.</b> Sale el listado entero del año; lo filtras después en Excel.</li>
+          <li><b>Cada documento en Word y PDF,</b> con tu logo, tu pie y tu código de formato. Si un día te vas, el conocimiento se va contigo.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="pm">
+          <div class="pm-head"><span class="pm-title">Descargas · ejercicio 2026</span><div class="pm-btns"><span class="pri">Descargar todo (ZIP)</span></div></div>
+          <div class="nd-row"><span class="nd-dot b"></span><span><b>Expedientes</b> · el panel completo del año</span></div>
+          <div class="nd-row"><span class="nd-dot b"></span><span><b>Plan de mejora</b> · acciones y eficacia</span></div>
+          <div class="nd-row"><span class="nd-dot b"></span><span><b>Riesgos y oportunidades</b> · la matriz</span></div>
+          <div class="nd-row"><span class="nd-dot g"></span><span><b>Trazabilidad del sistema</b> · firmas, reaperturas y borrados</span></div>
         </div>
       </div>
     </div>
@@ -209,7 +299,7 @@
       </div>
       <div class="fr-text">
         <ul class="fr-list">
-          <li><b>Tus documentos son tuyos:</b> expedientes en Word y PDF con tu identidad documental, y las tablas de trabajo en CSV. Si un día te vas, el conocimiento se va contigo.</li>
+          <li><b>Tus documentos son tuyos:</b> expedientes en Word y PDF con tu identidad documental, y todas las tablas de trabajo en CSV desde <a href="#descargas" style="color:var(--blue);font-weight:700;text-decoration:none">Descargas</a>.</li>
           <li><b>Dossier de seguridad disponible:</b> arquitectura, tratamiento de datos e IA, subencargados, copias de seguridad y respuesta a incidentes. Pídelo en <a href="mailto:demo@evidran.com" style="color:var(--blue);font-weight:700;text-decoration:none">demo@evidran.com</a>.</li>
           <li><b>Divulgación responsable:</b> publicamos <a href="/.well-known/security.txt" style="color:var(--blue);font-weight:700;text-decoration:none">security.txt</a> y agradecemos los reportes de vulnerabilidades.</li>
         </ul>
@@ -227,10 +317,12 @@
         <h3>Instala Evidran en los servidores de tu empresa.</h3>
         <p>Para políticas que no permiten datos fuera — automoción/TISAX, centros tecnológicos, defensa—, Evidran se instala on-premise con la misma base de código que la nube: cada función nueva llega en la siguiente actualización.</p>
         <ul class="fr-list">
-          <li><b>Tres modos de IA, eliges tú:</b> modelo local en tu red <b>sin ninguna salida a internet</b>; híbrido con salida cifrada solo al proveedor de IA; o sin IA, con la gestión completa funcionando.</li>
-          <li><b>Licencia anual firmada</b> criptográficamente: al caducar, la aplicación se bloquea pero tus datos quedan intactos.</li>
+          <li><b>Tres modos de IA, eliges tú:</b> modelo local con Ollama en tu red, <b>sin ninguna salida a internet</b>; híbrido, con salida solo hacia la API de Anthropic y tope de gasto mensual; o sin IA, con la gestión completa funcionando.</li>
+          <li><b>Licencia anual firmada</b> criptográficamente y <b>sin tope de usuarios</b>: al caducar, la aplicación se bloquea pero tus datos quedan intactos.</li>
+          <li><b>La telemetría la decides tú:</b> un resumen agregado sin datos personales ni contenido de expedientes. Por defecto es manual: lo descargas y lo envías tú, si quieres.</li>
           <li><b>Emails internos:</b> avisos y feedback van por tu propio SMTP; nada sale de tu red.</li>
           <li><b>La app de campo (QR, foto, offline) funciona igual</b> dentro de tu red, también desde la wifi de planta.</li>
+          <li><b>Lo que queda de tu lado:</b> copias de seguridad, TLS y el servidor son responsabilidad de tu equipo; Evidran entrega versiones etiquetadas y sus migraciones. Vigilancia normativa y el espacio del auditor no van incluidos por defecto.</li>
         </ul>
       </div>
       <div class="fr-visual">
@@ -238,11 +330,11 @@
         <div class="tri">
           <div class="tri-item">
             <div class="tri-top"><span class="tri-org">Local</span><span class="pmpill ce">Sin salida a internet</span></div>
-            <p>El modelo corre en tu red. Ideal TISAX y entornos cerrados.</p>
+            <p>El modelo corre en tu red con Ollama. Pensado para entornos cerrados, como los de automoción con TISAX.</p>
           </div>
           <div class="tri-item">
-            <div class="tri-top"><span class="tri-org">Híbrido</span><span class="pmpill ab">Salida cifrada única</span></div>
-            <p>Los datos residen en tu servidor; solo el texto de cada consulta viaja cifrado al proveedor de IA, con tope de gasto mensual.</p>
+            <div class="tri-top"><span class="tri-org">Híbrido</span><span class="pmpill ab">Solo hacia Anthropic</span></div>
+            <p>Los datos residen en tu servidor; solo el texto de cada consulta viaja cifrado a la API de Anthropic, con tope de gasto mensual.</p>
           </div>
           <div class="tri-item">
             <div class="tri-top"><span class="tri-org">Sin IA</span><span class="pmpill ab">Gestión completa</span></div>
@@ -285,11 +377,13 @@
   <div class="wrap" style="max-width:760px">
     <div class="eyebrow">Preguntas frecuentes</div>
     <h2 style="margin-bottom:18px">Sobre seguridad y despliegue</h2>
-    <details open><summary>¿Podéis trabajar sin nube?</summary><p>Sí. Evidran se instala on-premise en tus servidores, con la misma aplicación que la nube. La IA puede ser local (sin ninguna salida a internet) o puedes trabajar sin IA con la gestión completa. Licencia anual.</p></details>
+    <details open><summary>¿Podéis trabajar sin nube?</summary><p>Sí. Evidran se instala on-premise en tus servidores, con la misma aplicación que la nube. La IA puede ser local (sin ninguna salida a internet), híbrida (solo hacia la API de Anthropic) o puedes trabajar sin IA con la gestión completa. Licencia anual, sin tope de usuarios.</p></details>
     <details><summary>¿Qué ve exactamente la IA?</summary><p>Lo que cada función necesita y nada más: la entrevista ve lo que tú le cuentas en ese expediente; la Revisión 9.3 se genera con estadísticas agregadas; el copiloto ejecuta consultas deterministas con los permisos de tu sesión. La clave y los prompts viven en el servidor.</p></details>
-    <details><summary>¿Qué pasa con mis datos si dejo Evidran?</summary><p>Son tuyos y se van contigo: expedientes en Word y PDF con tu identidad documental, y las tablas de trabajo (panel, plan, riesgos, evidencias de vigilancia) en CSV.</p></details>
-    <details><summary>Ya firmamos con otra herramienta (Adobe, FNMT…).</summary><p>Perfecto: firma el expediente en Evidran, exporta el PDF, fírmalo donde ya firméis y súbelo al expediente. Evidran comprueba que la huella impresa corresponde al expediente y te avisa si el documento firma una versión anterior.</p></details>
-    <details><summary>¿Cómo sé que un informe firmado no se ha tocado después?</summary><p>Al firmarlo, el expediente queda bloqueado. La base de datos registra quién firma y cuándo a partir de la sesión autenticada. Si alguien lo reabre, la firma se anula y queda registrado quién lo hizo — en un registro que solo admite añadir y que sobrevive incluso al borrado del expediente.</p></details>
+    <details><summary>¿Qué pasa con mis datos si dejo Evidran?</summary><p>Son tuyos y se van contigo. En Descargas tienes todos los CSV en un solo sitio, por ejercicio, con «descargar todo» en ZIP; y cada documento sale en Word y PDF con tu identidad documental.</p></details>
+    <details><summary>Ya firmamos con otra herramienta (Adobe, FNMT…).</summary><p>Perfecto: firma el expediente en Evidran, exporta el PDF, fírmalo donde ya firméis y súbelo al expediente. Evidran comprueba que el PDF lleva la huella del expediente y lo marca si firma una versión anterior. Detecta si el PDF trae firma digital incrustada, pero no la valida: eso lo sigue haciendo vuestra herramienta de firma.</p></details>
+    <details><summary>¿Tenéis certificación ISO/IEC 27001 o SOC 2?</summary><p>A fecha de hoy, no tenemos certificación ISO/IEC 27001 ni SOC 2 propias. Nos apoyamos en proveedores de infraestructura con sus propias certificaciones y te contamos por escrito nuestros controles en el dossier de seguridad.</p></details>
+    <details><summary>¿Está cifrado de extremo a extremo?</summary><p>No. La conexión va cifrada (TLS) y los datos se cifran en reposo en la infraestructura, pero el contenido se procesa en el servidor para que la IA pueda trabajar con él. Por eso no lo llamamos cifrado de extremo a extremo.</p></details>
+    <details><summary>¿Cómo sé que un informe firmado no se ha tocado después?</summary><p>Al firmarlo, el expediente queda bloqueado. La base de datos registra quién firma y cuándo a partir de la sesión autenticada. Si alguien lo reabre, la firma deja de valer y queda registrado quién lo hizo, en la Trazabilidad del sistema: un registro que solo admite añadir, que sobrevive incluso al borrado del expediente y que puedes exportar a CSV.</p></details>
   </div>
 </section>
 

@@ -184,6 +184,117 @@
   details[open] summary::after { content: "–"; }
   details p { font-size: 14.5px; padding: 0 0 14px; }
 
+  /* SALTOS DENTRO DE LA PÁGINA */
+  .px-jumps { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 22px; }
+  .px-jumps span { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); align-self: center; margin-right: 4px; }
+  .px-jumps a { font-size: 13px; font-weight: 700; color: var(--ink); text-decoration: none; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; transition: border-color .15s, color .15s; }
+  .px-jumps a:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* SECCIONES NUEVAS: PLANTA Y CALIDAD · A TU MANERA (patrón texto + maqueta) */
+  .px-white { background: #fff; }
+  .px-row { display: grid; grid-template-columns: 1.02fr 1.18fr; gap: 46px; align-items: center; margin-top: 44px; }
+  .px-row.rev .px-vis { order: -1; }
+  .px-eyebrow { font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--blue); margin-bottom: 12px; }
+  .px-row h3 { font-size: clamp(21px, 2.5vw, 26px); letter-spacing: -0.02em; margin-bottom: 12px; }
+  .px-row p { font-size: 15px; }
+  .px-list { list-style: none; margin-top: 12px; }
+  .px-list li { position: relative; padding: 7px 0 7px 22px; font-size: 14.5px; color: var(--ink-soft); }
+  .px-list li::before { content: ""; position: absolute; left: 2px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-l), var(--blue)); }
+  .px-list b { color: var(--ink); }
+  .px-vis { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 24px 48px rgba(22,32,43,.11); overflow: hidden; min-width: 0; }
+  .px-bar { display: flex; align-items: center; gap: 7px; padding: 11px 16px; background: var(--cream); border-bottom: 1px solid var(--cream-d); }
+  .px-bar i { width: 11px; height: 11px; border-radius: 50%; background: #D7D2C6; flex: 0 0 auto; }
+  .px-bar .url { margin-left: 12px; font-size: 11.5px; color: var(--ink-soft); background: #fff; border: 1px solid var(--line); border-radius: 7px; padding: 3px 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .px-pm { padding: 18px; }
+  .px-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .px-code { font-size: 11px; font-weight: 800; color: var(--navy); letter-spacing: .02em; }
+  .px-pill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .px-pill.dev { background: #FEF1DE; color: #B45309; }
+  .px-pill.ok { background: #E7F6EC; color: #167C40; }
+  .px-pill.ab { background: #EAF2FF; color: #1D4ED8; }
+  .px-pill.gr { background: var(--cream); color: var(--ink-soft); }
+  .px-title { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); }
+  .px-meta { font-size: 11.5px; color: var(--ink-soft); margin-top: 3px; }
+  .px-btns { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 4px; }
+  .px-btns span { font-size: 10.5px; font-weight: 700; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; white-space: nowrap; }
+  .px-btns .pri { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .px-sub { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin: 16px 0 8px; }
+  .px-msg { border-radius: 12px; padding: 10px 12px; font-size: 12.5px; color: var(--ink); margin-bottom: 8px; max-width: 92%; }
+  .px-msg .who { display: block; font-size: 10.5px; font-weight: 800; color: var(--ink-soft); margin-bottom: 3px; }
+  .px-msg.q { background: #F2F6FF; }
+  .px-msg.r { background: var(--cream); margin-left: auto; }
+  .px-msg.ia { background: #F2F6FF; }
+  .px-msg .att { display: block; font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+  .px-note { font-size: 11.5px; color: var(--ink-soft); margin-top: 10px; }
+  .px-note b { color: var(--ink); }
+
+  /* panel del técnico */
+  .px-att { display: flex; flex-wrap: wrap; gap: 7px; }
+  .px-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 700; color: var(--ink); background: var(--cream); border-radius: 999px; padding: 6px 11px; }
+  .px-chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex: 0 0 auto; }
+  .px-chip.am i { background: #DD8A0E; }
+  .px-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .px-card .t { font-size: 12.5px; color: var(--ink); }
+  .px-card .t b { display: block; font-size: 13px; }
+  .px-card .go { font-size: 10.5px; font-weight: 700; color: #fff; background: var(--blue); border-radius: 8px; padding: 6px 10px; white-space: nowrap; }
+  .px-card .ok-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #16A34A; margin-right: 6px; }
+
+  /* app de campo: cinco tarjetas */
+  .px-field { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; margin-top: 40px; }
+  .px-fc { background: var(--cream); border: 1px solid var(--cream-d); border-radius: 14px; padding: 16px 16px 14px; }
+  .px-fc .ic { width: 9px; height: 9px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-l), var(--blue)); margin-bottom: 11px; }
+  .px-fc b { display: block; font-size: 14px; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 4px; }
+  .px-fc span { font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; display: block; }
+
+  /* cambio de tipo: tres columnas */
+  .px-mig { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-top: 12px; }
+  .px-col { border: 1px solid var(--cream-d); border-radius: 11px; padding: 10px 11px; }
+  .px-col .h { display: flex; align-items: center; gap: 6px; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-bottom: 7px; }
+  .px-col .h i { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+  .px-col.keep { background: #F3FAF5; } .px-col.keep .h i { background: #16A34A; }
+  .px-col.lost { background: #FFF8EC; } .px-col.lost .h i { background: #DD8A0E; }
+  .px-col.need { background: #F2F6FF; } .px-col.need .h i { background: var(--blue); }
+  .px-col div:not(.h) { font-size: 11.5px; color: var(--ink); padding: 4px 0; border-top: 1px solid rgba(22,32,43,.06); }
+  .px-col div.h + div { border-top: 0; }
+  .px-col small { display: block; font-size: 10.5px; color: var(--ink-soft); }
+
+  /* documento con identidad del cliente */
+  .px-doc { border: 1px solid var(--cream-d); border-radius: 11px; overflow: hidden; }
+  .px-doc-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 13px; border-bottom: 1px solid var(--cream-d); }
+  .px-logo { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: var(--navy); border: 1.5px solid var(--navy); border-radius: 6px; padding: 4px 8px; white-space: nowrap; }
+  .px-fmt { font-size: 10.5px; font-weight: 800; color: var(--ink-soft); text-align: right; }
+  .px-fmt b { display: block; color: var(--ink); font-size: 12px; }
+  .px-fld { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 8px 13px; border-bottom: 1px solid var(--cream-d); font-size: 12px; color: var(--ink); }
+  .px-fld .l { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 700; display: block; }
+  .px-doc-foot { padding: 8px 13px; font-size: 10.5px; color: var(--ink-soft); background: var(--cream); }
+  .px-sw { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 14px; font-size: 11.5px; color: var(--ink-soft); }
+  .px-sw i { width: 18px; height: 18px; border-radius: 6px; flex: 0 0 auto; }
+  .px-sw i.sel { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ink); }
+
+  /* tres tarjetas finales */
+  .px-trio { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; margin-top: 44px; }
+  .px-tc { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; }
+  .px-tc .k { display: inline-flex; align-items: center; gap: 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+  .px-tc b { display: block; font-size: 15.5px; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 6px; }
+  .px-tc p { font-size: 13.5px; }
+  .px-tc .px-msg { margin: 12px 0 0; max-width: none; font-size: 12px; }
+
+  @media (max-width: 960px) {
+    .px-field { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .px-field .px-fc:last-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 860px) {
+    .px-row { grid-template-columns: 1fr; gap: 28px; }
+    .px-row.rev .px-vis { order: 0; }
+    .px-trio { grid-template-columns: 1fr; }
+    .px-pm { padding: 16px; }
+  }
+  @media (max-width: 560px) {
+    .px-mig { grid-template-columns: 1fr; }
+    .px-field { grid-template-columns: 1fr; }
+    .cmp th, .cmp td { padding: 12px 10px; font-size: 13px; }
+  }
+
   @media (max-width: 860px) {
     .nav-burger { display: flex; }
     .nav-links { display: none; }
@@ -233,7 +344,7 @@
     <div class="center-head">
       <div class="eyebrow">Míralo por dentro</div>
       <h1 style="font-size:clamp(34px,5vw,54px)">Así es Evidran por dentro.</h1>
-      <p>Capturas de la interfaz real para seguir el trabajo completo: controlar, investigar, aprobar, aprender y ejecutar. Los datos son de demostración y están anonimizados.</p>
+      <p>Capturas de la interfaz real para seguir el trabajo completo: controlar, investigar, aprobar, reutilizar y ejecutar. Los datos son de demostración y están anonimizados.</p>
     </div>
 
     <div class="product-tour" id="productTour">
@@ -252,7 +363,7 @@
             <img src="/media/evidran-panel-real-anon.png" width="1301" height="1209" alt="Panel real de Evidran con expedientes abiertos, vencimientos, indicadores y distribución por tipo y proceso" fetchpriority="high" decoding="async" />
           </a>
           <figcaption class="tour-copy">
-            <div><span class="tour-kicker">01 · Controlar</span><h2>Lo urgente deja de esconderse.</h2><p>Expedientes abiertos, vencimientos, carga por norma y áreas que concentran incidencias: el responsable de calidad sabe dónde actuar antes de abrir otro Excel.</p></div>
+            <div><span class="tour-kicker">01 · Controlar</span><h2>Lo urgente deja de esconderse.</h2><p>Abre con el veredicto del sistema, los vencimientos en semáforo y las áreas que concentran incidencias. «Necesita tu atención» junta lo que espera a alguien: expedientes en aprobación, devueltos, por desarrollar y preguntas sin responder. El primer mes, «Puesta en marcha» te enseña cuatro hitos que se marcan solos según los cumples.</p></div>
             <span class="tour-proof">Interfaz real</span>
           </figcaption>
         </figure>
@@ -262,7 +373,7 @@
             <img src="/media/evidran-entrevista-real.png" width="1600" height="824" alt="Entrevista real de Evidran junto al informe de no conformidad que se completa durante la conversación" loading="lazy" decoding="async" />
           </a>
           <figcaption class="tour-copy">
-            <div><span class="tour-kicker">02 · Investigar</span><h2>La conversación y el documento avanzan juntos.</h2><p>Evidran pregunta lo que falta, distingue hechos de causas y redacta el expediente mientras el equipo explica lo ocurrido con sus propias palabras.</p></div>
+            <div><span class="tour-kicker">02 · Investigar</span><h2>La conversación y el documento avanzan juntos.</h2><p>Evidran pregunta lo que falta, distingue hechos de causas y redacta el expediente mientras el equipo explica lo ocurrido con sus propias palabras. La barra «Documento %» dice cuánto está cumplimentado de verdad, y el resultado sale en Word o PDF en los 17 tipos.</p></div>
             <span class="tour-proof">Interfaz real</span>
           </figcaption>
         </figure>
@@ -272,7 +383,7 @@
             <img src="/media/evidran-firma-real.png" width="2040" height="1206" alt="Expediente de Evidran aprobado, firmado, bloqueado y con huella de verificación" loading="lazy" decoding="async" />
           </a>
           <figcaption class="tour-copy">
-            <div><span class="tour-kicker">03 · Aprobar</span><h2>Formal, firmado y trazable.</h2><p>Al aprobar, el expediente queda bloqueado, conserva quién firmó, cuándo lo hizo y la huella de la versión. Las evidencias posteriores quedan registradas sin alterar la firma.</p></div>
+            <div><span class="tour-kicker">03 · Aprobar</span><h2>Formal, firmado y trazable.</h2><p>Miembros y técnicos envían el expediente a aprobación; el responsable de calidad lo firma o lo devuelve con indicaciones. Al firmar queda bloqueado, con nombre, cargo, fecha y la huella del contenido, y cada reapertura queda en una traza que no se borra.</p></div>
             <span class="tour-proof">Firma verificable</span>
           </figcaption>
         </figure>
@@ -315,6 +426,14 @@
       <div class="normband-profile" style="margin-top:28px">
         <strong>¿Vienes de Excel?</strong> Importa tu histórico de no conformidades con un asistente de mapeo de columnas, y ponlo a trabajar desde el primer día.
       </div>
+      <div class="px-jumps" role="navigation" aria-label="Más en esta página">
+        <span>Sigue por:</span>
+        <a href="#normas">Las normas</a>
+        <a href="#planta">Planta y calidad</a>
+        <a href="#a-tu-manera">A tu manera</a>
+        <a href="#comparativa">Comparativa</a>
+        <a href="/recorrido.html">Una NC de principio a fin</a>
+      </div>
     </div>
   </div>
 </section>
@@ -345,7 +464,161 @@
       <span class="nchip aud"><i></i><b>Auditoría</b> Respuesta a hallazgos</span>
     </div>
     <div class="normband-profile">
-      <strong>Y aprende a qué te dedicas.</strong> Propone un perfil de tu empresa desde tu web pública; tú lo apruebas y la entrevista pasa a hablar con el vocabulario de tu actividad.
+      <strong>Y habla el idioma de tu actividad.</strong> Propone un perfil de tu empresa desde tu web pública; tú lo apruebas y la entrevista pasa a hablar con el vocabulario de tu actividad.
+    </div>
+  </div>
+</section>
+
+<!-- PLANTA Y CALIDAD -->
+<section id="planta" class="px-white">
+  <div class="wrap">
+    <div class="center-head" style="margin-bottom:0">
+      <div class="eyebrow">Planta y calidad</div>
+      <h2 style="text-wrap:balance">Planta y calidad, en la misma NC.</h2>
+      <p>Quien ve el problema no siempre tiene el encargo de investigarlo. En Evidran lo cuenta él, y calidad lo desarrolla con él, sobre el mismo expediente.</p>
+    </div>
+
+    <div class="px-row">
+      <div>
+        <div class="px-eyebrow">Técnico de captura · «Completar con calidad»</div>
+        <h3>El técnico cuenta el hecho. Calidad desarrolla el resto, con él.</h3>
+        <ul class="px-list">
+          <li><b>Rol Técnico de captura:</b> registra y ve solo sus propias NC. El límite lo pone la base de datos, no solo la pantalla.</li>
+          <li><b>«Completar con calidad»:</b> en cuanto ha descrito el incumplimiento, la NC pasa a «Por desarrollar» y aparece en el panel de calidad. No se congela: él la sigue viendo y puede añadir fotos y datos.</li>
+          <li><b>Calidad la asume</b> o pide a Evidran un primer borrador de causa y acción a partir de lo descrito: una hipótesis para revisar y ajustar, nunca un cierre.</li>
+          <li><b>Ninguna se queda huérfana:</b> si nadie la recoge, el resumen diario lo recuerda.</li>
+        </ul>
+      </div>
+      <div class="px-vis" aria-hidden="true">
+        <div class="px-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/expedientes/NC-2026-021</span></div>
+        <div class="px-pm">
+          <div class="px-head"><span class="px-code">NC-2026-021</span><span class="px-pill dev">Por desarrollar</span></div>
+          <div class="px-title">Rebaba fuera de tolerancia en piezas de la prensa P-03</div>
+          <div class="px-meta">Registrada por J. Ruiz · Técnico · desde el QR de la prensa</div>
+          <div class="px-btns"><span class="pri">La desarrollo yo</span><span>Borrador de causa y acción</span></div>
+          <div class="px-sub">Preguntas de calidad</div>
+          <div class="px-msg q"><span class="who">A. Pérez · Calidad</span>¿En qué turno pasó? ¿Tienes foto de la pieza?</div>
+          <div class="px-msg r"><span class="who">J. Ruiz · Técnico</span>Turno de tarde, sobre las 18:00. Subo la foto.<span class="att">📎 pieza-P03.jpg</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-row rev">
+      <div>
+        <div class="px-eyebrow">«Preguntar al técnico» · Aviso de cierre</div>
+        <h3>Una aclaración puntual, sin traspasar nada.</h3>
+        <p>Cuando a calidad le basta un dato —el turno, una foto—, pregunta desde el editor. Al técnico le llega en «Necesita tu atención» y en su resumen diario, y responde desde su propia NC. La pregunta no frena nada: calidad sigue completando mientras espera.</p>
+        <ul class="px-list">
+          <li><b>Cuando su NC se cierra, se entera.</b> Al entrar ve «Tu aviso se ha resuelto», con el código y un botón para abrirla.</li>
+          <li><b>Lo decide tu organización:</b> es opcional y viene desactivado. Activado, los avisos mostrados se conservan con su fecha, como evidencia de comunicación interna (7.4) y toma de conciencia (7.3).</li>
+        </ul>
+      </div>
+      <div class="px-vis" aria-hidden="true">
+        <div class="px-bar"><i></i><i></i><i></i><span class="url">app.evidran.com · Panel de J. Ruiz</span></div>
+        <div class="px-pm">
+          <div class="px-sub" style="margin-top:0">Necesita tu atención</div>
+          <div class="px-att"><span class="px-chip"><i></i>Tienes una pregunta de calidad</span></div>
+          <div class="px-card">
+            <div class="t"><b><span class="ok-dot"></span>Tu aviso se ha resuelto</b>NC-2026-014 · Controles dimensionales del turno de noche</div>
+            <span class="go">Abrir</span>
+          </div>
+          <div class="px-card">
+            <div class="t"><b>NC-2026-021 · Rebaba en la prensa P-03</b>Calidad te pregunta: ¿en qué turno pasó?</div>
+            <span class="go">Responder</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-field">
+      <div class="px-fc"><div class="ic"></div><b>Captura rápida</b><span>Qué ha pasado, proceso y tipo. El expediente se crea al momento y el detalle se completa después.</span></div>
+      <div class="px-fc"><div class="ic"></div><b>QR por máquina</b><span>Se escanea el QR de la máquina o la zona y la captura se abre ya rellena.</span></div>
+      <div class="px-fc"><div class="ic"></div><b>Dictado</b><span>Con el micrófono del teclado del móvil: el audio no sale del dispositivo, solo el texto que revisas.</span></div>
+      <div class="px-fc"><div class="ic"></div><b>Foto de evidencia</b><span>Desde la cámara, comprimida antes de subir para que vaya rápida con datos móviles.</span></div>
+      <div class="px-fc"><div class="ic"></div><b>Sin cobertura</b><span>La captura queda en cola y se envía sola al volver la red. Nada se pierde.</span></div>
+    </div>
+    <p class="tour-note">App de campo instalable desde el navegador, sin tiendas de aplicaciones. Sin cobertura solo se guarda la captura de texto.</p>
+  </div>
+</section>
+
+<!-- A TU MANERA -->
+<section id="a-tu-manera">
+  <div class="wrap">
+    <div class="center-head" style="margin-bottom:0">
+      <div class="eyebrow">A tu manera</div>
+      <h2 style="text-wrap:balance">El expediente se adapta a tu forma de trabajar.</h2>
+      <p>Tu formato, tus códigos y tu ritmo. Evidran se ajusta sin que pierdas lo avanzado ni la traza.</p>
+    </div>
+
+    <div class="px-row">
+      <div>
+        <div class="px-eyebrow">Cambiar de tipo</div>
+        <h3>¿Abriste el tipo que no era? Cámbialo sin perder lo avanzado.</h3>
+        <p>Se abre una NC ambiental y a mitad de la conversación queda claro que era de calidad. Pasa al tipo correcto conservando lo hecho; antes de confirmar ves tres columnas: qué se conserva, qué queda sin destino y qué pedirá el nuevo tipo para cerrar.</p>
+        <ul class="px-list">
+          <li><b>Nada desaparece sin rastro:</b> lo que no tiene destino queda en la traza del documento, también en el Word y el PDF.</li>
+          <li><b>La IA avisa una vez</b> si lo que cuentas encaja mejor en otro tipo. La sugerencia te ahorra un clic; decides tú.</li>
+          <li><b>Nunca sobre un expediente firmado:</b> primero se reabre, y eso deja constancia de que la firma se anula. El cambio lo hace calidad.</li>
+        </ul>
+      </div>
+      <div class="px-vis" aria-hidden="true">
+        <div class="px-bar"><i></i><i></i><i></i><span class="url">app.evidran.com · Cambiar tipo</span></div>
+        <div class="px-pm">
+          <div class="px-msg ia"><span class="who">Evidran</span>Esto es más una no conformidad de calidad que ambiental. Si quieres, la paso y conservamos todo lo que llevamos.</div>
+          <div class="px-head" style="margin-top:12px"><span class="px-pill gr">NC Ambiental · ISO 14001</span><span class="px-code">→</span><span class="px-pill ab">NC Interna · ISO 9001</span></div>
+          <div class="px-mig">
+            <div class="px-col keep"><div class="h"><i></i>Se conserva</div><div>Qué pasó</div><div>Contención</div><div>Causa raíz</div><div>Responsable y plazo</div></div>
+            <div class="px-col lost"><div class="h"><i></i>Sin destino</div><div>Aspecto ambiental<small>Queda en la traza del documento</small></div></div>
+            <div class="px-col need"><div class="h"><i></i>Pedirá para cerrar</div><div>Acción correctiva</div><div>Verificación de eficacia</div></div>
+          </div>
+          <div class="px-btns" style="margin-bottom:0"><span class="pri">Cambiar tipo</span><span>Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-row rev">
+      <div>
+        <div class="px-eyebrow">Tus casilleros · Tu documento · Tus colores</div>
+        <h3>Tu formato de siempre, dentro de Evidran.</h3>
+        <ul class="px-list">
+          <li><b>Campos propios:</b> hasta 20 casilleros de tu empresa (texto, fecha, número, lista, sí/no) que salen en pantalla, en Word, PDF y CSV, y pueden ser obligatorios para cerrar. La IA puede proponerlos a partir de tu formato antiguo; tú marcas cuáles se quedan.</li>
+          <li><b>Identidad documental:</b> los Word y PDF salen con tu logo, tu pie y tu código de formato por tipo de documento.</li>
+          <li><b>Colores de tu empresa</b> en la aplicación, elegidos de una paleta acotada con el contraste medido. Las señales con significado —semáforo, colores por norma— y el logo de Evidran se quedan como están.</li>
+        </ul>
+      </div>
+      <div class="px-vis" aria-hidden="true">
+        <div class="px-bar"><i></i><i></i><i></i><span class="url">NC-2026-021.docx</span></div>
+        <div class="px-pm">
+          <div class="px-doc">
+            <div class="px-doc-top"><span class="px-logo">INDUSTRIAS MERIDIA</span><span class="px-fmt"><b>F-PG-08</b>Informe de no conformidad</span></div>
+            <div class="px-fld"><span><span class="l">Nº de pedido del cliente</span>PC-4471</span><span class="px-pill gr">Campo propio</span></div>
+            <div class="px-fld"><span><span class="l">Coste estimado (€)</span>1.240</span><span class="px-pill gr">Campo propio</span></div>
+            <div class="px-fld"><span><span class="l">¿Afecta a cliente final?</span>No</span><span class="px-pill dev">Obligatorio</span></div>
+            <div class="px-doc-foot">Pie de Industrias Meridia · Firmado por el responsable de calidad</div>
+          </div>
+          <div class="px-sw">Colores de la app:
+            <i class="sel" style="background:#2D5A7B"></i><i class="sel" style="background:#0E7490"></i><i style="background:#2E7D54"></i><i style="background:#6D28D9"></i><i style="background:#9F1239"></i><span>· 2 elegidos de 13</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-trio">
+      <div class="px-tc">
+        <div class="k">Sin entrevista</div>
+        <b>¿Prefieres escribir? Apaga el chat.</b>
+        <p>La plantilla ocupa toda la pantalla y la rellenas a tu ritmo. Al terminar, pides «Revisar con Evidran» si quieres una segunda lectura.</p>
+      </div>
+      <div class="px-tc">
+        <div class="k">Eficacia precipitada</div>
+        <b>Verificar el mismo día del cambio, mejor no.</b>
+        <p>Si das por eficaz una acción implantada hoy o ayer, Evidran pregunta una vez si prefieres esperar unos días. Decides tú.</p>
+      </div>
+      <div class="px-tc">
+        <div class="k">Pausa</div>
+        <b>«No me preguntes más.» Y no pregunta.</b>
+        <p>Evidran deja de preguntar y sigue anotando lo que le cuentes. La pausa se mantiene aunque recargues o vuelvas a abrir el expediente.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -355,9 +628,9 @@
   <div class="wrap">
     <div class="center-head"><div class="eyebrow">Por qué Evidran</div><h2>Encuentra cómo se resolvió la última vez.</h2><p>Así gestiona hoy la calidad gran parte del mercado: Word, Excel, carpetas compartidas y correo. Funciona… hasta que alguien pregunta «¿esto ya nos pasó?».</p></div>
     <table>
-      <thead><tr><th></th><th>Software que archiva</th><th>Evidran · el sistema que aprende</th></tr></thead>
+      <thead><tr><th></th><th>Software que archiva</th><th>Evidran · memoria que se consulta</th></tr></thead>
       <tbody>
-        <tr><td>Documentar</td><td>Rellenas tú, campo a campo</td><td>Hablas y se redacta solo</td></tr>
+        <tr><td>Documentar</td><td>Rellenas tú, campo a campo</td><td>Lo cuentas; Evidran redacta y tú revisas</td></tr>
         <tr><td>Causa raíz</td><td>Lo que se te ocurra</td><td>Criterio de sistema, sin causas pobres</td></tr>
         <tr><td>Varias normas</td><td>Una plantilla por cada una</td><td>Una herramienta para todas</td></tr>
         <tr><td>Plazos</td><td>Los vigilas a mano</td><td>Semáforo de vencimiento y avisos</td></tr>
@@ -366,6 +639,9 @@
         <tr><td>Apartado Revisión 9.3</td><td>A mano cada año</td><td>Redactado desde tus datos</td></tr>
         <tr><td>Auditoría interna</td><td>Un Excel la semana antes</td><td>Programa, checklist y hallazgos conectados</td></tr>
         <tr><td>Registrar en planta</td><td>Un papel que llega tarde</td><td>App de campo: QR, foto y captura en el momento</td></tr>
+        <tr><td>Planta y calidad</td><td>Un correo que nadie recoge</td><td>La misma NC: el técnico describe, calidad desarrolla</td></tr>
+        <tr><td>Aprobación</td><td>Una firma en papel, sin traza</td><td>El responsable firma o devuelve con indicaciones</td></tr>
+        <tr><td>Tu formato</td><td>Te adaptas a la plantilla</td><td>Tus campos, tu logo y tu código de formato</td></tr>
         <tr><td>Vigencia de tus normas</td><td>Se comprueba a mano, si hay tiempo</td><td>Vigilancia diaria con evidencia registrada</td></tr>
         <tr><td>«¿Estoy listo?»</td><td>Nadie te lo dice</td><td>Se lo preguntas al copiloto</td></tr>
       </tbody>
@@ -385,6 +661,9 @@
     <details><summary>¿No me vale con mis plantillas de Word?</summary><p>Evidran añade una entrevista para profundizar en las causas, avisos de vencimiento y seguimiento de acciones. Los expedientes quedan conectados y puedes recuperar sus causas, decisiones y resultados.</p></details>
     <details><summary>Las suites ISO tienen más módulos.</summary><p>Cierto: son más anchas. La pregunta es cuántos módulos vas a usar tú solo, cuánto tarda la plataforma en estar configurada y quién la mantiene después. Evidran cubre a fondo el ciclo que decide tu auditoría — riesgos, no conformidades, acciones, auditoría interna, objetivos y revisión por la dirección — y funciona desde el primer día. Si tu núcleo es un gestor documental con flujos o un portal de proveedores, una suite encaja mejor; te lo decimos igual de claro.</p></details>
     <details><summary>¿Mis datos están seguros?</summary><p>Aislados por empresa a nivel de base de datos, evidencias privadas y la IA recibe lo mínimo imprescindible. El detalle completo —firma, roles, on-premise, conexión MCP— está en <a href="/seguridad.html" style="color:var(--blue);font-weight:700">Seguridad y privacidad</a>.</p></details>
+    <details><summary>Ya tenemos nuestro formato y nuestros códigos.</summary><p>Tu referencia propia se puede usar en lugar de la numeración automática. Además, añades hasta 20 campos propios que salen en pantalla, Word, PDF y CSV, y los documentos llevan tu logo, tu pie y tu código de formato por tipo de documento. Lo tienes en <a href="#a-tu-manera" style="color:var(--blue);font-weight:700">A tu manera</a>.</p></details>
+    <details><summary>¿Y si prefiero escribir sin chat?</summary><p>Apagas la entrevista desde la cabecera del expediente y rellenas la plantilla a tu ritmo. Al terminar puedes pedir «Revisar con Evidran».</p></details>
+    <details><summary>En planta no van a investigar causas.</summary><p>No hace falta. El técnico describe el hecho y pulsa «Completar con calidad»; quien lleva calidad desarrolla la causa y la acción sobre la misma NC. Mira <a href="#planta" style="color:var(--blue);font-weight:700">Planta y calidad</a>.</p></details>
     <details><summary>Soy yo solo para toda la calidad.</summary><p>Justo para eso está pensado Evidran.</p></details>
   </div>
 </section>

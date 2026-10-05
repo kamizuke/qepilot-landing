@@ -4,13 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Auditorías: bandeja de hallazgos, auditoría interna 9.2 y calendario — Evidran</title>
-<meta name="description" content="Los hallazgos del auditor llegan ya estructurados o se extraen del PDF con IA. Auditoría interna con programa anual y checklist propuesta por IA, calendario de auditorías con tres vistas y avisos de vencimiento." />
+<meta name="description" content="Los hallazgos del auditor llegan ya estructurados o se extraen del PDF con IA. Auditoría interna multinorma con checklist sobre tu propia lista de requisitos (VDA ISA, IFS Food, requisitos propios) y calendario anual que se comparte y se imprime en una hoja." />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Auditorías: bandeja de hallazgos, auditoría interna 9.2 y calendario — Evidran" />
-<meta property="og:description" content="Los hallazgos del auditor llegan ya estructurados o se extraen del PDF con IA. Auditoría interna con programa anual y checklist propuesta por IA, calendario de auditorías con tres vistas y avisos de vencimiento." />
+<meta property="og:description" content="Los hallazgos del auditor llegan ya estructurados o se extraen del PDF con IA. Auditoría interna multinorma con checklist sobre tu propia lista de requisitos (VDA ISA, IFS Food, requisitos propios) y calendario anual que se comparte y se imprime en una hoja." />
 <meta property="og:url" content="https://www.evidran.com/auditorias.html" />
 <meta property="og:site_name" content="Evidran" />
 <meta property="og:locale" content="es_ES" />
@@ -23,6 +23,41 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/plataforma.css">
+<style>
+/* Catálogos, IFS, memoria del triage, compartir (prefijo au-) */
+.au-mem { display: flex; gap: 8px; align-items: flex-start; margin-top: 9px; background: #F2F6FC; border-radius: 9px; padding: 8px 11px; font-size: 11.5px; color: var(--ink); line-height: 1.5; }
+.au-mem .ic { flex: 0 0 auto; font-weight: 800; color: var(--navy); }
+.au-file { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; font-size: 12px; color: var(--ink); padding: 10px 12px; border: 1px dashed var(--line); border-radius: 10px; background: var(--cream); }
+.au-file .tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; background: #E7F6EC; color: #167C40; margin-left: auto; white-space: nowrap; }
+.au-file small { display: block; width: 100%; font-size: 10.5px; color: var(--ink-soft); }
+.au-req { display: flex; gap: 10px; align-items: flex-start; font-size: 12px; color: var(--ink); padding: 8px 0; border-top: 1px solid var(--cream-d); }
+.au-req:first-of-type { border-top: 0; }
+.au-req .id { font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--navy); background: #EAF2FF; border-radius: 5px; padding: 1px 6px; flex: 0 0 auto; margin-top: 1px; }
+.au-req .r { margin-left: auto; font-size: 10.5px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
+.au-req .r.no { color: #B42318; }
+.au-sc { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 7px; }
+.au-sc span { font-size: 10.5px; font-weight: 800; min-width: 26px; text-align: center; border: 1px solid var(--line); border-radius: 7px; padding: 3px 7px; color: var(--ink-soft); }
+.au-sc .on { background: var(--blue); border-color: var(--blue); color: #fff; }
+.au-sc .off { opacity: .35; text-decoration: line-through; }
+.au-ifs-item { padding: 10px 0; border-top: 1px solid var(--cream-d); font-size: 12px; color: var(--ink); }
+.au-ifs-item:first-of-type { border-top: 0; }
+.au-ko { font-size: 9px; font-weight: 800; letter-spacing: .04em; padding: 2px 6px; border-radius: 5px; background: #FDE7E7; color: #B42318; margin-left: 6px; }
+.au-score { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; background: var(--cream-d); border-radius: 12px; padding: 11px 14px; }
+.au-score .v { font-size: 22px; font-weight: 800; color: var(--ink); line-height: 1.1; }
+.au-score .k { font-size: 11px; color: var(--ink-soft); }
+.au-views { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.au-views span { font-size: 10.5px; font-weight: 700; border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; color: var(--ink-soft); }
+.au-views .on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.au-views .sp { margin-left: auto; }
+.au-share { padding: 16px 18px; }
+.au-share .h { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); font-weight: 700; margin-bottom: 9px; }
+.au-msg { background: var(--cream); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font-size: 12.5px; color: var(--ink); line-height: 1.6; }
+.au-msg .st { display: inline-block; margin-top: 6px; font-weight: 700; color: #B45309; }
+.au-ch { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 12px; }
+.au-ch span { font-size: 11px; font-weight: 700; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; color: var(--navy); background: #fff; }
+.au-print { display: flex; gap: 10px; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--ink-soft); flex-wrap: wrap; }
+.au-print b { color: var(--ink); }
+</style>
 <script defer src="/consent.js"></script>
 </head>
 <body>
@@ -45,14 +80,14 @@
               <div class="mg-t">Gobernar el ciclo</div>
               <a href="/riesgos-plan.html#objetivos"><b>Objetivos de la calidad</b><small>Medibles, con indicador, meta y grado de logro · 6.2.</small></a>
               <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
-              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva y simulacros de emergencia · 6.1 y 8.2.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5, aspectos ambientales y simulacros · 6.1 y 8.2.</small></a><a href="/riesgos-plan.html#cambios"><b>Cambios planificados</b><small>Se planifican, se aprueban y se vigilan después · 6.3.</small></a>
               <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
             </div>
             <div class="mg-col">
               <div class="mg-t">Aprender de todo</div>
-              <a href="/inteligencia.html"><b>Inteligencia y tendencias</b><small>Causas que se repiten y hallazgos con su dato.</small></a>
+              <a href="/inteligencia.html"><b>Inteligencia del sistema</b><small>Estado diario con su regla, causas y hallazgos con su dato.</small></a>
               <a href="/inteligencia.html#historial"><b>Historial</b><small>La memoria de calidad de tu organización, buscable.</small></a>
-              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y quién · 7.1.6.</small></a>
+              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y las lecciones que quedan · 7.1.6.</small></a>
               <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
               <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
             </div>
@@ -89,7 +124,7 @@
     <p class="crumbs"><a href="/">Plataforma</a> · Capturar con criterio</p>
     <div class="eyebrow">Auditorías</div>
     <h1>Todo lo que entra y sale de una auditoría, en un solo sitio.</h1>
-    <p class="sub">Los hallazgos del auditor llegan a tu bandeja ya redactados — por conexión directa o extraídos de su PDF—. La auditoría interna se planifica, se ejecuta con checklist y alimenta la misma bandeja. Y el calendario junta el programa interno con las visitas externas.</p>
+    <p class="sub">Los hallazgos del auditor llegan a tu bandeja ya redactados — por conexión directa o extraídos de su PDF—. La auditoría interna se planifica, se ejecuta con checklist — sobre tu propia lista de requisitos cuando la traes — y alimenta la misma bandeja. Y el calendario junta el programa interno con las visitas externas.</p>
     <div class="hero-cta">
       <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary">Pide una demo personalizada</a>
       <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O pruébalo por tu cuenta — 30 días gratis</a>
@@ -111,6 +146,7 @@
           <li><b>Descartar</b> — dejando constancia obligatoria del motivo.</li>
         </ul>
         <p style="margin-top:12px">Si el auditor corrige un hallazgo que ya convertiste, te avisa con un antes/después para actualizar o anular el expediente.</p>
+        <p style="margin-top:12px"><b>Y la memoria te sale al paso:</b> si un hallazgo se parece a uno ya decidido, la tarjeta te lo recuerda — «ya descartasteis un hallazgo muy parecido de este mismo auditor», con su motivo. No bloquea nada: decides tú.</p>
       </div>
       <div class="fr-visual">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditorias</span></div>
@@ -119,6 +155,7 @@
             <div class="tri-top"><span class="tri-org">Del auditor · EVD-7Q4K</span><span class="pmpill en">Pendiente</span></div>
             <p>No se evidencia la verificación de la eficacia de las acciones correctivas derivadas de la auditoría anterior.</p>
             <div class="norm">Sugerido: UNE-EN ISO 9001:2015 · 10.2.1 d)</div>
+            <div class="au-mem"><span class="ic">↺</span><span>Un hallazgo muy parecido de este mismo auditor se convirtió en expediente: <b>NC-2024-031</b>.</span></div>
             <div class="tri-act"><span class="go">Convertir en expediente</span><span class="pl">Al plan de mejora</span><span>Descartar</span></div>
           </div>
           <div class="tri-item">
@@ -162,10 +199,11 @@
         <div class="fr-eyebrow">Auditoría interna · 9.2</div>
         <h3>El programa anual completo, sin salir a Excel.</h3>
         <ul class="fr-list">
-          <li><b>Planifica por procesos</b> — del mapa genérico o de los tuyos—, multinorma, con responsable, fecha y semáforo de vencimiento.</li>
+          <li><b>Planifica por procesos</b> — del mapa genérico o de los tuyos —, con responsable, fecha, estado (planificada, realizada o cancelada) y semáforo de vencimiento. Por ejercicio: lo pendiente arrastra al año siguiente.</li>
+          <li><b>Multinorma:</b> ISO 9001, 14001, 45001, 17025, 17065, 17020, 37001, 14006, EN 9100, IATF 16949, ISO 56001, ISO/IEC 27001, TISAX, <a href="#ifs" style="color:var(--navy)">IFS Food</a> y <a href="#requisitos" style="color:var(--navy)">requisitos propios</a>.</li>
           <li><b>Checklist propuesta por IA</b> según el proceso, la norma y el perfil de tu empresa: 8–15 puntos verificables que revisas y editas antes de usar. Cada punto se marca Sí / No / N.A. con comentario, y todo se autoguarda.</li>
-          <li><b>Los hallazgos no se cierran aquí:</b> entran en la misma bandeja de triage — convertir, al plan o descartar. Cero transcripción.</li>
-          <li><b>Informe imprimible en PDF</b> con la identidad documental de tu empresa, y resultados que alimentan Tendencias y la Revisión por la Dirección (9.3.2 c).</li>
+          <li><b>Hallazgos desde un «No» o a mano</b>, con sugerencia de norma y apartado. No se cierran aquí: entran en la misma <a href="#bandeja" style="color:var(--navy)">bandeja de triage</a> — convertir, al plan o descartar. Al reabrir la auditoría ves en qué quedó cada uno.</li>
+          <li><b>Informe imprimible en PDF</b> con la identidad documental de tu empresa, y resultados que alimentan Inteligencia del sistema y la Revisión por la Dirección (9.3.2 c).</li>
         </ul>
       </div>
       <div class="fr-visual">
@@ -177,7 +215,7 @@
             <tbody>
               <tr><td>Compras y proveedores</td><td>Feb</td><td><span class="pmpill ce">Realizada</span></td><td>2</td></tr>
               <tr><td>Producción</td><td>Abr</td><td><span class="pmpill ce">Realizada</span></td><td>3</td></tr>
-              <tr><td>Almacén y logística</td><td>Jun</td><td><span class="pmpill en">En curso</span></td><td>—</td></tr>
+              <tr><td>Almacén y logística</td><td>Jun</td><td><span class="pmpill ce">Realizada</span></td><td>1</td></tr>
               <tr><td>Diseño y desarrollo</td><td>Oct</td><td><span class="pmpill ab">Planificada</span></td><td>—</td></tr>
             </tbody>
           </table>
@@ -187,6 +225,63 @@
             <div class="pm-chk"><span class="box on">✓</span><span>¿Hay trazabilidad de lotes en las expediciones? (8.5.2)</span></div>
             <div class="pm-chk"><span class="box">✓</span><span>¿Se controla la rotación del stock por caducidad, FIFO? (8.5.1)</span></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-row rev" id="requisitos">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Catálogo de requisitos y requisitos propios</div>
+        <h3>Tu lista de requisitos, literal. Ni de memoria ni inventada.</h3>
+        <p>Hay auditorías que no van contra una ISO, sino contra una lista concreta. La subes una vez y la checklist se apoya en ella: cada punto lleva delante el identificador y el título copiados tal cual de tu lista.</p>
+        <ul class="fr-list">
+          <li><b>Para TISAX, el catálogo VDA ISA</b> que descargas del portal ENX, en Excel. Sin catálogo cargado, Evidran no propone apartados de TISAX y te dice dónde subirlo.</li>
+          <li><b>Requisitos propios:</b> tu inventario legal, los requisitos de un contrato — por ejemplo, normas ECSS — o los de un cliente. En Excel, CSV, Word o PDF.</li>
+          <li><b>Evidran no cita catálogos de memoria ni identifica legislación.</b> Trabaja con la lista que traes; el criterio sobre qué te aplica es tuyo.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria-interna · Requisitos propios</span></div>
+        <div class="pm">
+          <div class="au-file">📄 Requisitos-contrato-cliente-2026.xlsx <span class="tag">Cargada</span><small>42 requisitos leídos por columnas · se guarda una vez para tu organización</small></div>
+          <div class="pm-check">
+            <div class="h">Checklist · sobre tu lista</div>
+            <div class="au-req"><span class="id">R-007</span><span>Trazabilidad del lote de materia prima hasta el producto entregado</span><span class="r">Sí</span></div>
+            <div class="au-req"><span class="id">R-012</span><span>Notificación previa al cliente de cambios de proceso</span><span class="r no">No</span></div>
+            <div class="au-req"><span class="id">R-019</span><span>Conservación de registros de inspección final durante 10 años</span><span class="r">N.A.</span></div>
+          </div>
+        </div>
+        <p class="fr-cap"><b>R-012</b> marcado «No»: de ahí sale el hallazgo, directo a la bandeja.</p>
+      </div>
+    </div>
+
+    <div class="feat-row" id="ifs">
+      <div class="fr-text">
+        <div class="fr-eyebrow">IFS Food</div>
+        <h3>Una puntuación orientativa antes de la auditoría.</h3>
+        <p>Con IFS Food en la auditoría interna, cada ítem de la checklist se puntúa además con <b>A, B, C, D o Mayor</b>. Los requisitos KO solo admiten A, B o D.</p>
+        <ul class="fr-list">
+          <li><b>Porcentaje orientativo</b> en pantalla y en el informe, calculado según el sistema de puntuación oficial de IFS.</li>
+          <li><b>El hallazgo nace con su tipo:</b> el que sale de un ítem lleva ya la gravedad que le corresponde.</li>
+          <li><b>La lista de requisitos la sube tu organización,</b> la de la versión con la que te certificas. Evidran no la distribuye ni la cita de memoria.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/auditoria-interna · IFS Food</span></div>
+        <div class="pm">
+          <div class="pm-check">
+            <div class="h">Checklist · Producción <span class="ia">IFS Food</span></div>
+            <div class="au-ifs-item"><span class="pmcode">IFS-014</span> Control de cuerpos extraños en línea de envasado<span class="au-ko">KO</span>
+              <div class="au-sc"><span class="on">A</span><span>B</span><span class="off">C</span><span>D</span><span class="off">Mayor</span></div>
+            </div>
+            <div class="au-ifs-item"><span class="pmcode">IFS-031</span> Registro de limpieza de equipos tras cambio de producto
+              <div class="au-sc"><span>A</span><span class="on">B</span><span>C</span><span>D</span><span>Mayor</span></div>
+            </div>
+            <div class="au-ifs-item"><span class="pmcode">IFS-047</span> Calibración de básculas de dosificación
+              <div class="au-sc"><span>A</span><span>B</span><span class="on">C</span><span>D</span><span>Mayor</span></div>
+            </div>
+          </div>
+          <div class="au-score"><div><div class="k">Porcentaje orientativo</div><div class="v">91,2 %</div></div><span class="pmpill ab">Orientativo · no sustituye a la evaluación</span></div>
         </div>
       </div>
     </div>
@@ -200,16 +295,17 @@
       <div class="fr-text">
         <div class="fr-eyebrow">Calendario de auditorías</div>
         <h3>El año entero de un vistazo: las tuyas y las que te hacen.</h3>
-        <p>El programa interno y las visitas externas —certificadora, clientes, proveedores— en una sola agenda con tres vistas: lista, mes y año.</p>
+        <p>El programa interno y las visitas externas — certificadora, clientes, proveedores — en una sola agenda.</p>
         <ul class="fr-list">
-          <li><b>Fecha planificada vs confirmada.</b> «Más o menos en octubre» se apunta así, con etiqueta discontinua; cuando se acerca, Evidran te pide confirmarla — en pantalla y en el resumen diario.</li>
-          <li><b>Compartir por donde ya habláis:</b> Teams, WhatsApp, correo. El mensaje siempre dice si la fecha está confirmada.</li>
-          <li><b>Se imprime en una hoja A4</b> — lista, mes o año — con el membrete y el pie de tu identidad documental.</li>
+          <li><b>Tres vistas: Lista, Mes y Año.</b> La lista agrupa por mes; el mes es una rejilla con un punto por auditoría; el año, los 12 meses en miniatura con cada día pintado del color de su norma. Pulsas un día y ves el detalle, también en el móvil.</li>
+          <li><b>Fecha planificada vs confirmada.</b> «Más o menos en octubre» se apunta así, con etiqueta discontinua; cuando se acerca, Evidran te pide confirmarla en un clic — en pantalla y en el resumen diario.</li>
+          <li><b>Las externas, con su contexto:</b> entidad, tipo (certificación, seguimiento, renovación, cliente, proveedor), normas del alcance y notas.</li>
         </ul>
       </div>
       <div class="fr-visual">
         <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/calendario-auditorias</span></div>
         <div class="callist">
+          <div class="au-views"><span class="on">Lista</span><span>Mes</span><span>Año</span><span class="sp">Imprimir</span></div>
           <div class="cal-mes">Junio 2026</div>
           <div class="cal-ev"><i class="q"></i><span><b>Auditoría interna</b> · Almacén y logística</span><span class="who">ISO 9001</span><span class="cal-tag conf">Confirmada · 18 jun</span></div>
           <div class="cal-mes">Septiembre 2026</div>
@@ -221,7 +317,28 @@
       </div>
     </div>
 
-    <div class="feat-row">
+    <div class="feat-row" id="compartir">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Compartir e imprimir</div>
+        <h3>La fecha, por donde ya habláis. Y en papel, en una sola hoja.</h3>
+        <ul class="fr-list">
+          <li><b>Compartir una auditoría</b> por Teams, WhatsApp, correo o SMS. Es texto plano: funciona con todos y no necesita que tu IT autorice ninguna integración.</li>
+          <li><b>El mensaje dice siempre si la fecha está confirmada o solo planificada.</b> Un mensaje de chat es una foto: si la fecha se mueve, quien lo recibe sabe si podía fiarse.</li>
+          <li><b>Se imprime en una hoja A4</b> — lista, mes o año —, con los colores por norma y la identidad documental de tu empresa: membrete, código de formato y la fecha de impresión, para que un papel de hace meses no parezca vigente.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">Compartir auditoría</span></div>
+        <div class="au-share">
+          <div class="h">Mensaje que se envía</div>
+          <div class="au-msg">Auditoría interna · Gestión ambiental (ISO 14001)<br>Industrias Meridia · septiembre de 2026<br><span class="st">Fecha planificada, aún sin confirmar.</span></div>
+          <div class="au-ch"><span>Teams</span><span>WhatsApp</span><span>Correo</span><span>SMS</span></div>
+          <div class="au-print">🖨 <span><b>Imprimir la vista</b> · cabe en una hoja A4 · con tu membrete y la fecha de impresión</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-row rev">
       <div class="fr-text">
         <div class="fr-eyebrow">Avisos</div>
         <h3>Ninguna auditoría se te echa encima sin avisar.</h3>
@@ -232,9 +349,9 @@
         <div class="notif">
           <div class="notif-digest">
             <div class="h">Auditorías</div>
-            <div class="nd-row"><span class="nd-dot a"></span><span>Seguimiento <b>AENOR</b> en 12 días — 2 NC abiertas por cerrar</span></div>
-            <div class="nd-row"><span class="nd-dot r"></span><span>Interna de <b>Gestión ambiental</b>: fecha planificada sin confirmar</span></div>
-            <div class="nd-row"><span class="nd-dot b"></span><span>Interna de <b>Almacén</b> en curso — hallazgos por pasar al triage</span></div>
+            <div class="nd-row"><span class="nd-dot a"></span><span>Seguimiento <b>AENOR</b> el 6 de octubre · fecha confirmada</span></div>
+            <div class="nd-row"><span class="nd-dot r"></span><span>Interna de <b>Gestión ambiental</b>: la fecha planificada pasó sin confirmarse</span></div>
+            <div class="nd-row"><span class="nd-dot b"></span><span>Interna de <b>Diseño y desarrollo</b>: fecha planificada cerca y aún sin confirmar</span></div>
           </div>
         </div>
       </div>
