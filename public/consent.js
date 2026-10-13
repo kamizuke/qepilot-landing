@@ -1,6 +1,7 @@
 /* Evidran · consentimiento de cookies
    Dos finalidades independientes: analítica (Google Analytics) y publicidad (píxel de Meta).
-   Nada se carga hasta que el visitante acepta esa finalidad. */
+   Nada de eso se carga hasta que el visitante acepta esa finalidad.
+   Aparte va el recuento de visitas sin cookies (contarVisita), que no necesita consentimiento. */
 (function () {
   var KEY = "evd_consent_v2"; // v2: se añade publicidad; quien aceptó en v1 vuelve a ver el aviso
   var GA_ID = "G-W6Q6L17YS9";
@@ -114,6 +115,19 @@
     preferencias: preferencias,
     estado: estado
   };
+
+  // Recuento de visitas sin cookies (Vercel Web Analytics): no guarda nada en el
+  // dispositivo ni identifica al visitante, así que no depende del aviso.
+  // Solo en producción; en local y en vistas previas el guion no existe.
+  function contarVisita() {
+    if (!/(^|\.)evidran\.com$/.test(window.location.hostname)) return;
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    var s = document.createElement("script");
+    s.defer = true;
+    s.src = "/_vercel/insights/script.js";
+    document.head.appendChild(s);
+  }
+  contarVisita();
 
   var c = estado();
   if (c) {

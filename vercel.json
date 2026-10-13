@@ -1,0 +1,9 @@
+{
+  "rewrites": [{ "source": "/para/:empresa", "destination": "/index.html" }],
+  "headers": [
+    {
+      "source": "/para/:empresa",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    }
+  ]
+}
