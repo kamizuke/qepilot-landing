@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aspectos ambientales ISO 14001 · 6.1.2: identificación, evaluación, LER y evidencia — Evidran</title>
+<meta name="description" content="Identifica y evalúa tus aspectos ambientales con perspectiva de ciclo de vida: catálogo por familias, severidad + magnitud con tus criterios aprobados, consumos y residuos con tendencia, lista LER oficial completa (incluida la Decisión 2025/934) e informe de evidencia para el auditor." />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Aspectos ambientales ISO 14001 · 6.1.2: identificación, evaluación, LER y evidencia — Evidran" />
+<meta property="og:description" content="Identifica y evalúa tus aspectos ambientales con perspectiva de ciclo de vida: catálogo por familias, severidad + magnitud con tus criterios aprobados, consumos y residuos con tendencia, lista LER oficial completa (incluida la Decisión 2025/934) e informe de evidencia para el auditor." />
+<meta property="og:url" content="https://www.evidran.com/aspectos-ambientales.html" />
+<meta property="og:site_name" content="Evidran" />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:image" content="https://www.evidran.com/brand/evidran-og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Evidran" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/plataforma.css">
+<style>
+/* Aspectos ambientales (prefijo aa-) */
+.aa-pill { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; display: inline-block; }
+.aa-pill.sig { background: #FDE7E7; color: #B42318; }
+.aa-pill.no { background: var(--cream-d); color: var(--ink-soft); }
+.aa-pill.pen { background: #FEF1DE; color: #B45309; }
+.aa-pill.ben { background: #EAF2FF; color: #1D4ED8; }
+.aa-cards { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.aa-cards span { font-size: 10.5px; font-weight: 700; border: 1px solid var(--line); border-radius: 10px; padding: 5px 10px; color: var(--ink-soft); background: #fff; }
+.aa-cards span b { color: var(--ink); font-size: 12px; margin-right: 3px; }
+.aa-cards .on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.aa-cards .on b { color: #fff; }
+.aa-row { display: grid; grid-template-columns: minmax(0,1.4fr) auto auto; gap: 8px 12px; align-items: center; padding: 9px 0; border-top: 1px solid var(--cream-d); font-size: 12px; color: var(--ink); }
+.aa-row:first-of-type { border-top: 0; }
+.aa-row small { display: block; font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
+.aa-sev { display: inline-flex; gap: 3px; }
+.aa-sev span { font-size: 10px; font-weight: 700; border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; color: var(--ink-soft); white-space: nowrap; }
+.aa-sev .on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.aa-sev .prop { border-style: dashed; border-color: var(--navy); color: var(--navy); }
+.aa-sev .on.grave { background: #B45309; border-color: #B45309; }
+.aa-m { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--ink); white-space: nowrap; }
+.aa-trend { font-size: 10.5px; font-weight: 700; color: #B45309; }
+.aa-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin: 4px 0 12px; }
+.aa-kpi { border-radius: 10px; padding: 9px 12px; background: var(--cream-d); }
+.aa-kpi .v { font-size: 20px; font-weight: 800; color: var(--ink); line-height: 1.1; }
+.aa-kpi .k { font-size: 10.5px; color: var(--ink-soft); margin-top: 3px; }
+.aa-qty { border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; }
+.aa-qty .h { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.aa-qty .h span { font-weight: 600; font-size: 10.5px; color: var(--ink-soft); }
+.aa-sem { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
+.aa-sem div { border: 1px solid var(--cream-d); border-radius: 8px; padding: 6px 8px; font-size: 10.5px; color: var(--ink-soft); }
+.aa-sem div b { display: block; font-size: 13px; color: var(--ink); }
+.aa-qty p { font-size: 11px; color: var(--ink-soft); margin-top: 8px; }
+.aa-ler-in { border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px; font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; background: #fff; }
+.aa-ler-opt { border-radius: 10px; padding: 9px 11px; background: #F2F6FC; font-size: 12px; color: var(--ink); line-height: 1.45; }
+.aa-ler-opt .c { font-family: ui-monospace, Menlo, monospace; font-weight: 700; color: var(--navy); margin-right: 6px; }
+.aa-ler-opt small { display: block; color: var(--ink-soft); font-size: 10.5px; margin-top: 3px; }
+.aa-ler-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.aa-check { display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; font-size: 12px; color: var(--ink); }
+.aa-check i { flex: 0 0 auto; width: 16px; height: 16px; border-radius: 4px; background: var(--blue); color: #fff; font-style: normal; font-size: 10px; font-weight: 800; display: grid; place-items: center; margin-top: 1px; }
+.aa-check small { display: block; color: var(--ink-soft); font-size: 10.5px; }
+.aa-cov { width: 100%; border-collapse: collapse; font-size: 11px; }
+.aa-cov th { font-size: 9.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-weight: 700; text-align: left; padding: 0 4px 6px; }
+.aa-cov td { padding: 5px 4px; border-top: 1px solid var(--cream-d); color: var(--ink); vertical-align: middle; }
+.aa-chip { display: inline-block; min-width: 22px; text-align: center; font-size: 10px; font-weight: 700; border-radius: 6px; padding: 2px 6px; }
+.aa-chip.ok { background: #E7F6EC; color: #167C40; }
+.aa-chip.na { background: var(--cream-d); color: var(--ink-soft); }
+.aa-chip.pd { background: #FEF1DE; color: #B45309; }
+.aa-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 10.5px; color: var(--ink-soft); }
+.aa-legend span { display: inline-flex; gap: 5px; align-items: center; }
+.aa-doc-row { display: flex; justify-content: space-between; gap: 10px; font-size: 11.5px; color: var(--ink); padding: 6px 0; border-top: 1px solid var(--cream-d); }
+.aa-doc-row .m { font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--navy); white-space: nowrap; }
+.aa-steps { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.aa-steps span { font-size: 10.5px; font-weight: 700; border-radius: 999px; padding: 4px 11px; background: var(--cream-d); color: var(--ink-soft); }
+.aa-steps .on { background: var(--navy); color: #fff; }
+.aa-steps .done { background: #E7F6EC; color: #167C40; }
+.aa-falta { font-size: 11px; color: #B45309; margin-bottom: 10px; }
+.aa-q { font-size: 11px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .05em; margin: 10px 0 6px; }
+.aa-res { margin-top: 12px; border-radius: 10px; padding: 10px 12px; background: #FDE7E7; color: #B42318; font-size: 12px; font-weight: 700; }
+.aa-res small { display: block; font-weight: 500; color: var(--ink); margin-top: 2px; font-size: 11px; }
+.aa-faq details { border-top: 1px solid var(--line); padding: 14px 0; }
+.aa-faq details:last-child { border-bottom: 1px solid var(--line); }
+.aa-faq summary { cursor: pointer; font-weight: 700; color: var(--ink); font-size: 16px; }
+.aa-faq details p { margin-top: 10px; color: var(--ink-soft); line-height: 1.6; }
+@media (max-width: 560px) {
+  .aa-row { grid-template-columns: minmax(0,1fr) auto; }
+  .aa-row .aa-sev { grid-column: 1 / -1; }
+  .aa-grid { grid-template-columns: 1fr 1fr; }
+  .aa-cov .hide-sm { display: none; }
+}
+</style>
+<script defer src="/consent.js"></script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="brand"><img src="/brand/evidran-logo.svg" alt="Evidran" width="135" height="34" /></a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <div class="nav-item mega-item">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Plataforma <span class="car"></span></button>
+          <div class="drop mega">
+            <div class="mg-col">
+              <div class="mg-t">Capturar con criterio</div>
+              <a href="/#capturar"><b>La entrevista</b><small>Hablas; el informe se redacta en vivo, con causa de verdad.</small></a>
+              <a href="/producto.html#normas"><b>No conformidades y 8D</b><small>Diecisiete tipos de expediente, cada uno con su norma.</small></a>
+              <a href="/auditorias.html"><b>Auditorías</b><small>Bandeja de hallazgos, auditoría interna 9.2 y calendario anual.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Gobernar el ciclo</div>
+              <a href="/riesgos-plan.html#objetivos"><b>Objetivos de la calidad</b><small>Medibles, con indicador, meta y grado de logro · 6.2.</small></a>
+              <a href="/riesgos-plan.html#plan"><b>Plan de mejora continua</b><small>Todas las acciones, con eficacia verificada · 10.2.</small></a>
+              <a href="/riesgos-plan.html"><b>Riesgos y oportunidades</b><small>Matriz 5×5 viva, con tratamiento, reevaluación y simulacros · 6.1 y 8.2.</small></a><a href="/aspectos-ambientales.html"><b>Aspectos ambientales</b><small>Tus criterios, consumos y residuos, LER y evidencia · 14001.</small></a><a href="/riesgos-plan.html#cambios"><b>Cambios planificados</b><small>Se planifican, se aprueban y se vigilan después · 6.3.</small></a>
+              <a href="/seguridad.html#firma"><b>Aprobación y firma</b><small>Firma verificable del responsable, con traza que no se borra.</small></a>
+            </div>
+            <div class="mg-col">
+              <div class="mg-t">Aprender de todo</div>
+              <a href="/inteligencia.html"><b>Inteligencia del sistema</b><small>Estado diario con su regla, causas y hallazgos con su dato.</small></a>
+              <a href="/inteligencia.html#historial"><b>Casos anteriores</b><small>La memoria de calidad de tu organización, buscable.</small></a>
+              <a href="/inteligencia.html#decisiones"><b>Memoria de decisiones</b><small>Por qué se decidió cada cosa, y las lecciones que quedan · 7.1.6.</small></a>
+              <a href="/inteligencia.html#revision"><b>Revisión por la Dirección</b><small>El acta 9.3 desde tus datos, archivada por años.</small></a>
+              <a href="/inteligencia.html#copiloto"><b>Copiloto</b><small>Pregúntale a tu sistema; responde con datos reales.</small></a>
+            </div>
+            <div class="mg-foot">
+              <a href="/vigilancia-normativa.html">Vigilancia normativa</a>
+              <a href="/seguridad.html#onpremise">On-premise</a>
+              <a href="/seguridad.html">Seguridad y privacidad</a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-item rel">
+          <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Recursos <span class="car"></span></button>
+          <div class="drop small">
+            <a href="/#transicion-2026"><b>Transición ISO 2026</b></a>
+            <a href="/recorrido.html"><b>Una NC de principio a fin</b></a>
+            <a href="/producto.html"><b>Evidran por dentro</b></a>
+            <a href="/producto.html#comparativa"><b>Frente a Excel, plantillas y suites</b></a>
+            <a href="/auditores.html"><b>Para auditores y consultores</b></a>
+          </div>
+        </div>
+        <a href="/blog/">Blog</a>
+        <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20personalizada" class="btn btn-primary btn-sm">Pide una demo</a>
+      </div>
+      <a href="https://app.evidran.com" class="btn btn-ghost btn-sm">Iniciar sesión</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<header class="phero">
+  <div class="wrap">
+    <p class="crumbs"><a href="/">Plataforma</a> · Gobernar el ciclo</p>
+    <div class="eyebrow">Aspectos ambientales · ISO 14001 · 6.1.2</div>
+    <h1>Tus aspectos ambientales, evaluados con tu criterio y listos para enseñar.</h1>
+    <p class="sub">La 14001 pide identificar los aspectos de tus actividades, productos y servicios con perspectiva de ciclo de vida, y decidir cuáles son significativos con criterios establecidos. Evidran ordena los datos, hace las cuentas y deja la traza. Qué es significativo lo decide tu equipo, y queda escrito quién lo aprobó.</p>
+    <div class="hero-cta">
+      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20aspectos%20ambientales" class="btn btn-primary">Pide una demo con tu hoja de aspectos</a>
+      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O pruébalo por tu cuenta — 30 días gratis</a>
+    </div>
+  </div>
+</header>
+
+<!-- DESDE TU EXCEL -->
+<section id="importar" style="padding-top:40px">
+  <div class="wrap">
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Empiezas desde lo que ya tienes</div>
+        <h3>Tu hoja de aspectos de siempre, dentro en una tarde.</h3>
+        <p>Muchas empresas llevan los aspectos en un Excel de varias hojas que se ha ido heredando año tras año. No hace falta rehacerlo.</p>
+        <ul class="fr-list">
+          <li><b>«Importar desde Excel» lee la hoja de identificación:</b> las filas de cada fase, las columnas de condición normal, anómala y emergencia, el bloque de indirectos, las fases que no aplican con su motivo y el código LER.</li>
+          <li><b>Y la de cuantificación:</b> lee el criterio («kg/nº ensayos») y las columnas de cantidad, y empareja cada fila con su aspecto por código LER o por nombre. Tú dices a qué año y periodo corresponde cada columna.</li>
+          <li><b>Nada se guarda sin revisarlo.</b> Antes de importar ves lo que Evidran ha entendido, incluidas las filas que parecen repetidas.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/aspectos · Importar desde Excel</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">Revisa antes de guardar</div><span class="pmpill ab">Datos de ejemplo</span></div>
+          <div class="aa-grid">
+            <div class="aa-kpi"><div class="v">66</div><div class="k">aspectos leídos</div></div>
+            <div class="aa-kpi"><div class="v">3</div><div class="k">fases que no aplican, con su motivo</div></div>
+            <div class="aa-kpi"><div class="v">3</div><div class="k">filas que parecen repetidas</div></div>
+          </div>
+          <table class="pm-table">
+            <thead><tr><th>Aspecto</th><th>Fase</th><th>Condición</th></tr></thead>
+            <tbody>
+              <tr><td>Consumo eléctrico · hornos de curado</td><td>Operación</td><td>Normal</td></tr>
+              <tr><td>Envases con restos de pintura <span class="pmcode">15 01 10*</span></td><td>Operación</td><td>Normal</td></tr>
+              <tr><td>Derrame de aceite · zona de carga</td><td>Operación</td><td>Emergencia</td></tr>
+              <tr><td>Transporte de producto · subcontratado</td><td>Distribución</td><td>Indirecto</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IDENTIFICAR: CATÁLOGO Y COBERTURA -->
+<section id="identificar" style="background:#fff">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Identificar</div>
+      <h2 style="margin:0 auto;max-width:28ch">Que no se quede fuera ningún aspecto. Y que se vea qué has descartado y por qué.</h2>
+      <p>La pregunta del auditor no suele ser «¿por qué este aspecto es significativo?», sino «¿y el transporte? ¿y el comedor? ¿y los residuos del taller de mantenimiento?».</p>
+    </div>
+
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Catálogo por familias</div>
+        <h3>Diecisiete familias de aspectos, de la energía a los impactos beneficiosos.</h3>
+        <ul class="fr-list">
+          <li><b>De la actividad a sus aspectos típicos.</b> Escribes la actividad y Evidran te sugiere las familias que suelen aplicarle, más las transversales: energía, agua, residuos, emisiones, vertidos, suelo, molestias, transporte, fin de vida, contratistas, emergencias… Con 65 aspectos típicos y su impacto.</li>
+          <li><b>Marcas los que te aplican</b> y se añaden de una vez, pendientes de evaluar. Lo que ya tienes sale como «ya está». Y siempre puedes añadir uno propio.</li>
+          <li><b>Perspectiva de ciclo de vida.</b> Cada aspecto lleva su fase, y las fases que la organización declara no aplicables quedan escritas con su motivo.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/aspectos · Cobertura</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">Cobertura · actividades × familias</div><span class="pmpill ab">Datos de ejemplo</span></div>
+          <table class="aa-cov">
+            <thead><tr><th>Actividad</th><th>Energía</th><th>Agua</th><th>Residuos</th><th>Vertidos</th><th class="hide-sm">Transporte</th></tr></thead>
+            <tbody>
+              <tr><td>Pintura en polvo</td><td><span class="aa-chip ok">2</span></td><td><span class="aa-chip ok">1</span></td><td><span class="aa-chip ok">3</span></td><td><span class="aa-chip ok">1</span></td><td class="hide-sm"><span class="aa-chip pd">·</span></td></tr>
+              <tr><td>Mantenimiento</td><td><span class="aa-chip ok">1</span></td><td><span class="aa-chip pd">·</span></td><td><span class="aa-chip ok">4</span></td><td><span class="aa-chip pd">·</span></td><td class="hide-sm"><span class="aa-chip na">N/A</span></td></tr>
+              <tr><td>Oficinas y comercial</td><td><span class="aa-chip ok">1</span></td><td><span class="aa-chip ok">1</span></td><td><span class="aa-chip ok">1</span></td><td><span class="aa-chip na">N/A</span></td><td class="hide-sm"><span class="aa-chip ok">1</span></td></tr>
+              <tr><td>Comedor · proveedor residente</td><td><span class="aa-chip pd">·</span></td><td><span class="aa-chip pd">·</span></td><td><span class="aa-chip ok">1</span></td><td><span class="aa-chip pd">·</span></td><td class="hide-sm"><span class="aa-chip na">N/A</span></td></tr>
+            </tbody>
+          </table>
+          <div class="aa-legend"><span><span class="aa-chip ok">2</span> aplica, con sus aspectos</span><span><span class="aa-chip na">N/A</span> no aplica, con motivo</span><span><span class="aa-chip pd">·</span> pendiente de revisar</span></div>
+        </div>
+        <p class="fr-cap"><b>Cobertura</b> cruza tus actividades —propias, auxiliares, subcontratadas o proyectos— con las diecisiete familias. Lo pendiente no se esconde; un «no aplica» lleva su motivo y su fecha.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVALUAR -->
+<section id="evaluar">
+  <div class="wrap">
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Evaluar · severidad + magnitud</div>
+        <h3>Dos preguntas por aspecto. Y la respuesta, defendible.</h3>
+        <p><b>¿Qué daño puede causar?</b> y <b>¿qué cantidad o alcance tiene?</b> La severidad la propone Evidran a partir de la ficha y la confirma quien evalúa. La magnitud sale de la cantidad del año y de los rangos de su familia: no necesitas años de histórico para empezar.</p>
+        <ul class="fr-list">
+          <li><b>Significativo si la suma alcanza tu umbral</b> (4, 5 o 6) o si el daño es grave. En emergencia, severidad + probabilidad.</li>
+          <li><b>«Pendiente de evaluar», nunca un «no» por defecto.</b> Si falta la cantidad o la probabilidad, el aspecto queda pendiente y dice qué le falta.</li>
+          <li><b>La decisión de tu equipo manda.</b> Puedes declarar un aspecto significativo o no significativo de forma expresa, con su justificación, y queda a la vista junto al resultado del método.</li>
+          <li><b>«Revisar en bloque».</b> Todos los aspectos en una lista, con las dos preguntas en línea: confirmas la severidad con un clic, ves la cantidad del año y su nivel, y cada cambio se guarda al momento.</li>
+          <li><b>¿Prefieres tu matriz 5×5?</b> Sigue disponible como método. Lo eliges por organización.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/aspectos · Revisar en bloque</span></div>
+        <div class="pm">
+          <div class="aa-cards"><span class="on"><b>22</b>Aspectos</span><span><b>5</b>Significativos</span><span><b>3</b>Pendientes de evaluar</span><span><b>1</b>Piden revisión</span><span><b>1</b>Beneficiosos</span></div>
+          <div class="aa-row"><div>Consumo eléctrico · hornos de curado<small>Electricidad · 1.240 MWh/año</small></div><div class="aa-sev"><span>Limitado</span><span class="on">Relevante</span><span>Grave</span></div><div><span class="aa-m">S2 + M3</span> <span class="aa-pill sig">Significativo</span></div></div>
+          <div class="aa-row"><div>Envases con restos de pintura · 15 01 10*<small>Residuos peligrosos · 380 kg/año · <span class="aa-trend">▲ +22 %</span></small></div><div class="aa-sev"><span>Limitado</span><span class="prop">Relevante</span><span>Grave</span></div><div><span class="aa-m">S2 + M2</span> <span class="aa-pill no">No significativo</span></div></div>
+          <div class="aa-row"><div>Taladrina agotada · 12 01 09*<small>Falta: cantidad del año</small></div><div class="aa-sev"><span>Limitado</span><span class="on">Relevante</span><span>Grave</span></div><div><span class="aa-pill pen">Pendiente de evaluar</span></div></div>
+          <div class="aa-row"><div>Derrame de aceite · zona de carga<small>Emergencia · probabilidad posible</small></div><div class="aa-sev"><span>Limitado</span><span>Relevante</span><span class="on grave">Grave</span></div><div><span class="aa-m">S3 + P2</span> <span class="aa-pill sig">Significativo</span></div></div>
+          <div class="aa-row"><div>Placas solares en cubierta<small>Impacto beneficioso · no se puntúa</small></div><div></div><div><span class="aa-pill ben">Beneficioso</span></div></div>
+        </div>
+        <p class="fr-cap"><b>La propuesta de Evidran</b> se ve punteada hasta que alguien la confirma. <b>▲ +22 %</b>: la cantidad sube más que la banda sobre la media de años anteriores, así que pide revisión sin cambiar el nivel.</p>
+      </div>
+    </div>
+
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Método de evaluación</div>
+        <h3>Tus criterios, aprobados una vez y aplicados igual a todos.</h3>
+        <ul class="fr-list">
+          <li><b>Rangos de magnitud por familia</b> —residuos peligrosos en kg, no peligrosos en t, electricidad y gas en MWh, agua y vertidos en m³, emisiones en t CO₂e, ruido en dB(A)—, con valores de partida que puedes editar o <b>calibrar con tus propios datos</b>.</li>
+          <li><b>Antes de guardar, ves qué cambia:</b> cuántos aspectos quedarían significativos, no significativos o pendientes con cada umbral, y cuáles cambiarían de resultado.</li>
+          <li><b>Queda quién aprobó los criterios y cuándo.</b> El documento «Criterios de evaluación» describe el método activo con sus valores reales y tu identidad documental.</li>
+          <li><b>Impactos beneficiosos aparte.</b> No se puntúan ni compensan los adversos; si quieres llevar uno a un objetivo, lo declaras significativo.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/aspectos · Ficha del aspecto</span></div>
+        <div class="pm">
+          <div class="aa-steps"><span class="done">1 · Identificar</span><span class="on">2 · Evaluar</span><span>3 · Revisar</span></div>
+          <div class="aa-q">¿Qué daño puede causar?</div>
+          <div class="aa-sev"><span>Limitado</span><span class="on">Relevante</span><span>Grave</span></div>
+          <div class="aa-q">¿Qué cantidad tiene? · Residuos peligrosos</div>
+          <div class="aa-m" style="white-space:normal;line-height:1.5">640 kg en 2026 · rangos aprobados: ≤100 bajo · ≤500 medio · &gt;500 alto</div>
+          <div class="aa-res">S2 + M3 = 5 · Significativo<small>Umbral 5 · criterios aprobados por M. López, 3 mar 2026</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSUMOS Y RESIDUOS -->
+<section id="consumos" style="background:#fff">
+  <div class="wrap">
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Consumos y residuos</div>
+        <h3>Las cuentas que hoy viven en una fórmula por celda.</h3>
+        <p>Anotas las cantidades de cada aspecto por semestre o por año, y los números de la empresa que sirven para normalizarlas: ensayos, trabajadores, facturación, m², unidades u horas.</p>
+        <ul class="fr-list">
+          <li><b>Evidran calcula el indicador,</b> la media de los tres años anteriores, la banda del ±10 % y la tendencia.</li>
+          <li><b>Avisa de lo que falta:</b> semestres cerrados sin dato y factores sin valor.</li>
+          <li><b>La ficha del aspecto enseña su histórico,</b> y la cantidad del año alimenta la magnitud sin teclearla dos veces.</li>
+          <li><b>Alta rápida:</b> si mides algo que aún no es un aspecto, lo creas desde aquí con nombre, categoría, unidad y factor, y completas su ficha después.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/aspectos · Consumos y residuos</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">Consumos y residuos · 2026</div><span class="pmpill ab">Datos de ejemplo</span></div>
+          <div class="aa-grid">
+            <div class="aa-kpi"><div class="v">14</div><div class="k">aspectos medidos</div></div>
+            <div class="aa-kpi"><div class="v">2</div><div class="k">suben sobre la banda</div></div>
+            <div class="aa-kpi"><div class="v">1</div><div class="k">semestre cerrado sin dato</div></div>
+          </div>
+          <div class="aa-qty">
+            <div class="h">Envases con restos de pintura · 15 01 10*<span>kg / nº de unidades producidas</span></div>
+            <div class="aa-sem">
+              <div>1.er semestre<b>180 kg</b></div>
+              <div>2.º semestre<b>200 kg</b></div>
+              <div>Indicador anual<b>0,41</b></div>
+            </div>
+            <p>Media 2023-2025: 0,34 · banda ±10 %: 0,31-0,37 · <span class="aa-trend">▲ +22 % sobre la media</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LER -->
+<section id="ler">
+  <div class="wrap">
+    <div class="feat-row rev">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Residuos y código LER</div>
+        <h3>La lista europea completa, del texto oficial. Y al día de pilas y baterías.</h3>
+        <p>El selector LER de la ficha trabaja con las 890 entradas de la lista europea de residuos (Decisión 2000/532/CE consolidada), incluida la <b>Decisión Delegada (UE) 2025/934</b> sobre pilas y baterías, que se aplica <b>a partir del 9 de diciembre de 2026</b>.</p>
+        <ul class="fr-list">
+          <li><b>Busca por código o por palabras,</b> con capítulo, subcapítulo, versión y fecha. Al elegir un código con asterisco, el residuo se marca como peligroso.</li>
+          <li><b>Te avisa cuando un código cambia de versión</b> o entra en vigor más adelante, y te enseña su entrada espejo (la peligrosa y la no peligrosa del mismo subcapítulo).</li>
+          <li><b>«Código confirmado con la documentación del residuo».</b> Una casilla que guarda la fecha. Si cambias el código, hay que confirmarlo de nuevo.</li>
+          <li><b>La IA no asigna códigos LER.</b> Gestor, tratamiento y código son datos de tu organización: Evidran los guarda y te ayuda a encontrarlos, pero no los da por buenos.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">app.evidran.com/aspectos · Ficha · Residuo</span></div>
+        <div class="pm">
+          <div class="aa-ler-in">baterías de litio</div>
+          <div class="aa-ler-opt"><span class="c">16 06 07*</span>Residuos de baterías de litio<small>16 Residuos no especificados en otro capítulo de la lista › 16 06 Residuos de la fabricación, distribución y utilización de pilas y baterías</small>
+            <div class="aa-ler-meta"><span class="aa-pill pen">Entra en vigor 09/12/2026</span><span class="aa-pill sig">Peligroso</span><span class="aa-pill no">Decisión Delegada (UE) 2025/934</span></div>
+          </div>
+          <div class="aa-check"><i>✓</i><span>Código confirmado con la documentación del residuo<small>Confirmado el 14 oct 2026</small></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDENCIA -->
+<section id="evidencia" style="background:#fff">
+  <div class="wrap">
+    <div class="feat-row">
+      <div class="fr-text">
+        <div class="fr-eyebrow">Informe de evidencia</div>
+        <h3>Lo que el auditor va a pedir, en un documento generado desde tus datos.</h3>
+        <ul class="fr-list">
+          <li><b>Criterios aplicados,</b> con su regla, su versión y quién los aprobó y cuándo, y los rangos por familia con su origen.</li>
+          <li><b>Recuento</b> de significativos, no significativos, pendientes, beneficiosos y decisiones expresas.</li>
+          <li><b>Cobertura</b> por actividad y familia, con cada «no aplica» y su motivo, y las fases del ciclo de vida no aplicables.</li>
+          <li><b>Cada aspecto con su puntuación legible</b> («S2 + M3 = 5»), su resultado, la decisión expresa si la hubo, la justificación, el requisito legal y la próxima revisión. Los residuos, con su LER, su versión y su confirmación documental.</li>
+          <li><b>En PDF o Word,</b> con tu membrete y tu pie de control.</li>
+        </ul>
+      </div>
+      <div class="fr-visual">
+        <div class="browser-bar"><i></i><i></i><i></i><span class="url">Informe de evidencia · aspectos ambientales</span></div>
+        <div class="pm">
+          <div class="pm-head"><div class="pm-title">INDUSTRIAS MERIDIA · Aspectos ambientales 2026</div></div>
+          <div class="aa-doc-row"><span>1 · Criterios aplicados · severidad + magnitud, umbral 5</span><span class="m">aprob. 03/03/2026</span></div>
+          <div class="aa-doc-row"><span>2 · Recuento</span><span class="m">5 sig. · 13 no · 3 pend. · 1 benef.</span></div>
+          <div class="aa-doc-row"><span>3 · Cobertura por actividad y familia</span><span class="m">10 actividades</span></div>
+          <div class="aa-doc-row"><span>4 · Aspectos adversos, significativos primero</span><span class="m">S2 + M3 = 5</span></div>
+          <div class="aa-doc-row"><span>5 · Impactos beneficiosos, aparte</span><span class="m">1</span></div>
+          <div class="aa-doc-row"><span>6 · Residuos con LER y confirmación documental</span><span class="m">16 06 07* · 2025/934</span></div>
+          <div class="aa-doc-row"><span>7 · Pendiente, con su motivo</span><span class="m">3</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONECTADO -->
+<section id="conectado">
+  <div class="wrap">
+    <div class="center-head">
+      <div class="eyebrow">Conectado con el resto del sistema</div>
+      <h2 style="margin:0 auto;max-width:26ch">Un aspecto significativo no se queda en la lista.</h2>
+    </div>
+    <div class="xlinks">
+      <a class="xlink" href="/riesgos-plan.html#plan"><span class="k">Plan de mejora · 10.2</span><b>Tratamiento con acción y eficacia</b><span>El tratamiento genera su acción, con responsable, plazo y verificación.</span></a>
+      <a class="xlink" href="/riesgos-plan.html#simulacros"><span class="k">Emergencias · 8.2</span><b>Simulacros de emergencia</b><span>Los aspectos en condición de emergencia son la cantera de escenarios. Viven dentro de Aspectos ambientales.</span></a>
+      <a class="xlink" href="/riesgos-plan.html#cambios"><span class="k">Cambios · 6.3</span><b>Cambios planificados</b><span>Con la 14001, la ficha pregunta qué aspectos cambian, si afecta a un requisito legal o permiso y si cambia alguna emergencia.</span></a>
+      <a class="xlink" href="/inteligencia.html#transicion"><span class="k">ISO 14001:2026</span><b>Transición 2026</b><span>Los aspectos con su fase del ciclo de vida cuentan como evidencia del requisito nuevo del 6.1.2.</span></a>
+      <a class="xlink" href="/inteligencia.html#revision"><span class="k">Revisión · 9.3</span><b>Acta de la Revisión por la Dirección</b><span>Los aspectos significativos llegan al acta y a los indicadores clave de Inteligencia.</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:#fff">
+  <div class="wrap aa-faq" style="max-width:760px">
+    <div class="eyebrow">Preguntas frecuentes</div>
+    <h2 style="margin-bottom:18px">Sobre los aspectos ambientales</h2>
+    <details open><summary>¿Decide Evidran qué aspectos son significativos?</summary><p>No. Evidran aplica el método y los criterios que tu organización aprueba, y propone la severidad a partir de la ficha. La propuesta se ve como tal hasta que alguien la confirma, y la decisión expresa de tu equipo prevalece siempre sobre el cálculo, con su justificación. Lo que sí hace es dejar escrito qué dijo el método, qué se decidió y quién aprobó los criterios.</p></details>
+    <details><summary>Ya tenemos nuestra matriz y nuestros criterios. ¿Tenemos que cambiarlos?</summary><p>No. Puedes trabajar con la matriz 5×5 de frecuencia × severidad o con severidad + magnitud, y fijar tu umbral y tus rangos. El método se elige por organización y, antes de guardarlo, ves qué aspectos cambiarían de resultado.</p></details>
+    <details><summary>¿Hace falta tener años de datos para usar la magnitud?</summary><p>No. La magnitud sale de la cantidad del año frente a los rangos de su familia, no de la tendencia. El histórico sirve para otra cosa: avisar cuando un aspecto sube más que la banda sobre la media de años anteriores y para calibrar los rangos con tus propias cantidades.</p></details>
+    <details><summary>¿Evidran comprueba si el código LER, el gestor o el tratamiento son correctos?</summary><p>No. Son datos de tu organización. Evidran trae la lista oficial completa y al día, marca la peligrosidad, avisa de los cambios de versión y te deja registrar que el código está confirmado con la documentación del residuo. La IA no asigna códigos.</p></details>
+    <details><summary>¿Qué cambia con la Decisión Delegada (UE) 2025/934?</summary><p>Modifica la lista europea de residuos en lo que toca a pilas y baterías: añade códigos nuevos, modifica otros y suprime algunos. Se aplica a partir del 9 de diciembre de 2026, según la corrección de errores publicada en el DO el 19 de agosto de 2025. En Evidran esos códigos ya aparecen con su fecha de entrada en vigor.</p></details>
+    <details><summary>¿Lo tengo si solo trabajo con ISO 9001?</summary><p>Aspectos ambientales aparece en el menú cuando tu organización tiene activa la capa ISO 14001. Sin ella, Riesgos y oportunidades sigue cubriendo la 9001 y la 27001, y los simulacros de emergencia cuelgan de Riesgos.</p></details>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final">
+  <div class="wrap">
+    <h2>Trae tu hoja de aspectos. Te enseñamos cómo queda.</h2>
+    <p>Con tus actividades, tus residuos y tus criterios. Tu equipo decide qué es significativo; Evidran hace las cuentas y deja la evidencia lista.</p>
+    <div class="hero-cta">
+      <a href="mailto:demo@evidran.com?subject=Quiero%20una%20demo%20de%20aspectos%20ambientales" class="btn btn-primary">Pide una demo con tu hoja de aspectos</a>
+      <a href="https://app.evidran.com/?alta=1" class="btn btn-ghost">O empieza por tu cuenta, gratis</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><img src="/brand/evidran-logo-negativo.svg" alt="Evidran" width="111" height="28" /></span>
+    <span>El sistema de conocimiento de calidad · app.evidran.com · <a href="/blog/" style="text-decoration:underline">Blog</a> · <a href="mailto:demo@evidran.com" style="text-decoration:underline">demo@evidran.com</a> · <a href="/terminos.html" style="text-decoration:underline">Términos y condiciones</a> · <a href="/aviso-legal.html" style="text-decoration:underline">Aviso legal</a> · <a href="/privacidad.html" style="text-decoration:underline">Privacidad</a> · <a href="/cookies.html" style="text-decoration:underline">Cookies</a></span>
+  </div>
+</footer>
+
+<script src="/plataforma.js"></script>
+<script defer src="/asistente.js"></script>
+</body>
+</html>
