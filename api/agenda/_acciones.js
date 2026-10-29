@@ -2,7 +2,7 @@
 // dependencias (datos, correo, reloj, ajustes) para poder probarse sin
 // Supabase ni SMTP: tools/agenda-local.mjs y tests/agenda.test.js.
 import crypto from "node:crypto";
-import { compararTexto, limitador, ipDe, generarToken } from "../deck/_comun.js";
+import { compararTexto, limitador, ipDe, generarToken, generarClave } from "../deck/_comun.js";
 import {
   RESULTADOS,
   partesMadrid,
@@ -29,10 +29,17 @@ export function hashToken(token) {
   return crypto.createHash("sha256").update(String(token)).digest("hex");
 }
 
+// Huella de la clave de cada persona que llama. Las claves las genera el
+// panel (12 caracteres aleatorios), así que basta un HMAC con secreto propio.
+export function huellaClave(clave, secreto) {
+  return crypto.createHmac("sha256", `agenda-setter|${secreto}`).update(String(clave)).digest("hex");
+}
+
 export function ajustesDeEntorno() {
   return {
     claveAdmin: process.env.AGENDA_ADMIN_CLAVE || "",
     claveSetter: process.env.AGENDA_SETTER_CLAVE || "",
+    secreto: process.env.SUPABASE_SERVICE_ROLE || "",
     avisos: process.env.AGENDA_AVISOS_EMAIL || "",
     base: (process.env.AGENDA_URL_BASE || "https://evidran.com").replace(/\/+$/, ""),
   };
@@ -44,6 +51,24 @@ const MENSAJES = {
   cita_no_disponible: "Esta demo ya no está activa.",
   contacto_no_existe: "Ese contacto ya no existe. Recarga la página.",
 };
+
+// Quién entra: Lissette (admin), la clave común antigua de setter
+// (setterId null, ve los contactos sin asignar) o una persona con su clave.
+async function identificar(deps, a, dada) {
+  if (!dada) return null;
+  if (compararTexto(dada, a.claveAdmin)) return { rol: "admin", setterId: null, nombre: "Administración" };
+  if (a.claveSetter && compararTexto(dada, a.claveSetter)) return { rol: "setter", setterId: null, nombre: "Setter" };
+  if (dada.length < 10 || dada.length > 64) return null;
+  const s = await deps.datos.setterPorHash(huellaClave(dada, a.secreto));
+  return s && s.activo ? { rol: "setter", setterId: s.id, nombre: s.nombre } : null;
+}
+
+// Una persona que llama solo toca sus contactos y sus demos.
+function esSuyo(quien, fila) {
+  return quien.rol === "admin" || (fila && (fila.setter_id || null) === quien.setterId);
+}
+
+const NO_ES_TUYO = "Ese contacto no está en tu lista.";
 
 function fallo(res, err, donde) {
   if (err?.codigo && MENSAJES[err.codigo]) return res.status(409).json({ error: MENSAJES[err.codigo], codigo: err.codigo });
@@ -119,38 +144,36 @@ export function crearTrabajo(deps) {
     const ip = ipDe(req);
     if (limitado(ip)) return res.status(429).json({ error: "Demasiadas peticiones. Espera unos minutos." });
 
-    const dada = String(req.headers["x-clave"] || "");
-    let rol = null;
-    if (dada && compararTexto(dada, a.claveAdmin)) rol = "admin";
-    else if (dada && a.claveSetter && compararTexto(dada, a.claveSetter)) rol = "setter";
-    if (!rol) {
-      if (fallosClave(ip)) return res.status(429).json({ error: "Demasiados intentos. Espera unos minutos." });
-      return res.status(401).json({ error: "Clave incorrecta." });
-    }
-
     const body = req.body || {};
     const accion = body.accion;
-    const soloAdmin = ["importar", "borrar_contacto", "guardar_config", "crear_bloqueo", "borrar_bloqueo", "cancelar_cita"];
-    if (soloAdmin.includes(accion) && rol !== "admin") {
-      return res.status(403).json({ error: "Esta acción no está disponible con tu clave." });
-    }
-
     try {
+      const quien = await identificar(deps, a, String(req.headers["x-clave"] || ""));
+      if (!quien) {
+        if (fallosClave(ip)) return res.status(429).json({ error: "Demasiados intentos. Espera unos minutos." });
+        return res.status(401).json({ error: "Clave incorrecta." });
+      }
+      const rol = quien.rol;
+      const soloAdmin = ["importar", "borrar_contacto", "guardar_config", "crear_bloqueo", "borrar_bloqueo", "cancelar_cita",
+        "crear_setter", "editar_setter", "nueva_clave_setter", "asignar", "repartir"];
+      if (soloAdmin.includes(accion) && rol !== "admin") {
+        return res.status(403).json({ error: "Esta acción no está disponible con tu clave." });
+      }
+
       switch (accion) {
         case "entrar":
-          return res.status(200).json({ rol });
+          return res.status(200).json({ rol, nombre: quien.nombre });
         case "estado":
-          return await estado(deps, rol, res);
+          return await estado(deps, quien, res);
         case "huecos": {
           const { huecos } = await calcularHuecos(deps);
           return res.status(200).json({ huecos });
         }
         case "reservar":
-          return await reservar(deps, rol, body, res);
+          return await reservar(deps, quien, body, res);
         case "llamada":
-          return await llamada(deps, rol, body, res);
+          return await llamada(deps, quien, body, res);
         case "editar_contacto":
-          return await editarContacto(deps, rol, body, res);
+          return await editarContacto(deps, quien, body, res);
         case "importar":
           return await importar(deps, body, res);
         case "borrar_contacto":
@@ -166,9 +189,19 @@ export function crearTrabajo(deps) {
           await deps.datos.borrarBloqueo(body.id);
           return res.status(200).json({ ok: true });
         case "editar_cita":
-          return await editarCita(deps, rol, body, res);
+          return await editarCita(deps, quien, body, res);
         case "cancelar_cita":
           return await cancelarCita(deps, body, res);
+        case "crear_setter":
+          return await crearSetter(deps, body, res);
+        case "editar_setter":
+          return await editarSetter(deps, body, res);
+        case "nueva_clave_setter":
+          return await nuevaClaveSetter(deps, body, res);
+        case "asignar":
+          return await asignar(deps, body, res);
+        case "repartir":
+          return await repartir(deps, res);
         default:
           return res.status(400).json({ error: "Acción no reconocida." });
       }
@@ -178,32 +211,48 @@ export function crearTrabajo(deps) {
   };
 }
 
-async function estado(deps, rol, res) {
+async function estado(deps, quien, res) {
+  const rol = quien.rol;
   const ahora = deps.ahora();
   const hace30 = new Date(ahora.getTime() - 30 * 86400000).toISOString();
-  const [config, contactos, llamadas, citas, bloqueos] = await Promise.all([
+  const [config, todosContactos, llamadas, todasCitas, bloqueos, setters] = await Promise.all([
     deps.datos.leerConfig(),
     deps.datos.listarContactos(),
     deps.datos.listarLlamadas(),
     deps.datos.citasRecientes(hace30),
     rol === "admin" ? deps.datos.listarBloqueos(ahora.toISOString()) : Promise.resolve([]),
+    deps.datos.listarSetters(),
   ]);
+  const nombres = new Map(setters.map((x) => [x.id, x.nombre]));
+  const quienLlamo = (l) => (l.rol === "admin" ? "administración" : l.setter_id ? nombres.get(l.setter_id) || "Setter" : "Setter (clave común)");
 
   const porContacto = new Map();
   for (const l of llamadas) {
     if (!l.contacto_id) continue;
     if (!porContacto.has(l.contacto_id)) porContacto.set(l.contacto_id, []);
-    porContacto.get(l.contacto_id).push({ hechaEn: l.hecha_en, resultado: l.resultado, nota: l.nota, rol: l.rol });
+    porContacto.get(l.contacto_id).push({ hechaEn: l.hecha_en, resultado: l.resultado, nota: l.nota, rol: l.rol, quien: quienLlamo(l) });
   }
+
+  // Lo que cuenta: para una persona, solo sus llamadas; para Lissette, todas.
+  const propias = rol === "admin" ? llamadas : llamadas.filter((l) => l.rol === "setter" && (l.setter_id || null) === quien.setterId);
+  const contactos = rol === "admin" ? todosContactos : todosContactos.filter((c) => esSuyo(quien, c));
+  const citas = rol === "admin" ? todasCitas : todasCitas.filter((c) => esSuyo(quien, c));
 
   const hoy = partesMadrid(ahora).fecha;
   const resumen = { llamadasSetter: 0, llamadasSetterHoy: 0, llamadasAdmin: 0, porResultado: {}, porDia: {} };
-  for (const l of llamadas) {
+  const porPersona = new Map();
+  for (const l of propias) {
     if (l.rol === "setter") {
       resumen.llamadasSetter++;
       const dia = partesMadrid(new Date(l.hecha_en)).fecha;
       if (dia === hoy) resumen.llamadasSetterHoy++;
       resumen.porDia[dia] = (resumen.porDia[dia] || 0) + 1;
+      const k = l.setter_id || "comun";
+      if (!porPersona.has(k)) porPersona.set(k, { id: l.setter_id || null, nombre: quienLlamo(l), llamadas: 0, hoy: 0, demos: 0 });
+      const p = porPersona.get(k);
+      p.llamadas++;
+      if (dia === hoy) p.hoy++;
+      if (l.resultado === "demo") p.demos++;
     } else resumen.llamadasAdmin++;
     resumen.porResultado[l.resultado] = (resumen.porResultado[l.resultado] || 0) + 1;
   }
@@ -211,23 +260,30 @@ async function estado(deps, rol, res) {
   resumen.demosProximas = confirmadas.filter((c) => new Date(c.fin) > ahora).length;
   resumen.demosHechas = confirmadas.filter((c) => new Date(c.fin) <= ahora).length;
   resumen.demosCanceladas = citas.length - confirmadas.length;
+  if (rol === "admin") {
+    for (const x of setters) if (!porPersona.has(x.id)) porPersona.set(x.id, { id: x.id, nombre: x.nombre, llamadas: 0, hoy: 0, demos: 0 });
+    resumen.porPersona = [...porPersona.values()].sort((a, b) => b.llamadas - a.llamadas);
+  }
 
   return res.status(200).json({
     rol,
+    yo: { nombre: quien.nombre, setterId: quien.setterId },
     ahora: ahora.toISOString(),
     resultados: RESULTADOS,
     config:
       rol === "admin"
         ? config
         : config && { duracion_min: config.duracion_min, margen_min: config.margen_min },
+    setters: rol === "admin" ? setters : [],
     contactos: contactos.map((c) => ({ ...c, historial: porContacto.get(c.id) || [] })),
-    citas,
+    citas: citas.map((c) => ({ ...c, reservadaPor: c.origen === "admin" ? "administración" : c.origen === "web" ? "la propia persona" : c.setter_id ? nombres.get(c.setter_id) || "Setter" : "Setter (clave común)" })),
     bloqueos,
     resumen,
   });
 }
 
-async function reservar(deps, rol, body, res) {
+async function reservar(deps, quien, body, res) {
+  const rol = quien.rol;
   const nombre = texto(body.nombre, 120);
   const email = typeof body.email === "string" ? body.email.trim() : "";
   if (!nombre || !emailValido(email)) {
@@ -235,6 +291,7 @@ async function reservar(deps, rol, body, res) {
   }
   const contactoId = body.contactoId ? String(body.contactoId) : null;
   if (contactoId && !UUID.test(contactoId)) return res.status(400).json({ error: "Contacto no válido." });
+  if (contactoId && !esSuyo(quien, await deps.datos.contactoPorId(contactoId))) return res.status(403).json({ error: NO_ES_TUYO });
 
   const { config, huecos } = await calcularHuecos(deps);
   const hueco = huecos.find((h) => h.inicio === String(body.inicio || ""));
@@ -258,12 +315,13 @@ async function reservar(deps, rol, body, res) {
     contactoId,
     tokenHash: hashToken(token),
     rol,
+    setterId: quien.setterId,
   });
-  const correo = await notificar(deps, "nueva", cita, { config, token });
+  const correo = await notificar(deps, "nueva", cita, { config, token, quien: rol === "admin" ? "ti" : quien.nombre });
   return res.status(200).json({ ok: true, id: cita.id, correo });
 }
 
-async function llamada(deps, rol, body, res) {
+async function llamada(deps, quien, body, res) {
   const contactoId = String(body.contactoId || "");
   const resultado = String(body.resultado || "");
   if (!UUID.test(contactoId) || !RESULTADOS[resultado] || resultado === "demo") {
@@ -275,13 +333,16 @@ async function llamada(deps, rol, body, res) {
     if (!m) return res.status(400).json({ error: "Fecha para volver a llamar no válida." });
     volverEn = madridAUtc(m[1], m[2]).toISOString();
   }
-  await deps.datos.registrarLlamada(contactoId, resultado, textoLargo(body.nota, 600), volverEn, rol);
+  if (!esSuyo(quien, await deps.datos.contactoPorId(contactoId))) return res.status(403).json({ error: NO_ES_TUYO });
+  await deps.datos.registrarLlamada(contactoId, resultado, textoLargo(body.nota, 600), volverEn, quien.rol, quien.setterId);
   return res.status(200).json({ ok: true });
 }
 
-async function editarContacto(deps, rol, body, res) {
+async function editarContacto(deps, quien, body, res) {
+  const rol = quien.rol;
   const id = String(body.id || "");
   if (!UUID.test(id)) return res.status(400).json({ error: "Contacto no válido." });
+  if (!esSuyo(quien, await deps.datos.contactoPorId(id))) return res.status(403).json({ error: NO_ES_TUYO });
   const c = body.campos || {};
   const campos = {};
   const limites = { persona: 120, cargo: 120, telefono: 40 };
@@ -317,6 +378,18 @@ async function importar(deps, body, res) {
     existentes.add(k);
     nuevos.push(c);
   }
+  // Asignar: "" = sin asignar, un id = a esa persona, "repartir" = entre las activas.
+  const asignarA = String(body.asignar || "");
+  if (asignarA) {
+    const activas = (await deps.datos.listarSetters()).filter((x) => x.activo).map((x) => x.id);
+    if (asignarA === "repartir") {
+      if (!activas.length) return res.status(400).json({ error: "No hay personas activas entre las que repartir." });
+      nuevos.forEach((c, i) => (c.setter_id = activas[i % activas.length]));
+    } else {
+      if (!activas.includes(asignarA)) return res.status(400).json({ error: "Esa persona no existe o está desactivada." });
+      nuevos.forEach((c) => (c.setter_id = asignarA));
+    }
+  } else nuevos.forEach((c) => (c.setter_id = null));
   for (let i = 0; i < nuevos.length; i += 500) await deps.datos.crearContactos(nuevos.slice(i, i + 500));
   return res.status(200).json({
     creados: nuevos.length,
@@ -368,13 +441,14 @@ async function crearBloqueo(deps, body, res) {
 // Corregir los datos de una demo próxima (p. ej. un correo mal escrito).
 // Si cambia el correo, o se pide reenviar, sale de nuevo la invitación con
 // un enlace «cambiar o cancelar» nuevo: el anterior deja de funcionar.
-async function editarCita(deps, rol, body, res) {
+async function editarCita(deps, quien, body, res) {
   const id = String(body.id || "");
   if (!UUID.test(id)) return res.status(400).json({ error: "Cita no válida." });
   const cita = await deps.datos.citaPorId(id);
   if (!cita || cita.estado !== "confirmada" || new Date(cita.fin) <= deps.ahora()) {
     return res.status(409).json({ error: MENSAJES.cita_no_disponible });
   }
+  if (!esSuyo(quien, cita)) return res.status(403).json({ error: "Esa demo no es tuya." });
   const c = body.campos || {};
   const campos = {};
   if ("nombre" in c) {
@@ -405,8 +479,8 @@ async function editarCita(deps, rol, body, res) {
   let correo = null;
   if (reenviar) {
     const config = await deps.datos.leerConfig();
-    const quien = rol === "admin" ? "administración" : "la setter";
-    correo = await notificar(deps, "nueva", { ...cita, ...campos }, { config, token, quien, tipoAviso: "reenvio" });
+    const por = quien.rol === "admin" ? "administración" : quien.nombre;
+    correo = await notificar(deps, "nueva", { ...cita, ...campos }, { config, token, quien: por, tipoAviso: "reenvio" });
   }
   return res.status(200).json({ ok: true, reenviada: reenviar, correo });
 }
@@ -422,6 +496,63 @@ async function cancelarCita(deps, body, res) {
     ? await notificar(deps, "cancelada", cita, { config, porLaPersona: false, quien: "ti" })
     : true;
   return res.status(200).json({ ok: true, correo });
+}
+
+// --- Personas que llaman (solo Lissette) ---
+async function crearSetter(deps, body, res) {
+  const nombre = texto(body.nombre, 80);
+  if (!nombre) return res.status(400).json({ error: "Escribe el nombre de la persona." });
+  const clave = generarClave(12);
+  const fila = await deps.datos.crearSetter({ nombre, clave_hash: huellaClave(clave, deps.ajustes().secreto) });
+  // La clave solo viaja aquí, una vez; en la base queda su huella.
+  return res.status(200).json({ id: fila.id, nombre, clave });
+}
+
+async function editarSetter(deps, body, res) {
+  const id = String(body.id || "");
+  if (!UUID.test(id)) return res.status(400).json({ error: "Persona no válida." });
+  const campos = {};
+  if (typeof body.activo === "boolean") campos.activo = body.activo;
+  if ("nombre" in body) {
+    campos.nombre = texto(body.nombre, 80);
+    if (!campos.nombre) return res.status(400).json({ error: "El nombre no puede quedar vacío." });
+  }
+  if (!Object.keys(campos).length) return res.status(400).json({ error: "No hay cambios." });
+  await deps.datos.editarSetter(id, campos);
+  return res.status(200).json({ ok: true });
+}
+
+async function nuevaClaveSetter(deps, body, res) {
+  const id = String(body.id || "");
+  if (!UUID.test(id)) return res.status(400).json({ error: "Persona no válida." });
+  const clave = generarClave(12);
+  await deps.datos.editarSetter(id, { clave_hash: huellaClave(clave, deps.ajustes().secreto) });
+  return res.status(200).json({ clave });
+}
+
+async function asignar(deps, body, res) {
+  const ids = Array.isArray(body.ids) ? body.ids.map(String).filter((x) => UUID.test(x)) : [];
+  if (!ids.length || ids.length > 5000) return res.status(400).json({ error: "No hay contactos que asignar." });
+  const setterId = body.setterId ? String(body.setterId) : null;
+  if (setterId && !(await deps.datos.listarSetters()).some((x) => x.id === setterId && x.activo)) {
+    return res.status(400).json({ error: "Esa persona no existe o está desactivada." });
+  }
+  await deps.datos.asignarContactos(ids, setterId);
+  return res.status(200).json({ ok: true, asignados: ids.length });
+}
+
+// Reparte entre las personas activas los contactos sin asignar que aún
+// están pendientes (sin llamar o por volver a llamar).
+async function repartir(deps, res) {
+  const activas = (await deps.datos.listarSetters()).filter((x) => x.activo).map((x) => x.id);
+  if (!activas.length) return res.status(400).json({ error: "No hay personas activas entre las que repartir." });
+  const libres = (await deps.datos.listarContactos()).filter(
+    (c) => !c.setter_id && !c.no_llamar && (!c.resultado || ["volver", "no_contesta", "no_esta"].includes(c.resultado))
+  );
+  const grupos = new Map(activas.map((id) => [id, []]));
+  libres.forEach((c, i) => grupos.get(activas[i % activas.length]).push(c.id));
+  for (const [id, lista] of grupos) if (lista.length) await deps.datos.asignarContactos(lista, id);
+  return res.status(200).json({ ok: true, repartidos: libres.length });
 }
 
 // ============================================================

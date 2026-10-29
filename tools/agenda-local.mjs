@@ -26,7 +26,7 @@ const deps = {
   datos,
   correo: { remitente: "app@evidran.com", async enviar(m) { correos.unshift({ ...m, enviadoEn: new Date().toISOString() }); } },
   ahora: () => new Date(),
-  ajustes: () => ({ claveAdmin: "admin-local", claveSetter: "setter-local", avisos: "demo@evidran.com", base: `http://localhost:${PUERTO}` }),
+  ajustes: () => ({ claveAdmin: "admin-local", claveSetter: "setter-local", secreto: "local", avisos: "demo@evidran.com", base: `http://localhost:${PUERTO}` }),
 };
 const trabajo = crearTrabajo(deps);
 const cita = crearCitaPublica(deps);

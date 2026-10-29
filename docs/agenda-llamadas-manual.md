@@ -30,6 +30,26 @@ Ninguna de las dos sale en Google (van marcadas como «no indexar»).
 
 La persona invitada puede cambiar la hora o cancelar desde su correo.
 
+## Varias personas que llaman
+
+Cada persona tiene **su propia clave**, **su lista** y **su recuento**:
+
+1. **Ajustes → Personas que llaman → Crear su clave.** La clave (12
+   caracteres) se ve una sola vez: cópiala y pásala por un canal distinto al
+   del enlace. En la base solo queda su huella.
+2. **Asigna contactos:** al cargar el CSV («Asignar los contactos nuevos a»:
+   una persona o «Repartir entre las personas activas»), con **Repartir los sin
+   asignar**, o uno a uno desde la ficha («Quién la llama»).
+3. Cada persona solo ve **sus contactos, sus demos y sus llamadas**, y no puede
+   tocar los de otra. En tu **Resumen → Por persona** ves las llamadas de cada
+   una (lo que cuenta para su pago), las de hoy y sus demos.
+4. **Desactivar** corta el acceso al momento (lo anotado se queda). **Nueva
+   clave** anula la anterior.
+
+La clave común antigua (`AGENDA_SETTER_CLAVE`) sigue funcionando y ve solo
+los contactos **sin asignar**. Cuando todas las personas tengan su clave,
+puedes borrar esa variable en Vercel para cerrarla.
+
 ## Cómo funciona
 
 1. **Lissette carga los contactos** (pestaña Contactos → Cargar contactos)

@@ -23,6 +23,7 @@ export function crearDatosMemoria(semilla = {}) {
     },
     bloqueos: [],
     contactos: [],
+    setters: [],
     citas: [],
     llamadas: [],
   };
@@ -60,10 +61,11 @@ export function crearDatosMemoria(semilla = {}) {
         id: id(), inicio: a.inicio, fin: a.fin, nombre: a.nombre, empresa: a.empresa, email: a.email,
         telefono: a.telefono, notas: a.notas, origen: a.origen, contacto_id: a.contactoId, estado: "confirmada",
         token_hash: a.tokenHash, secuencia: 0, creada_en: ahoraIso(), cancelada_en: null, cancelada_por: null,
+        setter_id: a.setterId || null,
       };
       db.citas.push(cita);
       if (a.contactoId) {
-        db.llamadas.push({ id: id(), contacto_id: a.contactoId, hecha_en: ahoraIso(), resultado: "demo", nota: null, rol: a.rol });
+        db.llamadas.push({ id: id(), contacto_id: a.contactoId, hecha_en: ahoraIso(), resultado: "demo", nota: null, rol: a.rol, setter_id: a.setterId || null });
         const c = db.contactos.find((x) => x.id === a.contactoId);
         Object.assign(c, { resultado: "demo", intentos: c.intentos + 1, ultima_llamada: ahoraIso(), volver_en: null, cita_id: cita.id });
       }
@@ -93,19 +95,25 @@ export function crearDatosMemoria(semilla = {}) {
         db.contactos.push({
           id: id(), persona: null, cargo: null, telefono: null, email: null, web: null, ciudad: null, origen: null,
           notas: null, resultado: null, intentos: 0, ultima_llamada: null, volver_en: null, no_llamar: false,
-          cita_id: null, creado_en: ahoraIso(), ...f,
+          cita_id: null, creado_en: ahoraIso(), setter_id: null, ...f,
         });
       }
     },
+    async contactoPorId(cid) { const c = db.contactos.find((x) => x.id === cid); return c ? { id: c.id, setter_id: c.setter_id } : null; },
+    async asignarContactos(ids, setterId) { for (const c of db.contactos) if (ids.includes(c.id)) c.setter_id = setterId; },
+    async listarSetters() { return copia(db.setters.map(({ clave_hash, ...x }) => x)); },
+    async setterPorHash(h) { const x = db.setters.find((s) => s.clave_hash === h); return x ? { id: x.id, nombre: x.nombre, activo: x.activo } : null; },
+    async crearSetter(f) { const x = { id: id(), activo: true, creado_en: ahoraIso(), ...f }; db.setters.push(x); return { id: x.id, nombre: x.nombre }; },
+    async editarSetter(sid, campos) { Object.assign(db.setters.find((x) => x.id === sid) || {}, campos); },
     async editarContacto(cid, campos) { Object.assign(db.contactos.find((c) => c.id === cid) || {}, campos); },
     async borrarContacto(cid) {
       for (const l of db.llamadas) if (l.contacto_id === cid) Object.assign(l, { nota: null, contacto_id: null });
       db.contactos = db.contactos.filter((c) => c.id !== cid);
     },
-    async registrarLlamada(cid, resultado, nota, volverEn, rol) {
+    async registrarLlamada(cid, resultado, nota, volverEn, rol, setterId = null) {
       const c = db.contactos.find((x) => x.id === cid);
       if (!c) throw error("contacto_no_existe");
-      db.llamadas.push({ id: id(), contacto_id: cid, hecha_en: ahoraIso(), resultado, nota, rol });
+      db.llamadas.push({ id: id(), contacto_id: cid, hecha_en: ahoraIso(), resultado, nota, rol, setter_id: setterId });
       Object.assign(c, {
         resultado, intentos: c.intentos + 1, ultima_llamada: ahoraIso(),
         volver_en: resultado === "volver" ? volverEn : null, no_llamar: c.no_llamar || resultado === "no_llamar",

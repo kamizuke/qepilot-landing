@@ -291,3 +291,97 @@ alter table public.seg_contacto add constraint seg_contacto_resultado_check chec
 alter table public.seg_llamada drop constraint if exists seg_llamada_resultado_check;
 alter table public.seg_llamada add constraint seg_llamada_resultado_check check (resultado in
   ('demo','volver','info','no_contesta','no_esta','no_interesa','herramienta_propia','no_encaja','no_llamar','erroneo'));
+
+-- 14) (29 oct) Varias personas que llaman, cada una con su clave, su
+--     lista y su recuento. Las claves las genera el panel (aleatorias) y
+--     aquí solo se guarda su huella (HMAC-SHA256). La clave única antigua
+--     (AGENDA_SETTER_CLAVE) sigue funcionando y ve los contactos sin asignar.
+create table if not exists public.seg_setter (
+  id         uuid primary key default gen_random_uuid(),
+  nombre     text not null,
+  clave_hash text not null unique,
+  activo     boolean not null default true,
+  creado_en  timestamptz not null default now()
+);
+alter table public.seg_setter enable row level security;
+revoke all on public.seg_setter from anon, authenticated;
+
+alter table public.seg_contacto add column if not exists setter_id uuid references public.seg_setter(id) on delete set null;
+alter table public.seg_llamada  add column if not exists setter_id uuid references public.seg_setter(id) on delete set null;
+alter table public.agenda_cita  add column if not exists setter_id uuid references public.seg_setter(id) on delete set null;
+create index if not exists seg_contacto_setter_idx on public.seg_contacto (setter_id);
+create index if not exists seg_llamada_setter_idx on public.seg_llamada (setter_id);
+
+-- Las dos funciones ganan el parámetro p_setter (con valor por defecto,
+-- así la versión anterior de la web sigue funcionando hasta el despliegue).
+drop function if exists public.agenda_reservar(timestamptz, timestamptz, int, text, text, text, text, text, text, uuid, text, text);
+create or replace function public.agenda_reservar(
+  p_inicio     timestamptz,
+  p_fin        timestamptz,
+  p_margen_min int,
+  p_nombre     text,
+  p_empresa    text,
+  p_email      text,
+  p_telefono   text,
+  p_notas      text,
+  p_origen     text,
+  p_contacto   uuid,
+  p_token_hash text,
+  p_rol        text,
+  p_setter     uuid default null
+) returns uuid
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  v_choque text;
+  v_id uuid;
+begin
+  perform pg_advisory_xact_lock(hashtext('agenda_cita'));
+  v_choque := public.agenda_choque(p_inicio, p_fin, p_margen_min, null);
+  if v_choque is not null then
+    raise exception '%', v_choque using errcode = 'P0001';
+  end if;
+  insert into public.agenda_cita
+    (inicio, fin, nombre, empresa, email, telefono, notas, origen, contacto_id, token_hash, setter_id)
+  values
+    (p_inicio, p_fin, p_nombre, p_empresa, p_email, p_telefono, p_notas, p_origen, p_contacto, p_token_hash, p_setter)
+  returning id into v_id;
+  if p_contacto is not null then
+    insert into public.seg_llamada (contacto_id, resultado, rol, setter_id)
+    values (p_contacto, 'demo', p_rol, p_setter);
+    update public.seg_contacto
+       set resultado = 'demo', intentos = intentos + 1, ultima_llamada = now(),
+           volver_en = null, cita_id = v_id
+     where id = p_contacto;
+  end if;
+  return v_id;
+end $$;
+
+drop function if exists public.seg_registrar_llamada(uuid, text, text, timestamptz, text);
+create or replace function public.seg_registrar_llamada(
+  p_contacto uuid, p_resultado text, p_nota text, p_volver_en timestamptz, p_rol text,
+  p_setter uuid default null
+) returns void
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+begin
+  if not exists (select 1 from public.seg_contacto where id = p_contacto) then
+    raise exception 'contacto_no_existe' using errcode = 'P0001';
+  end if;
+  insert into public.seg_llamada (contacto_id, resultado, nota, rol, setter_id)
+  values (p_contacto, p_resultado, nullif(btrim(p_nota), ''), p_rol, p_setter);
+  update public.seg_contacto
+     set resultado = p_resultado,
+         intentos = intentos + 1,
+         ultima_llamada = now(),
+         volver_en = case when p_resultado = 'volver' then p_volver_en else null end,
+         no_llamar = no_llamar or p_resultado = 'no_llamar'
+   where id = p_contacto;
+end $$;
+
+revoke all on function public.agenda_reservar(timestamptz, timestamptz, int, text, text, text, text, text, text, uuid, text, text, uuid) from public, anon, authenticated;
+revoke all on function public.seg_registrar_llamada(uuid, text, text, timestamptz, text, uuid) from public, anon, authenticated;

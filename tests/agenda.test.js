@@ -129,7 +129,7 @@ function montar(ahoraIso = "2026-11-01T19:00:00Z") {
     datos,
     correo: { remitente: "app@evidran.com", async enviar(m) { enviados.push(m); } },
     ahora: () => new Date(ahoraIso),
-    ajustes: () => ({ claveAdmin: "clave-admin", claveSetter: "clave-setter", avisos: "demo@evidran.com", base: "https://evidran.com" }),
+    ajustes: () => ({ claveAdmin: "clave-admin", claveSetter: "clave-setter", secreto: "pruebas", avisos: "demo@evidran.com", base: "https://evidran.com" }),
   };
   const trabajo = crearTrabajo(deps);
   const cita = crearCitaPublica(deps);
@@ -145,6 +145,7 @@ function montar(ahoraIso = "2026-11-01T19:00:00Z") {
     admin: (body) => llamar(trabajo, "clave-admin", body),
     setter: (body) => llamar(trabajo, "clave-setter", body),
     sinClave: (body) => llamar(trabajo, "mala", body),
+    con: (clave, body) => llamar(trabajo, clave, body),
     publica: (body) => llamar(cita, "", body),
   };
 }
@@ -281,4 +282,64 @@ test("«Ya tienen o desarrollan la suya» se anota y saca al contacto de la cola
   const est = (await t.admin({ accion: "estado" })).body;
   assert.equal(est.resultados.herramienta_propia, "Ya tienen o desarrollan la suya");
   assert.equal(est.resumen.porResultado.herramienta_propia, 1);
+});
+
+test("varias personas: cada una con su clave, su lista, sus demos y su recuento", async () => {
+  const t = montar();
+  const marta = (await t.admin({ accion: "crear_setter", nombre: "Marta" })).body;
+  const luis = (await t.admin({ accion: "crear_setter", nombre: "Luis" })).body;
+  assert.equal(marta.clave.length, 12);
+  assert.equal(t.datos._db.setters[0].clave_hash.includes(marta.clave), false);
+  assert.equal((await t.setter({ accion: "crear_setter", nombre: "X" })).statusCode, 403);
+
+  const imp = await t.admin({ accion: "importar", asignar: "repartir", csv: "Empresa,Teléfono\nA SL,986000001\nB SL,986000002\nC SL,986000003\nD SL,986000004\n" });
+  assert.equal(imp.body.creados, 4);
+
+  const em = (await t.con(marta.clave, { accion: "estado" })).body;
+  assert.equal(em.rol, "setter");
+  assert.equal(em.yo.nombre, "Marta");
+  assert.equal(em.contactos.length, 2);
+  assert.equal(em.setters.length, 0);
+  const deLuis = t.datos._db.contactos.find((c) => c.setter_id === luis.id);
+  const deMarta = em.contactos[0];
+
+  // No puede tocar lo de Luis.
+  assert.equal((await t.con(marta.clave, { accion: "llamada", contactoId: deLuis.id, resultado: "no_contesta" })).statusCode, 403);
+  assert.equal((await t.con(marta.clave, { accion: "editar_contacto", id: deLuis.id, campos: { persona: "X" } })).statusCode, 403);
+
+  // Llama y agenda con lo suyo.
+  assert.equal((await t.con(marta.clave, { accion: "llamada", contactoId: deMarta.id, resultado: "no_contesta" })).statusCode, 200);
+  const { huecos } = (await t.con(marta.clave, { accion: "huecos" })).body;
+  const r = await t.con(marta.clave, { accion: "reservar", inicio: huecos[0].inicio, nombre: "Ana", email: "ana@a.es", contactoId: em.contactos[1].id });
+  assert.equal(r.statusCode, 200);
+  assert.equal(t.datos._db.citas[0].setter_id, marta.id);
+  assert.equal((await t.con(luis.clave, { accion: "reservar", inicio: huecos[2].inicio, nombre: "Eva", email: "e@e.es", contactoId: deMarta.id })).statusCode, 403);
+
+  // Recuentos separados.
+  const otraVez = (await t.con(marta.clave, { accion: "estado" })).body;
+  assert.equal(otraVez.resumen.llamadasSetter, 2);
+  assert.equal(otraVez.citas[0].reservadaPor, "Marta");
+  const el = (await t.con(luis.clave, { accion: "estado" })).body;
+  assert.equal(el.resumen.llamadasSetter, 0);
+  assert.equal(el.citas.length, 0);
+  assert.equal((await t.con(luis.clave, { accion: "editar_cita", id: r.body.id, campos: { notas: "x" } })).statusCode, 403);
+  const adm = (await t.admin({ accion: "estado" })).body;
+  assert.deepEqual(adm.resumen.porPersona.map((p) => [p.nombre, p.llamadas, p.demos]), [["Marta", 2, 1], ["Luis", 0, 0]]);
+  assert.equal(adm.contactos.find((c) => c.id === deMarta.id).historial[0].quien, "Marta");
+
+  // La clave común antigua solo ve los contactos sin asignar.
+  assert.equal((await t.setter({ accion: "estado" })).body.contactos.length, 0);
+
+  // Reasignar, repartir, desactivar y cambiar la clave.
+  assert.equal((await t.admin({ accion: "asignar", ids: [deLuis.id], setterId: marta.id })).statusCode, 200);
+  assert.equal((await t.con(marta.clave, { accion: "estado" })).body.contactos.length, 3);
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nE SL,986000005\nF SL,986000006\n" });
+  assert.equal((await t.admin({ accion: "repartir" })).body.repartidos, 2);
+  assert.equal(t.datos._db.contactos.filter((c) => !c.setter_id).length, 0);
+  await t.admin({ accion: "editar_setter", id: luis.id, activo: false });
+  assert.equal((await t.con(luis.clave, { accion: "entrar" })).statusCode, 401);
+  await t.admin({ accion: "editar_setter", id: luis.id, activo: true });
+  const nueva = (await t.admin({ accion: "nueva_clave_setter", id: luis.id })).body.clave;
+  assert.equal((await t.con(luis.clave, { accion: "entrar" })).statusCode, 401);
+  assert.equal((await t.con(nueva, { accion: "entrar" })).body.nombre, "Luis");
 });
