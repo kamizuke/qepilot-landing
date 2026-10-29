@@ -106,6 +106,23 @@
   .horas button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
   .lista-huecos { max-height: 260px; overflow-y: auto; padding-right: 4px; }
 
+  /* Guion */
+  .guion-indice { display: flex; flex-wrap: wrap; gap: 6px; }
+  .guion-indice a { font-size: 13px; font-weight: 700; color: var(--ink); text-decoration: none; background: #fff; border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+  .guion details.tarjeta { margin-top: 14px; }
+  .guion details.tarjeta > summary { font-size: 17px; font-weight: 800; letter-spacing: -.01em; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  .guion details.tarjeta > summary::-webkit-details-marker { display: none; }
+  .guion details.tarjeta > summary::after { content: "+"; font-size: 22px; color: var(--ink-soft); font-weight: 600; }
+  .guion details.tarjeta[open] > summary::after { content: "–"; }
+  .guion p, .guion li { font-size: 15px; line-height: 1.55; margin-top: 8px; }
+  .guion ul, .guion ol { padding-left: 20px; }
+  .guion h4 { font-size: 15px; font-weight: 800; margin-top: 16px; }
+  .frase { background: var(--cream); border-radius: 12px; padding: 10px 14px; margin-top: 8px; font-size: 15.5px; line-height: 1.5; }
+  .objecion { padding: 10px 0; border-top: 1px solid var(--cream-d); }
+  .objecion:first-child { border-top: 0; }
+  .objecion b { display: block; font-size: 14.5px; }
+  .objecion span { display: block; font-size: 14.5px; color: var(--ink); margin-top: 3px; }
+
   /* Ajustes de horario */
   .dia-horario { display: grid; grid-template-columns: 120px 1fr; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--cream-d); }
   .dia-horario:first-child { border-top: 0; }
@@ -151,6 +168,150 @@
         <p class="suave peq">Primero, quien pidió que le llamaras hoy. Después, los que aún no se han llamado y, al final, los que no contestaron otro día. Cada contacto tiene hasta 3 intentos.</p>
         <div id="cola"></div>
       </div>
+    </section>
+
+    <!-- Guion -->
+    <section id="v-guion" class="vista oculto guion">
+      <div class="tarjeta bloque">
+        <h2>Guion de llamada</h2>
+        <p class="suave">Tu objetivo es uno: que la persona que lleva la calidad en la empresa acepte una videollamada de 30 minutos con Lissette. No vendes nada: buscamos empresas que prueben Evidran gratis durante 30 días, sin tarjeta. Tú consigues la cita y en la demo se les deja la prueba montada. Es una guía: dilo con tus palabras.</p>
+        <div class="guion-indice bloque">
+          <a href="#g-pasos">Guion en 6 pasos</a><a href="#g-pegas">Si te dicen…</a><a href="#g-centralita">Centralita y buzón</a><a href="#g-demo">Cuando hay demo</a><a href="#g-resultados">Resultados</a><a href="#g-evidran">Qué es Evidran</a><a href="#g-quien">A quién llamas</a><a href="#g-no">Lo que no se dice</a><a href="#g-reglas">Reglas</a>
+        </div>
+      </div>
+
+      <details class="tarjeta" id="g-pasos" open>
+        <summary>El guion en 6 pasos</summary>
+        <p>La llamada dura 2 o 3 minutos. Si la persona te habla de usted, háblale de usted.</p>
+        <h4>1. Saludo y permiso (10 segundos)</h4>
+        <div class="frase">«Hola, [nombre], soy [tu nombre], te llamo de Evidran. Es una llamada corta, ¿te pillo en buen momento o te llamo en otro rato?»</div>
+        <p>Si dice que no es buen momento, pide día y hora concretos y cuelga. No insistas.</p>
+        <h4>2. El motivo (20 segundos)</h4>
+        <p>Elige UNA de estas tres entradas según la empresa:</p>
+        <ul>
+          <li><b>General:</b> «Te llamo porque llevas la calidad de [empresa]. Lissette, que fue responsable de sistemas de gestión durante 20 años, ha creado un programa para que documentar una no conformidad sea contarla, en vez de pelearse con plantillas de Word.»</li>
+          <li><b>Nueva norma:</b> «Con la ISO 9001:2026 recién publicada, muchas empresas están viendo qué les toca cambiar. Evidran te dice qué requisitos nuevos ya cubres con tus datos y cuáles no.»</li>
+          <li><b>Automoción (si fabrican para coches):</b> «Si os llegan reclamaciones de cliente y tenéis que responder con un 8D, Evidran te va preguntando y redacta el informe contigo.»</li>
+        </ul>
+        <h4>3. Una pregunta para que hable (lo más importante)</h4>
+        <div class="frase">«Por curiosidad, ¿cómo registráis hoy las no conformidades? ¿Word, Excel, algún programa?»</div>
+        <p>Calla y escucha. Apunta lo que diga. Si te da pie, añade una más: «¿Lo llevas tú solo o sois varios?» o «¿Cuándo tenéis la próxima auditoría?»</p>
+        <h4>4. Conecta con lo que te ha contado</h4>
+        <ul>
+          <li>Si usa Word o Excel: «Justo para eso está. En vez de rellenar, lo cuentas y el informe se escribe.»</li>
+          <li>Si lo lleva solo: «Está pensado para una persona con poco tiempo, no para un departamento grande.»</li>
+          <li>Si tiene auditoría pronto: «Te avisa de lo que vence y te dice qué te falta antes de que venga el auditor.»</li>
+          <li>Si ya tiene un programa: mira «Si te dicen…».</li>
+        </ul>
+        <h4>5. Pide la cita (concreta, nunca «ya me dirás»)</h4>
+        <div class="frase">«Estamos buscando unas pocas empresas que lo prueben gratis durante 30 días, sin tarjeta y sin compromiso. Lissette te lo deja montado en una videollamada de 30 minutos, con un caso real tuyo. ¿Te va mejor el [día] a las [hora] o el [día] a las [hora]?»</div>
+        <p>Ofrece siempre dos huecos concretos de la agenda. Si ninguno le va: «¿Qué día de la semana que viene te encaja mejor?»</p>
+        <h4>6. Confirma y cierra</h4>
+        <div class="frase">«Perfecto. ¿A qué correo te mando la invitación? ¿Quieres que se conecte alguien más, por ejemplo gerencia o vuestro consultor?»</div>
+        <p>Repite día, hora y correo antes de colgar. Da las gracias.</p>
+      </details>
+
+      <details class="tarjeta" id="g-pegas" open>
+        <summary>Si te dicen…</summary>
+        <p>Responde una vez, con calma, y vuelve a proponer la cita. Si repite que no, agradece y cuelga.</p>
+        <div id="guion-objeciones"></div>
+      </details>
+
+      <details class="tarjeta" id="g-centralita">
+        <summary>Centralita y buzón de voz</summary>
+        <p><b>Si tienes el nombre:</b></p>
+        <div class="frase">«Hola, buenos días. ¿Me pasas con [nombre], de calidad, por favor?»</div>
+        <p>Si preguntan el motivo: «Es sobre el sistema de calidad, la ISO 9001. Llamo de Evidran.»</p>
+        <p><b>Si no tienes el nombre o la persona ya no está:</b></p>
+        <div class="frase">«¿Quién lleva la calidad o la ISO en la empresa?»</div>
+        <p>Apunta el nombre que te den (en la ficha, «Corregir datos»). Si no te pasan, pregunta a qué hora es más fácil encontrarle.</p>
+        <p><b>Buzón de voz:</b> en el primer y el segundo intento, cuelga sin dejar mensaje. En el tercero, deja uno corto:</p>
+        <div class="frase">«Hola, [nombre], soy [tu nombre], de Evidran. Te llamaba por cómo lleváis las no conformidades de la ISO. Si te interesa ver una demo de 30 minutos, puedes llamarme al [tu teléfono]. Gracias.»</div>
+      </details>
+
+      <details class="tarjeta" id="g-demo">
+        <summary>Cuando consigues la demo</summary>
+        <ol>
+          <li>Sin colgar, pulsa <b>Demo agendada</b> en la ficha del contacto.</li>
+          <li>Elige uno de los huecos libres y escribe su correo. Repíteselo letra a letra.</li>
+          <li>En «Notas para la demo» escribe lo que sepas: qué normas llevan, cómo registran hoy las no conformidades, qué le preocupa (con sus palabras) y quién más se conecta.</li>
+          <li>Pulsa <b>Reservar demo</b>. La invitación le llega al momento, con el enlace de la videollamada.</li>
+        </ol>
+        <p>¿Te has equivocado en el correo o te dice que no le ha llegado? En la pestaña <b>Agenda</b>, en esa demo: <b>Corregir datos</b> o <b>Reenviar invitación</b>.</p>
+      </details>
+
+      <details class="tarjeta" id="g-resultados">
+        <summary>Cómo anotar cada llamada</summary>
+        <p>Cada intento cuenta como una llamada, conteste o no. En la ficha de cada contacto escribe la nota y pulsa uno de estos resultados:</p>
+        <div id="guion-resultados"></div>
+        <p>En la nota escribe en una línea lo que te haya contado, sobre todo el programa que usan, la consultora y la fecha de su próxima auditoría. Es lo más útil para preparar la demo.</p>
+      </details>
+
+      <details class="tarjeta" id="g-evidran">
+        <summary>Qué es Evidran en 30 segundos</summary>
+        <p>Evidran es un programa para la persona que lleva la calidad (la ISO 9001 y, a menudo, medioambiente y prevención). Cuando algo sale mal en la empresa, hay que documentarlo en un informe de «no conformidad» para la auditoría. Hoy casi todos lo hacen en Word o Excel, a mano.</p>
+        <p>Con Evidran la persona cuenta qué ha pasado, con sus palabras. El programa le hace las preguntas que haría un experto y redacta el informe formal. Además le avisa de lo que vence y le enseña qué problemas se repiten.</p>
+        <p>Lo ha creado Lissette, que fue responsable de sistemas de gestión durante 20 años. Ella hace las demos.</p>
+        <h4>Palabras que vas a oír</h4>
+        <ul>
+          <li><b>No conformidad (NC):</b> algo que no cumple lo previsto (un fallo, una queja de cliente, un hallazgo de auditoría).</li>
+          <li><b>Auditoría:</b> la revisión anual de la certificadora para mantener el certificado ISO.</li>
+          <li><b>Causa raíz:</b> el porqué de fondo de un problema.</li>
+          <li><b>ISO 9001:2026:</b> la nueva edición de la norma, publicada en septiembre de 2026. Las empresas certificadas tendrán que adaptarse.</li>
+        </ul>
+      </details>
+
+      <details class="tarjeta" id="g-quien">
+        <summary>A quién llamas</summary>
+        <p>En la pestaña <b>Llamar</b> tienes empresas pequeñas y medianas (entre 20 y 200 empleados, sobre todo fabricación e industria) que tienen o preparan la ISO 9001. En muchas, una sola persona lleva toda la calidad. Esa es la persona que buscas. Por orden de preferencia, pide por:</p>
+        <ol>
+          <li>Responsable de calidad o de sistemas de gestión (a veces «QHSE» o «calidad y medioambiente»).</li>
+          <li>Técnico de calidad, si no hay responsable.</li>
+          <li>Gerente o director general, en empresas de menos de 50 personas. Allí suele decidir él.</li>
+        </ol>
+        <p>Llama siempre al teléfono de la empresa (centralita o el que aparece en su web), nunca a un móvil personal. Cada contacto tiene hasta <b>3 intentos</b>, en días y horas distintos. Suele funcionar mejor entre las 9:30 y las 12:30. Evita el lunes a primera hora y el viernes por la tarde.</p>
+      </details>
+
+      <details class="tarjeta" id="g-no">
+        <summary>Lo que no se dice</summary>
+        <ul>
+          <li><b>Ningún precio concreto.</b> Solo «la prueba es gratis 30 días; después es un precio anual por empresa». Las cifras se dan en la demo.</li>
+          <li><b>Ninguna promesa</b> del tipo «el auditor te lo aceptará», «ahorras un 50 %» o «ya lo usan muchas empresas».</li>
+          <li><b>Nada que no sepas.</b> Si te preguntan algo técnico: «Buena pregunta, eso te lo responde Lissette en la demo». Y apúntalo en la nota.</li>
+          <li><b>Nada de «inteligencia artificial mágica».</b> Evidran pregunta y redacta; el criterio es de la persona.</li>
+          <li><b>No critiques</b> a otros programas ni a su consultora.</li>
+        </ul>
+      </details>
+
+      <details class="tarjeta" id="g-reglas">
+        <summary>Reglas del encargo</summary>
+        <h4>Cómo llamas</h4>
+        <ul>
+          <li>Llamas tú, en persona y en directo. Nada de bots, voces de IA, mensajes grabados ni marcadores automáticos.</li>
+          <li>Siempre con el número visible, nunca oculto. Mejor siempre el mismo, para que puedan devolver la llamada.</li>
+          <li>Te presentas con tu nombre y dices que llamas de parte de Evidran. No te haces pasar por nadie de la empresa.</li>
+          <li>No inventas nada para abrir puertas: ni «me han pasado tu contacto», ni «ya hablamos», ni «es urgente».</li>
+          <li>Solo llamas a los contactos de esta lista, al teléfono de la empresa, de lunes a viernes entre las 9:30 y las 13:30 o entre las 16:00 y las 18:00.</li>
+          <li>No grabas las llamadas.</li>
+        </ul>
+        <h4>Qué puedes ofrecer y qué no</h4>
+        <ul>
+          <li>Solo la videollamada de demo y la prueba gratis de 30 días.</li>
+          <li>Ni precios, ni descuentos, ni condiciones especiales, ni plazos de entrega.</li>
+          <li>Tú solo llamas. Los correos, mensajes de LinkedIn o WhatsApp a los contactos no los envías tú.</li>
+        </ul>
+        <h4>Los datos de la lista</h4>
+        <ul>
+          <li>La lista es confidencial. Solo la usas para este encargo: no la copias, no la exportas, no haces capturas y no la usas para otros trabajos.</li>
+          <li>Si alguien pide que no le llamemos, se respeta siempre y se marca como <b>No llamar</b>.</li>
+          <li>Al terminar el encargo, tu clave deja de funcionar.</li>
+        </ul>
+        <h4>Cómo se cuenta</h4>
+        <ul>
+          <li>Cuenta cada intento anotado aquí, conteste o no. Lo que no está anotado no cuenta. Lo ves en la pestaña <b>Resumen</b>.</li>
+          <li>A las 20 primeras llamadas se revisan las notas y se ajusta el guion.</li>
+        </ul>
+      </details>
     </section>
 
     <!-- Contactos -->
@@ -388,7 +549,7 @@
 
   // ---------- Pestañas ----------
   function pintarPestanas() {
-    var lista = [["llamar", "Llamar"], ["contactos", "Contactos"], ["agenda", "Agenda"], ["resumen", "Resumen"]];
+    var lista = [["llamar", "Llamar"], ["guion", "Guion"], ["contactos", "Contactos"], ["agenda", "Agenda"], ["resumen", "Resumen"]];
     if (S.rol === "admin") lista.push(["ajustes", "Ajustes"]);
     var nav = vaciar($("pestanas"));
     lista.forEach(function (p) {
@@ -503,6 +664,7 @@
         web ? h("span", null, (c.ciudad || c.email ? " · " : ""), h("a", { href: web, target: "_blank", rel: "noopener" }, c.web)) : null),
       c.origen ? h("div", { class: "peq", style: "margin-top:6px" }, "Por qué encaja: ", c.origen) : null,
       c.notas ? h("div", { class: "cita" }, h("div", { class: "notas" }, c.notas)) : null,
+      chuleta(c),
       h("h3", null, "Esta llamada"),
       nota,
       botones,
@@ -621,6 +783,61 @@
       if (/ocupado|bloqueado/.test(e.message)) api({ accion: "huecos" }).then(function (j) { S.reserva.inicio = null; pintarHuecos(j.huecos); });
     });
   });
+
+  // ---------- Guion ----------
+  var OBJECIONES = [
+    ["«No tengo tiempo.»", "«Por eso te lo propongo corto: 30 minutos. Y si a los diez ves que no te encaja, lo dejamos ahí.»"],
+    ["«Mándame información por correo.»", "«Claro, ¿a qué correo? Y para que no se quede en un PDF más, ¿te dejo reservados 30 minutos el [día]? Si al leerlo no te interesa, lo cancelas.»"],
+    ["«Ya tenemos un programa.»", "«¿Cuál usáis? (apúntalo). Muchos sirven para archivar. Evidran te entrevista al registrar cada no conformidad y no acepta “error humano” como causa. Merece la pena compararlo en 30 minutos.» Si no hay forma, pulsa «Ya tienen o desarrollan la suya»."],
+    ["«Lo estamos desarrollando nosotros.»", "«Tiene mérito. ¿Qué parte os está costando más? En 30 minutos ves cómo lo resuelve Evidran y te sirve para comparar con lo vuestro, sin compromiso.» Si no hay forma, pulsa «Ya tienen o desarrollan la suya»."],
+    ["«Con Excel nos va bien.»", "«Lo entiendo. Excel no te avisa cuando una acción se pasa de plazo ni te dice qué problemas se repiten. Eso es lo que verías en la demo.»"],
+    ["«Ya uso ChatGPT para redactar.»", "«Ayuda a redactar, pero el informe se queda en un chat suelto. En Evidran cada no conformidad queda registrada, con responsable, plazo y aviso cuando vence.»"],
+    ["«Nos lo lleva una consultora.»", "«Perfecto, la demo también le sirve a tu consultor. ¿Le invitamos? ¿Cómo se llama la consultora?» (Apúntalo siempre.)"],
+    ["«¿Cuánto cuesta?»", "«Ahora mismo nada: es una prueba gratis de 30 días, sin tarjeta. Si después quieres seguir, en la demo te explican el precio: es anual por empresa, no por usuario.»"],
+    ["«¿Esto es inteligencia artificial? No me fío.»", "«La herramienta no decide por ti. Te pregunta y redacta a partir de lo que tú cuentas. El criterio sigue siendo tuyo.»"],
+    ["«Esto no lo decido yo.»", "«¿Quién lo decide? ¿Os encaja conectaros los dos a la demo?»"],
+    ["«Llámame en otro momento.»", "«Claro. ¿Qué día y a qué hora te viene bien?» (Pulsa «Volver a llamar» y pon ese día.)"],
+    ["«No me interesa.»", "«Entendido. Una sola pregunta antes de colgar: ¿cómo registráis hoy las no conformidades?» Si repite que no, agradece y cuelga."],
+    ["«No me llaméis más.»", "«Entendido, no te volveremos a llamar. Gracias.» Márcalo como «No llamar»: es obligatorio respetarlo."],
+  ];
+  var CUANDO = {
+    demo: "Ha aceptado día y hora (se anota sola al reservar).",
+    volver: "Te ha pedido otro momento. Pon día y hora.",
+    info: "Solo quiere información. Apunta su correo en «Corregir datos».",
+    no_contesta: "Nadie coge el teléfono o salta el buzón.",
+    no_esta: "Ya no trabaja allí o no te pasan. Apunta quién la sustituye.",
+    no_interesa: "Ha dicho que no tras tu respuesta. Apunta el motivo.",
+    herramienta_propia: "Ya usan un programa de calidad o lo están desarrollando ellos. Apunta cuál, si lo dice.",
+    no_encaja: "No tienen ISO ni piensan tenerla, o la empresa no es lo que parecía.",
+    no_llamar: "Ha pedido que no le llamemos. No se vuelve a contactar.",
+    erroneo: "El número no existe o no es de la empresa.",
+  };
+  var NOMBRES_RESULTADO = { demo: "Demo agendada", volver: "Volver a llamar", info: "Info por correo", no_contesta: "No contesta", no_esta: "No está la persona", no_interesa: "No interesa", herramienta_propia: "Ya tienen o desarrollan la suya", no_encaja: "No encaja", no_llamar: "No llamar", erroneo: "Teléfono erróneo" };
+
+  function listaObjeciones() {
+    return OBJECIONES.map(function (o) { return h("div", { class: "objecion" }, h("b", null, o[0]), h("span", null, o[1])); });
+  }
+  (function pintarGuion() {
+    anadir($("guion-objeciones"), listaObjeciones());
+    anadir($("guion-resultados"), Object.keys(CUANDO).map(function (k) {
+      return h("div", { class: "objecion" }, h("b", null, NOMBRES_RESULTADO[k]), h("span", null, CUANDO[k]));
+    }));
+    document.querySelectorAll(".guion-indice a").forEach(function (a) {
+      a.addEventListener("click", function () { var d = document.querySelector(a.getAttribute("href")); if (d) d.open = true; });
+    });
+  })();
+
+  // Chuleta dentro de la ficha, con el nombre y la empresa de esa llamada.
+  function chuleta(c) {
+    var nombre = c.persona ? c.persona.split(" ")[0] : "[nombre]";
+    return h("details", null, h("summary", null, "Guion para esta llamada"),
+      h("div", { class: "guion" },
+        h("h4", null, "1. Saludo"), h("div", { class: "frase" }, "«Hola, " + nombre + ", soy [tu nombre], te llamo de Evidran. Es una llamada corta, ¿te pillo en buen momento o te llamo en otro rato?»"),
+        h("h4", null, "2. Motivo"), h("div", { class: "frase" }, "«Te llamo porque llevas la calidad de " + c.empresa.replace(/\.$/, "") + ". Lissette, que fue responsable de sistemas de gestión durante 20 años, ha creado un programa para que documentar una no conformidad sea contarla, en vez de pelearse con plantillas de Word.»"),
+        h("h4", null, "3. Pregunta (y escucha)"), h("div", { class: "frase" }, "«Por curiosidad, ¿cómo registráis hoy las no conformidades? ¿Word, Excel, algún programa?»"),
+        h("h4", null, "5. Pide la cita"), h("div", { class: "frase" }, "«Estamos buscando unas pocas empresas que lo prueben gratis durante 30 días, sin tarjeta y sin compromiso. Lissette te lo deja montado en una videollamada de 30 minutos. ¿Te va mejor el [día] a las [hora] o el [día] a las [hora]?»"),
+        h("h4", null, "Si te dicen…"), listaObjeciones()));
+  }
 
   // ---------- Contactos ----------
   function pintarContactos() {

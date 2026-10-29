@@ -54,7 +54,7 @@ create table if not exists public.seg_contacto (
   notas          text,                 -- lo que se va sabiendo de la empresa
   resultado      text check (resultado in
                    ('demo','volver','info','no_contesta','no_esta',
-                    'no_interesa','no_encaja','no_llamar','erroneo')),
+                    'no_interesa','herramienta_propia','no_encaja','no_llamar','erroneo')),
   intentos       int not null default 0,
   ultima_llamada timestamptz,
   volver_en      timestamptz,          -- solo con resultado «volver»
@@ -96,7 +96,7 @@ create table if not exists public.seg_llamada (
   hecha_en    timestamptz not null default now(),
   resultado   text not null check (resultado in
                 ('demo','volver','info','no_contesta','no_esta',
-                 'no_interesa','no_encaja','no_llamar','erroneo')),
+                 'no_interesa','herramienta_propia','no_encaja','no_llamar','erroneo')),
   nota        text,
   rol         text not null check (rol in ('setter','admin'))
 );
@@ -282,3 +282,12 @@ revoke all on function public.agenda_mover(uuid, timestamptz, timestamptz, int) 
 revoke all on function public.agenda_cancelar(uuid, text) from public, anon, authenticated;
 revoke all on function public.seg_registrar_llamada(uuid, text, text, timestamptz, text) from public, anon, authenticated;
 revoke all on function public.seg_borrar_contacto(uuid) from public, anon, authenticated;
+
+-- 13) (29 oct) Nuevo resultado «herramienta_propia»: ya tienen o están
+--     desarrollando su propia herramienta. Para bases creadas antes.
+alter table public.seg_contacto drop constraint if exists seg_contacto_resultado_check;
+alter table public.seg_contacto add constraint seg_contacto_resultado_check check (resultado in
+  ('demo','volver','info','no_contesta','no_esta','no_interesa','herramienta_propia','no_encaja','no_llamar','erroneo'));
+alter table public.seg_llamada drop constraint if exists seg_llamada_resultado_check;
+alter table public.seg_llamada add constraint seg_llamada_resultado_check check (resultado in
+  ('demo','volver','info','no_contesta','no_esta','no_interesa','herramienta_propia','no_encaja','no_llamar','erroneo'));

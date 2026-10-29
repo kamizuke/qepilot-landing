@@ -18,6 +18,7 @@ Ninguna de las dos sale en Google (van marcadas como «no indexar»).
 | | Setter | Lissette |
 |---|---|---|
 | Ver a quién llamar y anotar cada intento | Sí | Sí |
+| Leer el guion (pestaña Guion y chuleta en cada ficha) | Sí | Sí |
 | Agendar demos en los huecos libres | Sí | Sí |
 | Corregir los datos de una demo y reenviar la invitación | Sí | Sí |
 | Corregir datos de un contacto y añadir notas | Sí | Sí |

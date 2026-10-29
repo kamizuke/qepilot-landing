@@ -270,3 +270,15 @@ test("corregir el correo de una demo reenvía la invitación y anula el enlace a
   assert.equal(re.body.correo, true);
   assert.equal(t.enviados.at(-2).para, "ana@metal.es");
 });
+
+test("«Ya tienen o desarrollan la suya» se anota y saca al contacto de la cola", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nPropia SL,986555666\n" });
+  const c = t.datos._db.contactos[0];
+  const r = await t.setter({ accion: "llamada", contactoId: c.id, resultado: "herramienta_propia", nota: "Lo hacen con Power Apps" });
+  assert.equal(r.statusCode, 200);
+  assert.equal(t.datos._db.contactos[0].resultado, "herramienta_propia");
+  const est = (await t.admin({ accion: "estado" })).body;
+  assert.equal(est.resultados.herramienta_propia, "Ya tienen o desarrollan la suya");
+  assert.equal(est.resumen.porResultado.herramienta_propia, 1);
+});

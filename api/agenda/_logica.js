@@ -10,6 +10,7 @@ export const RESULTADOS = {
   no_contesta: "No contesta",
   no_esta: "No está la persona",
   no_interesa: "No interesa",
+  herramienta_propia: "Ya tienen o desarrollan la suya",
   no_encaja: "No encaja",
   no_llamar: "No llamar",
   erroneo: "Teléfono erróneo",
