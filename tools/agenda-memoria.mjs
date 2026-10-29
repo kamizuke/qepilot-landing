@@ -69,6 +69,7 @@ export function crearDatosMemoria(semilla = {}) {
       }
       return cita.id;
     },
+    async editarCita(cid, campos) { Object.assign(db.citas.find((c) => c.id === cid && c.estado === "confirmada") || {}, campos); },
     async mover(cid, inicio, fin, margen) {
       const ch = choque(inicio, fin, margen, cid);
       if (ch) throw error(ch);

@@ -423,7 +423,7 @@ const ORIGENES = { setter: "la setter", admin: "ti", web: "la propia persona" };
 
 // Aviso interno a Lissette.
 export function correoAviso({ tipo, cita, quien }) {
-  const titulo = { nueva: "Nueva demo", cambio: "Demo cambiada", cancelada: "Demo cancelada" }[tipo];
+  const titulo = { nueva: "Nueva demo", cambio: "Demo cambiada", cancelada: "Demo cancelada", reenvio: "Invitación reenviada" }[tipo];
   const filas = [
     ["Cuándo", fechaLarga(cita.inicio)],
     ["Empresa", cita.empresa || "—"],
@@ -431,7 +431,7 @@ export function correoAviso({ tipo, cita, quien }) {
     ["Correo", cita.email],
     ["Teléfono", cita.telefono || "—"],
     ["Notas", cita.notas || "—"],
-    [tipo === "cancelada" ? "Cancelada por" : "Reservada por", quien || ORIGENES[cita.origen] || cita.origen],
+    [{ cancelada: "Cancelada por", reenvio: "Reenviada por", cambio: "Cambiada por" }[tipo] || "Reservada por", quien || ORIGENES[cita.origen] || cita.origen],
   ];
   const tabla = filas
     .map(

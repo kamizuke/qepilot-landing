@@ -64,7 +64,7 @@ async function calcularHuecos(deps, excepto = null) {
 
 // Correo a la persona y aviso interno (AGENDA_AVISOS_EMAIL), con la invitación de calendario.
 // Si falla, la cita ya está hecha: se devuelve false y la pantalla lo dice.
-async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien } = {}) {
+async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien, tipoAviso } = {}) {
   const correo = deps.correo;
   if (!correo) return false;
   const a = deps.ajustes();
@@ -94,7 +94,7 @@ async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien 
   }
   if (a.avisos) {
     try {
-      await correo.enviar({ para: a.avisos, ...correoAviso({ tipo, cita, quien }), ics, metodo });
+      await correo.enviar({ para: a.avisos, ...correoAviso({ tipo: tipoAviso || tipo, cita, quien }), ics, metodo });
     } catch (err) {
       console.error(`agenda aviso ${tipo} falló:`, err?.code || err?.responseCode || "sin código");
     }
@@ -165,6 +165,8 @@ export function crearTrabajo(deps) {
           if (!UUID.test(String(body.id || ""))) return res.status(400).json({ error: "Bloqueo no válido." });
           await deps.datos.borrarBloqueo(body.id);
           return res.status(200).json({ ok: true });
+        case "editar_cita":
+          return await editarCita(deps, rol, body, res);
         case "cancelar_cita":
           return await cancelarCita(deps, body, res);
         default:
@@ -361,6 +363,52 @@ async function crearBloqueo(deps, body, res) {
   }
   await deps.datos.crearBloqueo({ desde: desde.toISOString(), hasta: hasta.toISOString(), motivo: texto(body.motivo, 120) });
   return res.status(200).json({ ok: true });
+}
+
+// Corregir los datos de una demo próxima (p. ej. un correo mal escrito).
+// Si cambia el correo, o se pide reenviar, sale de nuevo la invitación con
+// un enlace «cambiar o cancelar» nuevo: el anterior deja de funcionar.
+async function editarCita(deps, rol, body, res) {
+  const id = String(body.id || "");
+  if (!UUID.test(id)) return res.status(400).json({ error: "Cita no válida." });
+  const cita = await deps.datos.citaPorId(id);
+  if (!cita || cita.estado !== "confirmada" || new Date(cita.fin) <= deps.ahora()) {
+    return res.status(409).json({ error: MENSAJES.cita_no_disponible });
+  }
+  const c = body.campos || {};
+  const campos = {};
+  if ("nombre" in c) {
+    campos.nombre = texto(c.nombre, 120);
+    if (!campos.nombre) return res.status(400).json({ error: "El nombre no puede quedar vacío." });
+  }
+  if ("empresa" in c) campos.empresa = texto(c.empresa, 160);
+  if ("telefono" in c) campos.telefono = texto(c.telefono, 40);
+  if ("notas" in c) campos.notas = textoLargo(c.notas, 1500);
+  if ("email" in c) {
+    const e = typeof c.email === "string" ? c.email.trim() : "";
+    if (!emailValido(e)) return res.status(400).json({ error: "El correo no parece válido." });
+    campos.email = e;
+  }
+  const cambiaEmail = "email" in campos && campos.email.toLowerCase() !== String(cita.email).toLowerCase();
+  const reenviar = cambiaEmail || body.reenviar === true;
+  let token = null;
+  if (reenviar) {
+    token = generarToken();
+    campos.token_hash = hashToken(token);
+    campos.secuencia = (cita.secuencia || 0) + 1;
+  }
+  if (!Object.keys(campos).length) return res.status(400).json({ error: "No hay cambios." });
+  await deps.datos.editarCita(id, campos);
+  if (cambiaEmail && cita.contacto_id) {
+    await deps.datos.editarContacto(cita.contacto_id, { email: campos.email }).catch(() => {});
+  }
+  let correo = null;
+  if (reenviar) {
+    const config = await deps.datos.leerConfig();
+    const quien = rol === "admin" ? "administración" : "la setter";
+    correo = await notificar(deps, "nueva", { ...cita, ...campos }, { config, token, quien, tipoAviso: "reenvio" });
+  }
+  return res.status(200).json({ ok: true, reenviada: reenviar, correo });
 }
 
 async function cancelarCita(deps, body, res) {

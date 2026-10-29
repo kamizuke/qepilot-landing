@@ -85,6 +85,9 @@ export function crearDatos(env) {
         })
       );
     },
+    async editarCita(id, campos) {
+      await rest(env, `agenda_cita?id=eq.${id}&estado=eq.confirmada`, { method: "PATCH", body: campos });
+    },
     async mover(id, inicio, fin, margen) {
       return conCodigo(rpc(env, "agenda_mover", { p_id: id, p_inicio: inicio, p_fin: fin, p_margen_min: margen }));
     },

@@ -236,3 +236,37 @@ test("guardar horario, bloquear un día y cancelar desde el panel", async () => 
   assert.match(t.enviados.at(-2).html, /Tenemos que cancelar/);
   assert.match(t.enviados[0].html, /Te enviaremos el enlace de la videollamada antes de la demo/);
 });
+
+test("corregir el correo de una demo reenvía la invitación y anula el enlace anterior", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Persona,Teléfono\nMetal SL,Ana,986111222\n" });
+  const ana = t.datos._db.contactos[0];
+  const { huecos } = (await t.setter({ accion: "huecos" })).body;
+  const r = await t.setter({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Ana", empresa: "Metal SL", email: "ana@metla.es", contactoId: ana.id });
+  const tokenViejo = t.enviados[0].html.match(/\/cita\/([A-Za-z0-9_-]+)/)[1];
+
+  // La setter corrige el correo: sale la invitación a la dirección buena.
+  const e = await t.setter({ accion: "editar_cita", id: r.body.id, campos: { email: "ana@metal.es" } });
+  assert.equal(e.statusCode, 200);
+  assert.deepEqual([e.body.reenviada, e.body.correo], [true, true]);
+  const paraAna = t.enviados.at(-2);
+  assert.equal(paraAna.para, "ana@metal.es");
+  assert.match(t.enviados.at(-1).asunto, /^Invitación reenviada/);
+  assert.equal(t.datos._db.citas[0].email, "ana@metal.es");
+  assert.equal(t.datos._db.citas[0].secuencia, 1);
+  assert.equal(t.datos._db.contactos[0].email, "ana@metal.es");
+  const tokenNuevo = paraAna.html.match(/\/cita\/([A-Za-z0-9_-]+)/)[1];
+  assert.equal((await t.publica({ token: tokenViejo, accion: "ver" })).statusCode, 404);
+  assert.equal((await t.publica({ token: tokenNuevo, accion: "ver" })).body.estado, "confirmada");
+
+  // Cambiar solo las notas no manda correo; un correo mal escrito se rechaza.
+  const antes = t.enviados.length;
+  assert.equal((await t.admin({ accion: "editar_cita", id: r.body.id, campos: { notas: "9001" } })).body.reenviada, false);
+  assert.equal(t.enviados.length, antes);
+  assert.equal((await t.admin({ accion: "editar_cita", id: r.body.id, campos: { email: "mal" } })).statusCode, 400);
+
+  // Reenviar sin cambios también funciona.
+  const re = await t.admin({ accion: "editar_cita", id: r.body.id, campos: {}, reenviar: true });
+  assert.equal(re.body.correo, true);
+  assert.equal(t.enviados.at(-2).para, "ana@metal.es");
+});

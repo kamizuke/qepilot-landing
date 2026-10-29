@@ -19,6 +19,7 @@ Ninguna de las dos sale en Google (van marcadas como «no indexar»).
 |---|---|---|
 | Ver a quién llamar y anotar cada intento | Sí | Sí |
 | Agendar demos en los huecos libres | Sí | Sí |
+| Corregir los datos de una demo y reenviar la invitación | Sí | Sí |
 | Corregir datos de un contacto y añadir notas | Sí | Sí |
 | Ver el resumen (llamadas, demos, resultados) | Sí | Sí |
 | Cargar contactos (CSV de Apollo) y descargar la lista | — | Sí |
@@ -51,7 +52,12 @@ La persona invitada puede cambiar la hora o cancelar desde su correo.
      cancelar;
    - a Lissette (`AGENDA_AVISOS_EMAIL`): aviso con todos los datos y la misma
      invitación, para tenerla en su calendario.
-5. **Si la persona cambia la hora o cancela**, os llega a las dos el aviso con
+5. **Si un dato de la demo está mal** (por ejemplo, el correo), en Agenda →
+   «Corregir datos». Si cambia el correo, la invitación sale a la dirección
+   nueva y el enlace del correo anterior deja de funcionar. «Reenviar
+   invitación» la vuelve a mandar sin cambiar nada (útil si dice que no le ha
+   llegado).
+6. **Si la persona cambia la hora o cancela**, os llega a las dos el aviso con
    la invitación actualizada. Si cancela, el contacto vuelve a «Volver a
    llamar» para que la setter busque otro momento.
 

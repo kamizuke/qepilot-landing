@@ -247,6 +247,9 @@
 <!-- Ficha de un contacto -->
 <dialog id="ficha"><div class="dlg" id="ficha-cuerpo"></div></dialog>
 
+<!-- Corregir datos de una demo -->
+<dialog id="editar"><div class="dlg" id="editar-cuerpo"></div></dialog>
+
 <!-- Agendar una demo -->
 <dialog id="reserva">
   <div class="dlg">
@@ -682,7 +685,7 @@
   });
 
   // ---------- Agenda ----------
-  function bloqueCita(c, conCancelar) {
+  function bloqueCita(c, proxima) {
     var origen = { setter: "la setter", admin: "administración", web: "la propia persona" }[c.origen] || c.origen;
     return h("div", { class: "cita" },
       h("div", { class: "fila", style: "justify-content:space-between" },
@@ -691,10 +694,55 @@
       h("div", null, h("strong", null, c.empresa || "Sin empresa"), " · ", c.nombre),
       h("div", { class: "peq suave" }, [c.email, c.telefono, "reservada por " + origen].filter(Boolean).join(" · ")),
       c.notas ? h("div", { class: "notas" }, c.notas) : null,
-      conCancelar && S.rol === "admin" ? h("div", { class: "fila mt" }, h("button", { class: "boton peligro mini", onclick: function () {
-        if (!confirm("¿Cancelar la demo con " + c.nombre + "? Le llegará un correo avisando.")) return;
-        api({ accion: "cancelar_cita", id: c.id }).then(function (j) { toast(j.correo ? "Demo cancelada y aviso enviado." : "Demo cancelada, pero el correo no salió."); recargar(); }).catch(function (e) { toast(e.message); });
-      } }, "Cancelar demo")) : null);
+      proxima ? h("div", { class: "fila mt" },
+        h("button", { class: "boton claro mini", onclick: function () { abrirEditarCita(c); } }, "Corregir datos"),
+        h("button", { class: "boton claro mini", onclick: function () {
+          if (!confirm("¿Volver a enviar la invitación a " + c.email + "? El enlace para cambiar o cancelar del correo anterior dejará de funcionar.")) return;
+          api({ accion: "editar_cita", id: c.id, campos: {}, reenviar: true }).then(function (j) {
+            toast(j.correo ? "Invitación reenviada a " + c.email + "." : "No se pudo enviar el correo.");
+            recargar();
+          }).catch(function (e) { toast(e.message); });
+        } }, "Reenviar invitación"),
+        S.rol === "admin" ? h("button", { class: "boton peligro mini", onclick: function () {
+          if (!confirm("¿Cancelar la demo con " + c.nombre + "? Le llegará un correo avisando.")) return;
+          api({ accion: "cancelar_cita", id: c.id }).then(function (j) { toast(j.correo ? "Demo cancelada y aviso enviado." : "Demo cancelada, pero el correo no salió."); recargar(); }).catch(function (e) { toast(e.message); });
+        } }, "Cancelar demo") : null) : null);
+  }
+
+  function abrirEditarCita(c) {
+    var campos = [["nombre", "Nombre de la persona *", "text"], ["empresa", "Empresa", "text"], ["email", "Correo para la invitación *", "email"], ["telefono", "Teléfono", "tel"]];
+    var inputs = {};
+    var notas = h("textarea", { maxlength: "1500" });
+    notas.value = c.notas || "";
+    var error = h("div", { class: "aviso mal" });
+    var cuerpo = vaciar($("editar-cuerpo"));
+    anadir(cuerpo, [
+      h("div", { class: "dlg-cab" }, h("h2", null, "Corregir datos de la demo"), h("button", { class: "cerrar", "aria-label": "Cerrar", onclick: function () { cerrar("editar"); } }, "×")),
+      h("div", { class: "peq suave" }, cuando(c.inicio)),
+      h("div", { class: "rejilla2" }, campos.map(function (f) {
+        inputs[f[0]] = h("input", { type: f[2], value: c[f[0]] || "" });
+        return h("div", null, h("label", null, f[1]), inputs[f[0]]);
+      })),
+      h("label", null, "Notas para la demo"), notas,
+      h("p", { class: "peq suave", style: "margin-top:10px" }, "Si cambias el correo, la invitación se envía a la dirección nueva y el enlace del correo anterior deja de funcionar."),
+      error,
+      h("div", { class: "fila mt" },
+        h("button", { class: "boton", onclick: function (ev) {
+          var cambios = {};
+          Object.keys(inputs).forEach(function (k) { if (inputs[k].value.trim() !== (c[k] || "")) cambios[k] = inputs[k].value; });
+          if (notas.value !== (c.notas || "")) cambios.notas = notas.value;
+          if (!Object.keys(cambios).length) { error.textContent = "No hay cambios."; return; }
+          ev.currentTarget.disabled = true;
+          var boton = ev.currentTarget;
+          api({ accion: "editar_cita", id: c.id, campos: cambios }).then(function (j) {
+            cerrar("editar");
+            toast(!j.reenviada ? "Datos corregidos." : j.correo ? "Datos corregidos. Invitación enviada a " + cambios.email.trim() + "." : "Datos corregidos, pero el correo no salió.");
+            recargar();
+          }).catch(function (e) { boton.disabled = false; error.textContent = e.message; });
+        } }, "Guardar"),
+        h("button", { class: "boton claro", onclick: function () { cerrar("editar"); } }, "Cancelar"))
+    ]);
+    $("editar").showModal();
   }
 
   function pintarAgenda() {
@@ -820,7 +868,7 @@
   $("salir").addEventListener("click", salir);
   // Se refresca sola cada minuto (si no hay una ficha abierta), para ver lo que va anotando la otra persona.
   setInterval(function () {
-    if (S.rol && document.visibilityState === "visible" && !$("ficha").open && !$("reserva").open) recargar();
+    if (S.rol && document.visibilityState === "visible" && !$("ficha").open && !$("reserva").open && !$("editar").open) recargar();
   }, 60000);
   if (S.clave) api({ accion: "entrar" }).then(function (j) { arrancar(j.rol); }).catch(function () { salir(); });
 })();
