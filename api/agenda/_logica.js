@@ -364,7 +364,7 @@ const PIE_PRIVACIDAD =
 function lineaReunion(enlaceReunion) {
   return enlaceReunion
     ? `Enlace de la videollamada (Microsoft Teams): <a href="${escaparHtml(enlaceReunion)}">${escaparHtml(enlaceReunion)}</a>`
-    : "Te enviaré el enlace de la videollamada antes de la demo.";
+    : "Te enviaremos el enlace de la videollamada antes de la demo.";
 }
 
 export function correoConfirmacion({ cita, enlaceReunion, enlaceGestion }) {
@@ -376,9 +376,9 @@ export function correoConfirmacion({ cita, enlaceReunion, enlaceGestion }) {
         `Hola, ${escaparHtml(cita.nombre)}:`,
         `Queda confirmada la demo de Evidran el <strong>${escaparHtml(cuando)}</strong> (hora peninsular). Dura ${minutosDe(cita)} minutos.`,
         lineaReunion(enlaceReunion),
-        "En la demo verás cómo se registra una no conformidad contándola con tus palabras, y te dejo montada la prueba gratis de 30 días, sin tarjeta. Si tienes a mano un caso real reciente, mejor.",
+        "En la demo verás cómo se registra una no conformidad contándola con tus palabras, y te dejamos montada la prueba gratis de 30 días, sin tarjeta. Si tienes a mano un caso real reciente, mejor.",
         `Si necesitas cambiar la hora o no puedes asistir: <a href="${escaparHtml(enlaceGestion)}">cambiar o cancelar la demo</a>.`,
-        "Un saludo,<br>Lissette<br>Evidran · evidran.com",
+        "Un saludo,<br>El equipo de Evidran<br>evidran.com",
       ],
       PIE_PRIVACIDAD
     ),
@@ -395,7 +395,7 @@ export function correoCambio({ cita, enlaceReunion, enlaceGestion }) {
         `La demo de Evidran pasa al <strong>${escaparHtml(cuando)}</strong> (hora peninsular).`,
         lineaReunion(enlaceReunion),
         `Si necesitas volver a cambiarla: <a href="${escaparHtml(enlaceGestion)}">cambiar o cancelar la demo</a>.`,
-        "Un saludo,<br>Lissette<br>Evidran · evidran.com",
+        "Un saludo,<br>El equipo de Evidran<br>evidran.com",
       ],
       PIE_PRIVACIDAD
     ),
@@ -411,8 +411,8 @@ export function correoCancelacion({ cita, porLaPersona }) {
         `Hola, ${escaparHtml(cita.nombre)}:`,
         porLaPersona
           ? `Queda cancelada la demo del ${escaparHtml(cuando)}. Si quieres buscar otro momento, responde a este correo.`
-          : `Tengo que cancelar la demo del ${escaparHtml(cuando)}. Disculpa las molestias; te escribiré para buscar otro momento.`,
-        "Un saludo,<br>Lissette<br>Evidran · evidran.com",
+          : `Tenemos que cancelar la demo del ${escaparHtml(cuando)}. Disculpa las molestias; te escribiremos para buscar otro momento.`,
+        "Un saludo,<br>El equipo de Evidran<br>evidran.com",
       ],
       PIE_PRIVACIDAD
     ),

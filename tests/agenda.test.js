@@ -233,6 +233,6 @@ test("guardar horario, bloquear un día y cancelar desde el panel", async () => 
   const r = await t.admin({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Eva", email: "eva@x.es" });
   const c = await t.admin({ accion: "cancelar_cita", id: r.body.id });
   assert.equal(c.statusCode, 200);
-  assert.match(t.enviados.at(-2).html, /Tengo que cancelar/);
-  assert.match(t.enviados[0].html, /enlace de la videollamada antes de la demo/);
+  assert.match(t.enviados.at(-2).html, /Tenemos que cancelar/);
+  assert.match(t.enviados[0].html, /Te enviaremos el enlace de la videollamada antes de la demo/);
 });

@@ -62,7 +62,7 @@ async function calcularHuecos(deps, excepto = null) {
   return { config, huecos: config ? huecosLibres({ config, citas, bloqueos, ahora, excepto }) : [] };
 }
 
-// Correo a la persona y aviso a Lissette, con la invitación de calendario.
+// Correo a la persona y aviso interno (AGENDA_AVISOS_EMAIL), con la invitación de calendario.
 // Si falla, la cita ya está hecha: se devuelve false y la pantalla lo dice.
 async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien } = {}) {
   const correo = deps.correo;
@@ -74,7 +74,7 @@ async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien 
   const ics = crearIcs({
     cita,
     metodo,
-    organizador: { nombre: "Lissette · Evidran", email: correo.remitente },
+    organizador: { nombre: "Evidran", email: correo.remitente },
     avisos: a.avisos,
     enlaceReunion,
     ahora: deps.ahora(),
@@ -132,7 +132,7 @@ export function crearTrabajo(deps) {
     const accion = body.accion;
     const soloAdmin = ["importar", "borrar_contacto", "guardar_config", "crear_bloqueo", "borrar_bloqueo", "cancelar_cita"];
     if (soloAdmin.includes(accion) && rol !== "admin") {
-      return res.status(403).json({ error: "Esta acción solo la puede hacer Lissette." });
+      return res.status(403).json({ error: "Esta acción no está disponible con tu clave." });
     }
 
     try {
@@ -368,7 +368,7 @@ async function cancelarCita(deps, body, res) {
   if (!UUID.test(id)) return res.status(400).json({ error: "Cita no válida." });
   const cita = await deps.datos.citaPorId(id);
   if (!cita || cita.estado !== "confirmada") return res.status(409).json({ error: MENSAJES.cita_no_disponible });
-  cita.secuencia = await deps.datos.cancelar(id, "Lissette");
+  cita.secuencia = await deps.datos.cancelar(id, "administración");
   const config = await deps.datos.leerConfig();
   const correo = new Date(cita.fin) > deps.ahora()
     ? await notificar(deps, "cancelada", cita, { config, porLaPersona: false, quien: "ti" })

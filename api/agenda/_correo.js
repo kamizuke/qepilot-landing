@@ -26,7 +26,7 @@ export function crearCorreo() {
     remitente,
     async enviar({ para, asunto, html, ics, metodo, responderA }) {
       await transporter.sendMail({
-        from: { name: "Lissette · Evidran", address: remitente },
+        from: { name: "Evidran", address: remitente },
         to: para,
         replyTo: responderA || undefined,
         subject: asunto,

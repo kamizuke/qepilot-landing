@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/plataforma.css" />
 <style>
-  /* Llamadas y demos: página de trabajo de la setter y de Lissette. Hereda tokens de plataforma.css. */
+  /* Llamadas y demos: página de trabajo de la setter y de administración. Hereda tokens de plataforma.css. */
   body { padding-bottom: 90px; background: var(--cream); }
   .cab { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 20px 0 8px; flex-wrap: wrap; }
   .cab .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); font-weight: 800; font-size: 18px; letter-spacing: -.01em; }
@@ -132,7 +132,7 @@
   <section id="puerta" class="bloque">
     <div class="tarjeta" style="max-width:440px">
       <h2>Entrar</h2>
-      <p class="suave peq">Escribe la clave que te ha dado Lissette.</p>
+      <p class="suave peq">Escribe tu clave de acceso.</p>
       <label for="clave">Clave</label>
       <input id="clave" type="password" autocomplete="current-password" />
       <div class="aviso mal" id="puerta-error"></div>
@@ -221,7 +221,7 @@
       </div>
     </section>
 
-    <!-- Ajustes (solo Lissette) -->
+    <!-- Ajustes (solo administración) -->
     <section id="v-ajustes" class="vista oculto">
       <div class="tarjeta bloque">
         <h2>Horario de demos</h2>
@@ -260,7 +260,7 @@
         <div><label for="r-email">Correo para la invitación *</label><input id="r-email" type="email" maxlength="200" /></div>
         <div><label for="r-telefono">Teléfono</label><input id="r-telefono" type="tel" maxlength="40" /></div>
       </div>
-      <label for="r-notas">Notas para Lissette</label>
+      <label for="r-notas">Notas para la demo</label>
       <textarea id="r-notas" maxlength="1500" placeholder="Normas que llevan, cómo registran hoy las no conformidades, qué le preocupa, quién más se conecta"></textarea>
       <div class="aviso mal" id="r-error"></div>
       <div class="fila mt"><button class="boton" id="r-reservar">Reservar demo</button><button class="boton claro" data-cierra="reserva">Cancelar</button></div>
@@ -377,7 +377,7 @@
     $("puerta").classList.add("oculto");
     $("app").classList.remove("oculto");
     $("cab-sesion").classList.remove("oculto");
-    $("cab-rol").textContent = rol === "admin" ? "Lissette" : "Setter";
+    $("cab-rol").textContent = rol === "admin" ? "Administración" : "Setter";
     document.querySelectorAll(".solo-admin").forEach(function (el) { el.classList.toggle("oculto", rol !== "admin"); });
     pintarPestanas();
     recargar();
@@ -506,7 +506,7 @@
       volverFila,
       c.historial.length ? h("div", null, h("h3", null, "Intentos anteriores (" + c.historial.length + ")"),
         h("ul", { class: "historial" }, c.historial.map(function (l) {
-          return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (l.rol === "admin" ? " (Lissette)" : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
+          return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (l.rol === "admin" ? " (administración)" : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
         }))) : null,
       formularioDatos(c),
     ]);
@@ -574,7 +574,7 @@
 
   function pintarHuecos(huecos) {
     var caja = vaciar($("r-huecos"));
-    if (!huecos.length) { caja.appendChild(h("div", { class: "vacio" }, "No quedan huecos libres en los próximos días. Avisa a Lissette.")); return; }
+    if (!huecos.length) { caja.appendChild(h("div", { class: "vacio" }, "No quedan huecos libres en los próximos días. Avisa para que se abran más.")); return; }
     var porDia = {};
     huecos.forEach(function (x) { var d = diaDe(x.inicio); (porDia[d] = porDia[d] || []).push(x); });
     Object.keys(porDia).forEach(function (d) {
@@ -610,7 +610,7 @@
       $("r-formulario").classList.add("oculto");
       $("r-hecho").classList.remove("oculto");
       $("r-hecho-texto").textContent = "Demo reservada para el " + cuando(cuerpo.inicio) + ". " +
-        (j.correo ? "La invitación ha salido a " + cuerpo.email.trim() + " y a Lissette." : "Ojo: la demo está reservada, pero el correo no ha salido. Avisa a Lissette para que se lo mande.");
+        (j.correo ? "La invitación ha salido a " + cuerpo.email.trim() + "." : "Ojo: la demo está reservada, pero el correo no ha salido. Avisa para que se le envíe a mano.");
       recargar();
     }).catch(function (e) {
       $("r-reservar").disabled = false;
@@ -683,7 +683,7 @@
 
   // ---------- Agenda ----------
   function bloqueCita(c, conCancelar) {
-    var origen = { setter: "la setter", admin: "Lissette", web: "la propia persona" }[c.origen] || c.origen;
+    var origen = { setter: "la setter", admin: "administración", web: "la propia persona" }[c.origen] || c.origen;
     return h("div", { class: "cita" },
       h("div", { class: "fila", style: "justify-content:space-between" },
         h("div", { class: "cuando" }, cuando(c.inicio)),
