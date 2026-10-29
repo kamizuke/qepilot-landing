@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tu demo de Evidran</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="referrer" content="no-referrer" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/plataforma.css" />
+<style>
+  /* Página de la persona invitada: ver, cambiar o cancelar su demo. */
+  body { background: var(--cream); min-height: 100vh; }
+  .caja { max-width: 560px; margin: 0 auto; padding: 28px 20px 60px; }
+  .caja > a img { height: 30px; width: auto; }
+  .tarjeta { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin-top: 22px; box-shadow: 0 3px 10px rgba(22,32,43,.04); }
+  h1 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+  .cuando { font-size: 19px; font-weight: 800; margin-top: 12px; text-transform: none; }
+  .suave { color: var(--ink-soft); }
+  .boton { font: inherit; font-weight: 700; font-size: 15px; padding: 11px 18px; border-radius: 12px; border: 0; cursor: pointer; background: var(--blue); color: #fff; text-decoration: none; display: inline-flex; }
+  .boton.claro { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
+  .boton.peligro { background: #fff; color: #B42318; border: 1.5px solid var(--line); }
+  .boton:disabled { opacity: .55; cursor: default; }
+  .fila { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .aviso { margin-top: 12px; font-size: 14px; font-weight: 600; min-height: 18px; }
+  .aviso.mal { color: #B42318; }
+  .aviso.bien { color: #15803D; }
+  .oculto { display: none !important; }
+  .dia { margin-top: 14px; }
+  .dia b { display: block; font-size: 14px; margin-bottom: 6px; }
+  .dia b::first-letter { text-transform: uppercase; }
+  .horas { display: flex; flex-wrap: wrap; gap: 6px; }
+  .horas button { font: inherit; font-size: 14px; font-weight: 700; padding: 7px 12px; border-radius: 10px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; }
+  .horas button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .lista { max-height: 320px; overflow-y: auto; }
+</style>
+</head>
+<body>
+<div class="caja">
+  <a href="/"><img src="/brand/evidran-logo.svg" alt="Evidran" width="120" height="30" /></a>
+
+  <div class="tarjeta" id="cargando"><p class="suave">Cargando tu demo…</p></div>
+
+  <div class="tarjeta oculto" id="error"><h1>Este enlace no funciona</h1><p class="suave" id="error-texto" style="margin-top:8px"></p></div>
+
+  <div class="tarjeta oculto" id="ficha">
+    <h1 id="titulo">Tu demo de Evidran</h1>
+    <div class="cuando" id="cuando"></div>
+    <p class="suave" id="detalle" style="margin-top:4px"></p>
+    <div class="fila" id="acciones">
+      <a class="boton oculto" id="unirse" target="_blank" rel="noopener">Entrar en la videollamada</a>
+      <button class="boton claro" id="cambiar">Cambiar la hora</button>
+      <button class="boton peligro" id="cancelar">No puedo asistir</button>
+    </div>
+    <div class="aviso" id="aviso"></div>
+
+    <div id="cambio" class="oculto">
+      <p style="margin-top:18px;font-weight:700">Elige una nueva hora</p>
+      <div class="lista" id="huecos"></div>
+      <div class="fila"><button class="boton" id="confirmar-cambio" disabled>Cambiar a esta hora</button><button class="boton claro" id="cerrar-cambio">Volver</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var token = (location.pathname.split("/cita/")[1] || "").split(/[/?#]/)[0];
+  var ZONA = "Europe/Madrid";
+  var fFecha = new Intl.DateTimeFormat("es-ES", { timeZone: ZONA, weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  var fDiaCorto = new Intl.DateTimeFormat("es-ES", { timeZone: ZONA, weekday: "long", day: "numeric", month: "long" });
+  var fHora = new Intl.DateTimeFormat("es-ES", { timeZone: ZONA, hour: "2-digit", minute: "2-digit" });
+  var fDia = new Intl.DateTimeFormat("en-CA", { timeZone: ZONA, year: "numeric", month: "2-digit", day: "2-digit" });
+  var elegido = null;
+
+  function $(id) { return document.getElementById(id); }
+  function cuando(f) { var d = new Date(f); var t = fFecha.format(d).replace(",", "") + ", a las " + fHora.format(d); return t.charAt(0).toUpperCase() + t.slice(1); }
+
+  function api(cuerpo) {
+    cuerpo.token = token;
+    return fetch("/api/agenda/cita", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cuerpo) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j.error || "Error " + r.status); e.status = r.status; throw e; } return j; }); });
+  }
+
+  function mostrarError(texto) {
+    $("cargando").classList.add("oculto");
+    $("ficha").classList.add("oculto");
+    $("error").classList.remove("oculto");
+    $("error-texto").textContent = texto;
+  }
+
+  function pintar(c) {
+    $("cargando").classList.add("oculto");
+    $("ficha").classList.remove("oculto");
+    $("cuando").textContent = cuando(c.inicio) + " (hora peninsular)";
+    var activa = c.estado === "confirmada" && !c.pasada;
+    if (c.estado === "cancelada") {
+      $("titulo").textContent = "Demo cancelada";
+      $("detalle").textContent = "Esta demo está cancelada. Si quieres buscar otro momento, responde al correo que recibiste.";
+    } else if (c.pasada) {
+      $("titulo").textContent = "Esta demo ya pasó";
+      $("detalle").textContent = "Gracias por tu tiempo. Si quieres otra, responde al correo que recibiste.";
+    } else {
+      $("titulo").textContent = c.nombre ? "Hola, " + c.nombre : "Tu demo de Evidran";
+      var minutos = Math.round((new Date(c.fin) - new Date(c.inicio)) / 60000);
+      var empresa = c.empresa ? " para " + c.empresa.replace(/\.$/, "") : "";
+      $("detalle").textContent = "Demo de Evidran de " + minutos + " minutos por videollamada" + empresa + ".";
+    }
+    $("cambiar").classList.toggle("oculto", !activa);
+    $("cancelar").classList.toggle("oculto", !activa);
+    var unirse = $("unirse");
+    if (activa && c.enlaceReunion) { unirse.href = c.enlaceReunion; unirse.classList.remove("oculto"); }
+    else unirse.classList.add("oculto");
+  }
+
+  function cargar() {
+    if (!/^[A-Za-z0-9_-]{16,64}$/.test(token)) { mostrarError("Revisa que el enlace esté completo."); return; }
+    api({ accion: "ver" }).then(pintar).catch(function (e) {
+      mostrarError(e.status === 404 ? "Revisa que el enlace esté completo o responde al correo que recibiste." : e.message);
+    });
+  }
+
+  $("cambiar").addEventListener("click", function () {
+    var caja = $("huecos");
+    caja.textContent = "Buscando huecos…";
+    $("cambio").classList.remove("oculto");
+    $("acciones").classList.add("oculto");
+    elegido = null;
+    $("confirmar-cambio").disabled = true;
+    api({ accion: "huecos" }).then(function (j) {
+      caja.textContent = "";
+      if (!j.huecos.length) { caja.textContent = "Ahora mismo no quedan huecos libres. Responde al correo y buscamos otro momento."; return; }
+      var porDia = {};
+      j.huecos.forEach(function (x) { var d = fDia.format(new Date(x.inicio)); (porDia[d] = porDia[d] || []).push(x); });
+      Object.keys(porDia).forEach(function (d) {
+        var bloque = document.createElement("div");
+        bloque.className = "dia";
+        var t = document.createElement("b");
+        t.textContent = fDiaCorto.format(new Date(porDia[d][0].inicio));
+        var horas = document.createElement("div");
+        horas.className = "horas";
+        porDia[d].forEach(function (x) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.setAttribute("aria-pressed", "false");
+          b.textContent = fHora.format(new Date(x.inicio));
+          b.addEventListener("click", function () {
+            caja.querySelectorAll("button").forEach(function (o) { o.setAttribute("aria-pressed", "false"); });
+            b.setAttribute("aria-pressed", "true");
+            elegido = x.inicio;
+            $("confirmar-cambio").disabled = false;
+          });
+          horas.appendChild(b);
+        });
+        bloque.appendChild(t);
+        bloque.appendChild(horas);
+        caja.appendChild(bloque);
+      });
+    }).catch(function (e) { caja.textContent = e.message; });
+  });
+
+  $("cerrar-cambio").addEventListener("click", function () {
+    $("cambio").classList.add("oculto");
+    $("acciones").classList.remove("oculto");
+  });
+
+  $("confirmar-cambio").addEventListener("click", function () {
+    if (!elegido) return;
+    $("confirmar-cambio").disabled = true;
+    api({ accion: "mover", inicio: elegido }).then(function (j) {
+      $("cambio").classList.add("oculto");
+      $("acciones").classList.remove("oculto");
+      $("aviso").className = "aviso bien";
+      $("aviso").textContent = j.correo ? "Hecho. Te hemos enviado la nueva invitación por correo." : "Hecho. La nueva hora está guardada.";
+      return api({ accion: "ver" }).then(pintar);
+    }).catch(function (e) {
+      $("aviso").className = "aviso mal";
+      $("aviso").textContent = e.message;
+      $("confirmar-cambio").disabled = false;
+    });
+  });
+
+  $("cancelar").addEventListener("click", function () {
+    if (!confirm("¿Seguro que quieres cancelar la demo?")) return;
+    $("cancelar").disabled = true;
+    api({ accion: "cancelar" }).then(function () {
+      $("aviso").className = "aviso bien";
+      $("aviso").textContent = "Demo cancelada. Gracias por avisar.";
+      return api({ accion: "ver" }).then(pintar);
+    }).catch(function (e) {
+      $("aviso").className = "aviso mal";
+      $("aviso").textContent = e.message;
+      $("cancelar").disabled = false;
+    });
+  });
+
+  cargar();
+})();
+</script>
+</body>
+</html>

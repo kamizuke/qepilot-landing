@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Presentación privada — Evidran</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="description" content="Documento compartido de forma privada." />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #2563EB; --teal: #15B8A6; --navy: #2D5A7B; --ink: #16202B;
+    --ink-soft: #4A5563; --cream: #F7F6F2; --line: #DDD8CC; --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--ink); color: var(--cream); -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* ---------- Puerta (clave) ---------- */
+  #puerta {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    padding: 24px; background: var(--ink); z-index: 30;
+  }
+  .puerta-card {
+    width: 100%; max-width: 420px; background: var(--cream); color: var(--ink);
+    border-radius: var(--radius); padding: 36px 32px 30px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35); text-align: center;
+  }
+  .puerta-card .brand {
+    display: inline-flex; align-items: center; gap: 10px; font-weight: 800;
+    font-size: 21px; letter-spacing: -0.02em; margin-bottom: 22px;
+  }
+  .puerta-card .brand img { height: 34px; width: auto; display: block; }
+  .puerta-card .brand em { font-style: normal; color: var(--navy); }
+  .puerta-card .eyebrow {
+    text-transform: uppercase; letter-spacing: .12em; font-size: 12px;
+    font-weight: 700; color: var(--blue); margin-bottom: 10px;
+  }
+  .puerta-card h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 8px; }
+  .puerta-card p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.55; }
+  .puerta-card form { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .puerta-card input {
+    font: inherit; font-size: 19px; font-weight: 600; text-align: center;
+    letter-spacing: .14em; padding: 13px 16px; border-radius: 12px;
+    border: 1.5px solid var(--line); background: #fff; color: var(--ink); outline: none;
+  }
+  .puerta-card input:focus { border-color: var(--blue); }
+  .puerta-card button {
+    font: inherit; font-weight: 700; font-size: 16px; padding: 13px 22px;
+    border-radius: 12px; border: 0; background: var(--blue); color: #fff; cursor: pointer;
+  }
+  .puerta-card button:disabled { opacity: .6; cursor: default; }
+  .puerta-error { color: #B42318; font-size: 14px; font-weight: 600; min-height: 20px; }
+  .puerta-pie { margin-top: 18px; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+
+  /* ---------- Visor ---------- */
+  #visor { position: fixed; inset: 0; display: none; flex-direction: column; }
+  #visor.activo { display: flex; }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px; gap: 14px; flex: 0 0 auto;
+  }
+  .topbar .brand {
+    display: inline-flex; align-items: center; gap: 9px; font-weight: 800;
+    font-size: 17px; letter-spacing: -0.02em; color: var(--cream); text-decoration: none;
+  }
+  .topbar .brand img { height: 26px; width: auto; display: block; }
+  .topbar .brand em { font-style: normal; color: var(--teal); }
+  .topbar .titulo {
+    font-size: 13.5px; font-weight: 600; color: rgba(247,246,242,.75);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  @media (max-width: 560px) { .topbar .titulo { display: none; } }
+
+  #escenario {
+    flex: 1 1 auto; position: relative; display: flex;
+    align-items: center; justify-content: center; min-height: 0;
+    user-select: none; -webkit-user-select: none;
+  }
+  #lienzo-caja { position: relative; box-shadow: 0 24px 80px rgba(0,0,0,.45); border-radius: 6px; overflow: hidden; background: #fff; }
+  #lienzo { display: block; }
+  #marca-agua {
+    position: absolute; inset: -40%; pointer-events: none; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: 54px; align-content: space-around;
+    transform: rotate(-24deg); opacity: .07;
+  }
+  #marca-agua span { font-size: 13px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  #cargando {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: rgba(247,246,242,.7); font-size: 14px; font-weight: 600;
+  }
+
+  .flecha {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+    width: 46px; height: 46px; border-radius: 999px; border: 0; cursor: pointer;
+    background: rgba(247,246,242,.1); color: var(--cream);
+    font-size: 20px; line-height: 1; display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  .flecha:hover { background: rgba(247,246,242,.22); }
+  .flecha:disabled { opacity: .25; cursor: default; }
+  #ant { left: 14px; } #sig { right: 14px; }
+  @media (max-width: 700px) { .flecha { display: none; } }
+
+  .pie {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; padding: 10px 18px 14px;
+  }
+  .pie .contador { font-size: 13.5px; font-weight: 700; letter-spacing: .04em; color: rgba(247,246,242,.85); min-width: 70px; }
+  .pie .acciones { display: flex; gap: 8px; }
+  .pie button {
+    font: inherit; font-size: 13px; font-weight: 700; padding: 8px 14px;
+    border-radius: 999px; border: 0; cursor: pointer;
+    background: rgba(247,246,242,.1); color: var(--cream);
+  }
+  .pie button:hover { background: rgba(247,246,242,.22); }
+  #progreso { height: 3px; background: rgba(247,246,242,.12); flex: 0 0 auto; }
+  #progreso i { display: block; height: 100%; width: 0; background: var(--teal); transition: width .25s; }
+
+  .aviso-pie { font-size: 11.5px; color: rgba(247,246,242,.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 560px) { .aviso-pie { display: none; } }
+</style>
+</head>
+<body>
+
+<div id="puerta">
+  <div class="puerta-card">
+    <span class="brand"><img src="/brand/evidran-logo.svg" alt="Evidran" width="135" height="34" /></span>
+    <div class="eyebrow">Presentación privada</div>
+    <h1>Este enlace es personal</h1>
+    <p>Introduce la clave que te hemos enviado para abrir el documento.</p>
+    <form id="form-clave" autocomplete="off">
+      <input id="clave" type="text" inputmode="text" autocapitalize="none" autocorrect="off"
+             spellcheck="false" placeholder="clave" aria-label="Clave de acceso" maxlength="64" required />
+      <div class="puerta-error" id="error" role="alert"></div>
+      <button id="entrar" type="submit">Abrir la presentación</button>
+    </form>
+    <div class="puerta-pie">
+      Documento compartido de forma privada por Evidran.<br />
+      Al entrar queda constancia de la lectura. <a href="/privacidad.html" target="_blank" rel="noopener" style="color:inherit">Privacidad</a>
+    </div>
+  </div>
+</div>
+
+<div id="visor">
+  <div class="topbar">
+    <a class="brand" href="https://www.evidran.com" target="_blank" rel="noopener">
+      <img src="/brand/evidran-logo-negativo.svg" alt="Evidran" width="111" height="28" />
+    </a>
+    <div class="titulo" id="titulo"></div>
+  </div>
+  <div id="escenario">
+    <button class="flecha" id="ant" aria-label="Página anterior">←</button>
+    <div id="lienzo-caja">
+      <canvas id="lienzo"></canvas>
+      <div id="marca-agua" aria-hidden="true"></div>
+    </div>
+    <button class="flecha" id="sig" aria-label="Página siguiente">→</button>
+    <div id="cargando">Cargando…</div>
+  </div>
+  <div id="progreso"><i></i></div>
+  <div class="pie">
+    <div class="contador" id="contador"></div>
+    <div class="aviso-pie" id="aviso-pie"></div>
+    <div class="acciones">
+      <button id="pantalla" type="button">Pantalla completa</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  }
+
+  // El token viene de /d/<token> (rewrite de Vercel) o de ?t=.
+  var m = location.pathname.match(/^\/d\/([A-Za-z0-9_-]{10,64})/);
+  var token = m ? m[1] : new URLSearchParams(location.search).get("t") || "";
+
+  var $ = function (id) { return document.getElementById(id); };
+  var pase = null, pdf = null, numPaginas = 0, pagina = 1;
+  var cacheRender = new Map(); // clave: pagina|ancho → canvas pintado
+
+  // ---------- Puerta ----------
+  $("form-clave").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var clave = $("clave").value.trim();
+    if (!clave) return;
+    $("entrar").disabled = true;
+    $("error").textContent = "";
+    fetch("/api/deck/acceso", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: token, clave: clave }),
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.d && res.d.error || "No se pudo abrir.");
+        abrir(res.d);
+      })
+      .catch(function (err) {
+        $("error").textContent = err.message || "No se pudo abrir.";
+        $("entrar").disabled = false;
+      });
+  });
+
+  if (!token) {
+    $("error").textContent = "Este enlace no es válido.";
+    $("entrar").disabled = true;
+    $("clave").disabled = true;
+  }
+
+  // ---------- Apertura ----------
+  function abrir(datos) {
+    pase = datos.pase;
+    $("titulo").textContent = datos.titulo || "";
+    $("aviso-pie").textContent = "Compartido con " + datos.destinatario +
+      (datos.empresa ? " · " + datos.empresa : "");
+    pintarMarcaAgua(datos.destinatario + (datos.empresa ? " · " + datos.empresa : ""));
+    document.title = (datos.titulo || "Presentación") + " — Evidran";
+
+    pdfjsLib.getDocument({ url: datos.pdfUrl }).promise
+      .then(function (doc) {
+        pdf = doc;
+        numPaginas = doc.numPages;
+        $("puerta").style.display = "none";
+        $("visor").classList.add("activo");
+        latir(true); // comunica numPaginas
+        irA(1);
+      })
+      .catch(function (err) {
+        console.error(err);
+        $("error").textContent = "No se pudo cargar el documento. Vuelve a intentarlo.";
+        $("entrar").disabled = false;
+      });
+  }
+
+  function pintarMarcaAgua(texto) {
+    var caja = $("marca-agua");
+    caja.innerHTML = "";
+    for (var i = 0; i < 80; i++) {
+      var s = document.createElement("span");
+      s.textContent = texto;
+      caja.appendChild(s);
+    }
+  }
+
+  // ---------- Render ----------
+  var renderEnCurso = 0;
+  function irA(n) {
+    if (!pdf) return;
+    n = Math.min(Math.max(1, n), numPaginas);
+    if (n !== pagina) contabiliza();
+    pagina = n;
+    actualizarUi();
+    render(n);
+    if (n + 1 <= numPaginas) setTimeout(function () { render(n + 1, true); }, 250);
+  }
+
+  function medidas(page) {
+    var esc = $("escenario");
+    var maxW = esc.clientWidth - (window.innerWidth > 700 ? 140 : 16);
+    var maxH = esc.clientHeight - 16;
+    var vp = page.getViewport({ scale: 1 });
+    var escala = Math.min(maxW / vp.width, maxH / vp.height);
+    return { escala: escala, w: Math.floor(vp.width * escala), h: Math.floor(vp.height * escala) };
+  }
+
+  function render(n, soloCache) {
+    var id = ++renderEnCurso;
+    pdf.getPage(n).then(function (page) {
+      var med = medidas(page);
+      var claveCache = n + "|" + med.w;
+      var listo = cacheRender.get(claveCache);
+      if (listo) { if (!soloCache && id === renderEnCurso) presentar(listo, med); return; }
+
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var canvas = document.createElement("canvas");
+      canvas.width = med.w * dpr;
+      canvas.height = med.h * dpr;
+      var ctx = canvas.getContext("2d");
+      var vp = page.getViewport({ scale: med.escala * dpr });
+      page.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
+        if (cacheRender.size > 8) cacheRender.delete(cacheRender.keys().next().value);
+        cacheRender.set(claveCache, canvas);
+        if (!soloCache && id === renderEnCurso) presentar(canvas, med);
+      });
+    });
+  }
+
+  function presentar(fuente, med) {
+    var lienzo = $("lienzo");
+    lienzo.width = fuente.width;
+    lienzo.height = fuente.height;
+    lienzo.style.width = med.w + "px";
+    lienzo.style.height = med.h + "px";
+    lienzo.getContext("2d").drawImage(fuente, 0, 0);
+    $("cargando").style.display = "none";
+  }
+
+  function actualizarUi() {
+    $("contador").textContent = pagina + " / " + numPaginas;
+    $("ant").disabled = pagina <= 1;
+    $("sig").disabled = pagina >= numPaginas;
+    document.querySelector("#progreso i").style.width = (pagina / numPaginas) * 100 + "%";
+  }
+
+  // ---------- Navegación ----------
+  $("ant").addEventListener("click", function () { irA(pagina - 1); });
+  $("sig").addEventListener("click", function () { irA(pagina + 1); });
+  document.addEventListener("keydown", function (ev) {
+    if (!pdf) return;
+    if (ev.key === "ArrowRight" || ev.key === " " || ev.key === "PageDown") { ev.preventDefault(); irA(pagina + 1); }
+    if (ev.key === "ArrowLeft" || ev.key === "PageUp") { ev.preventDefault(); irA(pagina - 1); }
+    if (ev.key === "Home") irA(1);
+    if (ev.key === "End") irA(numPaginas);
+  });
+  var toqueX = null;
+  $("escenario").addEventListener("touchstart", function (ev) { toqueX = ev.touches[0].clientX; }, { passive: true });
+  $("escenario").addEventListener("touchend", function (ev) {
+    if (toqueX === null) return;
+    var dx = ev.changedTouches[0].clientX - toqueX;
+    toqueX = null;
+    if (Math.abs(dx) > 40) irA(pagina + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+  $("escenario").addEventListener("click", function (ev) {
+    if (!pdf || window.innerWidth > 700) return;
+    var x = ev.clientX / window.innerWidth;
+    if (x > 0.66) irA(pagina + 1);
+    else if (x < 0.34) irA(pagina - 1);
+  });
+
+  $("pantalla").addEventListener("click", function () {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(function () {});
+  });
+
+  var tResize = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(tResize);
+    tResize = setTimeout(function () { if (pdf) { cacheRender.clear(); render(pagina); } }, 180);
+  });
+
+  document.addEventListener("contextmenu", function (ev) {
+    if (pdf) ev.preventDefault();
+  });
+
+  // ---------- Registro de lectura ----------
+  var pendientes = {}; // pagina → ms acumulados sin enviar
+  var tInicio = null;
+  var numPaginasComunicado = false;
+
+  function visible() { return document.visibilityState === "visible"; }
+  function arrancaReloj() { tInicio = visible() ? Date.now() : null; }
+  function contabiliza() {
+    if (tInicio !== null) {
+      var ms = Date.now() - tInicio;
+      if (ms > 300) pendientes[pagina] = (pendientes[pagina] || 0) + ms;
+    }
+    arrancaReloj();
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (!pdf) return;
+    if (document.visibilityState === "hidden") { contabiliza(); tInicio = null; latir(); }
+    else arrancaReloj();
+  });
+
+  function cuerpoLatido(conPaginas) {
+    var eventos = Object.keys(pendientes).map(function (p) {
+      return { pagina: Number(p), ms: Math.round(pendientes[p]) };
+    });
+    var cuerpo = { pase: pase, eventos: eventos };
+    if (conPaginas && !numPaginasComunicado) { cuerpo.numPaginas = numPaginas; }
+    return { eventos: eventos, json: JSON.stringify(cuerpo), conPaginas: conPaginas && !numPaginasComunicado };
+  }
+
+  function latir(conPaginas) {
+    if (!pase) return;
+    contabiliza();
+    var c = cuerpoLatido(conPaginas);
+    if (c.eventos.length === 0 && !c.conPaginas) return;
+    pendientes = {};
+    if (c.conPaginas) numPaginasComunicado = true;
+    fetch("/api/deck/latido", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: c.json,
+      keepalive: true,
+    }).catch(function () {});
+  }
+
+  setInterval(function () { if (pdf && visible()) latir(); }, 15000);
+
+  window.addEventListener("pagehide", function () {
+    if (!pase) return;
+    contabiliza();
+    var c = cuerpoLatido(false);
+    if (c.eventos.length === 0) return;
+    pendientes = {};
+    navigator.sendBeacon("/api/deck/latido", new Blob([c.json], { type: "text/plain" }));
+  });
+
+  arrancaReloj();
+})();
+</script>
+</body>
+</html>
