@@ -60,6 +60,9 @@
   /* Cola y listas de contactos */
   .contacto { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--cream-d); }
   .contacto:first-child { border-top: 0; }
+  .contacto.clic { cursor: pointer; margin: 0 -10px; padding-left: 10px; padding-right: 10px; border-radius: 8px; }
+  .contacto.clic:hover { background: var(--cream); }
+  .contacto.clic:focus-visible { outline: 2px solid var(--ink-soft); outline-offset: -2px; }
   .contacto .quien { font-weight: 800; }
   .contacto .det { font-size: 13.5px; color: var(--ink-soft); margin-top: 2px; }
   .etiqueta { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 10px; background: var(--cream); color: var(--ink-soft); white-space: nowrap; }
@@ -588,13 +591,19 @@
     return null;
   }
 
+  // Toda la fila abre la ficha; «Abrir» se queda como pista visual.
   function filaContacto(c, extra) {
-    return h("div", { class: "contacto" },
+    function abrir() { abrirFicha(c.id); }
+    return h("div", {
+      class: "contacto clic", role: "button", tabindex: "0", "aria-label": "Abrir la ficha de " + c.empresa,
+      onclick: abrir,
+      onkeydown: function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); abrir(); } },
+    },
       h("div", null,
         h("div", { class: "quien" }, c.empresa),
         h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona", c.telefono ? " · " + c.telefono : ""),
         extra ? h("div", { class: "det" }, extra) : null),
-      h("button", { class: "boton mini", onclick: function () { abrirFicha(c.id); } }, "Abrir"));
+      h("span", { class: "boton mini", "aria-hidden": "true" }, "Abrir"));
   }
 
   function pintarLlamar() {
