@@ -123,6 +123,9 @@
   .frase { background: var(--cream); border-radius: 12px; padding: 10px 14px; margin-top: 8px; font-size: 15.5px; line-height: 1.5; }
   .objecion { padding: 10px 0; border-top: 1px solid var(--cream-d); }
   .objecion:first-child { border-top: 0; }
+  details.opcional { margin-top: 12px; background: var(--cream); border-radius: 12px; padding: 10px 14px; }
+  details.opcional > summary { font-size: 14.5px; }
+  details.opcional .objecion { border-top-color: var(--cream-d); }
   .objecion b { display: block; font-size: 14.5px; }
   .objecion span { display: block; font-size: 14.5px; color: var(--ink); margin-top: 3px; }
 
@@ -206,6 +209,11 @@
           <li>Si tiene auditoría pronto: «Te avisa de lo que vence y te dice qué te falta antes de que venga el auditor.»</li>
           <li>Si ya tiene un programa: mira «Si te dicen…».</li>
         </ul>
+        <details class="opcional">
+          <summary>Opcional: qué gana la empresa</summary>
+          <p class="suave peq">Solo si la conversación te da pie. Elige UNA frase, la que encaje con lo que te ha contado, y pasa a pedir la cita. Si las sueltas todas, suena a folleto.</p>
+          <div id="guion-ganancias"></div>
+        </details>
         <h4>5. Pide la cita (concreta, nunca «ya me dirás»)</h4>
         <div class="frase">«Estamos buscando unas pocas empresas que lo prueben gratis durante 30 días, sin tarjeta y sin compromiso. En una videollamada de 30 minutos te lo dejamos montado, con un caso real tuyo. ¿Te va mejor el [día] a las [hora] o el [día] a las [hora]?»</div>
         <p>Ofrece siempre dos huecos concretos de la agenda. Si ninguno le va: «¿Qué día de la semana que viene te encaja mejor?»</p>
@@ -375,6 +383,14 @@
     <!-- Resumen -->
     <section id="v-resumen" class="vista oculto">
       <div class="cifras bloque" id="resumen-cifras"></div>
+      <div class="tarjeta bloque">
+        <div class="fila" style="justify-content:space-between">
+          <h2 style="margin:0">Últimas llamadas</h2>
+          <select id="ultimas-filtro" style="width:auto"><option value="hoy">Hoy</option><option value="7">Últimos 7 días</option><option value="todas">Todas</option></select>
+        </div>
+        <p class="suave peq" style="margin-top:6px">La más reciente arriba. Pulsa una fila para abrir la ficha de la empresa.</p>
+        <div id="ultimas-llamadas" class="bloque"></div>
+      </div>
       <div class="tarjeta bloque">
         <h2>Resultado de las llamadas</h2>
         <table><tbody id="resumen-resultados"></tbody></table>
@@ -823,11 +839,25 @@
   };
   var NOMBRES_RESULTADO = { demo: "Demo agendada", volver: "Volver a llamar", info: "Info por correo", no_contesta: "No contesta", no_esta: "No está la persona", no_interesa: "No interesa", herramienta_propia: "Ya tienen o desarrollan la suya", no_encaja: "No encaja", no_llamar: "No llamar", erroneo: "Teléfono erróneo" };
 
+  var GANANCIAS = [
+    ["Lo hace todo a mano o va justo de tiempo", "«Te ahorras pelearte con la plantilla: cuentas qué ha pasado y el informe sale redactado. Ese rato vuelve a tu trabajo de verdad.»"],
+    ["Le preocupa la auditoría", "«Cada no conformidad queda con su responsable, su plazo y su evidencia, y sabes qué te falta antes de que llegue el auditor.»"],
+    ["Las causas se quedan en «error humano» o «falta de formación»", "«Te hace las preguntas que haría un auditor y no te deja quedarte en “error humano”. Las causas llegan mucho más trabajadas.»"],
+    ["Se le pasan plazos o lleva demasiadas cosas", "«Te avisa por correo de lo que vence. No depende de que te acuerdes tú.»"],
+    ["Los mismos problemas se repiten", "«Te enseña qué se repite y por qué, y te propone objetivos con tus propios datos. Te sirve para la revisión por la dirección.»"],
+    ["Está con la ISO 9001:2026", "«Te dice qué requisitos nuevos ya cubres con lo que tienes y cuáles te faltan.»"],
+    ["Lleva varias normas (calidad, medioambiente, seguridad)", "«Lo tienes todo en el mismo sitio, con las preguntas adecuadas para cada norma.»"],
+  ];
+  function listaGanancias() {
+    return GANANCIAS.map(function (g) { return h("div", { class: "objecion" }, h("b", null, "Si te cuenta: " + g[0].charAt(0).toLowerCase() + g[0].slice(1)), h("span", null, g[1])); });
+  }
+
   function listaObjeciones() {
     return OBJECIONES.map(function (o) { return h("div", { class: "objecion" }, h("b", null, o[0]), h("span", null, o[1])); });
   }
   (function pintarGuion() {
     anadir($("guion-objeciones"), listaObjeciones());
+    anadir($("guion-ganancias"), listaGanancias());
     anadir($("guion-resultados"), Object.keys(CUANDO).map(function (k) {
       return h("div", { class: "objecion" }, h("b", null, NOMBRES_RESULTADO[k]), h("span", null, CUANDO[k]));
     }));
@@ -844,6 +874,8 @@
         h("h4", null, "1. Saludo"), h("div", { class: "frase" }, "«Hola, " + nombre + ", soy [tu nombre], te llamo de Evidran. Es una llamada corta, ¿te pillo en buen momento o te llamo en otro rato?»"),
         h("h4", null, "2. Motivo"), h("div", { class: "frase" }, "«Te llamo porque llevas la calidad de " + c.empresa.replace(/\.$/, "") + ". Hemos creado una herramienta, diseñada por personas de calidad con más de 20 años de experiencia, para que documentar una no conformidad sea contarla, en vez de pelearse con plantillas de Word.»"),
         h("h4", null, "3. Pregunta (y escucha)"), h("div", { class: "frase" }, "«Por curiosidad, ¿cómo registráis hoy las no conformidades? ¿Word, Excel, algún programa?»"),
+        h("details", { class: "opcional" }, h("summary", null, "Opcional: qué gana la empresa"),
+          h("p", { class: "suave peq" }, "Solo si te da pie. Elige UNA, la que encaje con lo que te ha contado."), listaGanancias()),
         h("h4", null, "5. Pide la cita"), h("div", { class: "frase" }, "«Estamos buscando unas pocas empresas que lo prueben gratis durante 30 días, sin tarjeta y sin compromiso. En una videollamada de 30 minutos te lo dejamos montado. ¿Te va mejor el [día] a las [hora] o el [día] a las [hora]?»"),
         h("h4", null, "Si te dicen…"), listaObjeciones()));
   }
@@ -1006,6 +1038,31 @@
   });
 
   // ---------- Resumen ----------
+  // Todas las llamadas anotadas, con su contacto, la más reciente primero.
+  function pintarUltimas() {
+    var filtro = $("ultimas-filtro").value;
+    var desde = filtro === "hoy" ? hoy() : filtro === "7" ? diaDe(Date.now() - 6 * 86400000) : "";
+    var lista = [];
+    S.d.contactos.forEach(function (c) { c.historial.forEach(function (l) { lista.push({ l: l, c: c }); }); });
+    lista = lista.filter(function (x) { return !desde || diaDe(x.l.hechaEn) >= desde; })
+      .sort(function (a, b) { return a.l.hechaEn < b.l.hechaEn ? 1 : -1; });
+    var caja = vaciar($("ultimas-llamadas"));
+    if (!lista.length) { caja.appendChild(h("div", { class: "vacio" }, filtro === "hoy" ? "Hoy todavía no hay llamadas anotadas." : "No hay llamadas anotadas en este periodo.")); return; }
+    var mostradas = lista.slice(0, 200);
+    mostradas.forEach(function (x) {
+      var l = x.l, c = x.c;
+      var clase = l.resultado === "demo" ? "demo" : l.resultado === "volver" ? "volver" : l.resultado === "no_llamar" ? "fuera" : "";
+      caja.appendChild(h("div", { class: "contacto", style: "cursor:pointer;align-items:flex-start", onclick: function () { abrirFicha(c.id); } },
+        h("div", null,
+          h("div", { class: "quien" }, c.empresa),
+          h("div", { class: "det" }, relativo(l.hechaEn) + (c.persona ? " · " + c.persona : "") + (l.rol === "admin" ? " · anotada por administración" : "")),
+          l.nota ? h("div", { style: "font-size:14.5px;margin-top:4px;white-space:pre-wrap" }, l.nota) : h("div", { class: "det" }, "Sin nota")),
+        h("span", { class: "etiqueta " + clase }, S.d.resultados[l.resultado] || l.resultado)));
+    });
+    if (lista.length > mostradas.length) caja.appendChild(h("div", { class: "vacio" }, "Se muestran las 200 más recientes de " + lista.length + "."));
+  }
+  $("ultimas-filtro").addEventListener("change", function () { if (S.d) pintarUltimas(); });
+
   function pintarResumen() {
     var r = S.d.resumen;
     var pendientes = S.d.contactos.filter(function (c) { var q = enCola(c); return q && q.grupo < 3; }).length;
@@ -1015,6 +1072,8 @@
       [S.d.contactos.length, "Contactos cargados"], [pendientes, "Pendientes de llamar"]]
       .concat(S.rol === "admin" ? [[r.llamadasAdmin, "Llamadas tuyas"]] : [])
       .forEach(function (x) { cif.appendChild(h("div", { class: "cifra" }, h("b", null, x[0]), h("span", null, x[1]))); });
+
+    pintarUltimas();
 
     var tr = vaciar($("resumen-resultados"));
     var total = Object.keys(r.porResultado).reduce(function (s, k) { return s + r.porResultado[k]; }, 0);
