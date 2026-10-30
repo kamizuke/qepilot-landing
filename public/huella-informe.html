@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Informe de huella de carbono — Evidran</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="referrer" content="no-referrer" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/plataforma.css" />
+<style>
+  /* Informe de la calculadora de huella. Se imprime en PDF desde el navegador. */
+  body { background: var(--cream); }
+  section { padding: 0; }
+  .inf { max-width: 860px; margin: 0 auto; padding: 26px 20px 70px; }
+  .cab-inf { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .cab-inf img { height: 30px; width: auto; }
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tarjeta { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin-top: 16px; box-shadow: 0 3px 10px rgba(22,32,43,.04); break-inside: avoid; }
+  h1 { font-size: clamp(24px, 3.4vw, 32px); font-weight: 800; letter-spacing: -.02em; margin-top: 22px; }
+  h2 { font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+  .suave { color: var(--ink-soft); }
+  .peq { font-size: 13.5px; }
+  .cifra { font-size: 52px; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; }
+  .cifra small { font-size: 20px; color: var(--ink-soft); font-weight: 700; letter-spacing: 0; }
+  .reparto { display: flex; height: 14px; border-radius: 7px; overflow: hidden; margin: 14px 0 8px; background: var(--cream-d); }
+  .reparto .a1 { background: var(--navy); }
+  .reparto .a2 { background: var(--teal); }
+  .leyenda { display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px; }
+  .leyenda i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px; }
+  th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); padding: 6px; border-bottom: 1px solid var(--line); }
+  td { padding: 8px 6px; border-bottom: 1px solid var(--cream-d); vertical-align: top; }
+  td.n, th.n { text-align: right; white-space: nowrap; }
+  .caja { background: var(--cream); border-radius: 12px; padding: 14px 16px; margin-top: 10px; font-size: 15px; line-height: 1.55; }
+  .boton { font: inherit; font-weight: 700; font-size: 14px; padding: 9px 16px; border-radius: 11px; border: 1.5px solid var(--line); background: #fff; color: var(--ink); cursor: pointer; text-decoration: none; display: inline-block; }
+  .boton.pri { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .fila { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+  .fila input, .fila select { font: inherit; font-size: 15px; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; width: 90px; }
+  .pestana { margin-top: 16px; }
+  .pestana b { display: block; font-size: 14.5px; }
+  .cta { text-align: center; }
+  .oculto { display: none !important; }
+  @media print {
+    body { background: #fff; }
+    .no-imprimir { display: none !important; }
+    .tarjeta { box-shadow: none; border-color: #ddd; }
+    .inf { padding: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="inf">
+  <div class="cab-inf">
+    <a href="/"><img src="/brand/evidran-logo.svg" alt="Evidran" width="120" height="30" /></a>
+    <div class="acciones no-imprimir">
+      <button class="boton pri" id="pdf">Guardar en PDF</button>
+    </div>
+  </div>
+
+  <div class="tarjeta" id="cargando"><p class="suave">Cargando tu informe…</p></div>
+  <div class="tarjeta oculto" id="error"><h2>Este enlace no funciona</h2><p class="suave" id="error-texto"></p></div>
+
+  <div id="informe" class="oculto">
+    <h1 id="titulo"></h1>
+    <p class="suave" id="subtitulo"></p>
+
+    <div class="tarjeta">
+      <h2>Resultado</h2>
+      <div class="cifra"><span id="total"></span> <small>t CO₂e</small></div>
+      <div class="reparto"><div class="a1" id="barra-a1"></div><div class="a2" id="barra-a2"></div></div>
+      <div class="leyenda">
+        <span><i style="background:var(--navy)"></i>Alcance 1 · combustibles: <b id="a1"></b> t</span>
+        <span><i style="background:var(--teal)"></i>Alcance 2 · electricidad: <b id="a2"></b> t</span>
+      </div>
+      <table><thead><tr><th>Fuente</th><th class="n">Consumo</th><th class="n">Factor</th><th class="n">t CO₂e</th><th class="n">%</th></tr></thead><tbody id="desglose"></tbody></table>
+      <p class="suave peq" id="nota-aprox" style="margin-top:10px"></p>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Qué pasa si…</h2>
+      <p class="suave peq">Calculado con los mismos factores oficiales y tus consumos. Solo toneladas: el ahorro en euros depende de tus contratos.</p>
+      <table><thead><tr><th>Cambio</th><th class="n">Huella</th><th class="n">Reducción</th></tr></thead><tbody id="escenarios"></tbody></table>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Objetivo para tu ISO 14001</h2>
+      <p class="suave peq">Sobre tu fuente principal. Ajusta el porcentaje y el año a lo que veas realista.</p>
+      <div class="fila no-imprimir">
+        <label>Reducir un <input id="obj-pct" type="number" min="1" max="90" value="15" /> %</label>
+        <label>en <select id="obj-anio"></select></label>
+      </div>
+      <div class="caja">
+        <div><b>Objetivo:</b> <span id="obj-texto"></span></div>
+        <div style="margin-top:6px"><b>Indicador:</b> <span id="obj-indicador"></span></div>
+        <div style="margin-top:6px"><b>Punto de partida:</b> <span id="obj-partida"></span></div>
+        <div style="margin-top:6px"><b>Seguimiento:</b> <span id="obj-seguimiento"></span></div>
+      </div>
+      <div class="fila no-imprimir"><button class="boton" data-copiar="objetivo">Copiar el objetivo</button></div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Texto para cuestionarios de clientes</h2>
+      <p class="suave peq">Para los cuestionarios de sostenibilidad que mandan los clientes, o para tu memoria anual.</p>
+      <div class="caja" id="cuestionario"></div>
+      <div class="fila no-imprimir"><button class="boton" data-copiar="cuestionario">Copiar el texto</button></div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Cifras para la calculadora del MITECO</h2>
+      <p class="suave peq">Descarga la calculadora de huella de organización (alcance 1+2) en la web del MITECO, pon el año en la pestaña 1 y copia cada fila en su pestaña. Los nombres son los de sus desplegables.</p>
+      <div id="miteco"></div>
+    </div>
+
+    <div class="tarjeta cta">
+      <h2>Que se calcule sola, cada año</h2>
+      <p class="suave" style="max-width:60ch;margin:6px auto 0">En Evidran la huella sale de los consumos que ya registras en tus aspectos ambientales y queda lista para la auditoría de la ISO 14001 y la revisión por la dirección.</p>
+      <div class="fila no-imprimir" style="justify-content:center"><a class="boton pri" href="https://app.evidran.com/?alta=1">Pruébalo gratis 30 días</a></div>
+    </div>
+
+    <p class="suave peq" style="margin-top:18px" id="pie"></p>
+    <p class="peq no-imprimir oculto" id="baja-caja" style="margin-top:6px"><button class="boton" id="baja">Darme de baja de los avisos</button> <span id="baja-ok"></span></p>
+  </div>
+</div>
+
+<script type="module">
+  import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, toneladas, porcentaje, versionFactores, ORIGEN } from "/huella/calculo.js";
+  import { COMERCIALIZADORAS } from "/huella/comercializadoras.js";
+
+  const $ = (id) => document.getElementById(id);
+  const token = (location.pathname.split("/huella/informe/")[1] || "").split(/[/?#]/)[0];
+  let datos = null;
+
+  function el(tag, props, ...hijos) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(props || {})) if (v != null) e.setAttribute(k, v);
+    for (const h of hijos.flat()) if (h != null) e.append(h);
+    return e;
+  }
+  async function api(cuerpo) {
+    const res = await fetch("/api/huella/calculadora", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...cuerpo, token }) });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok) throw Object.assign(new Error(j.error || "No se pudo cargar."), { status: res.status });
+    return j;
+  }
+  function copiar(texto, boton) {
+    navigator.clipboard.writeText(texto).then(() => { const t = boton.textContent; boton.textContent = "Copiado"; setTimeout(() => (boton.textContent = t), 1500); });
+  }
+
+  function pintarObjetivo(r) {
+    const o = objetivo(r, Number($("obj-pct").value), Number($("obj-anio").value));
+    if (!o) return;
+    $("obj-texto").textContent = o.texto;
+    $("obj-indicador").textContent = o.indicador;
+    $("obj-partida").textContent = o.partida;
+    $("obj-seguimiento").textContent = o.seguimiento;
+  }
+
+  function pintar(d) {
+    const r = calcular(d.entrada, COMERCIALIZADORAS);
+    document.title = `Huella de carbono ${r.anio} · ${d.empresa} — Evidran`;
+    $("titulo").textContent = `Huella de carbono ${r.anio} · ${d.empresa}`;
+    $("subtitulo").textContent = `Alcances 1 y 2, con los factores de la calculadora de huella de organización del MITECO (${versionFactores()}).`;
+    $("total").textContent = toneladas(r.total);
+    $("a1").textContent = toneladas(r.a1);
+    $("a2").textContent = toneladas(r.a2);
+    $("barra-a1").style.width = porcentaje(r.a1, r.total) + "%";
+    $("barra-a2").style.width = porcentaje(r.a2, r.total) + "%";
+    $("desglose").replaceChildren(...r.partidas.slice().sort((a, b) => b.kg - a.kg).map((p) => el("tr", null,
+      el("td", null, p.etiqueta + (p.aprox ? " (aproximado)" : "")),
+      el("td", { class: "n" }, `${p.cantidad.toLocaleString("es-ES")} ${p.unidad}`),
+      el("td", { class: "n" }, `${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })} kg/${p.unidad}`),
+      el("td", { class: "n" }, toneladas(p.kg)),
+      el("td", { class: "n" }, porcentaje(p.kg, r.total) + " %"))));
+    $("nota-aprox").textContent = r.aproximado ? "Parte de los consumos son aproximados." : "";
+
+    const { escenarios } = simular(d.entrada, COMERCIALIZADORAS);
+    $("escenarios").replaceChildren(...(escenarios.length ? escenarios.map((e) => el("tr", null,
+      el("td", null, el("b", null, e.titulo), el("div", { class: "suave peq" }, e.descripcion)),
+      el("td", { class: "n" }, `${toneladas(e.total)} t`),
+      el("td", { class: "n" }, `−${toneladas(e.ahorro)} t (${e.pct} %)`))) : [el("tr", null, el("td", { colspan: "3", class: "suave" }, "Con estos consumos no hay escenarios que comparar."))]));
+
+    const sel = $("obj-anio");
+    if (!sel.options.length) for (let a = r.anio + 1; a <= r.anio + 5; a++) sel.append(el("option", { value: a }, String(a)));
+    sel.value = String(r.anio + 2);
+    pintarObjetivo(r);
+    $("obj-pct").addEventListener("input", () => pintarObjetivo(r));
+    sel.addEventListener("change", () => pintarObjetivo(r));
+
+    $("cuestionario").textContent = textoCuestionario(r, d.empresa);
+
+    $("miteco").replaceChildren(...tablasMiteco(r).map((t) => {
+      const filasTexto = t.filas.map((f) => f.join("\t")).join("\n");
+      const b = el("button", { class: "boton no-imprimir" }, "Copiar filas");
+      b.addEventListener("click", () => copiar(filasTexto, b));
+      return el("div", { class: "pestana" },
+        el("b", null, `Pestaña ${t.pestana}`), el("div", { class: "suave peq" }, t.apartado),
+        el("table", null, el("thead", null, el("tr", null, ...t.columnas.map((c) => el("th", null, c)))),
+          el("tbody", null, ...t.filas.map((f) => el("tr", null, ...f.map((c) => el("td", null, c)))))),
+        el("div", { class: "fila" }, b));
+    }));
+
+    $("pie").textContent = `Informe generado en evidran.com/huella con los consumos que escribiste. Factores: ${ORIGEN.documento}, ${versionFactores()}.`;
+    if (d.novedades) $("baja-caja").classList.remove("oculto");
+    document.querySelectorAll("[data-copiar]").forEach((b) => b.addEventListener("click", () => {
+      const que = b.dataset.copiar;
+      const t = que === "cuestionario" ? $("cuestionario").textContent
+        : [`Objetivo: ${$("obj-texto").textContent}`, `Indicador: ${$("obj-indicador").textContent}`, `Punto de partida: ${$("obj-partida").textContent}`, `Seguimiento: ${$("obj-seguimiento").textContent}`].join("\n");
+      copiar(t, b);
+    }));
+  }
+
+  $("pdf").addEventListener("click", () => window.print());
+  $("baja").addEventListener("click", async () => {
+    try { await api({ accion: "baja" }); $("baja-ok").textContent = "Hecho: no te enviaremos más avisos."; $("baja").disabled = true; }
+    catch (e) { $("baja-ok").textContent = e.message; }
+  });
+
+  if (!/^[A-Za-z0-9_-]{16,64}$/.test(token)) {
+    $("cargando").classList.add("oculto"); $("error").classList.remove("oculto");
+    $("error-texto").textContent = "Revisa que el enlace esté completo.";
+  } else {
+    api({ accion: "informe" }).then((d) => {
+      datos = d;
+      $("cargando").classList.add("oculto");
+      $("informe").classList.remove("oculto");
+      pintar(d);
+    }).catch((e) => {
+      $("cargando").classList.add("oculto"); $("error").classList.remove("oculto");
+      $("error-texto").textContent = e.status === 404 ? "Revisa que el enlace esté completo o vuelve a calcular en evidran.com/huella." : e.message;
+    });
+  }
+</script>
+</body>
+</html>

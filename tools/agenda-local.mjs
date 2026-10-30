@@ -1,5 +1,5 @@
-// Agenda y seguimiento · servidor local para probar /llamadas y /cita/<token>
-// sin Supabase ni SMTP: datos en memoria y correos que no salen (se ven en
+// Agenda, seguimiento y calculadora de huella · servidor local para probar
+// /llamadas, /cita/<token>, /huella y /huella/informe/<token> sin Supabase ni SMTP: datos en memoria y correos que no salen (se ven en
 // http://localhost:5188/_correos).
 //   node tools/agenda-local.mjs
 // Claves de prueba: «admin-local» (Lissette) y «setter-local» (setter).
@@ -9,6 +9,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { crearTrabajo, crearCitaPublica } from "../api/agenda/_acciones.js";
 import { crearDatosMemoria } from "./agenda-memoria.mjs";
+import { crearCalculadora } from "../api/huella/_acciones.js";
+import { crearDatosHuellaMemoria } from "./huella-memoria.mjs";
+import { COMERCIALIZADORAS } from "../public/huella/comercializadoras.js";
 
 const raiz = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public");
 const PUERTO = Number(process.env.PORT) || 5188;
@@ -30,6 +33,7 @@ const deps = {
 };
 const trabajo = crearTrabajo(deps);
 const cita = crearCitaPublica(deps);
+const calculadora = crearCalculadora({ ...deps, datos: crearDatosHuellaMemoria(), comercializadoras: COMERCIALIZADORAS });
 
 const TIPOS = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon", ".webp": "image/webp" };
 
@@ -42,11 +46,12 @@ function adaptar(res) {
 
 http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://x");
-  if (url.pathname === "/api/agenda/trabajo" || url.pathname === "/api/agenda/cita") {
+  const api = { "/api/agenda/trabajo": trabajo, "/api/agenda/cita": cita, "/api/huella/calculadora": calculadora }[url.pathname];
+  if (api) {
     let cuerpo = "";
     for await (const trozo of req) cuerpo += trozo;
     req.body = cuerpo ? JSON.parse(cuerpo) : {};
-    return (url.pathname.endsWith("trabajo") ? trabajo : cita)(req, adaptar(res));
+    return api(req, adaptar(res));
   }
   if (url.pathname === "/_correos") {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -56,7 +61,8 @@ http.createServer(async (req, res) => {
         "</body>"
     );
   }
-  let ruta = url.pathname === "/llamadas" ? "/llamadas.html" : url.pathname.startsWith("/cita/") ? "/cita.html" : url.pathname;
+  const RUTAS = { "/llamadas": "/llamadas.html", "/huella": "/huella.html" };
+  let ruta = RUTAS[url.pathname] || (url.pathname.startsWith("/cita/") ? "/cita.html" : url.pathname.startsWith("/huella/informe/") ? "/huella-informe.html" : url.pathname);
   if (ruta === "/") ruta = "/llamadas.html";
   const fichero = path.join(raiz, path.normalize(decodeURIComponent(ruta)).replace(/^(\.\.[/\\])+/, ""));
   if (!fichero.startsWith(raiz) || !fs.existsSync(fichero) || fs.statSync(fichero).isDirectory()) {

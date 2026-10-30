@@ -15,6 +15,14 @@
     {
       "source": "/cita/:token",
       "destination": "/cita.html"
+    },
+    {
+      "source": "/huella",
+      "destination": "/huella.html"
+    },
+    {
+      "source": "/huella/informe/:token",
+      "destination": "/huella-informe.html"
     }
   ],
   "headers": [
@@ -120,6 +128,32 @@
         {
           "key": "Referrer-Policy",
           "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/huella/informe/:token",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/huella-informe.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
         }
       ]
     }
