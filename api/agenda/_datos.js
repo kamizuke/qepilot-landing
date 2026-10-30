@@ -3,6 +3,11 @@
 // probar con unos datos en memoria (tools/agenda-local.mjs).
 import { rest, rpc } from "../deck/_comun.js";
 
+// Fila de seg_setter que representa a Lissette cuando se queda un contacto.
+// Ninguna clave da esta huella (las huellas son hexadecimales de 64), así que
+// nadie puede entrar con ella; va desactivada para que no reciba repartos.
+export const RESERVA = "admin:reservado";
+
 const ERRORES = /(hueco_ocupado|hueco_bloqueado|cita_no_disponible|contacto_no_existe)/;
 
 // Los errores propios de las funciones SQL llegan dentro del texto de
@@ -141,8 +146,11 @@ export function crearDatos(env) {
       }
     },
 
+    // `reservado`: la fila de «me lo quedo» de Lissette (ver RESERVA en
+    // _acciones.js). La huella de la clave nunca sale de aquí.
     async listarSetters() {
-      return (await rest(env, "seg_setter?select=id,nombre,activo,creado_en&order=creado_en.asc")) || [];
+      const filas = (await rest(env, "seg_setter?select=id,nombre,activo,creado_en,clave_hash&order=creado_en.asc")) || [];
+      return filas.map(({ clave_hash, ...x }) => ({ ...x, reservado: clave_hash === RESERVA }));
     },
     async setterPorHash(hash) {
       const filas = await rest(env, `seg_setter?clave_hash=eq.${hash}&select=id,nombre,activo`);

@@ -172,7 +172,14 @@
     <section id="v-llamar" class="vista">
       <div class="cifras bloque" id="llamar-cifras"></div>
       <div class="tarjeta bloque">
-        <h2>A quién llamar ahora</h2>
+        <div class="fila" style="justify-content:space-between">
+          <h2 style="margin:0">A quién llamar ahora</h2>
+          <select id="llamar-ver" class="solo-admin" style="width:auto">
+            <option value="todas">Todos los contactos</option>
+            <option value="mios">Solo los míos</option>
+            <option value="sin">Sin asignar</option>
+          </select>
+        </div>
         <p class="suave peq">Primero, quien pidió que le llamaras hoy. Después, los que aún no se han llamado y, al final, los que no contestaron otro día. Cada contacto tiene hasta 3 intentos.</p>
         <div id="cola"></div>
       </div>
@@ -660,7 +667,13 @@
 
   function pintarLlamar() {
     var r = S.d.resumen;
-    var cola = S.d.contactos.map(function (c) { return { c: c, q: enCola(c) }; }).filter(function (x) { return x.q; });
+    var ver = S.rol === "admin" ? $("llamar-ver").value : "todas";
+    var base = S.d.contactos.filter(function (c) {
+      if (ver === "mios") return !!c.setter_id && c.setter_id === idMio();
+      if (ver === "sin") return !c.setter_id;
+      return true;
+    });
+    var cola = base.map(function (c) { return { c: c, q: enCola(c) }; }).filter(function (x) { return x.q; });
     cola.sort(function (a, b) { return a.q.grupo - b.q.grupo || (a.q.orden < b.q.orden ? -1 : a.q.orden > b.q.orden ? 1 : 0); });
     var cif = vaciar($("llamar-cifras"));
     cif.appendChild(h("div", { class: "cifra" }, h("b", null, r.llamadasSetterHoy), h("span", null, "Llamadas de hoy")));
@@ -671,6 +684,7 @@
     var caja = vaciar($("cola"));
     var titulos = { "-1": "Pidieron que les llamaras (calculadora de huella)", 0: "Te pidieron que llamaras hoy", 1: "Sin llamar todavía", 2: "No contestaron otro día", 3: "Ya intentados hoy" };
     if (!S.d.contactos.length) { caja.appendChild(h("div", { class: "vacio" }, "Aún no hay contactos cargados.")); return; }
+    if (ver === "mios" && !base.length) { caja.appendChild(h("div", { class: "vacio" }, "Todavía no te has quedado ningún contacto. Abre uno y, en «Quién la llama», elige «Me lo quedo».")); return; }
     if (!cola.length) { caja.appendChild(h("div", { class: "vacio" }, "No queda nadie por llamar. Buen trabajo.")); return; }
     [-1, 0, 1, 2, 3].forEach(function (g) {
       var del = cola.filter(function (x) { return x.q.grupo === g; });
@@ -929,13 +943,14 @@
       [["", "Todos"], ["pendiente", "Pendientes de llamar"], ["sin", "Sin llamar"]].concat(Object.keys(S.d.resultados).map(function (k) { return [k, S.d.resultados[k]]; }))
         .forEach(function (o) { sel.appendChild(h("option", { value: o[0] }, o[1])); });
     }
-    if (S.rol === "admin") rellenarSelectPersonas($("filtro-persona"), [["", "Todas"], ["__sin", "Sin asignar"]]);
+    if (S.rol === "admin") rellenarSelectPersonas($("filtro-persona"), [["", "Todas"], ["__yo", "Míos"], ["__sin", "Sin asignar"]]);
     var fp = S.rol === "admin" ? $("filtro-persona").value : "";
     var q = $("buscar").value.trim().toLowerCase();
     var f = sel.value;
     var lista = S.d.contactos.filter(function (c) {
       if (fp === "__sin" && c.setter_id) return false;
-      if (fp && fp !== "__sin" && c.setter_id !== fp) return false;
+      if (fp === "__yo" && (!c.setter_id || c.setter_id !== idMio())) return false;
+      if (fp && fp !== "__sin" && fp !== "__yo" && c.setter_id !== fp) return false;
       if (f === "pendiente" && !enCola(c)) return false;
       if (f === "sin" && c.resultado) return false;
       if (f && f !== "pendiente" && f !== "sin" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
@@ -958,24 +973,33 @@
   // ---------- Personas que llaman ----------
   function nombrePersona(id) {
     var p = (S.d.setters || []).find(function (x) { return x.id === id; });
+    if (p && p.reservado) return "Tú";
     return p ? p.nombre + (p.activo ? "" : " (desactivada)") : "—";
+  }
+  // Id de la fila «me lo quedo» de administración (null si aún no te has quedado ninguno).
+  function idMio() {
+    var p = (S.d.setters || []).find(function (x) { return x.reservado; });
+    return p ? p.id : null;
   }
   // Rellena un <select> con opciones fijas + las personas, conservando la elección.
   function rellenarSelectPersonas(sel, fijas, soloActivas) {
     var antes = sel.value;
     vaciar(sel);
-    fijas.concat((S.d.setters || []).filter(function (p) { return !soloActivas || p.activo; }).map(function (p) { return [p.id, p.nombre + (p.activo ? "" : " (desactivada)")]; }))
+    fijas.concat((S.d.setters || []).filter(function (p) { return !p.reservado && (!soloActivas || p.activo); }).map(function (p) { return [p.id, p.nombre + (p.activo ? "" : " (desactivada)")]; }))
       .forEach(function (o) { sel.appendChild(h("option", { value: o[0] }, o[1])); });
     if ([].some.call(sel.options, function (o) { return o.value === antes; })) sel.value = antes;
   }
   function asignacion(c) {
     var sel = h("select", { style: "flex:1 1 200px" });
-    rellenarSelectPersonas(sel, [["", "Sin asignar"]], true);
-    sel.value = c.setter_id || "";
+    rellenarSelectPersonas(sel, [["", "Sin asignar"], ["__yo", "Me lo quedo (lo llamo yo)"]], true);
+    sel.value = c.setter_id && c.setter_id === idMio() ? "__yo" : c.setter_id || "";
     return h("div", null, h("h3", null, "Quién la llama"),
       h("div", { class: "fila" }, sel, h("button", { class: "boton claro mini", onclick: function () {
-        api({ accion: "asignar", ids: [c.id], setterId: sel.value || null }).then(function () {
-          toast(sel.value ? "Asignada a " + nombrePersona(sel.value) + "." : "Queda sin asignar.");
+        var peticion = sel.value === "__yo"
+          ? api({ accion: "quedarme", ids: [c.id] })
+          : api({ accion: "asignar", ids: [c.id], setterId: sel.value || null });
+        peticion.then(function () {
+          toast(sel.value === "__yo" ? "Te la quedas: ninguna setter la verá." : sel.value ? "Asignada a " + nombrePersona(sel.value) + "." : "Queda sin asignar.");
           recargar();
         }).catch(function (e) { toast(e.message); });
       } }, "Guardar")));
@@ -986,7 +1010,7 @@
     var cuentas = {};
     (S.d.resumen.porPersona || []).forEach(function (p) { if (p.id) cuentas[p.id] = p; });
     if (!S.d.setters.length) { caja.appendChild(h("div", { class: "vacio" }, "Todavía no has creado ninguna. Mientras tanto, la clave común de setter sigue funcionando.")); return; }
-    S.d.setters.forEach(function (p) {
+    S.d.setters.filter(function (p) { return !p.reservado; }).forEach(function (p) {
       var n = cuentas[p.id] || { llamadas: 0, demos: 0 };
       var asignados = S.d.contactos.filter(function (c) { return c.setter_id === p.id; }).length;
       caja.appendChild(h("div", { class: "contacto" },
@@ -1024,6 +1048,11 @@
     navigator.clipboard.writeText($("p-clave").textContent).then(function () { toast("Clave copiada."); });
   });
   $("filtro-persona").addEventListener("change", function () { if (S.d) pintarContactos(); });
+  try { $("llamar-ver").value = sessionStorage.getItem("agendaVer") || "todas"; } catch (e) {}
+  $("llamar-ver").addEventListener("change", function () {
+    try { sessionStorage.setItem("agendaVer", $("llamar-ver").value); } catch (e) {}
+    if (S.d) pintarLlamar();
+  });
   $("repartir").addEventListener("click", function () {
     if (!confirm("¿Repartir entre las personas activas los contactos pendientes sin asignar?")) return;
     api({ accion: "repartir" }).then(function (j) { toast(j.repartidos + " contactos repartidos."); recargar(); }).catch(function (e) { toast(e.message); });

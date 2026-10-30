@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boceto · Diagrama de flujo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Boceto suelto: no se sirve en producción (vite build solo construye index.html).
+   Tokens copiados de la home para que se vea igual. */
+:root{--cream:#f7f6f2;--cream-d:#edeae2;--ink:#16202b;--ink-soft:#4a5563;--muted:#56616d;--blue:#2563eb;--blue-l:#4aa6f5;--navy:#2d5a7b;--teal:#14b2ba;--green:#33df9d;--line:#dddcd5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter Tight',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+p{color:var(--muted);line-height:1.65;margin:0}
+h1,h2,h3{margin:0;line-height:1.08;letter-spacing:-.045em}
+h2{font-size:clamp(34px,4vw,54px);font-weight:700}
+.wrap{width:min(1160px,calc(100% - 64px));margin:auto}
+
+/* Barra del boceto (no forma parte del diseño) */
+.toolbar{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;font-size:13px}
+.toolbar .wrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:10px 0}
+.toolbar b{font-weight:600;margin-right:4px}
+.toolbar button{font:inherit;color:#cfd6de;background:transparent;border:1px solid #3a4654;border-radius:100px;padding:5px 12px;cursor:pointer}
+.toolbar button[aria-pressed="true"]{background:#fff;color:var(--ink);border-color:#fff}
+.toolbar .note{color:#8f9aa6;margin-left:auto}
+
+/* Contexto: la sección «Lo que hoy te cuesta» tal como está */
+.pains2{background:#fff;border-top:1px solid var(--line);padding:96px 0}
+.pains2-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
+.pains2-grid h3{font-size:26px;letter-spacing:-.03em;line-height:1.15}
+.pains2-grid p{font-size:15.5px;margin-top:12px}
+.direccion{margin-top:44px;max-width:760px;font-size:15.5px}
+.direccion b{color:var(--ink);font-weight:600}
+
+/* ===== Diagrama ===== */
+.flow-block{margin-top:64px;padding-top:44px;border-top:1px solid var(--line)}
+.flow-head{text-align:center;max-width:640px;margin:0 auto 46px}
+.flow-head h3{font-size:30px;letter-spacing:-.035em;line-height:1.12}
+.flow-head p{margin-top:12px;font-size:15.5px}
+
+.flow{position:relative;padding-bottom:40px;display:grid;grid-template-columns:minmax(0,1fr) 250px minmax(0,1fr);column-gap:110px;align-items:center}
+.flow svg.wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.wire{fill:none;stroke:#d3dce6;stroke-width:1.6}
+.wire.out{stroke:#cfe6e2}
+.joint{fill:#fff;stroke:#b9c7d6;stroke-width:1.6}
+.joint.out{stroke:#9fd8cf}
+.pulse{fill:var(--blue-l)}
+.pulse.out{fill:var(--teal)}
+
+.col{display:flex;flex-direction:column;gap:14px;position:relative;z-index:1}
+.col-label{font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:700;color:var(--muted);margin-bottom:4px}
+.col.in{align-items:flex-end;text-align:left}
+.col.in .col-label{align-self:flex-end}
+.col.out{align-items:flex-start}
+
+.node{display:flex;gap:12px;align-items:center;width:100%;max-width:310px;padding:12px 16px 12px 12px;background:var(--cream);border:1px solid var(--line);border-radius:14px;transition:opacity .3s,transform .3s}
+.node .ic{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:#fff;border:1px solid var(--line);color:var(--ink-soft)}
+.node .ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.node b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--ink);line-height:1.25}
+.node small{display:block;font-size:13px;color:var(--muted);line-height:1.35;margin-top:2px}
+.col.out .node{background:#fff;box-shadow:0 6px 22px rgba(22,32,43,.06)}
+.col.out .node .ic{background:linear-gradient(135deg,#e6faf3,#e3f4fb);border-color:#cdeee6;color:#0f8f86}
+.col.in .node.dashed{border-style:dashed}
+
+.hub{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center}
+.hub-circle{position:relative;width:184px;height:184px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 18px 50px rgba(37,99,235,.14),0 0 0 1px #e4e9f0}
+.hub-circle::before{content:"";position:absolute;inset:-12px;border-radius:50%;background:conic-gradient(from 200deg,rgba(74,166,245,.35),rgba(20,178,186,.35),rgba(51,223,157,.35),rgba(74,166,245,.35));-webkit-mask:radial-gradient(circle,transparent 99px,#000 100px);mask:radial-gradient(circle,transparent 99px,#000 100px);animation:spin 14s linear infinite}
+.hub-circle::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 0 rgba(74,166,245,.28);animation:breathe 2.6s ease-out infinite}
+.hub-circle img{width:70px;height:70px}
+.hub-caption{position:absolute;top:100%;left:50%;transform:translateX(-50%);width:260px;display:flex;flex-direction:column;align-items:center}
+.hub-name{margin-top:22px;font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.hub p{margin-top:18px;font-size:13.5px;line-height:1.5;max-width:240px}
+.hub p b{color:var(--ink);font-weight:600}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%{box-shadow:0 0 0 0 rgba(74,166,245,.28)}100%{box-shadow:0 0 0 22px rgba(74,166,245,0)}}
+
+/* Móvil: columna única con conectores verticales */
+.vlink{display:none}
+@media (max-width:880px){
+  .wrap{width:calc(100% - 36px)}
+  .pains2{padding:62px 0}
+  .pains2-grid{grid-template-columns:1fr;gap:26px}
+  .flow{grid-template-columns:1fr;row-gap:0;padding-bottom:0}
+  .hub-caption{position:static;transform:none;width:auto}
+  .flow svg.wires{display:none}
+  .col.in,.col.out{align-items:stretch}
+  .col.in .col-label{align-self:flex-start}
+  .node{max-width:none}
+  .vlink{display:block;position:relative;width:2px;height:54px;margin:10px auto;background:linear-gradient(#d3dce6,#d3dce6)}
+  .vlink.out{background:#cfe6e2}
+  .vlink::after{content:"";position:absolute;left:50%;top:0;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--blue-l);animation:drop 1.8s ease-in infinite}
+  .vlink.out::after{background:var(--teal)}
+  .hub-circle{width:150px;height:150px}
+  .hub-circle::before{-webkit-mask:radial-gradient(circle,transparent 82px,#000 83px);mask:radial-gradient(circle,transparent 82px,#000 83px)}
+  .hub-circle img{width:58px;height:58px}
+  .flow-head h3{font-size:25px}
+}
+@keyframes drop{0%{top:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:calc(100% - 8px);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .pulse,.vlink::after{display:none}
+  .hub-circle::before,.hub-circle::after{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar"><div class="wrap">
+  <b>Boceto</b>
+  <span>Izquierda:</span>
+  <button type="button" data-variant="hechos" aria-pressed="true">Lo que ocurre</button>
+  <button type="button" data-variant="herramientas" aria-pressed="false">Dónde vive hoy</button>
+  <span class="note">Sustituiría la fila «Evidran sustituye…» de «Lo que hoy te cuesta»</span>
+</div></div>
+
+<section class="pains2"><div class="wrap">
+  <h2>Lo que hoy te cuesta.</h2>
+  <div class="pains2-grid">
+    <div><h3>Te lo cuentan por el pasillo.</h3><p>Y el viernes rellenas tú la plantilla con lo que recuerdas.</p></div>
+    <div><h3>El plazo venció hace dos semanas.</h3><p>Lo descubres tú, no el responsable de la acción.</p></div>
+    <div><h3>«Esto ya nos pasó.»</h3><p>Y nadie encuentra cómo se resolvió la última vez.</p></div>
+  </div>
+
+  <div class="flow-block">
+    <div class="flow-head">
+      <h3 id="flow-title">Todo lo que ocurre entra por un sitio. Sale ordenado.</h3>
+      <p id="flow-sub">Explicas lo que ha pasado; Evidran pregunta lo que falta y lo deja escrito, con su acción y su seguimiento.</p>
+    </div>
+
+    <div class="flow" id="flow">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
+
+      <div class="col in" id="col-in"></div>
+      <div class="vlink" aria-hidden="true"></div>
+
+      <div class="hub" id="hub">
+        <div class="hub-circle" id="hub-circle"><img src="/brand/evidran-isotipo.svg" alt=""></div>
+        <div class="hub-caption">
+          <div class="hub-name">Evidran</div>
+          <p>Te entrevista, redacta contigo y recuerda lo decidido. <b>El criterio sigue siendo tuyo.</b></p>
+        </div>
+      </div>
+
+      <div class="vlink out" aria-hidden="true"></div>
+      <div class="col out" id="col-out"></div>
+    </div>
+  </div>
+
+  <p class="direccion"><b>Para quien firma la factura:</b> expedientes que se defienden en auditoría, acciones que no vencen sin que nadie lo sepa, y un sistema que no vive en una sola cabeza.</p>
+</div></section>
+
+<script>
+const ICONS = {
+  audit:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 3h5v3h-5zM9 13l2 2 4-4"/>',
+  claim:'<path d="M4 5h16v11H9l-5 4z"/><path d="M12 8v3.2M12 13.4v.1"/>',
+  talk:'<path d="M3 5h11v7H7l-4 3z"/><path d="M14 9h7v7l-3-2h-6v-2"/>',
+  truck:'<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.5"/><circle cx="17" cy="17.5" r="1.5"/>',
+  kpi:'<path d="M4 4v16h16"/><path d="M7 8l4 4 3-3 5 5"/>',
+  word:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
+  excel:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 15h16M10 4v16"/>',
+  folder:'<path d="M3 6h6l2 2h10v11H3z"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+  pen:'<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/>',
+  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-4.5"/>',
+  cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4M9 14.5l2 2 4-4"/>',
+  repeat:'<path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M20 4v5h-5M4 20v-5h5"/>',
+  bars:'<path d="M4 20h16"/><rect x="6" y="12" width="3" height="6"/><rect x="11" y="8" width="3" height="10"/><rect x="16" y="4" width="3" height="14"/>'
+};
+
+const VARIANTS = {
+  hechos:{
+    label:'Lo que ocurre',
+    title:'Todo lo que ocurre entra por un sitio. Sale ordenado.',
+    sub:'Explicas lo que ha pasado; Evidran pregunta lo que falta y lo deja escrito, con su acción y su seguimiento.',
+    items:[
+      ['audit','Hallazgo de auditoría','interna, de cliente o de certificación'],
+      ['claim','Reclamación de cliente','con la pieza ya de vuelta'],
+      ['talk','Lo que te cuentan en el pasillo','y el viernes, de memoria'],
+      ['truck','Proveedor que vuelve a fallar','otra vez el mismo lote'],
+      ['kpi','Indicador fuera de objetivo','y nadie sabe desde cuándo']
+    ]
+  },
+  herramientas:{
+    label:'Dónde vive hoy',
+    title:'Lo que hoy está repartido en cinco sitios, en uno.',
+    sub:'Deja de saltar entre la plantilla, el Excel y el correo: el expediente, la acción y lo aprendido viven juntos.',
+    items:[
+      ['word','La plantilla de Word','cada uno la rellena a su manera'],
+      ['excel','El Excel de seguimiento','con plazos que vencen sin aviso'],
+      ['folder','La carpeta de red','Final_v3_bueno.docx'],
+      ['mail','El hilo de correo','donde se decidió todo'],
+      ['pen','«Ya lo redacto yo»','y se queda en una sola cabeza',true]
+    ]
+  }
+};
+
+const OUT = {
+  label:'Lo que queda',
+  items:[
+    ['shield','Un expediente que se defiende','causa, decisión y evidencia, ante el auditor'],
+    ['cal','Acciones con dueño y plazo','y la verificación de que funcionó'],
+    ['repeat','Las causas que se repiten','y el objetivo que sale de ellas'],
+    ['bars','La respuesta para dirección','sin tener que pedir un informe']
+  ]
+};
+
+const nodeHTML = ([ic, title, sub, dashed]) =>
+  `<div class="node${dashed ? ' dashed' : ''}"><span class="ic"><svg viewBox="0 0 24 24">${ICONS[ic]}</svg></span><span><b>${title}</b><small>${sub}</small></span></div>`;
+
+const colIn = document.getElementById('col-in');
+const colOut = document.getElementById('col-out');
+colOut.innerHTML = `<div class="col-label">${OUT.label}</div>` + OUT.items.map(nodeHTML).join('');
+
+function render(name){
+  const v = VARIANTS[name];
+  colIn.innerHTML = `<div class="col-label">${v.label}</div>` + v.items.map(nodeHTML).join('');
+  document.getElementById('flow-title').textContent = v.title;
+  document.getElementById('flow-sub').textContent = v.sub;
+  document.querySelectorAll('.toolbar button').forEach(b => b.setAttribute('aria-pressed', b.dataset.variant === name));
+  draw();
+}
+
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('wires');
+
+function el(tag, attrs){
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+// Curva desde cada nodo hasta el borde del círculo (o al revés en las salidas)
+function draw(){
+  svg.innerHTML = '';
+  if (getComputedStyle(svg).display === 'none') return;
+  const box = document.getElementById('flow').getBoundingClientRect();
+  const c = document.getElementById('hub-circle').getBoundingClientRect();
+  const cx = c.left + c.width / 2 - box.left, cy = c.top + c.height / 2 - box.top, r = c.width / 2 + 12;
+
+  const wire = (node, i, out) => {
+    const n = node.getBoundingClientRect();
+    const y = n.top + n.height / 2 - box.top;
+    const dy = Math.max(-r * .55, Math.min(r * .55, (y - cy) * .4));
+    const hx = Math.sqrt(r * r - dy * dy);
+    const a = out ? [cx + hx, cy + dy] : [n.right - box.left, y];
+    const b = out ? [n.left - box.left, y] : [cx - hx, cy + dy];
+    const k = (b[0] - a[0]) * .55;
+    const id = `w${out ? 'o' : 'i'}${i}`;
+    const cls = out ? 'out' : '';
+    svg.append(el('path', {id, class: `wire ${cls}`, d: `M${a[0]},${a[1]} C${a[0] + k},${a[1]} ${b[0] - k},${b[1]} ${b[0]},${b[1]}`}));
+    const end = out ? b : a;
+    svg.append(el('circle', {class: `joint ${cls}`, cx: end[0], cy: end[1], r: 4}));
+    const dot = el('circle', {class: `pulse ${cls}`, r: 4});
+    const anim = el('animateMotion', {dur: '2.8s', repeatCount: 'indefinite', begin: `${-(i * .55 + (out ? 1.4 : 0))}s`, keyPoints: '0;1', keyTimes: '0;1', calcMode: 'spline', keySplines: '.45 0 .55 1'});
+    anim.append(el('mpath', {href: `#${id}`}));
+    dot.append(anim);
+    svg.append(dot);
+  };
+
+  colIn.querySelectorAll('.node').forEach((n, i) => wire(n, i, false));
+  colOut.querySelectorAll('.node').forEach((n, i) => wire(n, i, true));
+}
+
+document.querySelectorAll('.toolbar button').forEach(b => b.addEventListener('click', () => render(b.dataset.variant)));
+new ResizeObserver(draw).observe(document.getElementById('flow'));
+document.fonts.ready.then(draw);
+render('hechos');
+</script>
+</body>
+</html>

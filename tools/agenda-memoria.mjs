@@ -101,7 +101,7 @@ export function crearDatosMemoria(semilla = {}) {
     },
     async contactoPorId(cid) { const c = db.contactos.find((x) => x.id === cid); return c ? { id: c.id, setter_id: c.setter_id } : null; },
     async asignarContactos(ids, setterId) { for (const c of db.contactos) if (ids.includes(c.id)) c.setter_id = setterId; },
-    async listarSetters() { return copia(db.setters.map(({ clave_hash, ...x }) => x)); },
+    async listarSetters() { return copia(db.setters.map(({ clave_hash, ...x }) => ({ ...x, reservado: clave_hash === "admin:reservado" }))); },
     async setterPorHash(h) { const x = db.setters.find((s) => s.clave_hash === h); return x ? { id: x.id, nombre: x.nombre, activo: x.activo } : null; },
     async crearSetter(f) { const x = { id: id(), activo: true, creado_en: ahoraIso(), ...f }; db.setters.push(x); return { id: x.id, nombre: x.nombre }; },
     async editarSetter(sid, campos) { Object.assign(db.setters.find((x) => x.id === sid) || {}, campos); },

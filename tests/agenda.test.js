@@ -343,3 +343,30 @@ test("varias personas: cada una con su clave, su lista, sus demos y su recuento"
   assert.equal((await t.con(luis.clave, { accion: "entrar" })).statusCode, 401);
   assert.equal((await t.con(nueva, { accion: "entrar" })).body.nombre, "Luis");
 });
+
+test("«me lo quedo»: Lissette se reserva un contacto y ninguna setter lo ve", async () => {
+  const t = montar();
+  const marta = (await t.admin({ accion: "crear_setter", nombre: "Marta" })).body;
+  await t.admin({ accion: "importar", asignar: "repartir", csv: "Empresa,Teléfono\nA SL,986000001\nB SL,986000002\n" });
+  const [a] = t.datos._db.contactos;
+  assert.equal((await t.setter({ accion: "quedarme", ids: [a.id] })).statusCode, 403);
+  assert.equal((await t.admin({ accion: "quedarme", ids: [a.id] })).statusCode, 200);
+  const reserva = t.datos._db.setters.find((x) => x.clave_hash === "admin:reservado");
+  assert.equal(reserva.activo, false);
+  assert.equal(t.datos._db.contactos[0].setter_id, reserva.id);
+  // Marta ya no lo ve; la clave común tampoco.
+  assert.equal((await t.con(marta.clave, { accion: "estado" })).body.contactos.length, 1);
+  assert.equal((await t.setter({ accion: "estado" })).body.contactos.length, 0);
+  // Quedarse otro reutiliza la misma fila, que no sale como persona ni se puede tocar.
+  await t.admin({ accion: "quedarme", ids: [t.datos._db.contactos[1].id] });
+  assert.equal(t.datos._db.setters.filter((x) => x.clave_hash === "admin:reservado").length, 1);
+  const est = (await t.admin({ accion: "estado" })).body;
+  assert.equal(est.setters.find((x) => x.reservado).nombre, "Administración");
+  assert.deepEqual(est.resumen.porPersona.map((p) => p.nombre), ["Marta"]);
+  assert.equal((await t.admin({ accion: "nueva_clave_setter", id: reserva.id })).statusCode, 400);
+  assert.equal((await t.admin({ accion: "editar_setter", id: reserva.id, activo: true })).statusCode, 400);
+  // Los repartos no le asignan nada a la fila reservada.
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nC SL,986000003\n" });
+  await t.admin({ accion: "repartir" });
+  assert.equal(t.datos._db.contactos.at(-1).setter_id, marta.id);
+});

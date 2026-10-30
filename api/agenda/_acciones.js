@@ -3,6 +3,7 @@
 // Supabase ni SMTP: tools/agenda-local.mjs y tests/agenda.test.js.
 import crypto from "node:crypto";
 import { compararTexto, limitador, ipDe, generarToken, generarClave } from "../deck/_comun.js";
+import { RESERVA } from "./_datos.js";
 import {
   RESULTADOS,
   partesMadrid,
@@ -154,7 +155,7 @@ export function crearTrabajo(deps) {
       }
       const rol = quien.rol;
       const soloAdmin = ["importar", "borrar_contacto", "guardar_config", "crear_bloqueo", "borrar_bloqueo", "cancelar_cita",
-        "crear_setter", "editar_setter", "nueva_clave_setter", "asignar", "repartir"];
+        "crear_setter", "editar_setter", "nueva_clave_setter", "asignar", "repartir", "quedarme"];
       if (soloAdmin.includes(accion) && rol !== "admin") {
         return res.status(403).json({ error: "Esta acción no está disponible con tu clave." });
       }
@@ -202,6 +203,8 @@ export function crearTrabajo(deps) {
           return await asignar(deps, body, res);
         case "repartir":
           return await repartir(deps, res);
+        case "quedarme":
+          return await quedarme(deps, body, res);
         default:
           return res.status(400).json({ error: "Acción no reconocida." });
       }
@@ -261,7 +264,7 @@ async function estado(deps, quien, res) {
   resumen.demosHechas = confirmadas.filter((c) => new Date(c.fin) <= ahora).length;
   resumen.demosCanceladas = citas.length - confirmadas.length;
   if (rol === "admin") {
-    for (const x of setters) if (!porPersona.has(x.id)) porPersona.set(x.id, { id: x.id, nombre: x.nombre, llamadas: 0, hoy: 0, demos: 0 });
+    for (const x of setters) if (!x.reservado && !porPersona.has(x.id)) porPersona.set(x.id, { id: x.id, nombre: x.nombre, llamadas: 0, hoy: 0, demos: 0 });
     resumen.porPersona = [...porPersona.values()].sort((a, b) => b.llamadas - a.llamadas);
   }
 
@@ -508,9 +511,14 @@ async function crearSetter(deps, body, res) {
   return res.status(200).json({ id: fila.id, nombre, clave });
 }
 
+async function esReservado(deps, id) {
+  return (await deps.datos.listarSetters()).some((x) => x.id === id && x.reservado);
+}
+
 async function editarSetter(deps, body, res) {
   const id = String(body.id || "");
   if (!UUID.test(id)) return res.status(400).json({ error: "Persona no válida." });
+  if (await esReservado(deps, id)) return res.status(400).json({ error: "Esa fila es la tuya: no se edita." });
   const campos = {};
   if (typeof body.activo === "boolean") campos.activo = body.activo;
   if ("nombre" in body) {
@@ -525,6 +533,7 @@ async function editarSetter(deps, body, res) {
 async function nuevaClaveSetter(deps, body, res) {
   const id = String(body.id || "");
   if (!UUID.test(id)) return res.status(400).json({ error: "Persona no válida." });
+  if (await esReservado(deps, id)) return res.status(400).json({ error: "Esa fila es la tuya: no tiene clave." });
   const clave = generarClave(12);
   await deps.datos.editarSetter(id, { clave_hash: huellaClave(clave, deps.ajustes().secreto) });
   return res.status(200).json({ clave });
@@ -538,6 +547,18 @@ async function asignar(deps, body, res) {
     return res.status(400).json({ error: "Esa persona no existe o está desactivada." });
   }
   await deps.datos.asignarContactos(ids, setterId);
+  return res.status(200).json({ ok: true, asignados: ids.length });
+}
+
+// «Me lo quedo»: Lissette se reserva contactos para llamarlos ella. Se
+// asignan a una fila propia (desactivada, sin clave), así que ninguna setter
+// los ve y no entran en repartos.
+async function quedarme(deps, body, res) {
+  const ids = Array.isArray(body.ids) ? body.ids.map(String).filter((x) => UUID.test(x)) : [];
+  if (!ids.length || ids.length > 5000) return res.status(400).json({ error: "No hay contactos que quedarte." });
+  let fila = (await deps.datos.listarSetters()).find((x) => x.reservado);
+  if (!fila) fila = await deps.datos.crearSetter({ nombre: "Administración", clave_hash: RESERVA, activo: false });
+  await deps.datos.asignarContactos(ids, fila.id);
   return res.status(200).json({ ok: true, asignados: ids.length });
 }
 
