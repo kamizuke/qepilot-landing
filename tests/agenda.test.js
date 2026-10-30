@@ -370,3 +370,22 @@ test("«me lo quedo»: Lissette se reserva un contacto y ninguna setter lo ve", 
   await t.admin({ accion: "repartir" });
   assert.equal(t.datos._db.contactos.at(-1).setter_id, marta.id);
 });
+
+test("«Info por correo» guarda el correo en el contacto y avisa para enviar la información", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Persona,Teléfono\nMetal SL,Ana,986111222\n" });
+  const c = t.datos._db.contactos[0];
+  assert.equal((await t.setter({ accion: "llamada", contactoId: c.id, resultado: "info", email: "mal" })).statusCode, 400);
+  const r = await t.setter({ accion: "llamada", contactoId: c.id, resultado: "info", email: "ana@metal.es", nota: "Quiere verlo con su jefe" });
+  assert.deepEqual(r.body, { ok: true, aviso: true });
+  assert.equal(t.datos._db.contactos[0].email, "ana@metal.es");
+  assert.equal(t.datos._db.contactos[0].resultado, "info");
+  const aviso = t.enviados.at(-1);
+  assert.equal(aviso.para, "demo@evidran.com");
+  assert.equal(aviso.asunto, "Enviar información: Metal SL");
+  assert.match(aviso.html, /ana@metal\.es/);
+  assert.match(aviso.html, /Quiere verlo con su jefe/);
+  // Sin correo también se anota, y el aviso lo dice.
+  await t.setter({ accion: "llamada", contactoId: c.id, resultado: "info" });
+  assert.match(t.enviados.at(-1).html, /ana@metal\.es/);
+});

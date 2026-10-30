@@ -137,7 +137,7 @@ export function crearDatos(env) {
       );
     },
     async contactoPorId(id) {
-      const filas = await rest(env, `seg_contacto?id=eq.${id}&select=id,setter_id`);
+      const filas = await rest(env, `seg_contacto?id=eq.${id}&select=id,setter_id,empresa,persona,cargo,telefono,email`);
       return filas?.[0] || null;
     },
     async asignarContactos(ids, setterId) {

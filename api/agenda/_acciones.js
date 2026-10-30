@@ -20,6 +20,7 @@ import {
   correoCambio,
   correoCancelacion,
   correoAviso,
+  escaparHtml,
 } from "./_logica.js";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -336,9 +337,52 @@ async function llamada(deps, quien, body, res) {
     if (!m) return res.status(400).json({ error: "Fecha para volver a llamar no válida." });
     volverEn = madridAUtc(m[1], m[2]).toISOString();
   }
-  if (!esSuyo(quien, await deps.datos.contactoPorId(contactoId))) return res.status(403).json({ error: NO_ES_TUYO });
-  await deps.datos.registrarLlamada(contactoId, resultado, textoLargo(body.nota, 600), volverEn, quien.rol, quien.setterId);
-  return res.status(200).json({ ok: true });
+  // «Info por correo»: el correo al que enviarla (se guarda en el contacto).
+  let email = null;
+  if (resultado === "info" && typeof body.email === "string" && body.email.trim()) {
+    email = body.email.trim();
+    if (!emailValido(email)) return res.status(400).json({ error: "El correo no parece válido." });
+  }
+  const contacto = await deps.datos.contactoPorId(contactoId);
+  if (!esSuyo(quien, contacto)) return res.status(403).json({ error: NO_ES_TUYO });
+  const nota = textoLargo(body.nota, 600);
+  await deps.datos.registrarLlamada(contactoId, resultado, nota, volverEn, quien.rol, quien.setterId);
+  let aviso = null;
+  if (resultado === "info") {
+    if (email && email !== contacto.email) await deps.datos.editarContacto(contactoId, { email });
+    aviso = await avisarInfo(deps, { ...contacto, email: email || contacto.email }, nota, quien);
+  }
+  return res.status(200).json({ ok: true, aviso });
+}
+
+// Aviso para enviar la información a mano (la setter no envía correos).
+async function avisarInfo(deps, c, nota, quien) {
+  const a = deps.ajustes();
+  if (!deps.correo || !a.avisos) return false;
+  const filas = [
+    ["Empresa", c.empresa],
+    ["Persona", [c.persona, c.cargo].filter(Boolean).join(" · ") || "—"],
+    ["Correo", c.email || "— (no lo dio)"],
+    ["Teléfono", c.telefono || "—"],
+    ["Nota de la llamada", nota || "—"],
+    ["Anotado por", quien.rol === "admin" ? "ti" : quien.nombre],
+  ];
+  try {
+    await deps.correo.enviar({
+      para: a.avisos,
+      asunto: `Enviar información: ${c.empresa}`,
+      html:
+        `<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#16202B"><p style="margin:0 0 12px;font-weight:bold">Han pedido información por correo</p>` +
+        `<table style="border-collapse:collapse;font-size:14px">${filas
+          .map(([k, v]) => `<tr><td style="padding:4px 14px 4px 0;color:#5B6675;vertical-align:top">${k}</td><td style="padding:4px 0;white-space:pre-wrap">${escaparHtml(v)}</td></tr>`)
+          .join("")}</table>` +
+        `<p style="margin:16px 0 0"><a href="${escaparHtml(a.base)}/llamadas">Abrir la lista de llamadas</a></p></div>`,
+    });
+    return true;
+  } catch (err) {
+    console.error("agenda aviso de info falló:", err?.code || err?.responseCode || "sin código");
+    return false;
+  }
 }
 
 async function editarContacto(deps, quien, body, res) {

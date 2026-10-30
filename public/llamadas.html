@@ -722,10 +722,17 @@
       h("div", { class: "fila" }, volverInput,
         h("button", { class: "boton", onclick: function () { guardarLlamada(c, "volver", nota.value, volverInput.value); } }, "Guardar «Volver a llamar»")),
       h("div", { class: "peq", style: "margin-top:6px" }, "Todavía no está guardado: elige día y hora y pulsa el botón.")]);
+    var infoFila = h("div", { class: "volver-pendiente oculto" });
+    var infoInput = h("input", { type: "email", value: c.email || "", placeholder: "correo@empresa.com", style: "flex:1 1 220px" });
+    anadir(infoFila, [
+      h("label", { style: "margin-top:0" }, "¿A qué correo le enviamos la información?"),
+      h("div", { class: "fila" }, infoInput,
+        h("button", { class: "boton", onclick: function () { guardarLlamada(c, "info", nota.value, null, infoInput.value); } }, "Guardar «Info por correo»")),
+      h("div", { class: "peq", style: "margin-top:6px" }, "Se guarda en el contacto y llega un aviso para enviársela. Si no quiso darlo, déjalo vacío y pulsa el botón.")]);
     var datos = formularioDatos(c);
     // Lo que se perdería al cerrar: la nota, el «volver a llamar» a medias o datos corregidos sin guardar.
     S.fichaPendiente = function () {
-      return !!nota.value.trim() || !volverFila.classList.contains("oculto") || datos.cambiado();
+      return !!nota.value.trim() || !volverFila.classList.contains("oculto") || !infoFila.classList.contains("oculto") || datos.cambiado();
     };
 
     var botones = h("div", { class: "resultados" });
@@ -733,6 +740,12 @@
     Object.keys(S.d.resultados).forEach(function (k) {
       if (k === "demo") return;
       botones.appendChild(h("button", { class: "boton claro", onclick: function () {
+        if (k === "info") {
+          infoFila.classList.remove("oculto");
+          infoFila.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          infoInput.focus();
+          return;
+        }
         if (k === "volver") {
           volverFila.classList.remove("oculto");
           volverFila.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -765,6 +778,7 @@
       nota,
       botones,
       volverFila,
+      infoFila,
       c.historial.length ? h("div", null, h("h3", null, "Intentos anteriores (" + c.historial.length + ")"),
         h("ul", { class: "historial" }, c.historial.map(function (l) {
           return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (S.rol === "admin" || l.rol === "admin" ? " · " + l.quien : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
@@ -808,10 +822,10 @@
     return bloque;
   }
 
-  function guardarLlamada(c, resultado, nota, volverEn) {
-    api({ accion: "llamada", contactoId: c.id, resultado: resultado, nota: nota, volverEn: volverEn }).then(function () {
+  function guardarLlamada(c, resultado, nota, volverEn, email) {
+    api({ accion: "llamada", contactoId: c.id, resultado: resultado, nota: nota, volverEn: volverEn, email: email }).then(function (j) {
       cerrarFicha(true);
-      toast("Anotado: " + S.d.resultados[resultado] + ".");
+      toast("Anotado: " + S.d.resultados[resultado] + "." + (resultado === "info" && j.aviso ? " Ha salido el aviso para enviársela." : ""));
       recargar();
     }).catch(function (e) { toast(e.message); });
   }
@@ -914,7 +928,7 @@
   var CUANDO = {
     demo: "Ha aceptado día y hora (se anota sola al reservar).",
     volver: "Te ha pedido otro momento. Pon día y hora.",
-    info: "Solo quiere información. Apunta su correo en «Corregir datos».",
+    info: "Solo quiere información: pulsa «Info por correo», escribe su correo y guarda. Llega un aviso para enviársela.",
     no_contesta: "Nadie coge el teléfono o salta el buzón.",
     no_esta: "Ya no trabaja allí o no te pasan. Apunta quién la sustituye.",
     no_interesa: "Ha dicho que no tras tu respuesta. Apunta el motivo.",
