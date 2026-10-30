@@ -99,6 +99,11 @@ export function crearDatosMemoria(semilla = {}) {
         });
       }
     },
+    async ultimaLlamadaDe(cid) {
+      const l = db.llamadas.filter((x) => x.contacto_id === cid).sort((a, b) => (a.hecha_en < b.hecha_en ? 1 : -1))[0];
+      return l ? copia(l) : null;
+    },
+    async corregirLlamada(lid, campos) { Object.assign(db.llamadas.find((x) => x.id === lid) || {}, campos); },
     async contactoPorId(cid) { const c = db.contactos.find((x) => x.id === cid); return c ? copia(c) : null; },
     async asignarContactos(ids, setterId) { for (const c of db.contactos) if (ids.includes(c.id)) c.setter_id = setterId; },
     async listarSetters() { return copia(db.setters.map(({ clave_hash, ...x }) => ({ ...x, reservado: clave_hash === "admin:reservado" }))); },

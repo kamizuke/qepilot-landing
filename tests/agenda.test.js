@@ -377,7 +377,7 @@ test("«Info por correo» guarda el correo en el contacto y avisa para enviar la
   const c = t.datos._db.contactos[0];
   assert.equal((await t.setter({ accion: "llamada", contactoId: c.id, resultado: "info", email: "mal" })).statusCode, 400);
   const r = await t.setter({ accion: "llamada", contactoId: c.id, resultado: "info", email: "ana@metal.es", nota: "Quiere verlo con su jefe" });
-  assert.deepEqual(r.body, { ok: true, aviso: true });
+  assert.deepEqual(r.body, { ok: true, aviso: true, corregida: false });
   assert.equal(t.datos._db.contactos[0].email, "ana@metal.es");
   assert.equal(t.datos._db.contactos[0].resultado, "info");
   const aviso = t.enviados.at(-1);
@@ -388,4 +388,30 @@ test("«Info por correo» guarda el correo en el contacto y avisa para enviar la
   // Sin correo también se anota, y el aviso lo dice.
   await t.setter({ accion: "llamada", contactoId: c.id, resultado: "info" });
   assert.match(t.enviados.at(-1).html, /ana@metal\.es/);
+});
+
+test("repetir el mismo resultado poco después corrige la anotación en vez de sumar otra llamada", async () => {
+  const t = montar(new Date().toISOString());
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nAlkain SL,943000001\n" });
+  const c = t.datos._db.contactos[0];
+  const r1 = await t.admin({ accion: "llamada", contactoId: c.id, resultado: "info", email: "jorge@alkain.es", nota: "No está; enviar info a Jorge" });
+  assert.equal(r1.body.corregida, false);
+  const avisos = t.enviados.length;
+  const r2 = await t.admin({ accion: "llamada", contactoId: c.id, resultado: "info" });
+  assert.equal(r2.body.corregida, true);
+  assert.equal(t.enviados.length, avisos, "no repite el aviso si no cambia el correo");
+  assert.equal(t.datos._db.llamadas.length, 1);
+  assert.equal(t.datos._db.contactos[0].intentos, 1);
+  assert.equal(t.datos._db.llamadas[0].nota, "No está; enviar info a Jorge");
+  // Añadir otra nota la suma a la anterior; cambiar el correo sí vuelve a avisar.
+  await t.admin({ accion: "llamada", contactoId: c.id, resultado: "info", email: "calidad@alkain.es", nota: "Mejor a calidad" });
+  assert.equal(t.datos._db.llamadas[0].nota, "No está; enviar info a Jorge\nMejor a calidad");
+  assert.equal(t.enviados.length, avisos + 1);
+  // Otro resultado sí es una llamada nueva; y pasadas 2 horas, también el mismo.
+  await t.admin({ accion: "llamada", contactoId: c.id, resultado: "no_contesta" });
+  assert.equal(t.datos._db.llamadas.length, 2);
+  t.datos._db.llamadas.forEach((l) => (l.hecha_en = new Date(Date.now() - 3 * 3600 * 1000).toISOString()));
+  await t.admin({ accion: "llamada", contactoId: c.id, resultado: "no_contesta" });
+  assert.equal(t.datos._db.llamadas.length, 3);
+  assert.equal(t.datos._db.contactos[0].intentos, 3);
 });

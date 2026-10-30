@@ -136,6 +136,13 @@ export function crearDatos(env) {
         })
       );
     },
+    async ultimaLlamadaDe(contactoId) {
+      const filas = await rest(env, `seg_llamada?contacto_id=eq.${contactoId}&select=id,resultado,rol,setter_id,hecha_en,nota&order=hecha_en.desc&limit=1`);
+      return filas?.[0] || null;
+    },
+    async corregirLlamada(id, campos) {
+      await rest(env, `seg_llamada?id=eq.${id}`, { method: "PATCH", body: campos });
+    },
     async contactoPorId(id) {
       const filas = await rest(env, `seg_contacto?id=eq.${id}&select=id,setter_id,empresa,persona,cargo,telefono,email`);
       return filas?.[0] || null;

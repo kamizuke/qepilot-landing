@@ -825,7 +825,9 @@
   function guardarLlamada(c, resultado, nota, volverEn, email) {
     api({ accion: "llamada", contactoId: c.id, resultado: resultado, nota: nota, volverEn: volverEn, email: email }).then(function (j) {
       cerrarFicha(true);
-      toast("Anotado: " + S.d.resultados[resultado] + "." + (resultado === "info" && j.aviso ? " Ha salido el aviso para enviársela." : ""));
+      toast(j.corregida
+        ? "Ya estaba anotado hace un momento: se ha actualizado, no cuenta como otra llamada."
+        : "Anotado: " + S.d.resultados[resultado] + "." + (resultado === "info" && j.aviso ? " Ha salido el aviso para enviársela." : ""));
       recargar();
     }).catch(function (e) { toast(e.message); });
   }

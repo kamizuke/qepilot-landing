@@ -346,14 +346,33 @@ async function llamada(deps, quien, body, res) {
   const contacto = await deps.datos.contactoPorId(contactoId);
   if (!esSuyo(quien, contacto)) return res.status(403).json({ error: NO_ES_TUYO });
   const nota = textoLargo(body.nota, 600);
-  await deps.datos.registrarLlamada(contactoId, resultado, nota, volverEn, quien.rol, quien.setterId);
+  // El mismo resultado, de la misma persona, hace menos de 2 horas es una
+  // corrección de la anotación anterior, no otra llamada: no suma intento.
+  const ultima = await deps.datos.ultimaLlamadaDe(contactoId);
+  const corregida =
+    !!ultima &&
+    ultima.resultado === resultado &&
+    ultima.rol === quien.rol &&
+    (ultima.setter_id || null) === quien.setterId &&
+    deps.ahora() - new Date(ultima.hecha_en) < VENTANA_CORRECCION;
+  if (corregida) {
+    const notaFinal = !nota ? ultima.nota : ultima.nota && ultima.nota !== nota ? `${ultima.nota}\n${nota}` : nota;
+    await deps.datos.corregirLlamada(ultima.id, { nota: notaFinal || null });
+    if (resultado === "volver") await deps.datos.editarContacto(contactoId, { volver_en: volverEn });
+  } else {
+    await deps.datos.registrarLlamada(contactoId, resultado, nota, volverEn, quien.rol, quien.setterId);
+  }
   let aviso = null;
   if (resultado === "info") {
-    if (email && email !== contacto.email) await deps.datos.editarContacto(contactoId, { email });
-    aviso = await avisarInfo(deps, { ...contacto, email: email || contacto.email }, nota, quien);
+    const cambiaEmail = !!email && email !== contacto.email;
+    if (cambiaEmail) await deps.datos.editarContacto(contactoId, { email });
+    // Al corregir solo se vuelve a avisar si ha cambiado el correo.
+    if (!corregida || cambiaEmail) aviso = await avisarInfo(deps, { ...contacto, email: email || contacto.email }, nota, quien);
   }
-  return res.status(200).json({ ok: true, aviso });
+  return res.status(200).json({ ok: true, aviso, corregida });
 }
+
+const VENTANA_CORRECCION = 2 * 3600 * 1000;
 
 // Aviso para enviar la información a mano (la setter no envía correos).
 async function avisarInfo(deps, c, nota, quien) {
