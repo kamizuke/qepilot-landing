@@ -23,5 +23,27 @@ export function crearDatosHuella(env) {
     async editarContacto(id, campos) {
       await rest(env, `huella_contacto?id=eq.${id}`, { method: "PATCH", body: campos });
     },
+    // Borra los contactos sin actividad desde antes de `antesIso`; devuelve cuántos.
+    async borrarAntiguos(antesIso) {
+      const filas = await rest(env, `huella_contacto?ultima_actividad=lt.${encodeURIComponent(antesIso)}&select=id`, {
+        method: "DELETE",
+        headers: { Prefer: "return=representation" },
+      });
+      return (filas || []).length;
+    },
+
+    // --- Lista de llamadas (tablas de la agenda) ---
+    async contactosLlamadas() {
+      return (await rest(env, "seg_contacto?select=id,telefono,resultado,no_llamar,setter_id,notas&limit=5000")) || [];
+    },
+    async settersActivos() {
+      return (await rest(env, "seg_setter?activo=eq.true&select=id,nombre&order=creado_en.asc")) || [];
+    },
+    async crearContactoLlamadas(fila) {
+      await rest(env, "seg_contacto", { method: "POST", body: fila });
+    },
+    async editarContactoLlamadas(id, campos) {
+      await rest(env, `seg_contacto?id=eq.${id}`, { method: "PATCH", body: campos });
+    },
   };
 }

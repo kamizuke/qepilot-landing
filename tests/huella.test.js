@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, limpiarEntrada, toneladas } from "../public/huella/calculo.js";
 import { COMERCIALIZADORAS } from "../public/huella/comercializadoras.js";
-import { crearCalculadora, hashToken } from "../api/huella/_acciones.js";
+import { crearCalculadora, hashToken, limpiar } from "../api/huella/_acciones.js";
 import { crearDatosHuellaMemoria } from "../tools/huella-memoria.mjs";
 
 // Caso validado en la app contra la calculadora oficial (47,24 t en el Excel del MITECO).
@@ -63,8 +63,8 @@ test("simulador, objetivo y texto para cuestionarios", () => {
   ]);
 });
 
-function montar() {
-  const datos = crearDatosHuellaMemoria();
+function montar(agenda) {
+  const datos = crearDatosHuellaMemoria(agenda);
   const enviados = [];
   const handler = crearCalculadora({
     datos,
@@ -72,11 +72,12 @@ function montar() {
     comercializadoras: COMERCIALIZADORAS,
     ahora: () => new Date("2026-10-30T10:00:00Z"),
     ajustes: () => ({ base: "https://www.evidran.com", avisos: "demo@evidran.com" }),
+    cron: "",
   });
   let ip = 0;
   const llamar = async (body) => {
     const res = { statusCode: 0, body: null, status(c) { this.statusCode = c; return this; }, json(b) { this.body = b; return this; } };
-    await handler({ method: "POST", headers: { "x-forwarded-for": `10.1.0.${++ip}` }, body }, res);
+    await handler({ method: body.metodo || "POST", headers: { "x-forwarded-for": `10.1.0.${++ip}` }, body }, res);
     return res;
   };
   return { datos, enviados, llamar };
@@ -121,4 +122,77 @@ test("calcular, pedir el informe, confirmar con el enlace y darse de baja", asyn
   assert.equal((await t.llamar({ accion: "baja", token })).statusCode, 200);
   assert.equal(t.datos._db.contactos[0].acepta_novedades, false);
   assert.equal((await t.llamar({ accion: "informe", token: "x".repeat(22) })).statusCode, 404);
+});
+
+async function pedirYConfirmar(t, { telefono = "986 555 777", llamada = true, empresa = "Metal SL" } = {}) {
+  const c = await t.llamar({ accion: "calcular", entrada: CASO });
+  await t.llamar({ accion: "enviar", calculoId: c.body.id, email: "ana@metal.es", empresa, telefono, informe: true, llamada });
+  const token = t.enviados.filter((m) => m.para === "ana@metal.es").at(-1).html.match(/\/huella\/informe\/([A-Za-z0-9_-]+)/)[1];
+  await t.llamar({ accion: "informe", token });
+  return token;
+}
+
+test("quien acepta la llamada pasa a la lista de llamadas al confirmar, a la persona con menos pendientes", async () => {
+  const agenda = {
+    contactos: [
+      { id: "c1", empresa: "Otra", telefono: "986000001", resultado: null, no_llamar: false, setter_id: "s1" },
+      { id: "c2", empresa: "Otra 2", telefono: "986000002", resultado: "volver", no_llamar: false, setter_id: "s1" },
+    ],
+    setters: [{ id: "s1", nombre: "Marta", activo: true }, { id: "s2", nombre: "Luis", activo: true }, { id: "s3", nombre: "Eva", activo: false }],
+  };
+  const t = montar(agenda);
+  await pedirYConfirmar(t);
+  const nuevo = agenda.contactos.at(-1);
+  assert.equal(nuevo.empresa, "Metal SL");
+  assert.equal(nuevo.setter_id, "s2");
+  assert.ok(nuevo.caliente_desde);
+  assert.match(nuevo.origen, /^Calculadora de huella: 47,2 t CO₂e en 2025; fuente principal: la electricidad comprada \(48 %\)/);
+  assert.match(t.enviados.at(-1).html, /Añadido arriba de la lista de llamadas \(asignado a Luis\)/);
+  // Volver a abrir el enlace no lo duplica.
+  const token = t.enviados[0].html.match(/\/huella\/informe\/([A-Za-z0-9_-]+)/)[1];
+  await t.llamar({ accion: "informe", token });
+  assert.equal(agenda.contactos.length, 3);
+});
+
+test("si su teléfono ya estaba, vuelve arriba; si pidió no ser llamado, se respeta; sin llamada, no entra", async () => {
+  const agenda = {
+    contactos: [
+      { id: "c1", empresa: "Metal", telefono: "+34 986 555 777", resultado: "no_interesa", no_llamar: false, setter_id: "s1", notas: "Llamar en enero" },
+      { id: "c2", empresa: "Fuera", telefono: "986 111 222", resultado: "no_llamar", no_llamar: true, setter_id: null },
+    ],
+    setters: [{ id: "s1", nombre: "Marta", activo: true }],
+  };
+  let t = montar(agenda);
+  await pedirYConfirmar(t);
+  assert.equal(agenda.contactos.length, 2);
+  assert.equal(agenda.contactos[0].resultado, "volver");
+  assert.ok(agenda.contactos[0].caliente_desde);
+  assert.match(agenda.contactos[0].notas, /^Llamar en enero\n30\/10\/2026: Calculadora de huella/);
+  assert.match(t.enviados.at(-1).html, /Ya estaba en la lista: vuelve arriba \(Marta\)/);
+
+  t = montar(agenda);
+  await pedirYConfirmar(t, { telefono: "986111222" });
+  assert.equal(agenda.contactos[1].caliente_desde, undefined);
+  assert.match(t.enviados.at(-1).html, /«No llamar»: no se ha añadido/);
+
+  t = montar(agenda);
+  await pedirYConfirmar(t, { telefono: "986999888", llamada: false });
+  assert.equal(agenda.contactos.length, 2);
+});
+
+test("el cron borra los contactos sin actividad en 24 meses y nada más", async () => {
+  const t = montar();
+  await pedirYConfirmar(t, { llamada: false });
+  t.datos._db.contactos.push({ ...t.datos._db.contactos[0], id: "viejo", ultima_actividad: "2024-10-29T00:00:00.000Z" });
+  t.datos._db.contactos.push({ ...t.datos._db.contactos[0], id: "justo", ultima_actividad: "2024-10-31T00:00:00.000Z" });
+  const r = await t.llamar({ metodo: "GET" });
+  assert.deepEqual(r.body, { borrados: 1 });
+  assert.deepEqual(t.datos._db.contactos.map((c) => c.id).slice(1), ["justo"]);
+  assert.equal(t.datos._db.calculos.length, 1, "los cálculos (sin datos personales) se quedan");
+  // Con CRON_SECRET, sin la cabecera correcta no hace nada.
+  const conClave = crearCalculadora({ datos: t.datos, comercializadoras: COMERCIALIZADORAS, ahora: () => new Date(), ajustes: () => ({}), cron: "x" });
+  const res = { status(c) { this.c = c; return this; }, json(b) { this.b = b; return this; } };
+  await conClave({ method: "GET", headers: {}, body: {} }, res);
+  assert.equal(res.c, 401);
+  assert.equal(typeof limpiar, "function");
 });

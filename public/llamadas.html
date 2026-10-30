@@ -557,8 +557,14 @@
     });
   }
 
+  // Pidió que le llamaran (calculadora de huella) y aún no se le ha llamado desde entonces.
+  function esCaliente(c) {
+    return !!c.caliente_desde && !c.no_llamar && (!c.ultima_llamada || c.ultima_llamada < c.caliente_desde);
+  }
+
   function etiquetaResultado(c) {
     if (c.no_llamar) return h("span", { class: "etiqueta fuera" }, "No llamar");
+    if (esCaliente(c)) return h("span", { class: "etiqueta demo" }, "Pidió que le llamaran");
     if (!c.resultado) return h("span", { class: "etiqueta" }, "Sin llamar");
     var clase = c.resultado === "demo" ? "demo" : c.resultado === "volver" ? "volver" : "";
     var txt = S.d.resultados[c.resultado];
@@ -622,6 +628,7 @@
   // ---------- Llamar ----------
   function enCola(c) {
     if (c.no_llamar) return null;
+    if (esCaliente(c)) return { grupo: -1, orden: c.caliente_desde };
     var r = c.resultado;
     if (r === "volver") {
       if (!c.volver_en || diaDe(c.volver_en) <= hoy()) return { grupo: 0, orden: c.volver_en || "" };
@@ -662,14 +669,19 @@
     cif.appendChild(h("div", { class: "cifra" }, h("b", null, cola.filter(function (x) { return x.q.grupo < 3; }).length), h("span", null, "Por llamar")));
 
     var caja = vaciar($("cola"));
-    var titulos = ["Te pidieron que llamaras hoy", "Sin llamar todavía", "No contestaron otro día", "Ya intentados hoy"];
+    var titulos = { "-1": "Pidieron que les llamaras (calculadora de huella)", 0: "Te pidieron que llamaras hoy", 1: "Sin llamar todavía", 2: "No contestaron otro día", 3: "Ya intentados hoy" };
     if (!S.d.contactos.length) { caja.appendChild(h("div", { class: "vacio" }, "Aún no hay contactos cargados.")); return; }
     if (!cola.length) { caja.appendChild(h("div", { class: "vacio" }, "No queda nadie por llamar. Buen trabajo.")); return; }
-    [0, 1, 2, 3].forEach(function (g) {
+    [-1, 0, 1, 2, 3].forEach(function (g) {
       var del = cola.filter(function (x) { return x.q.grupo === g; });
       if (!del.length) return;
       var lista = h("div", null, del.map(function (x) {
         var c = x.c, extra = null;
+        if (g === -1) {
+          var nota = c.origen && c.origen.indexOf("Calculadora") === 0 ? c.origen
+            : (c.notas || "").split("\n").filter(function (l) { return l.indexOf("Calculadora") >= 0; }).pop();
+          extra = (nota || "Pidió que le llamaran") + " · " + relativo(c.caliente_desde);
+        }
         if (g === 0) extra = c.volver_en ? "Pidió que le llamaras " + relativo(c.volver_en) : "Pidió que le volvieras a llamar";
         if (g >= 2) extra = "Intento " + (c.intentos + 1) + " de 3 · último " + relativo(c.ultima_llamada);
         return filaContacto(c, extra);

@@ -3,7 +3,7 @@
 // Supabase ni SMTP: tests/huella.test.js y tools/agenda-local.mjs.
 import crypto from "node:crypto";
 import { limitador, ipDe, generarToken } from "../deck/_comun.js";
-import { escaparHtml, emailValido, texto } from "../agenda/_logica.js";
+import { escaparHtml, emailValido, texto, soloDigitos, partesMadrid } from "../agenda/_logica.js";
 import { calcular, limpiarEntrada, toneladas, porBloque, porcentaje } from "../../public/huella/calculo.js";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -35,7 +35,14 @@ export function correoInforme({ empresa, r, enlace }) {
   };
 }
 
-export function correoAvisoContacto({ c, r }) {
+const LLAMADAS = {
+  nuevo: (p) => `Añadido arriba de la lista de llamadas${p.setter ? ` (asignado a ${p.setter})` : " (sin asignar)"}`,
+  reactivado: (p) => `Ya estaba en la lista: vuelve arriba${p.setter ? ` (${p.setter})` : ""}`,
+  no_llamar: () => "Estaba marcado como «No llamar»: no se ha añadido",
+  error: () => "No se pudo añadir a la lista de llamadas: añádelo a mano",
+};
+
+export function correoAvisoContacto({ c, r, llamadas }) {
   const principal = porBloque(r)[0];
   const filas = [
     ["Empresa", c.empresa],
@@ -47,6 +54,7 @@ export function correoAvisoContacto({ c, r }) {
     ["Acepta novedades", c.acepta_novedades ? "Sí" : "No"],
     ["Acepta que le llamen", c.acepta_llamada ? "Sí" : "No"],
   ];
+  if (llamadas) filas.push(["Lista de llamadas", LLAMADAS[llamadas.estado](llamadas)]);
   return {
     asunto: `Nuevo contacto de la calculadora: ${c.empresa} · ${toneladas(r.total)} t`,
     html:
@@ -62,10 +70,21 @@ export function crearCalculadora(deps) {
   const limiteEnvios = limitador(6, 10 * 60 * 1000);
 
   return async function handler(req, res) {
-    if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido" });
     if (!deps.datos) return res.status(503).json({ error: "La calculadora no está disponible ahora mismo." });
     const ip = ipDe(req);
     if (limitado(ip)) return res.status(429).json({ error: "Demasiadas peticiones. Espera unos minutos." });
+    // Cron semanal de Vercel (vercel.json). Solo borra lo que ya debía borrarse,
+    // así que no hace falta clave; si existe CRON_SECRET, se exige.
+    if (req.method === "GET") {
+      if (deps.cron && req.headers.authorization !== `Bearer ${deps.cron}`) return res.status(401).json({ error: "No autorizado." });
+      try {
+        return res.status(200).json({ borrados: await limpiar(deps) });
+      } catch (err) {
+        console.error("huella limpieza error:", err?.message || err);
+        return res.status(502).json({ error: "No se pudo limpiar." });
+      }
+    }
+    if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido" });
     const body = req.body || {};
     try {
       switch (body.accion) {
@@ -140,15 +159,27 @@ async function accionInforme(deps, body, res) {
   const c = await deps.datos.contactoPorToken(hashToken(body.token));
   if (!c || !c.huella_calculo) return res.status(404).json({ error: "Este enlace no es válido." });
   const primera = !c.confirmado_en;
+  const ahora = deps.ahora().toISOString();
   await deps.datos.editarContacto(c.id, {
-    confirmado_en: c.confirmado_en || deps.ahora().toISOString(),
+    confirmado_en: c.confirmado_en || ahora,
     visitas_informe: (c.visitas_informe || 0) + 1,
+    ultima_actividad: ahora,
   });
+  const r = calcular(c.huella_calculo.entrada, deps.comercializadoras);
+  // Doble confirmación hecha: si pidió que le llamaran, pasa a la lista de la setter.
+  let llamadas = null;
+  if (primera && c.acepta_llamada && c.telefono && !c.baja_en) {
+    try {
+      llamadas = await pasarALlamadas(deps, c, r);
+    } catch (err) {
+      console.error("huella paso a llamadas falló:", err?.message || err);
+      llamadas = { estado: "error" };
+    }
+  }
   const avisos = deps.ajustes().avisos;
   if (primera && avisos && deps.correo) {
-    const r = calcular(c.huella_calculo.entrada, deps.comercializadoras);
     try {
-      await deps.correo.enviar({ para: avisos, ...correoAvisoContacto({ c, r }) });
+      await deps.correo.enviar({ para: avisos, ...correoAvisoContacto({ c, r, llamadas }) });
     } catch (err) {
       console.error("huella aviso falló:", err?.code || err?.responseCode || "sin código");
     }
@@ -164,6 +195,58 @@ async function accionBaja(deps, body, res) {
   if (!TOKEN.test(String(body.token || ""))) return res.status(404).json({ error: "Este enlace no es válido." });
   const c = await deps.datos.contactoPorToken(hashToken(body.token));
   if (!c) return res.status(404).json({ error: "Este enlace no es válido." });
-  await deps.datos.editarContacto(c.id, { acepta_novedades: false, acepta_llamada: false, baja_en: deps.ahora().toISOString() });
+  const ahora = deps.ahora().toISOString();
+  await deps.datos.editarContacto(c.id, { acepta_novedades: false, acepta_llamada: false, baja_en: ahora, ultima_actividad: ahora });
   return res.status(200).json({ ok: true });
+}
+
+// Borra los contactos de la calculadora sin actividad en 24 meses (lo que
+// promete la política de privacidad). Los cálculos no tienen datos personales.
+export async function limpiar(deps) {
+  const limite = new Date(deps.ahora());
+  limite.setUTCMonth(limite.getUTCMonth() - 24);
+  return deps.datos.borrarAntiguos(limite.toISOString());
+}
+
+const PENDIENTE = (c) => !c.no_llamar && (!c.resultado || ["volver", "no_contesta", "no_esta"].includes(c.resultado));
+
+// Lo añade a la lista de llamadas como contacto caliente. Si su teléfono ya
+// estaba, lo sube arriba (salvo que pidiera no ser llamado). Si es nuevo, va a
+// la persona activa con menos pendientes.
+export async function pasarALlamadas(deps, c, r) {
+  const ahora = deps.ahora().toISOString();
+  const principal = porBloque(r)[0];
+  const resumen =
+    `Calculadora de huella: ${toneladas(r.total)} t CO₂e en ${r.anio}` +
+    (principal ? `; fuente principal: ${principal.ambito} (${porcentaje(principal.kg, r.total)} %)` : "") +
+    ". Pidió que le llamaran.";
+  const [lista, activos] = await Promise.all([deps.datos.contactosLlamadas(), deps.datos.settersActivos()]);
+  const nombre = (id) => activos.find((x) => x.id === id)?.nombre || null;
+  const tel = soloDigitos(c.telefono).slice(-9);
+  const existente = tel.length === 9 ? lista.find((x) => soloDigitos(x.telefono).slice(-9) === tel) : null;
+  if (existente) {
+    if (existente.no_llamar) return { estado: "no_llamar" };
+    const [y, m, d] = partesMadrid(new Date(ahora)).fecha.split("-");
+    await deps.datos.editarContactoLlamadas(existente.id, {
+      caliente_desde: ahora,
+      resultado: "volver",
+      volver_en: ahora,
+      notas: [existente.notas, `${d}/${m}/${y}: ${resumen}`].filter(Boolean).join("\n"),
+    });
+    return { estado: "reactivado", setter: nombre(existente.setter_id) };
+  }
+  let setterId = null;
+  if (activos.length) {
+    const carga = (id) => lista.filter((x) => x.setter_id === id && PENDIENTE(x)).length;
+    setterId = activos.reduce((mejor, x) => (carga(x.id) < carga(mejor.id) ? x : mejor), activos[0]).id;
+  }
+  await deps.datos.crearContactoLlamadas({
+    empresa: c.empresa,
+    telefono: c.telefono,
+    email: c.email,
+    origen: resumen,
+    caliente_desde: ahora,
+    setter_id: setterId,
+  });
+  return { estado: "nuevo", setter: nombre(setterId) };
 }

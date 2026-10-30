@@ -15,4 +15,5 @@ export default crearCalculadora({
   comercializadoras: COMERCIALIZADORAS,
   ahora: () => new Date(),
   ajustes: ajustesDeEntorno,
+  cron: process.env.CRON_SECRET || "",
 });

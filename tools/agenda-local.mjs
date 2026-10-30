@@ -33,7 +33,7 @@ const deps = {
 };
 const trabajo = crearTrabajo(deps);
 const cita = crearCitaPublica(deps);
-const calculadora = crearCalculadora({ ...deps, datos: crearDatosHuellaMemoria(), comercializadoras: COMERCIALIZADORAS });
+const calculadora = crearCalculadora({ ...deps, datos: crearDatosHuellaMemoria(datos._db), comercializadoras: COMERCIALIZADORAS });
 
 const TIPOS = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon", ".webp": "image/webp" };
 
