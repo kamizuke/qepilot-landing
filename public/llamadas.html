@@ -201,10 +201,10 @@
         <h4>1. Saludo y permiso (10 segundos)</h4>
         <div class="frase">«Hola, [nombre], soy [tu nombre], te llamo de Evidran. Es una llamada corta, ¿te pillo en buen momento o te llamo en otro rato?»</div>
         <p>Si dice que no es buen momento, pide día y hora concretos y cuelga. No insistas.</p>
-        <h4>2. El motivo (20 segundos)</h4>
+        <h4>2. El motivo (20-30 segundos)</h4>
         <p>Elige UNA de estas tres entradas según la empresa:</p>
         <ul>
-          <li><b>General:</b> «Te llamo porque llevas la calidad de [empresa]. Hemos creado una herramienta, diseñada por personas de calidad con más de 20 años de experiencia, para que documentar una no conformidad sea contarla, en vez de pelearse con plantillas de Word.»</li>
+          <li><b>General:</b> «Te llamo porque llevas la calidad de [empresa]. Normalmente la calidad acaba repartida entre plantillas de Word, varios Excel y la memoria de quien la lleva: qué acción vence, qué se hizo la última vez que pasó algo parecido… Hemos creado una herramienta, diseñada por personas de calidad con más de 20 años de experiencia, que lo reúne todo en un solo sitio: cuentas la no conformidad con tus palabras, el informe se redacta solo y te avisa de lo que vence.»</li>
           <li><b>Nueva norma:</b> «Con la ISO 9001:2026 recién publicada, muchas empresas están viendo qué les toca cambiar. Evidran te dice qué requisitos nuevos ya cubres con tus datos y cuáles no.»</li>
           <li><b>Automoción (si fabrican para coches):</b> «Si os llegan reclamaciones de cliente y tenéis que responder con un 8D, Evidran te va preguntando y redacta el informe contigo.»</li>
         </ul>
@@ -928,7 +928,7 @@
     return h("details", null, h("summary", null, "Guion para esta llamada"),
       h("div", { class: "guion" },
         h("h4", null, "1. Saludo"), h("div", { class: "frase" }, "«Hola, " + nombre + ", soy [tu nombre], te llamo de Evidran. Es una llamada corta, ¿te pillo en buen momento o te llamo en otro rato?»"),
-        h("h4", null, "2. Motivo"), h("div", { class: "frase" }, "«Te llamo porque llevas la calidad de " + c.empresa.replace(/\.$/, "") + ". Hemos creado una herramienta, diseñada por personas de calidad con más de 20 años de experiencia, para que documentar una no conformidad sea contarla, en vez de pelearse con plantillas de Word.»"),
+        h("h4", null, "2. Motivo"), h("div", { class: "frase" }, "«Te llamo porque llevas la calidad de " + c.empresa.replace(/\.$/, "") + ". Normalmente la calidad acaba repartida entre plantillas de Word, varios Excel y la memoria de quien la lleva: qué acción vence, qué se hizo la última vez que pasó algo parecido… Hemos creado una herramienta, diseñada por personas de calidad con más de 20 años de experiencia, que lo reúne todo en un solo sitio: cuentas la no conformidad con tus palabras, el informe se redacta solo y te avisa de lo que vence.»"),
         h("h4", null, "3. Pregunta (y escucha)"), h("div", { class: "frase" }, "«Por curiosidad, ¿cómo registráis hoy las no conformidades? ¿Word, Excel, algún programa?»"),
         h("details", { class: "opcional" }, h("summary", null, "Opcional: qué gana la empresa"),
           h("p", { class: "suave peq" }, "Solo si te da pie. Elige UNA, la que encaje con lo que te ha contado."), listaGanancias()),
