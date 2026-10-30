@@ -96,6 +96,8 @@
   .resultados { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px; }
   .resultados .boton { width: 100%; font-size: 14px; padding: 10px 8px; }
   .historial { font-size: 13.5px; margin-top: 6px; }
+  .volver-pendiente { margin-top: 12px; background: #EAF1FE; border-radius: 12px; padding: 12px 14px; color: #1D4ED8; }
+  .volver-pendiente label { color: #1D4ED8; }
   .historial li { margin: 4px 0 0 18px; }
   details { margin-top: 14px; }
   summary { cursor: pointer; font-weight: 700; font-size: 14.5px; }
@@ -639,7 +641,7 @@
     var r = c.resultado;
     if (r === "volver") {
       if (!c.volver_en || diaDe(c.volver_en) <= hoy()) return { grupo: 0, orden: c.volver_en || "" };
-      return null;
+      return { grupo: 4, orden: c.volver_en };
     }
     if (!r) return { grupo: 1, orden: c.creado_en };
     if (r === "no_contesta" || r === "no_esta") {
@@ -682,11 +684,11 @@
     cif.appendChild(h("div", { class: "cifra" }, h("b", null, cola.filter(function (x) { return x.q.grupo < 3; }).length), h("span", null, "Por llamar")));
 
     var caja = vaciar($("cola"));
-    var titulos = { "-1": "Pidieron que les llamaras (calculadora de huella)", 0: "Te pidieron que llamaras hoy", 1: "Sin llamar todavía", 2: "No contestaron otro día", 3: "Ya intentados hoy" };
+    var titulos = { "-1": "Pidieron que les llamaras (calculadora de huella)", 0: "Te pidieron que llamaras hoy", 1: "Sin llamar todavía", 2: "No contestaron otro día", 3: "Ya intentados hoy", 4: "Programados para otro día" };
     if (!S.d.contactos.length) { caja.appendChild(h("div", { class: "vacio" }, "Aún no hay contactos cargados.")); return; }
     if (ver === "mios" && !base.length) { caja.appendChild(h("div", { class: "vacio" }, "Todavía no te has quedado ningún contacto. Abre uno y, en «Quién la llama», elige «Me lo quedo».")); return; }
     if (!cola.length) { caja.appendChild(h("div", { class: "vacio" }, "No queda nadie por llamar. Buen trabajo.")); return; }
-    [-1, 0, 1, 2, 3].forEach(function (g) {
+    [-1, 0, 1, 2, 3, 4].forEach(function (g) {
       var del = cola.filter(function (x) { return x.q.grupo === g; });
       if (!del.length) return;
       var lista = h("div", null, del.map(function (x) {
@@ -697,10 +699,11 @@
           extra = (nota || "Pidió que le llamaran") + " · " + relativo(c.caliente_desde);
         }
         if (g === 0) extra = c.volver_en ? "Pidió que le llamaras " + relativo(c.volver_en) : "Pidió que le volvieras a llamar";
-        if (g >= 2) extra = "Intento " + (c.intentos + 1) + " de 3 · último " + relativo(c.ultima_llamada);
+        if (g === 2 || g === 3) extra = "Intento " + (c.intentos + 1) + " de 3 · último " + relativo(c.ultima_llamada);
+        if (g === 4) extra = "Llamar el " + cuando(c.volver_en);
         return filaContacto(c, extra);
       }));
-      if (g === 3) caja.appendChild(h("details", null, h("summary", null, titulos[g] + " (" + del.length + ")"), lista));
+      if (g >= 3) caja.appendChild(h("details", null, h("summary", null, titulos[g] + " (" + del.length + ")"), lista));
       else { caja.appendChild(h("h3", null, titulos[g] + " (" + del.length + ")")); caja.appendChild(lista); }
     });
   }
@@ -711,18 +714,31 @@
     if (!c) return;
     var cuerpo = vaciar($("ficha-cuerpo"));
     var nota = h("textarea", { id: "f-nota", maxlength: "600", placeholder: "Qué te ha dicho: programa que usan, consultora, próxima auditoría…" });
-    var volverFila = h("div", { class: "oculto" });
+    var volverFila = h("div", { class: "volver-pendiente oculto" });
     var manana = new Date(Date.now() + 86400000);
     var volverInput = h("input", { type: "datetime-local", value: diaDe(manana) + "T10:00" });
-    anadir(volverFila, [h("label", null, "¿Cuándo le vuelves a llamar?"), h("div", { class: "fila" }, volverInput,
-      h("button", { class: "boton", onclick: function () { guardarLlamada(c, "volver", nota.value, volverInput.value); } }, "Guardar"))]);
+    anadir(volverFila, [
+      h("label", { style: "margin-top:0" }, "¿Cuándo le vuelves a llamar?"),
+      h("div", { class: "fila" }, volverInput,
+        h("button", { class: "boton", onclick: function () { guardarLlamada(c, "volver", nota.value, volverInput.value); } }, "Guardar «Volver a llamar»")),
+      h("div", { class: "peq", style: "margin-top:6px" }, "Todavía no está guardado: elige día y hora y pulsa el botón.")]);
+    var datos = formularioDatos(c);
+    // Lo que se perdería al cerrar: la nota, el «volver a llamar» a medias o datos corregidos sin guardar.
+    S.fichaPendiente = function () {
+      return !!nota.value.trim() || !volverFila.classList.contains("oculto") || datos.cambiado();
+    };
 
     var botones = h("div", { class: "resultados" });
-    botones.appendChild(h("button", { class: "boton", onclick: function () { cerrar("ficha"); abrirReserva(c); } }, "Demo agendada"));
+    botones.appendChild(h("button", { class: "boton", onclick: function () { var n = nota.value.trim(); cerrarFicha(true); abrirReserva(c, n); } }, "Demo agendada"));
     Object.keys(S.d.resultados).forEach(function (k) {
       if (k === "demo") return;
       botones.appendChild(h("button", { class: "boton claro", onclick: function () {
-        if (k === "volver") { volverFila.classList.remove("oculto"); volverInput.focus(); return; }
+        if (k === "volver") {
+          volverFila.classList.remove("oculto");
+          volverFila.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          volverInput.focus();
+          return;
+        }
         if (k === "no_llamar" && !confirm("¿Ha pedido que no le llamemos? No se le volverá a llamar.")) return;
         guardarLlamada(c, k, nota.value, null);
       } }, S.d.resultados[k]));
@@ -735,7 +751,7 @@
       h("div", { class: "dlg-cab" },
         h("div", null, h("h2", { style: "margin:0" }, c.empresa),
           h("div", { class: "suave" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona identificada")),
-        h("button", { class: "cerrar", "aria-label": "Cerrar", onclick: function () { cerrar("ficha"); } }, "×")),
+        h("button", { class: "cerrar", "aria-label": "Cerrar", onclick: function () { cerrarFicha(); } }, "×")),
       h("div", { class: "fila mt" },
         c.telefono ? h("a", { class: "telefono", href: "tel:" + tel, style: "color:var(--ink);text-decoration:none" }, c.telefono) : h("span", { class: "suave" }, "Sin teléfono"),
         etiquetaResultado(c)),
@@ -754,7 +770,7 @@
           return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (S.rol === "admin" || l.rol === "admin" ? " · " + l.quien : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
         }))) : null,
       S.rol === "admin" ? asignacion(c) : null,
-      formularioDatos(c),
+      datos,
     ]);
     $("ficha").showModal();
   }
@@ -770,7 +786,7 @@
     inputs.notas = h("textarea", null);
     inputs.notas.value = c.notas || "";
     var aviso = h("div", { class: "aviso" });
-    return h("details", null, h("summary", null, "Corregir datos o añadir notas de la empresa"),
+    var bloque = h("details", null, h("summary", null, "Corregir datos o añadir notas de la empresa"),
       rejilla, h("label", null, "Notas de la empresa"), inputs.notas, aviso,
       h("div", { class: "fila mt" },
         h("button", { class: "boton claro", onclick: function () {
@@ -784,30 +800,44 @@
         } }, "Guardar datos"),
         S.rol === "admin" ? h("button", { class: "boton peligro", onclick: function () {
           if (!confirm("¿Borrar " + c.empresa + " y sus datos? Los intentos ya hechos siguen contando, sin datos personales.")) return;
-          api({ accion: "borrar_contacto", id: c.id }).then(function () { cerrar("ficha"); toast("Contacto borrado."); recargar(); }).catch(function (e) { toast(e.message); });
+          api({ accion: "borrar_contacto", id: c.id }).then(function () { cerrarFicha(true); toast("Contacto borrado."); recargar(); }).catch(function (e) { toast(e.message); });
         } }, "Borrar contacto") : null));
+    bloque.cambiado = function () {
+      return Object.keys(inputs).some(function (k) { return (inputs[k].value || "") !== (c[k] || ""); });
+    };
+    return bloque;
   }
 
   function guardarLlamada(c, resultado, nota, volverEn) {
     api({ accion: "llamada", contactoId: c.id, resultado: resultado, nota: nota, volverEn: volverEn }).then(function () {
-      cerrar("ficha");
+      cerrarFicha(true);
       toast("Anotado: " + S.d.resultados[resultado] + ".");
       recargar();
     }).catch(function (e) { toast(e.message); });
   }
 
   function cerrar(id) { var d = $(id); if (d.open) d.close(); }
+
+  // Cerrar la ficha avisando si se perdería algo escrito. `forzar`: tras guardar.
+  function cerrarFicha(forzar) {
+    if (!forzar && S.fichaPendiente && S.fichaPendiente() &&
+      !confirm("Hay cambios sin guardar en esta ficha (la nota de la llamada, el «volver a llamar» o los datos). ¿Cerrar sin guardar?")) return;
+    S.fichaPendiente = null;
+    cerrar("ficha");
+  }
+  // La tecla Escape también pasa por el aviso.
+  $("ficha").addEventListener("cancel", function (ev) { ev.preventDefault(); cerrarFicha(); });
   document.querySelectorAll("[data-cierra]").forEach(function (b) { b.addEventListener("click", function () { cerrar(b.getAttribute("data-cierra")); }); });
 
   // ---------- Reservar ----------
-  function abrirReserva(c) {
+  function abrirReserva(c, notaLlamada) {
     S.reserva = { contacto: c || null, inicio: null };
     $("r-titulo").textContent = c ? "Agendar demo · " + c.empresa : "Agendar demo";
     $("r-nombre").value = c ? c.persona || "" : "";
     $("r-empresa").value = c ? c.empresa : "";
     $("r-email").value = c ? c.email || "" : "";
     $("r-telefono").value = c ? c.telefono || "" : "";
-    $("r-notas").value = c ? c.notas || "" : "";
+    $("r-notas").value = [c ? c.notas : "", notaLlamada].filter(Boolean).join("\n");
     $("r-error").textContent = "";
     $("r-formulario").classList.remove("oculto");
     $("r-hecho").classList.add("oculto");
