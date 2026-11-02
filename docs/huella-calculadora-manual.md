@@ -14,8 +14,8 @@ contactos» (https://claude.ai/artifact/8Jc596SZZvbDNaHX3gtnDb). Fase 1
 ## Cómo funciona
 
 1. La persona escribe sus consumos: combustibles de instalaciones,
-   vehículos, maquinaria y electricidad (comercializadora y kWh). Puede marcar
-   cada dato como «aproximado».
+   vehículos, maquinaria, recargas de gas refrigerante (gas y kg) y electricidad
+   (comercializadora y kWh). Puede marcar cada dato como «aproximado».
 2. Pulsa **Calcular mi huella**: ve el total, el reparto entre alcance 1 y 2
    y el desglose por fuente. El cálculo se guarda **sin datos personales**.
 3. Para el informe completo deja correo y empresa (teléfono opcional) y marca
@@ -81,6 +81,10 @@ Después, Commit + Push en los dos repositorios.
 - «Guárdalo para seguir luego».
 - Envío del aviso anual a quien lo aceptó.
 - Alta de prueba de Evidran con el cálculo ya cargado.
+
+Los refrigerantes se añadieron el 2 nov 2026, igual que en la app: kg recargados
+× PCA, en alcance 1, con la pestaña 5 del MITECO en dos tablas (columna F y
+columnas I a M). Los cálculos guardados antes siguen dando lo mismo.
 
 Cambio respecto a la propuesta: el escenario «pasar de gasóleo a gas natural»
 se cambió por «un 10 % menos en instalaciones», porque necesita conversiones

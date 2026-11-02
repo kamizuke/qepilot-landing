@@ -128,6 +128,8 @@
   .frase { background: var(--cream); border-radius: 12px; padding: 10px 14px; margin-top: 8px; font-size: 15.5px; line-height: 1.5; }
   .objecion { padding: 10px 0; border-top: 1px solid var(--cream-d); }
   .objecion:first-child { border-top: 0; }
+  .guion-editar { margin-top: 8px; text-align: right; }
+  #g-texto { min-height: 340px; font-size: 14.5px; line-height: 1.5; }
   details.opcional { margin-top: 12px; background: var(--cream); border-radius: 12px; padding: 10px 14px; }
   details.opcional > summary { font-size: 14.5px; }
   details.opcional .objecion { border-top-color: var(--cream-d); }
@@ -204,7 +206,7 @@
     <section id="v-guion" class="vista oculto guion">
       <div class="tarjeta bloque">
         <h2>Guion de llamada</h2>
-        <p class="suave">Tu objetivo es uno: que la persona que lleva la calidad en la empresa acepte una videollamada de demo de 30 minutos. No vendes nada: buscamos empresas que prueben Evidran gratis durante 30 días, sin tarjeta. Tú consigues la cita y en la demo se les deja la prueba montada. Es una guía: dilo con tus palabras.</p>
+        <div id="g-intro"><p class="suave">Tu objetivo es uno: que la persona que lleva la calidad en la empresa acepte una videollamada de demo de 30 minutos. No vendes nada: buscamos empresas que prueben Evidran gratis durante 30 días, sin tarjeta. Tú consigues la cita y en la demo se les deja la prueba montada. Es una guía: dilo con tus palabras.</p></div>
         <div class="guion-indice bloque">
           <a href="#g-pasos">Guion en 6 pasos</a><a href="#g-pegas">Si te dicen…</a><a href="#g-centralita">Centralita y buzón</a><a href="#g-demo">Cuando hay demo</a><a href="#g-resultados">Resultados</a><a href="#g-evidran">Qué es Evidran</a><a href="#g-quien">A quién llamas</a><a href="#g-no">Lo que no se dice</a><a href="#g-reglas">Reglas</a>
         </div>
@@ -503,6 +505,9 @@
 <!-- Marcar un envío y pegar el correo -->
 <dialog id="envio"><div class="dlg" id="envio-cuerpo"></div></dialog>
 
+<!-- Editar una sección del guion -->
+<dialog id="guion-editor"><div class="dlg" id="guion-editor-cuerpo"></div></dialog>
+
 <!-- Agendar una demo -->
 <dialog id="reserva">
   <div class="dlg">
@@ -669,6 +674,7 @@
     pintarContactos();
     pintarAgenda();
     pintarResumen();
+    pintarGuionEditado();
     if (S.rol === "admin") { pintarAjustes(); pintarPersonas(); pintarEnvios(); pintarPestanas(); }
   }
 
@@ -1049,9 +1055,127 @@
     });
   })();
 
+  // ---------- Guion editable (lo edita administración) ----------
+  // Cada sección cambiada se guarda como texto sencillo y se pinta sin innerHTML.
+  // La que no se ha cambiado sigue mostrando el original de esta página.
+  var TITULOS_GUION = { "g-intro": "Tu objetivo" };
+  var partesGuion = {};
+  ["g-intro", "g-pasos", "g-pegas", "g-centralita", "g-demo", "g-resultados", "g-evidran", "g-quien", "g-no", "g-reglas"].forEach(function (id) {
+    var sec = $(id), original = h("div"), editado = h("div", { class: "oculto" });
+    [].slice.call(sec.childNodes).forEach(function (n) { if (n.nodeName !== "SUMMARY") original.appendChild(n); });
+    var boton = h("div", { class: "guion-editar oculto" }, h("button", { class: "boton claro mini", onclick: function () { abrirEditorGuion(id); } }, "Editar esta sección"));
+    anadir(sec, [boton, original, editado]);
+    partesGuion[id] = { sec: sec, original: original, editado: editado, boton: boton, pintado: "" };
+  });
+
+  function lineaATexto(el) {
+    var s = "";
+    el.childNodes.forEach(function (n) { s += n.nodeName === "B" ? "**" + n.textContent + "**" : n.textContent; });
+    return s.replace(/\s+/g, " ").trim();
+  }
+  function htmlATexto(el, lineas) {
+    [].forEach.call(el.children, function (n) {
+      if (n.nodeName === "SUMMARY") return;
+      if (n.nodeName === "H4") lineas.push("", "# " + lineaATexto(n));
+      else if (n.classList.contains("frase")) lineas.push("> " + lineaATexto(n));
+      else if (n.classList.contains("objecion")) lineas.push("", "? " + n.children[0].textContent, n.children[1].textContent);
+      else if (n.nodeName === "UL" || n.nodeName === "OL") [].forEach.call(n.children, function (li, i) { lineas.push((n.nodeName === "OL" ? i + 1 + ". " : "- ") + lineaATexto(li)); });
+      else if (n.nodeName === "DETAILS") { lineas.push("", "+ " + n.querySelector("summary").textContent); htmlATexto(n, lineas); }
+      else if (n.nodeName === "P") lineas.push(lineaATexto(n));
+      else htmlATexto(n, lineas);
+    });
+    return lineas;
+  }
+  function textoOriginal(id) { return htmlATexto(partesGuion[id].original, []).join("\n").trim(); }
+
+  function conNegrita(s) { return s.split("**").map(function (x, i) { return i % 2 ? h("b", null, x) : x; }); }
+  // `cambia` deja sustituir [nombre] y [empresa] en la ficha de cada llamada.
+  function textoAHtml(texto, cambia) {
+    var salida = h("div"), destino = salida, lista = null, objecion = null;
+    texto.split("\n").forEach(function (cruda) {
+      var l = cambia ? cambia(cruda.trim()) : cruda.trim(), m;
+      if (!l) return;
+      var etiquetaLista = /^- /.test(l) ? "ul" : /^\d+\. /.test(l) ? "ol" : null;
+      if (etiquetaLista) {
+        if (!lista || lista.nodeName.toLowerCase() !== etiquetaLista) { lista = h(etiquetaLista); destino.appendChild(lista); }
+        lista.appendChild(h("li", null, conNegrita(l.replace(/^(- |\d+\. )/, ""))));
+        objecion = null;
+        return;
+      }
+      lista = null;
+      if ((m = /^# (.*)/.exec(l))) { destino = salida; objecion = null; salida.appendChild(h("h4", null, conNegrita(m[1]))); return; }
+      if ((m = /^\+ (.*)/.exec(l))) { objecion = null; destino = h("details", { class: "opcional" }, h("summary", null, m[1])); salida.appendChild(destino); return; }
+      if ((m = /^> (.*)/.exec(l))) { objecion = null; destino.appendChild(h("div", { class: "frase" }, conNegrita(m[1]))); return; }
+      if ((m = /^\? (.*)/.exec(l))) { objecion = h("div", { class: "objecion" }, h("b", null, m[1])); destino.appendChild(objecion); return; }
+      if (objecion) { objecion.appendChild(h("span", null, conNegrita(l))); objecion = null; return; }
+      destino.appendChild(h("p", null, conNegrita(l)));
+    });
+    return salida;
+  }
+
+  function pintarGuionEditado() {
+    Object.keys(partesGuion).forEach(function (id) {
+      var p = partesGuion[id], t = S.d.guion[id] || "";
+      p.boton.classList.toggle("oculto", S.rol !== "admin");
+      if (p.pintado === t) return;
+      p.pintado = t;
+      anadir(vaciar(p.editado), t ? textoAHtml(t) : null);
+      p.original.classList.toggle("oculto", !!t);
+      p.editado.classList.toggle("oculto", !t);
+    });
+  }
+
+  function abrirEditorGuion(id) {
+    var p = partesGuion[id], original = textoOriginal(id), guardado = S.d.guion[id] || "";
+    var texto = h("textarea", { id: "g-texto", maxlength: "20000" });
+    texto.value = guardado || original;
+    var inicial = texto.value;
+    var error = h("div", { class: "aviso mal" });
+    var titulo = TITULOS_GUION[id] || p.sec.querySelector("summary").textContent;
+    function guardar(valor, aviso) {
+      error.textContent = "";
+      api({ accion: "guardar_guion", seccion: id, texto: valor }).then(function () {
+        cerrarEditorGuion(true);
+        toast(aviso);
+        return recargar();
+      }).catch(function (e) { error.textContent = e.message; });
+    }
+    S.guionPendiente = function () { return texto.value !== inicial; };
+    anadir(vaciar($("guion-editor-cuerpo")), [
+      h("div", { class: "dlg-cab" }, h("h2", { style: "margin:0" }, titulo),
+        h("button", { class: "cerrar", "aria-label": "Cerrar", onclick: function () { cerrarEditorGuion(); } }, "×")),
+      h("p", { class: "peq suave" }, "Al principio de cada línea: «# » subtítulo, «> » frase para decir, «- » punto de lista, «1. » lista numerada, «? » lo que te dicen (la respuesta, en la línea siguiente), «+ » bloque plegable hasta el siguiente subtítulo. **Así** va en negrita."),
+      texto, error,
+      h("div", { class: "fila mt" },
+        h("button", { class: "boton", onclick: function () {
+          if (texto.value === inicial) { cerrarEditorGuion(true); return; }
+          guardar(texto.value.trim() === original ? "" : texto.value, "Guion guardado. Las setters lo verán en menos de un minuto.");
+        } }, "Guardar"),
+        h("button", { class: "boton claro", onclick: function () { cerrarEditorGuion(); } }, "Cancelar"),
+        guardado ? h("button", { class: "boton peligro", onclick: function () {
+          if (confirm("¿Volver al texto original de esta sección? Se pierden tus cambios.")) guardar("", "Sección restaurada.");
+        } }, "Volver al original") : null),
+    ]);
+    $("guion-editor").showModal();
+  }
+  function cerrarEditorGuion(forzar) {
+    if (!forzar && S.guionPendiente && S.guionPendiente() && !confirm("Hay cambios sin guardar. ¿Cerrar sin guardar?")) return;
+    S.guionPendiente = null;
+    cerrar("guion-editor");
+  }
+  $("guion-editor").addEventListener("cancel", function (ev) { ev.preventDefault(); cerrarEditorGuion(); });
+
   // Chuleta dentro de la ficha, con el nombre y la empresa de esa llamada.
   function chuleta(c) {
     var nombre = c.persona ? c.persona.split(" ")[0] : "[nombre]";
+    var cambia = function (l) { return l.split("[nombre]").join(nombre).split("[empresa]").join(c.empresa.replace(/\.$/, "")); };
+    var pasos = S.d.guion["g-pasos"], pegas = S.d.guion["g-pegas"];
+    if (pasos || pegas) {
+      return h("details", null, h("summary", null, "Guion para esta llamada"),
+        h("div", { class: "guion" },
+          textoAHtml(pasos || textoOriginal("g-pasos"), cambia),
+          h("h4", null, "Si te dicen…"), textoAHtml(pegas || textoOriginal("g-pegas"), cambia)));
+    }
     return h("details", null, h("summary", null, "Guion para esta llamada"),
       h("div", { class: "guion" },
         h("h4", null, "1. Saludo"), h("div", { class: "frase" }, "«Hola, " + nombre + ", soy [tu nombre], te llamo de Evidran. Es una llamada corta, ¿te pillo en buen momento o te llamo en otro rato?»"),
@@ -1635,7 +1759,7 @@
   $("salir").addEventListener("click", salir);
   // Se refresca sola cada minuto (si no hay una ficha abierta), para ver lo que va anotando la otra persona.
   setInterval(function () {
-    if (S.rol && document.visibilityState === "visible" && !$("ficha").open && !$("reserva").open && !$("editar").open && !$("envio").open) recargar();
+    if (S.rol && document.visibilityState === "visible" && !$("ficha").open && !$("reserva").open && !$("editar").open && !$("envio").open && !$("guion-editor").open) recargar();
   }, 60000);
   if (S.clave) api({ accion: "entrar" }).then(function (j) { arrancar(j.rol, j.nombre); }).catch(function () { salir(); });
 })();

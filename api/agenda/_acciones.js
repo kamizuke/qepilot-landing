@@ -28,6 +28,7 @@ const TOKEN = /^[A-Za-z0-9_-]{16,64}$/;
 const LOCAL = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/;
 const DIA = /^\d{4}-\d{2}-\d{2}$/;
 const VENCIMIENTOS = ["vence_9001", "vence_14001", "vence_45001"];
+const SECCIONES_GUION = ["g-intro", "g-pasos", "g-pegas", "g-centralita", "g-demo", "g-resultados", "g-evidran", "g-quien", "g-no", "g-reglas"];
 
 export function hashToken(token) {
   return crypto.createHash("sha256").update(String(token)).digest("hex");
@@ -158,7 +159,7 @@ export function crearTrabajo(deps) {
       }
       const rol = quien.rol;
       const soloAdmin = ["importar", "borrar_contacto", "guardar_config", "crear_bloqueo", "borrar_bloqueo", "cancelar_cita",
-        "crear_setter", "editar_setter", "nueva_clave_setter", "asignar", "repartir", "quedarme", "info_enviada"];
+        "crear_setter", "editar_setter", "nueva_clave_setter", "asignar", "repartir", "quedarme", "info_enviada", "guardar_guion"];
       if (soloAdmin.includes(accion) && rol !== "admin") {
         return res.status(403).json({ error: "Esta acción no está disponible con tu clave." });
       }
@@ -188,6 +189,8 @@ export function crearTrabajo(deps) {
           return res.status(200).json({ ok: true });
         case "guardar_config":
           return await guardarConfig(deps, body, res);
+        case "guardar_guion":
+          return await guardarGuion(deps, body, res);
         case "crear_bloqueo":
           return await crearBloqueo(deps, body, res);
         case "borrar_bloqueo":
@@ -282,6 +285,7 @@ async function estado(deps, quien, res) {
       rol === "admin"
         ? config
         : config && { duracion_min: config.duracion_min, margen_min: config.margen_min },
+    guion: config?.guion || {},
     setters: rol === "admin" ? setters : [],
     contactos: contactos.map((c) => {
       // El seguimiento de los envíos es solo de Lissette.
@@ -497,6 +501,19 @@ async function importar(deps, body, res) {
     sinEmpresa: leido.sinEmpresa,
     recortados: leido.recortados,
   });
+}
+
+// Sin texto, la sección vuelve al original de la página.
+async function guardarGuion(deps, body, res) {
+  const seccion = String(body.seccion || "");
+  if (!SECCIONES_GUION.includes(seccion)) return res.status(400).json({ error: "Sección del guion no válida." });
+  const config = await deps.datos.leerConfig();
+  const guion = { ...(config?.guion || {}) };
+  const t = textoLargo(body.texto, 20000);
+  if (t) guion[seccion] = t;
+  else delete guion[seccion];
+  await deps.datos.guardarConfig({ guion });
+  return res.status(200).json({ ok: true });
 }
 
 async function guardarConfig(deps, body, res) {

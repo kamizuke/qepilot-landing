@@ -71,6 +71,7 @@
             <a href="/recorrido.html"><b>Una NC de principio a fin</b></a>
             <a href="/producto.html"><b>Evidran por dentro</b></a>
             <a href="/producto.html#comparativa"><b>Frente a Excel, plantillas y suites</b></a>
+            <a href="/huella"><b>Calculadora de huella de carbono</b></a>
             <a href="/auditores.html"><b>Para auditores y consultores</b></a>
           </div>
         </div>
@@ -99,6 +100,8 @@
   .fila-hc.fijas { grid-template-columns: 1.4fr 1fr 1fr auto auto; }
   .fila-hc.vehiculos, .fila-hc.maquinaria { grid-template-columns: 1.1fr 1.3fr 1fr auto auto; }
   .fila-hc.electricidad { grid-template-columns: 1.6fr 1fr 1fr auto auto; }
+  .fila-hc.fugas { grid-template-columns: 2fr 1.4fr auto auto; }
+  .fila-hc.fugas.otro { grid-template-columns: 1.3fr 1.1fr .9fr 1fr auto auto; }
   .cantidad { position: relative; }
   .cantidad span { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--ink-soft); pointer-events: none; }
   .cantidad input { padding-right: 46px; }
@@ -107,7 +110,7 @@
   .quitar { font: inherit; background: none; border: 0; color: var(--ink-soft); font-size: 20px; cursor: pointer; padding: 4px 8px; }
   .anadir { font: inherit; font-weight: 700; font-size: 14px; color: var(--blue); background: none; border: 1.5px dashed var(--line); border-radius: 12px; padding: 9px 14px; margin-top: 12px; cursor: pointer; }
   @media (max-width: 720px) {
-    .fila-hc.fijas, .fila-hc.vehiculos, .fila-hc.maquinaria, .fila-hc.electricidad { grid-template-columns: 1fr 1fr; }
+    .fila-hc.fijas, .fila-hc.vehiculos, .fila-hc.maquinaria, .fila-hc.electricidad, .fila-hc.fugas, .fila-hc.fugas.otro { grid-template-columns: 1fr 1fr; }
     .fila-hc > :first-child { grid-column: 1 / -1; }
   }
   .resultado-hc { text-align: center; }
@@ -180,7 +183,14 @@
     </div>
 
     <div class="tarjeta">
-      <h2>5. Electricidad</h2>
+      <h2>5. Fugas de gas refrigerante</h2>
+      <p class="ayuda">Climatización y cámaras de frío de la empresa o bajo su control: los kg de gas que recargó el mantenedor durante el año (vienen en su hoja de intervención). Si no se recargó nada, déjalo vacío.</p>
+      <div id="lista-fugas"></div>
+      <button class="anadir" data-anadir="fugas">+ Añadir gas</button>
+    </div>
+
+    <div class="tarjeta">
+      <h2>6. Electricidad</h2>
       <p class="ayuda">Tu comercializadora y los kWh del año. Si tu contrato tiene garantía de origen renovable, márcalo: cambia mucho el resultado.</p>
       <div id="lista-electricidad"></div>
       <button class="anadir" data-anadir="electricidad">+ Añadir otro contrato</button>
@@ -197,7 +207,7 @@
         <div class="cifra"><span id="r-total"></span> <small>t CO₂e</small></div>
         <div class="reparto"><div class="a1" id="r-barra-a1"></div><div class="a2" id="r-barra-a2"></div></div>
         <div class="leyenda">
-          <span><i style="background:var(--navy)"></i>Alcance 1 · combustibles: <b id="r-a1"></b> t</span>
+          <span><i style="background:var(--navy)"></i>Alcance 1 · combustibles y fugas: <b id="r-a1"></b> t</span>
           <span><i style="background:var(--teal)"></i>Alcance 2 · electricidad: <b id="r-a2"></b> t</span>
         </div>
         <div id="r-avisos"></div>
@@ -232,8 +242,9 @@
     <div class="tarjeta faq-hc" style="margin-top:28px">
       <h2 style="margin-bottom:8px">Preguntas frecuentes</h2>
       <details><summary>¿Es la calculadora oficial del Ministerio?</summary><p>No. Usa los mismos factores de emisión que la calculadora de huella de carbono de organización del MITECO y te da las cifras con los nombres exactos de sus desplegables, para que registrarla allí sea copiar y pegar.</p></details>
-      <details><summary>¿Qué son los alcances 1 y 2?</summary><p>Alcance 1: lo que se quema en la empresa (gas, gasóleo, combustible de vehículos y maquinaria). Alcance 2: la electricidad comprada. Es lo que pide el registro de huella del MITECO.</p></details>
-      <details><summary>¿Qué no incluye?</summary><p>El alcance 3: emisiones de proveedores, transporte contratado, viajes o residuos. Tampoco los gases refrigerantes de los equipos de climatización.</p></details>
+      <details><summary>¿Qué son los alcances 1 y 2?</summary><p>Alcance 1: lo que se quema en la empresa (gas, gasóleo, combustible de vehículos y maquinaria) y las fugas de gas refrigerante de la climatización y el frío. Alcance 2: la electricidad comprada. Son los dos alcances de la calculadora de huella de organización del MITECO.</p></details>
+      <details><summary>¿Qué no incluye?</summary><p>El alcance 3: emisiones de proveedores, transporte contratado, viajes o residuos.</p></details>
+      <details><summary>¿De dónde saco los kilos de refrigerante?</summary><p>De la hoja de intervención o el registro del mantenedor. Se cuenta lo que se recargó en el año: lo que se repone es lo que se había fugado. Cada gas calienta distinto, por eso cada kilo se multiplica por su potencial de calentamiento (PCA). Si tu gas no está en la lista, elige «Otro gas» y escribe el PCA de su ficha técnica.</p></details>
       <details><summary>¿Guardáis mis consumos?</summary><p>Guardamos el cálculo sin ningún dato personal, para mejorar la herramienta. Tus datos de contacto solo si pides el informe.</p></details>
       <details><summary>¿Y si no tengo un dato exacto?</summary><p>Escribe tu mejor estimación y marca «aproximado»: el resultado y el informe lo indicarán.</p></details>
     </div>
@@ -247,10 +258,10 @@
 </section>
 
 <script type="module">
-  import { PRIMER_ANIO, ULTIMO_ANIO, BLOQUES, COMBUSTIBLES, BIOMASAS, GDO, usosDe, calcular, toneladas, porcentaje, versionFactores } from "/huella/calculo.js";
+  import { PRIMER_ANIO, ULTIMO_ANIO, BLOQUES, COMBUSTIBLES, BIOMASAS, GDO, GASES, GAS_OTRO, usosDe, calcular, toneladas, porcentaje, versionFactores } from "/huella/calculo.js";
 
   const $ = (id) => document.getElementById(id);
-  const estado = { fijas: [], vehiculos: [], maquinaria: [], electricidad: [] };
+  const estado = { fijas: [], vehiculos: [], maquinaria: [], fugas: [], electricidad: [] };
   let comercializadoras = null;
   let calculoId = null;
 
@@ -328,16 +339,28 @@
     return el("div", { class: "fila-hc electricidad" }, com, gdo, campoCantidad(f, "kwh", "kWh"), campoAprox(f), botonQuitar("electricidad", i));
   }
 
+  function filaFugas(f, i) {
+    const otro = f.gas === GAS_OTRO;
+    const gas = selector(
+      [["", "¿Qué gas?"], ...GASES.map((g) => [g.nombre, `${g.nombre} · PCA ${g.pca.toLocaleString("es-ES")}`]), [GAS_OTRO, "Otro gas (escribe su nombre)"]],
+      f.gas || "", (v) => { f.gas = v; pintar("fugas"); cambiado(); }, "Gas refrigerante");
+    if (!otro) return el("div", { class: "fila-hc fugas" }, gas, campoCantidad(f, "kg", "kg"), campoAprox(f), botonQuitar("fugas", i));
+    const nombre = el("input", { type: "text", maxlength: "40", placeholder: "Nombre, ej. R-454B", value: f.nombre || "", "aria-label": "Nombre del gas" });
+    nombre.addEventListener("input", () => { f.nombre = nombre.value; cambiado(); });
+    return el("div", { class: "fila-hc fugas otro" }, gas, nombre, campoCantidad(f, "pca", "PCA"), campoCantidad(f, "kg", "kg"), campoAprox(f), botonQuitar("fugas", i));
+  }
+
   function pintar(bloque) {
     const caja = $("lista-" + bloque);
     caja.replaceChildren(...estado[bloque].map((f, i) =>
-      bloque === "fijas" ? filaFijas(f, i) : bloque === "electricidad" ? filaElectricidad(f, i) : filaUso(bloque, f, i)));
+      bloque === "fijas" ? filaFijas(f, i) : bloque === "electricidad" ? filaElectricidad(f, i) : bloque === "fugas" ? filaFugas(f, i) : filaUso(bloque, f, i)));
   }
 
   function nuevaFila(bloque) {
     if (bloque === "fijas") return { combustible: "gas_natural", cantidad: 0 };
     if (bloque === "vehiculos") return { combustible: "gasoleo_a", categoria: "m1", cantidad: 0 };
     if (bloque === "maquinaria") return { combustible: "gasoleo_a", tipo: "maq_industrial", cantidad: 0 };
+    if (bloque === "fugas") return { gas: "", kg: 0 };
     return { comercializadora: "", gdo: "no", kwh: 0 };
   }
 
@@ -355,6 +378,7 @@
       fijas: estado.fijas.map(limpio),
       vehiculos: estado.vehiculos.map(limpio),
       maquinaria: estado.maquinaria.map(limpio),
+      fugas: estado.fugas.map(limpio),
       electricidad: estado.electricidad.map(limpio),
     };
   }
@@ -444,7 +468,7 @@
   }));
   estado.fijas.push(nuevaFila("fijas"));
   estado.electricidad.push(nuevaFila("electricidad"));
-  ["fijas", "vehiculos", "maquinaria", "electricidad"].forEach(pintar);
+  ["fijas", "vehiculos", "maquinaria", "fugas", "electricidad"].forEach(pintar);
 </script>
 
 <footer>

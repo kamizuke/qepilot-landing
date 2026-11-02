@@ -25,6 +25,7 @@ Ninguna de las dos sale en Google (van marcadas como «no indexar»).
 | Ver el resumen (llamadas, demos, resultados) | Sí | Sí |
 | Cargar contactos (CSV de Apollo) y descargar la lista | — | Sí |
 | Marcar la información enviada y pegar el correo (pestaña Envíos) | — | Sí |
+| Editar el guion | — | Sí |
 | Borrar un contacto | — | Sí |
 | Cancelar una demo | — | Sí |
 | Horario, duración, margen, enlace de Teams y bloqueos | — | Sí |
@@ -69,6 +70,26 @@ número entre paréntesis es lo pendiente:
   de pendientes.
 - En la ficha de cualquier contacto, «Marcar o pegar el correo» sirve también
   para un envío que no vino de una llamada.
+
+## Editar el guion
+
+En la pestaña **Guion**, cada sección tiene «Editar esta sección» (solo la ves tú).
+El texto usa marcas sencillas al principio de cada línea:
+
+| Marca | Qué es |
+|---|---|
+| `# ` | Subtítulo |
+| `> ` | Frase para decir (recuadro) |
+| `- ` / `1. ` | Punto de lista / lista numerada |
+| `? ` | Lo que te dicen; la respuesta va en la línea siguiente |
+| `+ ` | Bloque plegable, hasta el siguiente subtítulo |
+| `**texto**` | Negrita |
+
+Las setters ven el cambio en menos de un minuto. Si cambias «El guion en 6 pasos»
+o «Si te dicen…», la chuleta de cada ficha pasa a mostrar esas dos secciones
+completas, con `[nombre]` y `[empresa]` ya sustituidos. «Volver al original»
+recupera el texto de la página y borra tus cambios en esa sección. El aviso legal
+no se edita desde aquí.
 
 ## Dónde está cada empresa
 

@@ -4,7 +4,7 @@
 // del MITECO (factoresOficiales.js y comercializadoras.js, copiados de la app
 // con tools/copiar-factores-huella.mjs). Mismas reglas que src/huellaCarbono.js
 // y src/huellaOficial.js de la app: si cambian allí, cambian aquí.
-import { ORIGEN, PRIMER_ANIO, ULTIMO_ANIO, SERIES, MIX_SIN_GDO } from "./factoresOficiales.js";
+import { ORIGEN, PRIMER_ANIO, ULTIMO_ANIO, SERIES, MIX_SIN_GDO, REFRIGERANTES, REFRIGERANTE_OTRO } from "./factoresOficiales.js";
 
 export { ORIGEN, PRIMER_ANIO, ULTIMO_ANIO };
 
@@ -36,6 +36,12 @@ export const GDO = [
   { value: "renovable", label: "Sí, renovable", factor: 0, miteco: "GdO energía renovable" },
   { value: "cogeneracion", label: "Sí, cogeneración de alta eficiencia", factor: 0.302, miteco: "GdO cogeneración de alta eficiencia" },
 ];
+
+// Gases de la pestaña 5 de la calculadora (fugas de climatización y frío): se
+// cuenta la recarga del año, kg × PCA. Mismas reglas que src/huellaRefrigerantes.js.
+export const GASES = REFRIGERANTES.map(([nombre, formula, pca]) => ({ nombre, formula, pca }));
+export const GAS_OTRO = REFRIGERANTE_OTRO;
+const MAX_GAS = 40;
 
 // Combustibles: unidad (la del factor y la de la calculadora) y texto exacto
 // del desplegable «Tipo de combustible». Desde 2019 la calculadora pide B7 y
@@ -91,6 +97,20 @@ export const PESTANAS = {
     apartado: "C. Funcionamiento de maquinaria",
     columnas: ["Tipo de maquinaria", "Tipo de combustible", "Cantidad"],
   },
+  // La pestaña 5 tiene la fórmula y el PCA del gas (columnas G y H) calculados
+  // y bloqueados entre lo que se rellena: dos bloques, para no pegar encima.
+  fugas: {
+    pestana: "5. Emisiones fugitivas",
+    apartado: "A. Equipos de climatización / refrigeración · columna F",
+    columnas: ["Nombre del gas o de la mezcla"],
+    pegarEn: "Pega en la columna F de la primera fila libre. La fórmula y el PCA (columnas G y H) los pone la calculadora.",
+  },
+  fugas_recarga: {
+    pestana: "5. Emisiones fugitivas",
+    apartado: "A. Equipos de climatización / refrigeración · columnas I a M",
+    columnas: ["Otros gases: nombre", "Otros gases: PCA", "Tipo de equipo", "Capacidad equipo (kg)", "Recarga equipo (kg)"],
+    pegarEn: "Pega en la columna I de esas mismas filas. El tipo de equipo y la capacidad son opcionales: rellénalos allí si los tienes.",
+  },
   electricidad: {
     pestana: "8. Electricidad y otras energías",
     apartado: "A. Consumo eléctrico en edificios",
@@ -102,6 +122,7 @@ const AMBITO = {
   fijas: "los combustibles de las instalaciones",
   vehiculos: "los vehículos",
   maquinaria: "la maquinaria",
+  fugas: "las fugas de gases refrigerantes",
   electricidad: "la electricidad comprada",
 };
 
@@ -110,6 +131,20 @@ export function factorOficial(anio, combustible, uso) {
   const s = SERIES.find((x) => x[0] === combustible && x[1] === uso);
   const v = s ? s[2][anio - PRIMER_ANIO] : null;
   return v == null ? null : v;
+}
+
+const claveGas = (s) => String(s || "").toUpperCase().replace(/[\s_-]/g, "");
+
+/**
+ * El gas de la lista oficial que corresponde a lo escrito («r410a» → R-410A;
+ * «R-134a» → HFC-134a, que es como lo llama la calculadora), o null.
+ */
+export function gasOficial(texto) {
+  const k = claveGas(texto);
+  if (!k) return null;
+  return GASES.find((g) => claveGas(g.nombre) === k)
+    || GASES.find((g) => claveGas(g.nombre.replace(/^H?C?FC-/, "R-")) === k)
+    || null;
 }
 
 /** Categorías (vehículos) o tipos (maquinaria) que la calculadora tiene para un combustible. */
@@ -133,6 +168,7 @@ function numero(v) {
  * entrada = { anio, fijas: [{combustible, cantidad, detalle?, aprox?}],
  *   vehiculos: [{combustible, categoria, cantidad, aprox?}],
  *   maquinaria: [{combustible, tipo, cantidad, aprox?}],
+ *   fugas: [{gas, nombre?, pca?, kg, aprox?}] (gas = nombre oficial u «Otro», con su nombre y su PCA),
  *   electricidad: [{comercializadora, gdo, kwh, aprox?}] }
  * Devuelve kg CO₂e; las filas a cero o vacías se ignoran.
  */
@@ -184,6 +220,38 @@ export function calcular(entrada, comercializadoras) {
   for (const m of entrada.maquinaria || []) {
     const tipo = MAQUINARIA.find((x) => x.value === m.tipo) || MAQUINARIA[0];
     anadir("maquinaria", m, tipo.value, tipo.label, [tipo.label]);
+  }
+  for (const f of entrada.fugas || []) {
+    const kg = numero(f.kg);
+    if (!kg) continue;
+    const otro = f.gas === GAS_OTRO;
+    // Un «otro» que en realidad está en la lista cuenta como el oficial.
+    const oficial = gasOficial(otro ? f.nombre : f.gas);
+    const nombre = oficial ? oficial.nombre : String(f.nombre || "").replace(/\s+/g, " ").trim().slice(0, MAX_GAS);
+    if (!oficial && !otro) {
+      avisos.push("Fugas de refrigerante: elige el gas de cada fila.");
+      continue;
+    }
+    if (!oficial && !nombre) {
+      avisos.push("Fugas de refrigerante: escribe el nombre del gas.");
+      continue;
+    }
+    const pca = oficial ? oficial.pca : numero(f.pca);
+    if (!pca) {
+      avisos.push(`${nombre}: escribe su PCA (viene en la ficha técnica del gas).`);
+      continue;
+    }
+    partidas.push({
+      bloque: "fugas",
+      alcance: 1,
+      etiqueta: `Fugas de ${nombre}`,
+      cantidad: kg,
+      unidad: "kg",
+      factor: pca,
+      kg: kg * pca,
+      aprox: !!f.aprox,
+      celdas: oficial ? [oficial.nombre, "", ""] : [GAS_OTRO, nombre, numeroExcel(pca)],
+    });
   }
   const lista = comercializadorasDe(anio, comercializadoras);
   for (const e of entrada.electricidad || []) {
@@ -323,15 +391,21 @@ export function numeroExcel(n) {
 
 /** Filas para la calculadora oficial, agrupadas por pestaña y tipo. */
 export function tablasMiteco(r) {
-  const orden = ["fijas", "vehiculos", "maquinaria", "electricidad"];
+  const orden = ["fijas", "vehiculos", "maquinaria", "fugas", "fugas_recarga", "electricidad"];
+  const celdasDe = (bloque, g) => {
+    if (bloque === "fugas") return [g.celdas[0]];
+    if (bloque === "fugas_recarga") return [g.celdas[1], g.celdas[2], "", "", numeroExcel(g.cantidad)];
+    return [...g.celdas, numeroExcel(g.cantidad)];
+  };
   return orden
     .map((bloque) => {
       const grupos = new Map();
-      for (const p of r.partidas.filter((x) => x.bloque === bloque)) {
+      const origen = bloque === "fugas_recarga" ? "fugas" : bloque;
+      for (const p of r.partidas.filter((x) => x.bloque === origen)) {
         const clave = p.celdas.join("|");
         grupos.set(clave, { celdas: p.celdas, cantidad: (grupos.get(clave)?.cantidad || 0) + p.cantidad });
       }
-      return { ...PESTANAS[bloque], bloque, filas: [...grupos.values()].map((g) => [...g.celdas, numeroExcel(g.cantidad)]) };
+      return { ...PESTANAS[bloque], bloque, filas: [...grupos.values()].map((g) => celdasDe(bloque, g)) };
     })
     .filter((t) => t.filas.length);
 }
@@ -345,7 +419,7 @@ export function limpiarEntrada(e) {
       const o = {};
       for (const k of campos) {
         if (k === "aprox") o.aprox = !!f?.aprox;
-        else if (k === "cantidad" || k === "kwh") o[k] = numero(f?.[k]) ?? 0;
+        else if (k === "cantidad" || k === "kwh" || k === "kg" || k === "pca") o[k] = numero(f?.[k]) ?? 0;
         else o[k] = typeof f?.[k] === "string" ? f[k].slice(0, 160) : null;
       }
       return o;
@@ -355,6 +429,7 @@ export function limpiarEntrada(e) {
     fijas: filas(e.fijas, ["combustible", "cantidad", "detalle", "aprox"]),
     vehiculos: filas(e.vehiculos, ["combustible", "categoria", "cantidad", "aprox"]),
     maquinaria: filas(e.maquinaria, ["combustible", "tipo", "cantidad", "aprox"]),
+    fugas: filas(e.fugas, ["gas", "nombre", "pca", "kg", "aprox"]),
     electricidad: filas(e.electricidad, ["comercializadora", "gdo", "kwh", "aprox"]),
   };
 }

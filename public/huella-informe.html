@@ -51,6 +51,8 @@
     .tarjeta { box-shadow: none; border-color: #ddd; }
     .inf { padding: 0; }
   }
+  .desliza { overflow-x: auto; }
+  @media print { .desliza { overflow: visible; } }
 </style>
 </head>
 <body>
@@ -74,17 +76,17 @@
       <div class="cifra"><span id="total"></span> <small>t CO₂e</small></div>
       <div class="reparto"><div class="a1" id="barra-a1"></div><div class="a2" id="barra-a2"></div></div>
       <div class="leyenda">
-        <span><i style="background:var(--navy)"></i>Alcance 1 · combustibles: <b id="a1"></b> t</span>
+        <span><i style="background:var(--navy)"></i>Alcance 1 · combustibles y fugas: <b id="a1"></b> t</span>
         <span><i style="background:var(--teal)"></i>Alcance 2 · electricidad: <b id="a2"></b> t</span>
       </div>
-      <table><thead><tr><th>Fuente</th><th class="n">Consumo</th><th class="n">Factor</th><th class="n">t CO₂e</th><th class="n">%</th></tr></thead><tbody id="desglose"></tbody></table>
+      <div class="desliza"><table><thead><tr><th>Fuente</th><th class="n">Consumo</th><th class="n">Factor</th><th class="n">t CO₂e</th><th class="n">%</th></tr></thead><tbody id="desglose"></tbody></table></div>
       <p class="suave peq" id="nota-aprox" style="margin-top:10px"></p>
     </div>
 
     <div class="tarjeta">
       <h2>Qué pasa si…</h2>
       <p class="suave peq">Calculado con los mismos factores oficiales y tus consumos. Solo toneladas: el ahorro en euros depende de tus contratos.</p>
-      <table><thead><tr><th>Cambio</th><th class="n">Huella</th><th class="n">Reducción</th></tr></thead><tbody id="escenarios"></tbody></table>
+      <div class="desliza"><table><thead><tr><th>Cambio</th><th class="n">Huella</th><th class="n">Reducción</th></tr></thead><tbody id="escenarios"></tbody></table></div>
     </div>
 
     <div class="tarjeta">
@@ -173,7 +175,7 @@
     $("desglose").replaceChildren(...r.partidas.slice().sort((a, b) => b.kg - a.kg).map((p) => el("tr", null,
       el("td", null, p.etiqueta + (p.aprox ? " (aproximado)" : "")),
       el("td", { class: "n" }, `${p.cantidad.toLocaleString("es-ES")} ${p.unidad}`),
-      el("td", { class: "n" }, `${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })} kg/${p.unidad}`),
+      el("td", { class: "n" }, p.bloque === "fugas" ? `PCA ${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })}` : `${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })} kg/${p.unidad}`),
       el("td", { class: "n" }, toneladas(p.kg)),
       el("td", { class: "n" }, porcentaje(p.kg, r.total) + " %"))));
     $("nota-aprox").textContent = r.aproximado ? "Parte de los consumos son aproximados." : "";
@@ -198,9 +200,9 @@
       const b = el("button", { class: "boton no-imprimir" }, "Copiar filas");
       b.addEventListener("click", () => copiar(filasTexto, b));
       return el("div", { class: "pestana" },
-        el("b", null, `Pestaña ${t.pestana}`), el("div", { class: "suave peq" }, t.apartado),
-        el("table", null, el("thead", null, el("tr", null, ...t.columnas.map((c) => el("th", null, c)))),
-          el("tbody", null, ...t.filas.map((f) => el("tr", null, ...f.map((c) => el("td", null, c)))))),
+        el("b", null, `Pestaña ${t.pestana}`), el("div", { class: "suave peq" }, t.pegarEn ? `${t.apartado}. ${t.pegarEn}` : t.apartado),
+        el("div", { class: "desliza" }, el("table", null, el("thead", null, el("tr", null, ...t.columnas.map((c) => el("th", null, c)))),
+          el("tbody", null, ...t.filas.map((f) => el("tr", null, ...f.map((c) => el("td", null, c))))))),
         el("div", { class: "fila" }, b));
     }));
 

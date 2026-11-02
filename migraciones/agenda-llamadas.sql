@@ -397,3 +397,7 @@ alter table public.seg_contacto add column if not exists certificadora text;
 alter table public.seg_contacto add column if not exists vence_9001 date;
 alter table public.seg_contacto add column if not exists vence_14001 date;
 alter table public.seg_contacto add column if not exists vence_45001 date;
+
+-- 17) (2 nov) Guion editable: el texto de cada sección que Lissette ha cambiado.
+--     La sección que no esté aquí se ve con el texto original de la página.
+alter table public.agenda_config add column if not exists guion jsonb not null default '{}'::jsonb;

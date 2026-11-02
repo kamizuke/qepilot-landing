@@ -1,7 +1,7 @@
 // Pruebas de la calculadora de huella gratuita. Ejecutar: npm test
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, limpiarEntrada, toneladas } from "../public/huella/calculo.js";
+import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, limpiarEntrada, toneladas, gasOficial } from "../public/huella/calculo.js";
 import { COMERCIALIZADORAS } from "../public/huella/comercializadoras.js";
 import { crearCalculadora, hashToken, limpiar } from "../api/huella/_acciones.js";
 import { crearDatosHuellaMemoria } from "../tools/huella-memoria.mjs";
@@ -25,6 +25,47 @@ test("el cálculo da lo mismo que la app y que la calculadora del MITECO", () =>
     [["Furgonetas y furgones (N1)", "B7 (l)", "2500"]],
     [["IBERDROLA CLIENTES, S.A.U.", "No", "90000"]],
   ]);
+});
+
+test("refrigerantes: kg × PCA en alcance 1, igual que la app y la pestaña 5 del MITECO", () => {
+  const r = calcular({ ...CASO, fugas: [
+    { gas: "R-410A", kg: 3 },
+    { gas: "Otro", nombre: "R-454B", pca: 466, kg: 1.5 },
+  ] }, COMERCIALIZADORAS);
+  assert.equal(toneladas(r.total), "54,7");
+  assert.equal(toneladas(r.a1), "32,1");
+  assert.equal(toneladas(r.a2), "22,6");
+  const fugas = r.partidas.filter((p) => p.bloque === "fugas");
+  assert.deepEqual(fugas.map((p) => [p.etiqueta, p.kg]), [["Fugas de R-410A", 6768], ["Fugas de R-454B", 699]]);
+  const tablas = tablasMiteco(r);
+  assert.deepEqual(tablas.find((t) => t.bloque === "fugas").filas, [["R-410A"], ["Otro"]]);
+  assert.deepEqual(tablas.find((t) => t.bloque === "fugas_recarga").filas, [
+    ["", "", "", "", "3"],
+    ["R-454B", "466", "", "", "1,5"],
+  ]);
+  assert.deepEqual(tablas.map((t) => t.bloque), ["fijas", "vehiculos", "fugas", "fugas_recarga", "electricidad"]);
+});
+
+test("refrigerantes: nombres reconocidos, avisos y lo que se guarda", () => {
+  assert.equal(gasOficial("r410a").nombre, "R-410A");
+  assert.equal(gasOficial("R-134a").nombre, "HFC-134a");
+  assert.equal(gasOficial("R-454B"), null);
+  // Un «otro» que está en la lista usa el PCA oficial, no el escrito.
+  const oficial = calcular({ anio: 2025, fugas: [{ gas: "Otro", nombre: "r 410 a", pca: 1, kg: 1 }] }, COMERCIALIZADORAS);
+  assert.deepEqual(oficial.partidas.map((p) => [p.etiqueta, p.factor]), [["Fugas de R-410A", 2256]]);
+  const sinDatos = calcular({ anio: 2025, fugas: [
+    { gas: "", kg: 2 },
+    { gas: "Otro", nombre: "", pca: 466, kg: 2 },
+    { gas: "Otro", nombre: "R-454B", kg: 2 },
+    { gas: "R-410A", kg: 0 },
+  ] }, COMERCIALIZADORAS);
+  assert.equal(sinDatos.partidas.length, 0);
+  assert.equal(sinDatos.avisos.length, 3);
+  assert.match(sinDatos.avisos[2], /R-454B: escribe su PCA/);
+  const limpia = limpiarEntrada({ anio: 2025, fugas: [{ gas: "Otro", nombre: "R-454B", pca: "466", kg: "1,5", aprox: 1, intruso: "x" }] });
+  assert.deepEqual(limpia.fugas, [{ gas: "Otro", nombre: "R-454B", pca: 466, kg: 1.5, aprox: true }]);
+  // Los cálculos guardados antes de añadir los refrigerantes siguen dando lo mismo.
+  assert.equal(toneladas(calcular(CASO, COMERCIALIZADORAS).total), "47,2");
 });
 
 test("garantía de origen, comercializadora desconocida, biomasa y años", () => {

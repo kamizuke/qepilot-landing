@@ -431,6 +431,18 @@ test("la certificadora y los vencimientos se guardan, se vacían y rechazan fech
   assert.equal(t.datos._db.contactos[0].vence_9001, null);
 });
 
+test("Lissette edita el guion por secciones, la setter lo lee y vaciarlo vuelve al original", async () => {
+  const t = montar();
+  const cambio = { accion: "guardar_guion", seccion: "g-pasos", texto: "  # Saludo\n> «Hola»  " };
+  assert.equal((await t.setter(cambio)).statusCode, 403);
+  assert.equal((await t.admin({ ...cambio, seccion: "g-legal" })).statusCode, 400, "el aviso legal no se edita");
+  assert.equal((await t.admin(cambio)).statusCode, 200);
+  await t.admin({ accion: "guardar_guion", seccion: "g-no", texto: "- Nada de precios" });
+  assert.deepEqual((await t.setter({ accion: "estado" })).body.guion, { "g-pasos": "# Saludo\n> «Hola»", "g-no": "- Nada de precios" });
+  await t.admin({ accion: "guardar_guion", seccion: "g-pasos", texto: "   " });
+  assert.deepEqual((await t.admin({ accion: "estado" })).body.guion, { "g-no": "- Nada de precios" });
+});
+
 test("repetir el mismo resultado poco después corrige la anotación en vez de sumar otra llamada", async () => {
   const t = montar(new Date().toISOString());
   await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nAlkain SL,943000001\n" });

@@ -19,6 +19,7 @@ export function crearDatosMemoria(semilla = {}) {
       antelacion_horas: 12,
       dias_vista: 21,
       enlace_reunion: "https://teams.microsoft.com/l/meetup-join/ejemplo",
+      guion: {},
       ...semilla.config,
     },
     bloqueos: [],
