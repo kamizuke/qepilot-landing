@@ -390,3 +390,10 @@ revoke all on function public.seg_registrar_llamada(uuid, text, text, timestampt
 --     y el correo enviado, pegado a mano. Solo lo ve administración.
 alter table public.seg_contacto add column if not exists info_enviada_en timestamptz;
 alter table public.seg_contacto add column if not exists info_texto text;
+
+-- 16) (2 nov) Certificación de la empresa, si se sabe: quién la certifica y
+--     cuándo vence cada certificado.
+alter table public.seg_contacto add column if not exists certificadora text;
+alter table public.seg_contacto add column if not exists vence_9001 date;
+alter table public.seg_contacto add column if not exists vence_14001 date;
+alter table public.seg_contacto add column if not exists vence_45001 date;

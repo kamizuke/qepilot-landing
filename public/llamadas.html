@@ -742,7 +742,7 @@
   }
 
   // ---------- Ficha ----------
-  function abrirFicha(id) {
+  function abrirFicha(id, notaInicial) {
     var c = S.d.contactos.find(function (x) { return x.id === id; });
     if (!c) return;
     var cuerpo = vaciar($("ficha-cuerpo"));
@@ -763,7 +763,8 @@
       h("div", { class: "fila" }, infoInput,
         h("button", { class: "boton", onclick: function () { guardarLlamada(c, "info", nota.value, null, infoInput.value); } }, "Guardar «Info por correo»")),
       h("div", { class: "peq", style: "margin-top:6px" }, "Se guarda en el contacto y llega un aviso para enviársela. Si no quiso darlo, déjalo vacío y pulsa el botón.")]);
-    var datos = formularioDatos(c);
+    nota.value = notaInicial || "";
+    var datos = formularioDatos(c, function () { return nota.value; });
     // Lo que se perdería al cerrar: la nota, el «volver a llamar» a medias o datos corregidos sin guardar.
     S.fichaPendiente = function () {
       return !!nota.value.trim() || !volverFila.classList.contains("oculto") || !infoFila.classList.contains("oculto") || datos.cambiado();
@@ -807,6 +808,7 @@
         [c.ciudad, c.email].filter(Boolean).join(" · "),
         web ? h("span", null, (c.ciudad || c.email ? " · " : ""), h("a", { href: web, target: "_blank", rel: "noopener" }, c.web)) : null),
       c.origen ? h("div", { class: "peq", style: "margin-top:6px" }, "Por qué encaja: ", c.origen) : null,
+      lineaCertificacion(c),
       c.notas ? h("div", { class: "cita" }, h("div", { class: "notas" }, c.notas)) : null,
       chuleta(c),
       h("h3", null, "Esta llamada"),
@@ -825,9 +827,31 @@
     $("ficha").showModal();
   }
 
-  function formularioDatos(c) {
+  var NORMAS = [["vence_9001", "ISO 9001"], ["vence_14001", "ISO 14001"], ["vence_45001", "ISO 45001"]];
+  // Los vencimientos son un día sin hora: no pasan por la zona horaria.
+  function fechaDia(f) { return f.split("-").reverse().join("/"); }
+  // Los que vencen de hoy a 6 meses, el más cercano primero. Los ya vencidos no entran.
+  function vencimientosProximos(c) {
+    var limite = new Date();
+    limite.setMonth(limite.getMonth() + 6);
+    return NORMAS.filter(function (n) { return c[n[0]] && c[n[0]] >= hoy() && c[n[0]] <= diaDe(limite); })
+      .map(function (n) { return { norma: n[1], fecha: c[n[0]] }; })
+      .sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; });
+  }
+  // Solo lo que se sepa.
+  function lineaCertificacion(c) {
+    var partes = c.certificadora ? ["Certificadora: " + c.certificadora] : [];
+    NORMAS.forEach(function (n) {
+      var f = c[n[0]];
+      if (f) partes.push(n[1] + (f < hoy() ? " venció el " : " vence el ") + fechaDia(f));
+    });
+    return partes.length ? h("div", { class: "peq", style: "margin-top:6px" }, partes.join(" · ")) : null;
+  }
+
+  function formularioDatos(c, notaDeLlamada) {
     var campos = [["persona", "Persona", "text"], ["cargo", "Cargo", "text"], ["telefono", "Teléfono", "tel"], ["email", "Correo", "email"]];
     if (S.rol === "admin") campos = [["empresa", "Empresa", "text"]].concat(campos, [["web", "Web", "text"], ["ciudad", "Ciudad", "text"], ["origen", "Por qué encaja", "text"]]);
+    campos = campos.concat([["certificadora", "Certificadora", "text"]], NORMAS.map(function (n) { return [n[0], "Vencimiento " + n[1], "date"]; }));
     var inputs = {};
     var rejilla = h("div", { class: "rejilla2" }, campos.map(function (f) {
       inputs[f[0]] = h("input", { type: f[2], value: c[f[0]] || "" });
@@ -836,7 +860,7 @@
     inputs.notas = h("textarea", null);
     inputs.notas.value = c.notas || "";
     var aviso = h("div", { class: "aviso" });
-    var bloque = h("details", null, h("summary", null, "Corregir datos o añadir notas de la empresa"),
+    var bloque = h("details", null, h("summary", null, "Corregir datos, certificación o notas de la empresa"),
       rejilla, h("label", null, "Notas de la empresa"), inputs.notas, aviso,
       h("div", { class: "fila mt" },
         h("button", { class: "boton claro", onclick: function () {
@@ -845,7 +869,7 @@
           if (!Object.keys(cambios).length) { aviso.textContent = "No hay cambios."; return; }
           api({ accion: "editar_contacto", id: c.id, campos: cambios }).then(function () {
             toast("Datos guardados.");
-            return recargar().then(function () { abrirFicha(c.id); });
+            return recargar().then(function () { abrirFicha(c.id, notaDeLlamada()); });
           }).catch(function (e) { aviso.className = "aviso mal"; aviso.textContent = e.message; });
         } }, "Guardar datos"),
         S.rol === "admin" ? h("button", { class: "boton peligro", onclick: function () {
@@ -1022,7 +1046,7 @@
   function pintarContactos() {
     var sel = $("filtro");
     if (!sel.options.length) {
-      [["", "Todos"], ["pendiente", "Pendientes de llamar"], ["sin", "Sin llamar"]].concat(Object.keys(S.d.resultados).map(function (k) { return [k, S.d.resultados[k]]; }))
+      [["", "Todos"], ["pendiente", "Pendientes de llamar"], ["sin", "Sin llamar"], ["vence_pronto", "Certificado vence en 6 meses"]].concat(Object.keys(S.d.resultados).map(function (k) { return [k, S.d.resultados[k]]; }))
         .forEach(function (o) { sel.appendChild(h("option", { value: o[0] }, o[1])); });
     }
     if (S.rol === "admin") rellenarSelectPersonas($("filtro-persona"), [["", "Todas"], ["__yo", "Míos"], ["__sin", "Sin asignar"]]);
@@ -1035,15 +1059,18 @@
       if (fp && fp !== "__sin" && fp !== "__yo" && c.setter_id !== fp) return false;
       if (f === "pendiente" && !enCola(c)) return false;
       if (f === "sin" && c.resultado) return false;
-      if (f && f !== "pendiente" && f !== "sin" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
+      if (f === "vence_pronto" && !vencimientosProximos(c).length) return false;
+      if (f && f !== "pendiente" && f !== "sin" && f !== "vence_pronto" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
       if (!q) return true;
       return [c.empresa, c.persona, c.telefono, c.ciudad].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
     });
+    if (f === "vence_pronto") lista.sort(function (a, b) { return vencimientosProximos(a)[0].fecha < vencimientosProximos(b)[0].fecha ? -1 : 1; });
     var tb = vaciar($("tabla-contactos"));
     if (!lista.length) { tb.appendChild(h("tr", null, h("td", { colspan: "6", class: "vacio" }, "Ningún contacto con ese filtro."))); return; }
     lista.forEach(function (c) {
       tb.appendChild(h("tr", { class: "clic", onclick: function () { abrirFicha(c.id); } },
-        h("td", null, h("strong", null, c.empresa), c.ciudad ? h("div", { class: "peq suave" }, c.ciudad) : null),
+        h("td", null, h("strong", null, c.empresa), c.ciudad ? h("div", { class: "peq suave" }, c.ciudad) : null,
+          f === "vence_pronto" ? h("div", { class: "peq" }, vencimientosProximos(c).map(function (v) { return v.norma + " vence el " + fechaDia(v.fecha); }).join(" · ")) : null),
         h("td", null, c.persona || "—", c.cargo ? h("div", { class: "peq suave" }, c.cargo) : null),
         h("td", null, c.telefono || "—"),
         h("td", null, h("div", { class: "etiquetas" }, etiquetaResultado(c), etiquetaEnvio(c))),
@@ -1285,7 +1312,7 @@
     }).catch(function (e) { aviso.className = "aviso mal"; aviso.textContent = e.message; });
   });
   $("csv-descargar").addEventListener("click", function () {
-    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "ciudad", "origen", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
+    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "ciudad", "origen", "certificadora", "vence_9001", "vence_14001", "vence_45001", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
     var celda = function (v) { v = v === null || v === undefined ? "" : String(v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
     var filas = [cols.join(",")].concat(S.d.contactos.map(function (c) {
       return cols.map(function (k) { return celda(k === "resultado" ? (c.no_llamar ? "No llamar" : S.d.resultados[c.resultado] || "") : c[k]); }).join(",");

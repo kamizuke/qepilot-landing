@@ -95,7 +95,8 @@ export function crearDatosMemoria(semilla = {}) {
         db.contactos.push({
           id: id(), persona: null, cargo: null, telefono: null, email: null, web: null, ciudad: null, origen: null,
           notas: null, resultado: null, intentos: 0, ultima_llamada: null, volver_en: null, no_llamar: false,
-          cita_id: null, creado_en: ahoraIso(), setter_id: null, caliente_desde: null, info_enviada_en: null, info_texto: null, ...f,
+          cita_id: null, creado_en: ahoraIso(), setter_id: null, caliente_desde: null, info_enviada_en: null, info_texto: null,
+          certificadora: null, vence_9001: null, vence_14001: null, vence_45001: null, ...f,
         });
       }
     },

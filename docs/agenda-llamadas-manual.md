@@ -70,6 +70,18 @@ número entre paréntesis es lo pendiente:
 - En la ficha de cualquier contacto, «Marcar o pegar el correo» sirve también
   para un envío que no vino de una llamada.
 
+## Certificación de la empresa
+
+En la ficha, «Corregir datos, certificación o notas de la empresa» deja apuntar,
+si se sabe, la **certificadora** y el **vencimiento** de ISO 9001, 14001 y 45001.
+Todo es opcional. Lo que esté relleno sale arriba en la ficha, y también en la
+lista que se descarga. Pueden rellenarlo tanto la setter como Lissette, y guardar
+no borra la nota de la llamada que se esté escribiendo.
+
+En Contactos, el filtro «Certificado vence en 6 meses» lista a quien le vence
+alguno de hoy a 6 meses, el más cercano primero y con la fecha a la vista. Los ya
+vencidos no salen: lo normal es que hayan renovado y falte actualizar la fecha.
+
 ## Cómo funciona
 
 1. **Lissette carga los contactos** (pestaña Contactos → Cargar contactos)

@@ -26,6 +26,8 @@ import {
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const TOKEN = /^[A-Za-z0-9_-]{16,64}$/;
 const LOCAL = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/;
+const DIA = /^\d{4}-\d{2}-\d{2}$/;
+const VENCIMIENTOS = ["vence_9001", "vence_14001", "vence_45001"];
 
 export function hashToken(token) {
   return crypto.createHash("sha256").update(String(token)).digest("hex");
@@ -417,10 +419,18 @@ async function editarContacto(deps, quien, body, res) {
   if (!esSuyo(quien, await deps.datos.contactoPorId(id))) return res.status(403).json({ error: NO_ES_TUYO });
   const c = body.campos || {};
   const campos = {};
-  const limites = { persona: 120, cargo: 120, telefono: 40 };
+  const limites = { persona: 120, cargo: 120, telefono: 40, certificadora: 120 };
   if (rol === "admin") Object.assign(limites, { empresa: 160, web: 200, ciudad: 80, origen: 300 });
   for (const [k, max] of Object.entries(limites)) if (k in c) campos[k] = texto(c[k], max);
   if ("notas" in c) campos.notas = textoLargo(c.notas, 2000);
+  for (const k of VENCIMIENTOS) {
+    if (!(k in c)) continue;
+    const f = typeof c[k] === "string" ? c[k].trim() : "";
+    if (f && !(DIA.test(f) && !isNaN(new Date(f)) && new Date(f).toISOString().slice(0, 10) === f)) {
+      return res.status(400).json({ error: "La fecha de vencimiento no es válida." });
+    }
+    campos[k] = f || null;
+  }
   if ("email" in c) {
     const e = typeof c.email === "string" ? c.email.trim() : "";
     if (e && !emailValido(e)) return res.status(400).json({ error: "El correo no parece válido." });

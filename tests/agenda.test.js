@@ -414,6 +414,23 @@ test("Lissette marca la información como enviada y guarda el correo; la setter 
   assert.equal(t.datos._db.contactos[0].info_texto, "Hola, Ana:\n\nTe envío…");
 });
 
+test("la certificadora y los vencimientos se guardan, se vacían y rechazan fechas imposibles", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nMetal SL,986111222\n" });
+  const c = t.datos._db.contactos[0];
+  assert.equal(c.certificadora, null, "son datos opcionales");
+  assert.equal((await t.setter({ accion: "editar_contacto", id: c.id, campos: { certificadora: "  Bureau   Veritas ", vence_9001: "2027-03-15" } })).statusCode, 200);
+  assert.equal(t.datos._db.contactos[0].certificadora, "Bureau Veritas");
+  assert.equal(t.datos._db.contactos[0].vence_9001, "2027-03-15");
+  for (const mal of ["2027-02-31", "15/03/2027", "mañana"]) {
+    assert.equal((await t.setter({ accion: "editar_contacto", id: c.id, campos: { vence_14001: mal } })).statusCode, 400, mal);
+  }
+  assert.equal(t.datos._db.contactos[0].vence_14001, null);
+  assert.equal((await t.setter({ accion: "estado" })).body.contactos[0].vence_9001, "2027-03-15", "la setter los ve");
+  await t.setter({ accion: "editar_contacto", id: c.id, campos: { vence_9001: "" } });
+  assert.equal(t.datos._db.contactos[0].vence_9001, null);
+});
+
 test("repetir el mismo resultado poco después corrige la anotación en vez de sumar otra llamada", async () => {
   const t = montar(new Date().toISOString());
   await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nAlkain SL,943000001\n" });
