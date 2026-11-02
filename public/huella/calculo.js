@@ -170,14 +170,18 @@ function numero(v) {
  *   maquinaria: [{combustible, tipo, cantidad, aprox?}],
  *   fugas: [{gas, nombre?, pca?, kg, aprox?}] (gas = nombre oficial u «Otro», con su nombre y su PCA),
  *   electricidad: [{comercializadora, gdo, kwh, aprox?}] }
- * Devuelve kg CO₂e; las filas a cero o vacías se ignoran.
+ * Devuelve kg CO₂e; las filas a cero o vacías se ignoran. `faltan` son las filas
+ * empezadas que no han podido entrar en la cifra ({que, texto}): con alguna, el
+ * resultado es parcial y hay que decirlo. `avisos` son notas que no quitan nada.
  */
 export function calcular(entrada, comercializadoras) {
   const anio = Number(entrada?.anio);
   const partidas = [];
   const avisos = [];
+  const faltan = [];
+  const falta = (que, porQue) => faltan.push({ que, texto: `${que}: ${porQue}` });
   if (!(anio >= PRIMER_ANIO && anio <= ULTIMO_ANIO)) {
-    return { anio, partidas, avisos: [`Elige un año entre ${PRIMER_ANIO} y ${ULTIMO_ANIO}.`], a1: 0, a2: 0, total: 0, aproximado: false };
+    return { anio, partidas, avisos: [`Elige un año entre ${PRIMER_ANIO} y ${ULTIMO_ANIO}.`], faltan, parcial: false, a1: 0, a2: 0, total: 0, aproximado: false };
   }
   const anadir = (bloque, fila, uso, etiqueta, celdas) => {
     const c = COMBUSTIBLES[fila.combustible];
@@ -186,7 +190,7 @@ export function calcular(entrada, comercializadoras) {
     const clave = fila.combustible === "biomasa" ? fila.detalle : uso;
     const factor = factorOficial(anio, fila.combustible, clave);
     if (factor == null) {
-      avisos.push(`${c.nombre}${etiqueta ? ` en ${etiqueta.toLowerCase()}` : ""}: la calculadora oficial no tiene factor para ${anio}.`);
+      falta(`${c.nombre}${etiqueta ? ` en ${etiqueta.toLowerCase()}` : ""} (${cuanto(cantidad, c.unidad)})`, `la calculadora oficial no tiene factor para ${anio}.`);
       return;
     }
     partidas.push({
@@ -196,6 +200,7 @@ export function calcular(entrada, comercializadoras) {
       cantidad,
       unidad: c.unidad,
       factor,
+      procedencia: `Factor del MITECO para ${anio}`,
       kg: cantidad * factor,
       aprox: !!fila.aprox,
       celdas: [...celdas, c.miteco(anio, uso, fila.detalle)],
@@ -203,7 +208,7 @@ export function calcular(entrada, comercializadoras) {
   };
   for (const f of entrada.fijas || []) {
     if (f.combustible === "biomasa" && !BIOMASAS.some((b) => b.value === f.detalle)) {
-      if (numero(f.cantidad)) avisos.push("Biomasa: elige el tipo (pellets, astillas…).");
+      if (numero(f.cantidad)) falta(`Biomasa (${cuanto(numero(f.cantidad), "kg")})`, "elige el tipo (pellets, astillas…).");
       continue;
     }
     const bio = BIOMASAS.find((b) => b.value === f.detalle);
@@ -212,7 +217,7 @@ export function calcular(entrada, comercializadoras) {
   for (const v of entrada.vehiculos || []) {
     const cat = VEHICULOS.find((x) => x.value === v.categoria);
     if (!cat) {
-      if (numero(v.cantidad)) avisos.push("Vehículos: elige la categoría de cada fila.");
+      if (numero(v.cantidad)) falta(`Vehículos (${cuanto(numero(v.cantidad), COMBUSTIBLES[v.combustible]?.unidad || "")})`, "elige la categoría.");
       continue;
     }
     anadir("vehiculos", v, cat.value, cat.label, [cat.label]);
@@ -223,22 +228,25 @@ export function calcular(entrada, comercializadoras) {
   }
   for (const f of entrada.fugas || []) {
     const kg = numero(f.kg);
-    if (!kg) continue;
     const otro = f.gas === GAS_OTRO;
     // Un «otro» que en realidad está en la lista cuenta como el oficial.
     const oficial = gasOficial(otro ? f.nombre : f.gas);
     const nombre = oficial ? oficial.nombre : String(f.nombre || "").replace(/\s+/g, " ").trim().slice(0, MAX_GAS);
+    if (!kg) {
+      if (f.gas) falta(nombre || "Gas refrigerante", "escribe los kg recargados, o quita la fila si no se recargó nada.");
+      continue;
+    }
     if (!oficial && !otro) {
-      avisos.push("Fugas de refrigerante: elige el gas de cada fila.");
+      falta(`Gas refrigerante (${cuanto(kg, "kg")})`, "elige el gas.");
       continue;
     }
     if (!oficial && !nombre) {
-      avisos.push("Fugas de refrigerante: escribe el nombre del gas.");
+      falta(`Gas refrigerante (${cuanto(kg, "kg")})`, "escribe el nombre del gas.");
       continue;
     }
     const pca = oficial ? oficial.pca : numero(f.pca);
     if (!pca) {
-      avisos.push(`${nombre}: escribe su PCA (viene en la ficha técnica del gas).`);
+      falta(`${nombre} (${cuanto(kg, "kg")})`, "escribe su PCA (viene en la ficha técnica del gas).");
       continue;
     }
     partidas.push({
@@ -248,6 +256,7 @@ export function calcular(entrada, comercializadoras) {
       cantidad: kg,
       unidad: "kg",
       factor: pca,
+      procedencia: oficial ? "PCA de la lista del MITECO" : "PCA escrito por ti",
       kg: kg * pca,
       aprox: !!f.aprox,
       celdas: oficial ? [oficial.nombre, "", ""] : [GAS_OTRO, nombre, numeroExcel(pca)],
@@ -256,21 +265,29 @@ export function calcular(entrada, comercializadoras) {
   const lista = comercializadorasDe(anio, comercializadoras);
   for (const e of entrada.electricidad || []) {
     const kwh = numero(e.kwh);
-    if (!kwh) continue;
     const gdo = GDO.find((g) => g.value === e.gdo) || GDO[0];
+    if (!kwh) {
+      const contrato = String(e.comercializadora || "").trim();
+      if (contrato || gdo.factor != null) falta(contrato ? `Electricidad de ${contrato}` : "Electricidad", "escribe los kWh del año.");
+      continue;
+    }
     const encontrada = lista.find((x) => x[0] === e.comercializadora);
     const nombre = encontrada ? encontrada[0] : "Otras";
     let factor;
     let origen;
+    let procedencia;
     if (gdo.factor != null) {
       factor = gdo.factor;
       origen = gdo.label;
+      procedencia = "Factor del MITECO para esta garantía de origen";
     } else if (encontrada) {
       factor = encontrada[1];
       origen = nombre;
+      procedencia = `Factor de esta comercializadora en ${anio}, según el MITECO`;
     } else {
       factor = MIX_SIN_GDO[String(anio)];
       origen = "mix sin garantía de origen";
+      procedencia = `Mix sin garantía de origen de ${anio}, según el MITECO`;
       if (e.comercializadora) avisos.push(`«${e.comercializadora}» no está en la lista de ${anio}: se usa «Otras».`);
     }
     partidas.push({
@@ -280,6 +297,7 @@ export function calcular(entrada, comercializadoras) {
       cantidad: kwh,
       unidad: "kWh",
       factor,
+      procedencia,
       kg: kwh * factor,
       aprox: !!e.aprox,
       celdas: [nombre, gdo.miteco],
@@ -287,7 +305,24 @@ export function calcular(entrada, comercializadoras) {
   }
   const a1 = partidas.filter((p) => p.alcance === 1).reduce((s, p) => s + p.kg, 0);
   const a2 = partidas.filter((p) => p.alcance === 2).reduce((s, p) => s + p.kg, 0);
-  return { anio, partidas, avisos, a1, a2, total: a1 + a2, aproximado: partidas.some((p) => p.aprox) };
+  return { anio, partidas, avisos, faltan, parcial: faltan.length > 0, a1, a2, total: a1 + a2, aproximado: partidas.some((p) => p.aprox) };
+}
+
+/** «3 kg» · «100.800 kWh» */
+function cuanto(cantidad, unidad) {
+  return `${cantidad.toLocaleString("es-ES")} ${unidad}`.trim();
+}
+
+/** Cómo sale la cifra de una partida: «3 kg × PCA 2256 = 6,768 t CO₂e». */
+export function operacion(p) {
+  const fac = p.factor.toLocaleString("es-ES", { maximumFractionDigits: 6 });
+  const t = (p.kg / 1000).toLocaleString("es-ES", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+  return `${cuanto(p.cantidad, p.unidad)} × ${p.bloque === "fugas" ? `PCA ${fac}` : `${fac} kg CO₂e/${p.unidad}`} = ${t} t CO₂e`;
+}
+
+/** Lo que no entra en un resultado parcial, para una frase: «R-454B (3 kg), biomasa…». */
+export function queFalta(r) {
+  return r.faltan.map((f) => f.que).join(", ");
 }
 
 // --- Lo que va en el informe ---
@@ -359,7 +394,7 @@ export function objetivo(r, pct = 15, anioMeta = r.anio + 2) {
     ambito: principal.ambito,
     texto: `Reducir un ${p} % las emisiones de ${principal.ambito} en ${anioMeta} respecto a ${r.anio} (de ${toneladas(principal.kg)} t CO₂e a ${toneladas(meta)} t CO₂e).`,
     indicador: `t CO₂e al año de ${principal.ambito}, calculadas con los factores de la calculadora del MITECO.`,
-    partida: `${toneladas(principal.kg)} t CO₂e en ${r.anio}.`,
+    partida: `${toneladas(principal.kg)} t CO₂e en ${r.anio}.${r.parcial ? ` Provisional: el cálculo no incluye ${queFalta(r)}.` : ""}`,
     seguimiento: "Recalcular cada año con los consumos de las facturas y comparar con la meta.",
   };
 }
@@ -376,8 +411,9 @@ export function textoCuestionario(r, empresa) {
   const quien = empresa ? empresa : "La empresa";
   const partes = [
     `${quien} ha calculado su huella de carbono de ${r.anio} para los alcances 1 y 2 con los factores de emisión de la calculadora de huella de carbono de organización del MITECO (${versionFactores()}).`,
-    `Resultado: ${toneladas(r.total)} t CO₂e (alcance 1: ${toneladas(r.a1)} t; alcance 2: ${toneladas(r.a2)} t).`,
+    `${r.parcial ? "Resultado parcial" : "Resultado"}: ${toneladas(r.total)} t CO₂e (alcance 1: ${toneladas(r.a1)} t; alcance 2: ${toneladas(r.a2)} t).`,
   ];
+  if (r.parcial) partes.push(`Esta cifra no incluye ${queFalta(r)}, pendiente de completar.`);
   if (principal) partes.push(`La fuente principal es ${principal.ambito} (${porcentaje(principal.kg, r.total)} % del total).`);
   if (r.aproximado) partes.push("Parte de los consumos son estimaciones.");
   partes.push("No incluye el alcance 3 (emisiones indirectas de la cadena de valor).");

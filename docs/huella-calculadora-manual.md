@@ -17,7 +17,13 @@ contactos» (https://claude.ai/artifact/8Jc596SZZvbDNaHX3gtnDb). Fase 1
    vehículos, maquinaria, recargas de gas refrigerante (gas y kg) y electricidad
    (comercializadora y kWh). Puede marcar cada dato como «aproximado».
 2. Pulsa **Calcular mi huella**: ve el total, el reparto entre alcance 1 y 2
-   y el desglose por fuente. El cálculo se guarda **sin datos personales**.
+   y el desglose por fuente, con la operación de cada cifra y de dónde sale su
+   factor. El cálculo se guarda **sin datos personales**.
+   Si una fila empezada no puede entrar en la cifra (falta el PCA, el gas, los
+   kg…), sale **Resultado parcial** con lo que falta. Se puede pedir el informe
+   igual: el correo, el informe, el objetivo y el texto para clientes lo dicen, y
+   a ti te llega en el aviso. Una cantidad que no es un número («3 kg») se marca
+   en rojo y no deja calcular ni enviar.
 3. Para el informe completo deja correo y empresa (teléfono opcional) y marca
    las casillas: informe (obligatoria), novedades y aviso anual (opcional),
    que le llamen (opcional, solo con teléfono).

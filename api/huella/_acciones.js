@@ -4,7 +4,7 @@
 import crypto from "node:crypto";
 import { limitador, ipDe, generarToken } from "../deck/_comun.js";
 import { escaparHtml, emailValido, texto, soloDigitos, partesMadrid } from "../agenda/_logica.js";
-import { calcular, limpiarEntrada, toneladas, porBloque, porcentaje } from "../../public/huella/calculo.js";
+import { calcular, limpiarEntrada, toneladas, porBloque, porcentaje, queFalta } from "../../public/huella/calculo.js";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const TOKEN = /^[A-Za-z0-9_-]{16,64}$/;
@@ -21,6 +21,9 @@ export function correoInforme({ empresa, r, enlace }) {
   const parrafos = [
     "Hola:",
     `Aquí tienes el informe de huella de carbono de ${r.anio} de <strong>${escaparHtml(empresa)}</strong>: <strong>${toneladas(r.total)} t CO₂e</strong> (alcance 1: ${toneladas(r.a1)} t; alcance 2: ${toneladas(r.a2)} t).`,
+    ...(r.parcial
+      ? [`<strong>Es un resultado parcial:</strong> no incluye ${escaparHtml(queFalta(r))}, porque faltaba algún dato. Para tener la cifra completa, vuelve a calcular en <a href="https://www.evidran.com/huella">evidran.com/huella</a>.`]
+      : []),
     boton,
     "Incluye cuánto bajaría con algunos cambios, un objetivo para tu sistema ISO 14001 ya redactado, un texto para los cuestionarios de tus clientes y las cifras listas para la calculadora del MITECO.",
     "El enlace es personal. Desde el informe puedes guardarlo en PDF.",
@@ -49,6 +52,7 @@ export function correoAvisoContacto({ c, r, llamadas }) {
     ["Correo", c.email],
     ["Teléfono", c.telefono || "—"],
     ["Huella", `${toneladas(r.total)} t CO₂e en ${r.anio} (alcance 1: ${toneladas(r.a1)} t; alcance 2: ${toneladas(r.a2)} t)`],
+    ...(r.parcial ? [["Resultado parcial", `No incluye ${queFalta(r)}`]] : []),
     ["Fuente principal", principal ? `${principal.ambito} (${porcentaje(principal.kg, r.total)} %)` : "—"],
     ["Estimado", r.aproximado ? "Sí, en parte" : "No"],
     ["Acepta novedades", c.acepta_novedades ? "Sí" : "No"],
@@ -217,7 +221,7 @@ export async function pasarALlamadas(deps, c, r) {
   const ahora = deps.ahora().toISOString();
   const principal = porBloque(r)[0];
   const resumen =
-    `Calculadora de huella: ${toneladas(r.total)} t CO₂e en ${r.anio}` +
+    `Calculadora de huella: ${toneladas(r.total)} t CO₂e en ${r.anio}${r.parcial ? ` (parcial: no incluye ${queFalta(r)})` : ""}` +
     (principal ? `; fuente principal: ${principal.ambito} (${porcentaje(principal.kg, r.total)} %)` : "") +
     ". Pidió que le llamaran.";
   const [lista, activos] = await Promise.all([deps.datos.contactosLlamadas(), deps.datos.settersActivos()]);

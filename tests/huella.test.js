@@ -1,9 +1,9 @@
 // Pruebas de la calculadora de huella gratuita. Ejecutar: npm test
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, limpiarEntrada, toneladas, gasOficial } from "../public/huella/calculo.js";
+import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, limpiarEntrada, toneladas, gasOficial, operacion } from "../public/huella/calculo.js";
 import { COMERCIALIZADORAS } from "../public/huella/comercializadoras.js";
-import { crearCalculadora, hashToken, limpiar } from "../api/huella/_acciones.js";
+import { crearCalculadora, correoInforme, hashToken, limpiar } from "../api/huella/_acciones.js";
 import { crearDatosHuellaMemoria } from "../tools/huella-memoria.mjs";
 
 // Caso validado en la app contra la calculadora oficial (47,24 t en el Excel del MITECO).
@@ -60,8 +60,11 @@ test("refrigerantes: nombres reconocidos, avisos y lo que se guarda", () => {
     { gas: "R-410A", kg: 0 },
   ] }, COMERCIALIZADORAS);
   assert.equal(sinDatos.partidas.length, 0);
-  assert.equal(sinDatos.avisos.length, 3);
-  assert.match(sinDatos.avisos[2], /R-454B: escribe su PCA/);
+  assert.equal(sinDatos.parcial, true);
+  assert.equal(sinDatos.faltan.length, 4);
+  assert.equal(sinDatos.faltan[2].que, "R-454B (2 kg)");
+  assert.match(sinDatos.faltan[2].texto, /R-454B \(2 kg\): escribe su PCA/);
+  assert.match(sinDatos.faltan[3].texto, /R-410A: escribe los kg/);
   const limpia = limpiarEntrada({ anio: 2025, fugas: [{ gas: "Otro", nombre: "R-454B", pca: "466", kg: "1,5", aprox: 1, intruso: "x" }] });
   assert.deepEqual(limpia.fugas, [{ gas: "Otro", nombre: "R-454B", pca: 466, kg: 1.5, aprox: true }]);
   // Los cálculos guardados antes de añadir los refrigerantes siguen dando lo mismo.
@@ -74,14 +77,52 @@ test("garantía de origen, comercializadora desconocida, biomasa y años", () =>
   const otra = calcular({ anio: 2025, electricidad: [{ comercializadora: "Inventada SL", gdo: "no", kwh: 1000 }] }, COMERCIALIZADORAS);
   assert.equal(otra.partidas[0].factor, 0.258);
   assert.match(otra.avisos[0], /no está en la lista/);
+  // Usar «Otras» es una nota, no un resultado incompleto.
+  assert.equal(otra.parcial, false);
   const bio = calcular({ anio: 2025, fijas: [{ combustible: "biomasa", cantidad: 1000 }] }, COMERCIALIZADORAS);
   assert.equal(bio.partidas.length, 0);
-  assert.match(bio.avisos[0], /elige el tipo/);
+  assert.match(bio.faltan[0].texto, /Biomasa \(1000 kg\): elige el tipo/);
   const bio2 = calcular({ anio: 2025, fijas: [{ combustible: "biomasa", detalle: "pellets", cantidad: 1000 }] }, COMERCIALIZADORAS);
   assert.equal(bio2.partidas[0].celdas[0], "Biomasa pellets (kg)**");
   assert.equal(calcular({ anio: 2018, vehiculos: [{ combustible: "gasoleo_a", categoria: "n1", cantidad: 1 }] }, COMERCIALIZADORAS).partidas[0].celdas[1], "Gasóleo (l)");
   assert.equal(calcular({ ...CASO, anio: 2030 }, COMERCIALIZADORAS).partidas.length, 0);
   assert.equal(calcular({ ...CASO, fijas: [{ combustible: "gas_natural", cantidad: 1000, aprox: true }] }, COMERCIALIZADORAS).aproximado, true);
+});
+
+test("resultado parcial: se dice en el objetivo, en el texto para clientes y en los correos", () => {
+  const completo = calcular(CASO, COMERCIALIZADORAS);
+  assert.equal(completo.parcial, false);
+  assert.deepEqual(completo.faltan, []);
+  assert.doesNotMatch(textoCuestionario(completo, "Metal SL"), /parcial/);
+  assert.doesNotMatch(objetivo(completo, 20).partida, /Provisional/);
+  // Filas sin empezar (las que trae la pantalla de serie): no falta nada.
+  const vacias = calcular({ ...CASO, fijas: [...CASO.fijas, { combustible: "gas_natural", cantidad: 0 }], electricidad: [...CASO.electricidad, { comercializadora: "", gdo: "no", kwh: 0 }], fugas: [{ gas: "", kg: 0 }] }, COMERCIALIZADORAS);
+  assert.equal(vacias.parcial, false);
+
+  const r = calcular({ ...CASO, fugas: [{ gas: "R-410A", kg: 3 }, { gas: "Otro", nombre: "R-454B", kg: 1.5 }] }, COMERCIALIZADORAS);
+  assert.equal(r.parcial, true);
+  assert.equal(toneladas(r.total), "54,0");
+  const t = textoCuestionario(r, "Metal SL");
+  assert.match(t, /Resultado parcial: 54,0 t CO₂e/);
+  assert.match(t, /no incluye R-454B \(1,5 kg\)/);
+  assert.match(objetivo(r, 20).partida, /Provisional: el cálculo no incluye R-454B/);
+  const correo = correoInforme({ empresa: "Metal SL", r, enlace: "https://www.evidran.com/huella/informe/x" });
+  assert.match(correo.html, /Es un resultado parcial:<\/strong> no incluye R-454B/);
+  assert.doesNotMatch(correoInforme({ empresa: "Metal SL", r: completo, enlace: "https://www.evidran.com/huella/informe/x" }).html, /parcial/);
+});
+
+test("cada partida enseña su operación y de dónde sale el factor", () => {
+  const r = calcular({ ...CASO, fugas: [{ gas: "R-410A", kg: 3 }, { gas: "Otro", nombre: "R-454B", pca: 466, kg: 1.5 }] }, COMERCIALIZADORAS);
+  const de = (texto) => r.partidas.find((p) => p.etiqueta.includes(texto));
+  assert.equal(operacion(de("R-410A")), "3 kg × PCA 2256 = 6,768 t CO₂e");
+  assert.equal(de("R-410A").procedencia, "PCA de la lista del MITECO");
+  assert.equal(de("R-454B").procedencia, "PCA escrito por ti");
+  assert.equal(operacion(de("Gas natural")), "100.800 kWh × 0,182 kg CO₂e/kWh = 18,346 t CO₂e");
+  assert.equal(de("Gas natural").procedencia, "Factor del MITECO para 2025");
+  assert.equal(operacion(de("Electricidad")), "90.000 kWh × 0,251 kg CO₂e/kWh = 22,590 t CO₂e");
+  assert.match(de("Electricidad").procedencia, /comercializadora en 2025, según el MITECO/);
+  const renovable = calcular({ ...CASO, electricidad: [{ ...CASO.electricidad[0], gdo: "renovable" }] }, COMERCIALIZADORAS);
+  assert.equal(operacion(renovable.partidas.at(-1)), "90.000 kWh × 0 kg CO₂e/kWh = 0,000 t CO₂e");
 });
 
 test("simulador, objetivo y texto para cuestionarios", () => {

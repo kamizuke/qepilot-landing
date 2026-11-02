@@ -105,6 +105,8 @@
   .cantidad { position: relative; }
   .cantidad span { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--ink-soft); pointer-events: none; }
   .cantidad input { padding-right: 46px; }
+  .hc .cantidad input.mal { border-color: #B42318; }
+  .fila-hc .ayuda-pca { grid-column: 1 / -1; font-size: 13px; color: var(--ink-soft); margin: 0; }
   .aprox { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--ink-soft); white-space: nowrap; cursor: pointer; }
   .aprox input { width: auto; }
   .quitar { font: inherit; background: none; border: 0; color: var(--ink-soft); font-size: 20px; cursor: pointer; padding: 4px 8px; }
@@ -124,7 +126,10 @@
   .desglose { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px; text-align: left; }
   .desglose th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); padding: 6px; border-bottom: 1px solid var(--line); }
   .desglose td { padding: 8px 6px; border-bottom: 1px solid var(--cream-d); }
-  .desglose td.n { text-align: right; white-space: nowrap; }
+  .desglose td.n { text-align: right; white-space: nowrap; vertical-align: top; }
+  .desglose .operacion { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+  .etiqueta-parcial { display: inline-block; background: #FFF4E5; color: #9A3412; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+  .avisos-hc ul { margin: 6px 0; padding-left: 20px; }
   .avisos-hc { margin-top: 12px; font-size: 14px; color: #9A3412; background: #FFF4E5; border-radius: 10px; padding: 10px 12px; text-align: left; }
   .incluye { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-top: 14px; }
   .incluye div { background: var(--cream); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
@@ -203,6 +208,7 @@
 
     <div id="resultado" class="oculto">
       <div class="tarjeta resultado-hc">
+        <div class="etiqueta-parcial oculto" id="r-etiqueta-parcial">Resultado parcial</div>
         <div class="eyebrow" style="margin-bottom:6px">Tu huella de carbono de <span id="r-anio"></span></div>
         <div class="cifra"><span id="r-total"></span> <small>t CO₂e</small></div>
         <div class="reparto"><div class="a1" id="r-barra-a1"></div><div class="a2" id="r-barra-a2"></div></div>
@@ -210,14 +216,17 @@
           <span><i style="background:var(--navy)"></i>Alcance 1 · combustibles y fugas: <b id="r-a1"></b> t</span>
           <span><i style="background:var(--teal)"></i>Alcance 2 · electricidad: <b id="r-a2"></b> t</span>
         </div>
+        <div id="r-parcial"></div>
         <div id="r-avisos"></div>
-        <table class="desglose"><thead><tr><th>Fuente</th><th class="n">Consumo</th><th class="n">t CO₂e</th><th class="n">%</th></tr></thead><tbody id="r-desglose"></tbody></table>
+        <table class="desglose"><thead><tr><th>Fuente y cálculo</th><th class="n">t CO₂e</th><th class="n">%</th></tr></thead><tbody id="r-desglose"></tbody></table>
         <p class="ayuda" id="r-aprox"></p>
+        <p class="ayuda" id="r-origen"></p>
       </div>
 
       <div class="tarjeta" id="pedir">
         <h2>Recibe el informe completo</h2>
         <p class="ayuda">Gratis, en tu correo, con un enlace para guardarlo en PDF.</p>
+        <p class="avisos-hc oculto" id="pedir-parcial">Tu resultado aún es parcial. Si lo pides ahora, el informe lo dirá y saldrá sin las emisiones que faltan.</p>
         <div class="incluye">
           <div><b>Qué pasa si…</b>Cuánto bajaría tu huella con luz renovable o un 10 % menos de combustible.</div>
           <div><b>Objetivo ISO 14001</b>Meta, indicador y punto de partida, ya redactados.</div>
@@ -258,7 +267,7 @@
 </section>
 
 <script type="module">
-  import { PRIMER_ANIO, ULTIMO_ANIO, BLOQUES, COMBUSTIBLES, BIOMASAS, GDO, GASES, GAS_OTRO, usosDe, calcular, toneladas, porcentaje, versionFactores } from "/huella/calculo.js";
+  import { PRIMER_ANIO, ULTIMO_ANIO, BLOQUES, COMBUSTIBLES, BIOMASAS, GDO, GASES, GAS_OTRO, usosDe, calcular, operacion, toneladas, porcentaje, versionFactores } from "/huella/calculo.js";
 
   const $ = (id) => document.getElementById(id);
   const estado = { fijas: [], vehiculos: [], maquinaria: [], fugas: [], electricidad: [] };
@@ -283,20 +292,27 @@
     return e;
   }
 
-  // «100.800», «2.500,5», «2500» → número
+  // «100.800», «2.500,5», «2500» → número; null si no se entiende («3 kg»)
   function leerNumero(t) {
     let s = String(t || "").replace(/\s/g, "");
     if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s = s.replace(/\./g, "");
     s = s.replace(",", ".");
     const n = Number(s);
-    return Number.isFinite(n) && n >= 0 ? n : 0;
+    return Number.isFinite(n) && n >= 0 ? n : null;
   }
+
+  // Cantidades escritas que no son un número: no se puede calcular con ellas.
+  const hayIlegibles = () => Object.values(estado).flat().some((f) =>
+    Object.entries(f).some(([k, v]) => k.endsWith("Texto") && leerNumero(v) == null));
+  const AVISO_ILEGIBLE = "Hay una cantidad que no se entiende (en rojo). Escribe solo el número, sin unidades.";
 
   const anioActual = () => Number($("anio").value);
 
-  function campoCantidad(fila, campo, unidad) {
-    const input = el("input", { type: "text", inputmode: "decimal", placeholder: "0", value: fila[campo + "Texto"] || "", "aria-label": "Cantidad" });
-    input.addEventListener("input", () => { fila[campo + "Texto"] = input.value; fila[campo] = leerNumero(input.value); cambiado(); });
+  function campoCantidad(fila, campo, unidad, etiqueta) {
+    const input = el("input", { type: "text", inputmode: "decimal", placeholder: "0", value: fila[campo + "Texto"] || "", "aria-label": etiqueta || `Cantidad en ${unidad}` });
+    const marcar = () => input.classList.toggle("mal", leerNumero(input.value) == null);
+    marcar();
+    input.addEventListener("input", () => { fila[campo + "Texto"] = input.value; fila[campo] = leerNumero(input.value) ?? 0; marcar(); cambiado(); });
     return el("div", { class: "cantidad" }, input, el("span", null, unidad));
   }
   function campoAprox(fila) {
@@ -339,15 +355,19 @@
     return el("div", { class: "fila-hc electricidad" }, com, gdo, campoCantidad(f, "kwh", "kWh"), campoAprox(f), botonQuitar("electricidad", i));
   }
 
+  const PCA_EJEMPLO = GASES.find((g) => g.nombre === "HFC-32")?.pca.toLocaleString("es-ES");
+
   function filaFugas(f, i) {
     const otro = f.gas === GAS_OTRO;
     const gas = selector(
       [["", "¿Qué gas?"], ...GASES.map((g) => [g.nombre, `${g.nombre} · PCA ${g.pca.toLocaleString("es-ES")}`]), [GAS_OTRO, "Otro gas (escribe su nombre)"]],
       f.gas || "", (v) => { f.gas = v; pintar("fugas"); cambiado(); }, "Gas refrigerante");
-    if (!otro) return el("div", { class: "fila-hc fugas" }, gas, campoCantidad(f, "kg", "kg"), campoAprox(f), botonQuitar("fugas", i));
+    const kg = campoCantidad(f, "kg", "kg", "Kilos de gas recargados en el año");
+    if (!otro) return el("div", { class: "fila-hc fugas" }, gas, kg, campoAprox(f), botonQuitar("fugas", i));
     const nombre = el("input", { type: "text", maxlength: "40", placeholder: "Nombre, ej. R-454B", value: f.nombre || "", "aria-label": "Nombre del gas" });
     nombre.addEventListener("input", () => { f.nombre = nombre.value; cambiado(); });
-    return el("div", { class: "fila-hc fugas otro" }, gas, nombre, campoCantidad(f, "pca", "PCA"), campoCantidad(f, "kg", "kg"), campoAprox(f), botonQuitar("fugas", i));
+    return el("div", { class: "fila-hc fugas otro" }, gas, nombre, campoCantidad(f, "pca", "PCA", "PCA del gas, en kg de CO₂e por kg de gas"), kg, campoAprox(f), botonQuitar("fugas", i),
+      el("p", { class: "ayuda-pca" }, `PCA: los kg de CO₂e que equivalen a 1 kg de ese gas (el HFC-32 de la lista, por ejemplo, tiene ${PCA_EJEMPLO}). Viene en la ficha técnica del gas.`));
   }
 
   function pintar(bloque) {
@@ -391,14 +411,22 @@
     $("r-a2").textContent = toneladas(r.a2);
     $("r-barra-a1").style.width = porcentaje(r.a1, r.total) + "%";
     $("r-barra-a2").style.width = porcentaje(r.a2, r.total) + "%";
+    $("r-etiqueta-parcial").classList.toggle("oculto", !r.parcial);
+    $("pedir-parcial").classList.toggle("oculto", !r.parcial);
+    $("r-parcial").replaceChildren(...(r.parcial ? [el("div", { class: "avisos-hc" },
+      el("b", null, "Esta cifra no incluye:"),
+      el("ul", null, ...r.faltan.map((f) => el("li", null, f.texto))),
+      el("div", null, "Complétalo arriba y la cifra se actualiza sola."))] : []));
     $("r-avisos").replaceChildren(...(r.avisos.length ? [el("div", { class: "avisos-hc" }, ...r.avisos.map((a) => el("div", null, a)))] : []));
     $("r-desglose").replaceChildren(...r.partidas.slice().sort((a, b) => b.kg - a.kg).map((p) =>
       el("tr", null,
-        el("td", null, p.etiqueta, p.aprox ? " (aproximado)" : ""),
-        el("td", { class: "n" }, p.cantidad.toLocaleString("es-ES") + " " + p.unidad),
+        el("td", null, p.etiqueta, p.aprox ? " (aproximado)" : "",
+          el("div", { class: "operacion" }, operacion(p)),
+          el("div", { class: "operacion" }, p.procedencia)),
         el("td", { class: "n" }, toneladas(p.kg)),
         el("td", { class: "n" }, porcentaje(p.kg, r.total) + " %"))));
     $("r-aprox").textContent = r.aproximado ? "Parte de los consumos son aproximados." : "";
+    $("r-origen").textContent = `Factores: calculadora de huella de organización del MITECO (${versionFactores()}).`;
     return r;
   }
 
@@ -423,8 +451,12 @@
 
   $("calcular").addEventListener("click", async () => {
     await cargaComercializadoras;
+    if (hayIlegibles()) { $("aviso-calcular").textContent = AVISO_ILEGIBLE; return; }
     const r = calcular(entrada(), comercializadoras);
-    if (!r.partidas.length) { $("aviso-calcular").textContent = "Escribe al menos un consumo."; return; }
+    if (!r.partidas.length) {
+      $("aviso-calcular").textContent = r.faltan.length ? r.faltan.map((f) => f.texto).join(" ") : "Escribe al menos un consumo.";
+      return;
+    }
     $("aviso-calcular").textContent = "";
     $("resultado").classList.remove("oculto");
     mostrarResultado();
@@ -436,6 +468,7 @@
     const aviso = $("aviso-enviar");
     aviso.className = "aviso-hc";
     const email = $("f-email").value.trim(), empresa = $("f-empresa").value.trim(), telefono = $("f-telefono").value.trim();
+    if (hayIlegibles()) { aviso.className = "aviso-hc mal"; aviso.textContent = AVISO_ILEGIBLE; return; }
     if (!email || !empresa) { aviso.className = "aviso-hc mal"; aviso.textContent = "Escribe tu correo y el nombre de la empresa."; return; }
     if (!$("f-informe").checked) { aviso.className = "aviso-hc mal"; aviso.textContent = "Marca la casilla para recibir el informe."; return; }
     if ($("f-llamada").checked && !telefono) { aviso.className = "aviso-hc mal"; aviso.textContent = "Para que te llamemos, deja tu teléfono."; return; }

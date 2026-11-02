@@ -41,6 +41,9 @@
   .boton.pri { background: var(--blue); border-color: var(--blue); color: #fff; }
   .fila { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
   .fila input, .fila select { font: inherit; font-size: 15px; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; width: 90px; }
+  .parcial { background: #FFF4E5; color: #9A3412; border-radius: 12px; padding: 12px 16px; margin-top: 12px; font-size: 14.5px; }
+  .parcial ul { margin: 6px 0; padding-left: 20px; }
+  .etiqueta-parcial { display: inline-block; background: #FFF4E5; color: #9A3412; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 999px; vertical-align: middle; margin-left: 8px; }
   .pestana { margin-top: 16px; }
   .pestana b { display: block; font-size: 14.5px; }
   .cta { text-align: center; }
@@ -72,13 +75,14 @@
     <p class="suave" id="subtitulo"></p>
 
     <div class="tarjeta">
-      <h2>Resultado</h2>
+      <h2>Resultado <span class="etiqueta-parcial oculto" id="etiqueta-parcial">Resultado parcial</span></h2>
       <div class="cifra"><span id="total"></span> <small>t CO₂e</small></div>
       <div class="reparto"><div class="a1" id="barra-a1"></div><div class="a2" id="barra-a2"></div></div>
       <div class="leyenda">
         <span><i style="background:var(--navy)"></i>Alcance 1 · combustibles y fugas: <b id="a1"></b> t</span>
         <span><i style="background:var(--teal)"></i>Alcance 2 · electricidad: <b id="a2"></b> t</span>
       </div>
+      <div class="parcial oculto" id="parcial"></div>
       <div class="desliza"><table><thead><tr><th>Fuente</th><th class="n">Consumo</th><th class="n">Factor</th><th class="n">t CO₂e</th><th class="n">%</th></tr></thead><tbody id="desglose"></tbody></table></div>
       <p class="suave peq" id="nota-aprox" style="margin-top:10px"></p>
     </div>
@@ -172,8 +176,16 @@
     $("a2").textContent = toneladas(r.a2);
     $("barra-a1").style.width = porcentaje(r.a1, r.total) + "%";
     $("barra-a2").style.width = porcentaje(r.a2, r.total) + "%";
+    if (r.parcial) {
+      $("etiqueta-parcial").classList.remove("oculto");
+      $("parcial").classList.remove("oculto");
+      $("parcial").replaceChildren(
+        el("b", null, "Esta cifra no incluye:"),
+        el("ul", { class: "falta" }, ...r.faltan.map((f) => el("li", null, f.texto))),
+        el("div", null, "Tampoco lo tienen en cuenta los escenarios, el objetivo ni el texto para clientes. Para la cifra completa, vuelve a calcular en evidran.com/huella con ese dato."));
+    }
     $("desglose").replaceChildren(...r.partidas.slice().sort((a, b) => b.kg - a.kg).map((p) => el("tr", null,
-      el("td", null, p.etiqueta + (p.aprox ? " (aproximado)" : "")),
+      el("td", null, p.etiqueta + (p.aprox ? " (aproximado)" : ""), el("div", { class: "suave peq" }, p.procedencia)),
       el("td", { class: "n" }, `${p.cantidad.toLocaleString("es-ES")} ${p.unidad}`),
       el("td", { class: "n" }, p.bloque === "fugas" ? `PCA ${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })}` : `${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })} kg/${p.unidad}`),
       el("td", { class: "n" }, toneladas(p.kg)),
