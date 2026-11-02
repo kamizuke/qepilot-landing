@@ -418,6 +418,7 @@
       </div>
       <div class="tarjeta bloque">
         <h2>Resultado de las llamadas</h2>
+        <p class="suave peq">Pulsa un resultado para ver las empresas que lo tuvieron.</p>
         <table><tbody id="resumen-resultados"></tbody></table>
       </div>
       <div class="tarjeta bloque">
@@ -1259,6 +1260,29 @@
   }
   $("ultimas-filtro").addEventListener("change", function () { if (S.d) pintarUltimas(); });
 
+  // Empresas con alguna llamada de ese resultado (las que cuentan en el Resumen), la más reciente arriba.
+  function empresasConResultado(k) {
+    var cuenta = function (l) { return S.rol === "admin" || (l.rol === "setter" && l.setterId === (S.d.yo.setterId || null)); };
+    var filas = [];
+    S.d.contactos.forEach(function (c) {
+      var hist = c.historial.slice().sort(function (a, b) { return a.hechaEn < b.hechaEn ? 1 : -1; });
+      var suyas = hist.filter(function (l) { return l.resultado === k && cuenta(l); });
+      if (suyas.length) filas.push({ c: c, l: suyas[0], veces: suyas.length, ahora: hist[0] });
+    });
+    filas.sort(function (a, b) { return a.l.hechaEn < b.l.hechaEn ? 1 : -1; });
+    var caja = h("div", { style: "padding:0 4px" });
+    filas.forEach(function (x) {
+      var c = x.c, l = x.l, cambio = x.ahora.resultado !== k;
+      caja.appendChild(h("div", { class: "contacto", style: "cursor:pointer;align-items:flex-start", onclick: function () { abrirFicha(c.id); } },
+        h("div", null,
+          h("div", { class: "quien" }, c.empresa),
+          h("div", { class: "det" }, relativo(l.hechaEn) + (x.veces > 1 ? " · " + x.veces + " veces" : "") + (c.persona ? " · " + c.persona : "") + (S.rol === "admin" ? " · " + l.quien : "")),
+          l.nota ? h("div", { style: "font-size:14.5px;margin-top:4px;white-space:pre-wrap" }, l.nota) : null),
+        cambio ? h("span", { class: "etiqueta" }, "Ahora: " + (S.d.resultados[x.ahora.resultado] || x.ahora.resultado)) : null));
+    });
+    return caja;
+  }
+
   function pintarResumen() {
     var r = S.d.resumen;
     var pendientes = S.d.contactos.filter(function (c) { var q = enCola(c); return q && q.grupo < 3; }).length;
@@ -1286,8 +1310,11 @@
     var total = Object.keys(r.porResultado).reduce(function (s, k) { return s + r.porResultado[k]; }, 0);
     Object.keys(S.d.resultados).forEach(function (k) {
       var n = r.porResultado[k] || 0;
-      tr.appendChild(h("tr", null, h("td", null, S.d.resultados[k]), h("td", { style: "width:60px;text-align:right" }, String(n)),
+      var abierto = S.resultadoAbierto === k;
+      tr.appendChild(h("tr", { style: n ? "cursor:pointer" : "", onclick: n ? function () { S.resultadoAbierto = abierto ? null : k; pintarResumen(); } : null },
+        h("td", null, (n ? (abierto ? "▾ " : "▸ ") : "") + S.d.resultados[k]), h("td", { style: "width:60px;text-align:right" }, String(n)),
         h("td", { style: "width:45%" }, h("div", { class: "barra", style: "width:" + (total ? Math.round(n / total * 100) : 0) + "%" }))));
+      if (abierto && n) tr.appendChild(h("tr", null, h("td", { colspan: "3", style: "padding:0 0 10px" }, empresasConResultado(k))));
     });
 
     var td = vaciar($("resumen-dias"));

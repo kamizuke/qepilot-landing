@@ -234,7 +234,7 @@ async function estado(deps, quien, res) {
   for (const l of llamadas) {
     if (!l.contacto_id) continue;
     if (!porContacto.has(l.contacto_id)) porContacto.set(l.contacto_id, []);
-    porContacto.get(l.contacto_id).push({ hechaEn: l.hecha_en, resultado: l.resultado, nota: l.nota, rol: l.rol, quien: quienLlamo(l) });
+    porContacto.get(l.contacto_id).push({ hechaEn: l.hecha_en, resultado: l.resultado, nota: l.nota, rol: l.rol, setterId: l.setter_id || null, quien: quienLlamo(l) });
   }
 
   // Lo que cuenta: para una persona, solo sus llamadas; para Lissette, todas.
