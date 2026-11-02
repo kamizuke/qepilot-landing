@@ -390,6 +390,30 @@ test("«Info por correo» guarda el correo en el contacto y avisa para enviar la
   assert.match(t.enviados.at(-1).html, /ana@metal\.es/);
 });
 
+test("Lissette marca la información como enviada y guarda el correo; la setter ni lo toca ni lo ve", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nMetal SL,986111222\n" });
+  const c = t.datos._db.contactos[0];
+  assert.equal((await t.setter({ accion: "info_enviada", id: c.id, enviada: true })).statusCode, 403);
+  assert.equal((await t.admin({ accion: "info_enviada", id: c.id })).statusCode, 400);
+  assert.equal((await t.admin({ accion: "info_enviada", id: c.id, email: "mal" })).statusCode, 400);
+  assert.equal((await t.admin({ accion: "info_enviada", id: c.id, enviada: true, texto: "  Hola, Ana:\n\nTe envío…  ", email: "ana@metal.es" })).statusCode, 200);
+  const fila = t.datos._db.contactos[0];
+  assert.equal(fila.info_enviada_en, new Date("2026-11-01T19:00:00Z").toISOString());
+  assert.equal(fila.info_texto, "Hola, Ana:\n\nTe envío…");
+  assert.equal(fila.email, "ana@metal.es");
+  assert.equal(fila.intentos, 0, "marcar un envío no cuenta como llamada");
+  const paraAdmin = (await t.admin({ accion: "estado" })).body.contactos[0];
+  assert.equal(paraAdmin.info_texto, "Hola, Ana:\n\nTe envío…");
+  const paraSetter = (await t.setter({ accion: "estado" })).body.contactos[0];
+  assert.equal(paraSetter.email, "ana@metal.es");
+  assert.ok(!("info_texto" in paraSetter) && !("info_enviada_en" in paraSetter));
+  // Quitar la casilla deja el correo guardado.
+  await t.admin({ accion: "info_enviada", id: c.id, enviada: false });
+  assert.equal(t.datos._db.contactos[0].info_enviada_en, null);
+  assert.equal(t.datos._db.contactos[0].info_texto, "Hola, Ana:\n\nTe envío…");
+});
+
 test("repetir el mismo resultado poco después corrige la anotación en vez de sumar otra llamada", async () => {
   const t = montar(new Date().toISOString());
   await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nAlkain SL,943000001\n" });

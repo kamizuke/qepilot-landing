@@ -69,6 +69,8 @@
   .etiqueta.demo { background: #E8F7EE; color: #15803D; }
   .etiqueta.volver { background: #EAF1FE; color: #1D4ED8; }
   .etiqueta.fuera { background: #FBEBEB; color: #B42318; }
+  .etiqueta.por-enviar { background: #FEF3E2; color: #B54708; }
+  .etiquetas { display: flex; flex-wrap: wrap; gap: 4px; }
   .vacio { color: var(--ink-soft); font-size: 14px; padding: 6px 0; }
 
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -140,6 +142,16 @@
   .tramo { display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; }
   .tramos input { width: 108px; padding: 7px 8px; font-size: 14px; }
   @media (max-width: 560px) { .dia-horario { grid-template-columns: 1fr; } }
+
+  /* Envíos de «Info por correo» */
+  .envio { align-items: flex-start; }
+  .envio .texto { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+  .envio .nota-envio { font-size: 14.5px; margin-top: 4px; white-space: pre-wrap; }
+  .envio .acciones { flex: 0 0 auto; justify-content: flex-end; }
+  .marca { flex: 0 0 auto; width: 22px; height: 22px; margin: 1px 0 0; padding: 0; accent-color: var(--blue); cursor: pointer; }
+  .casilla { display: flex; gap: 10px; align-items: center; margin: 14px 0 0; font-size: 15px; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--ink); cursor: pointer; }
+  #e-texto { min-height: 240px; }
+  @media (max-width: 560px) { .envio { flex-wrap: wrap; } .envio .texto { flex-basis: calc(100% - 40px); } .envio .acciones { width: 100%; justify-content: flex-start; padding-left: 34px; } }
 
   .toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); background: var(--ink); color: #fff; font-weight: 600; font-size: 14.5px; padding: 12px 18px; border-radius: 12px; box-shadow: 0 10px 30px rgba(22,32,43,.3); z-index: 50; max-width: calc(100vw - 32px); }
 </style>
@@ -427,6 +439,19 @@
       </div>
     </section>
 
+    <!-- Envíos de «Info por correo» (solo administración) -->
+    <section id="v-envios" class="vista oculto">
+      <div class="tarjeta bloque">
+        <h2>Por enviar</h2>
+        <p class="suave peq">Quienes pidieron información por correo. Cuando se la envíes, marca la casilla. Si quieres, pega el correo para tenerlo a mano; solo lo ves tú.</p>
+        <div id="envios-pendientes" class="bloque"></div>
+      </div>
+      <div class="tarjeta bloque">
+        <h2>Enviados</h2>
+        <div id="envios-hechos"></div>
+      </div>
+    </section>
+
     <!-- Ajustes (solo administración) -->
     <section id="v-ajustes" class="vista oculto">
       <div class="tarjeta bloque">
@@ -468,6 +493,9 @@
 
 <!-- Corregir datos de una demo -->
 <dialog id="editar"><div class="dlg" id="editar-cuerpo"></div></dialog>
+
+<!-- Marcar un envío y pegar el correo -->
+<dialog id="envio"><div class="dlg" id="envio-cuerpo"></div></dialog>
 
 <!-- Agendar una demo -->
 <dialog id="reserva">
@@ -614,7 +642,10 @@
   // ---------- Pestañas ----------
   function pintarPestanas() {
     var lista = [["llamar", "Llamar"], ["guion", "Guion"], ["contactos", "Contactos"], ["agenda", "Agenda"], ["resumen", "Resumen"]];
-    if (S.rol === "admin") lista.push(["ajustes", "Ajustes"]);
+    if (S.rol === "admin") {
+      var porEnviar = S.d ? S.d.contactos.filter(infoPendiente).length : 0;
+      lista.push(["envios", "Envíos" + (porEnviar ? " (" + porEnviar + ")" : "")], ["ajustes", "Ajustes"]);
+    }
     var nav = vaciar($("pestanas"));
     lista.forEach(function (p) {
       nav.appendChild(h("button", { role: "tab", "aria-selected": String(S.vista === p[0]), onclick: function () { S.vista = p[0]; pintarPestanas(); pintar(); } }, p[1]));
@@ -632,7 +663,7 @@
     pintarContactos();
     pintarAgenda();
     pintarResumen();
-    if (S.rol === "admin") { pintarAjustes(); pintarPersonas(); }
+    if (S.rol === "admin") { pintarAjustes(); pintarPersonas(); pintarEnvios(); pintarPestanas(); }
   }
 
   // ---------- Llamar ----------
@@ -664,7 +695,8 @@
       h("div", null,
         h("div", { class: "quien" }, c.empresa),
         h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona", c.telefono ? " · " + c.telefono : ""),
-        extra ? h("div", { class: "det" }, extra) : null),
+        extra ? h("div", { class: "det" }, extra) : null,
+        etiquetaEnvio(c) ? h("div", { class: "det" }, etiquetaEnvio(c)) : null),
       h("span", { class: "boton mini", "aria-hidden": "true" }, "Abrir"));
   }
 
@@ -714,6 +746,7 @@
     var c = S.d.contactos.find(function (x) { return x.id === id; });
     if (!c) return;
     var cuerpo = vaciar($("ficha-cuerpo"));
+    var marcaEnvio = h("span", null, etiquetaEnvio(c));
     var nota = h("textarea", { id: "f-nota", maxlength: "600", placeholder: "Qué te ha dicho: programa que usan, consultora, próxima auditoría…" });
     var volverFila = h("div", { class: "volver-pendiente oculto" });
     var manana = new Date(Date.now() + 86400000);
@@ -768,7 +801,8 @@
         h("button", { class: "cerrar", "aria-label": "Cerrar", onclick: function () { cerrarFicha(); } }, "×")),
       h("div", { class: "fila mt" },
         c.telefono ? h("a", { class: "telefono", href: "tel:" + tel, style: "color:var(--ink);text-decoration:none" }, c.telefono) : h("span", { class: "suave" }, "Sin teléfono"),
-        etiquetaResultado(c)),
+        etiquetaResultado(c),
+        marcaEnvio),
       h("div", { class: "peq suave", style: "margin-top:6px" },
         [c.ciudad, c.email].filter(Boolean).join(" · "),
         web ? h("span", null, (c.ciudad || c.email ? " · " : ""), h("a", { href: web, target: "_blank", rel: "noopener" }, c.web)) : null),
@@ -785,6 +819,7 @@
           return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (S.rol === "admin" || l.rol === "admin" ? " · " + l.quien : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
         }))) : null,
       S.rol === "admin" ? asignacion(c) : null,
+      S.rol === "admin" ? envioEnFicha(c, function (x) { anadir(vaciar(marcaEnvio), etiquetaEnvio(x)); }) : null,
       datos,
     ]);
     $("ficha").showModal();
@@ -1011,10 +1046,131 @@
         h("td", null, h("strong", null, c.empresa), c.ciudad ? h("div", { class: "peq suave" }, c.ciudad) : null),
         h("td", null, c.persona || "—", c.cargo ? h("div", { class: "peq suave" }, c.cargo) : null),
         h("td", null, c.telefono || "—"),
-        h("td", null, etiquetaResultado(c)),
+        h("td", null, h("div", { class: "etiquetas" }, etiquetaResultado(c), etiquetaEnvio(c))),
         h("td", null, String(c.intentos)),
         S.rol === "admin" ? h("td", null, c.setter_id ? nombrePersona(c.setter_id) : h("span", { class: "suave" }, "Sin asignar")) : null));
     });
+  }
+
+  // ---------- Envíos de «Info por correo» (solo administración) ----------
+  var SIN_ENVIO = ["demo", "no_interesa", "herramienta_propia", "no_encaja", "no_llamar", "erroneo"];
+  // El historial llega con la llamada más reciente primero.
+  function ultimaInfo(c) {
+    return c.historial.filter(function (l) { return l.resultado === "info"; })[0] || null;
+  }
+  // Pidió información, no se le ha enviado desde entonces y sigue teniendo sentido enviársela.
+  function infoPendiente(c) {
+    var l = ultimaInfo(c);
+    if (!l || c.no_llamar || SIN_ENVIO.indexOf(c.resultado) >= 0) return false;
+    return !c.info_enviada_en || new Date(c.info_enviada_en) < new Date(l.hechaEn);
+  }
+  function infoEnviada(c) { return !!c.info_enviada_en && !infoPendiente(c); }
+  // Las setters no reciben la fecha de envío: sin esta comprobación todo les saldría «por enviar».
+  function etiquetaEnvio(c) {
+    if (S.rol !== "admin") return null;
+    if (infoEnviada(c)) return h("span", { class: "etiqueta demo" }, "✓ Info enviada · " + relativo(c.info_enviada_en));
+    if (infoPendiente(c)) return h("span", { class: "etiqueta por-enviar" }, "Info por enviar");
+    return null;
+  }
+
+  function filaEnvio(c) {
+    var l = ultimaInfo(c);
+    var marca = h("input", { type: "checkbox", class: "marca", "aria-label": "Información enviada a " + c.empresa, onchange: function () {
+      marca.disabled = true;
+      api({ accion: "info_enviada", id: c.id, enviada: marca.checked }).then(function () {
+        toast((marca.checked ? "Marcada como enviada: " : "Vuelve a estar por enviar: ") + c.empresa.replace(/\.$/, "") + ".");
+        return recargar();
+      }).catch(function (e) { marca.checked = !marca.checked; marca.disabled = false; toast(e.message); });
+    } });
+    marca.checked = infoEnviada(c);
+    return h("div", { class: "contacto envio" },
+      marca,
+      h("div", { class: "texto" },
+        h("div", { class: "quien" }, c.empresa),
+        infoEnviada(c) ? h("div", { class: "det" }, etiquetaEnvio(c)) : null,
+        h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona"),
+        h("div", { class: "det" }, c.email ? h("a", { href: "mailto:" + c.email }, c.email) : h("span", { class: "etiqueta fuera" }, "Falta el correo")),
+        l ? h("div", { class: "det" }, "Lo pidió " + relativo(l.hechaEn) + " · anotó " + l.quien) : null,
+        l && l.nota ? h("div", { class: "nota-envio" }, l.nota) : null,
+        c.info_enviada_en && infoPendiente(c) ? h("div", { class: "det" }, "Último envío " + relativo(c.info_enviada_en)) : null),
+      h("div", { class: "fila acciones" },
+        h("button", { class: "boton claro mini", onclick: function () { abrirEnvio(c); } }, c.info_texto ? "Ver el correo" : "Pegar el correo"),
+        h("button", { class: "boton claro mini", onclick: function () { abrirFicha(c.id); } }, "Ficha")));
+  }
+
+  function pintarEnvios() {
+    var pend = S.d.contactos.filter(infoPendiente).sort(function (a, b) { return new Date(ultimaInfo(a).hechaEn) - new Date(ultimaInfo(b).hechaEn); });
+    var hechos = S.d.contactos.filter(infoEnviada).sort(function (a, b) { return new Date(b.info_enviada_en) - new Date(a.info_enviada_en); });
+    var cp = vaciar($("envios-pendientes"));
+    if (!pend.length) cp.appendChild(h("div", { class: "vacio" }, "No hay nada pendiente de enviar."));
+    pend.forEach(function (c) { cp.appendChild(filaEnvio(c)); });
+    var ch = vaciar($("envios-hechos"));
+    if (!hechos.length) ch.appendChild(h("div", { class: "vacio" }, "Todavía no has marcado ningún envío."));
+    hechos.forEach(function (c) { ch.appendChild(filaEnvio(c)); });
+  }
+
+  // `alGuardar` recibe el contacto ya actualizado.
+  function abrirEnvio(c, alGuardar) {
+    var email = h("input", { type: "email", maxlength: "200", value: c.email || "", placeholder: "correo@empresa.com" });
+    var texto = h("textarea", { id: "e-texto", maxlength: "20000", placeholder: "Pega aquí el correo que le has enviado" });
+    texto.value = c.info_texto || "";
+    var marca = h("input", { type: "checkbox", class: "marca" });
+    marca.checked = infoEnviada(c);
+    var inicial = marca.checked;
+    var error = h("div", { class: "aviso mal" });
+    function cambios() {
+      var x = {};
+      if (marca.checked !== inicial) x.enviada = marca.checked;
+      if (email.value.trim() !== (c.email || "")) x.email = email.value;
+      if (texto.value.trim() !== (c.info_texto || "")) x.texto = texto.value;
+      return x;
+    }
+    S.envioPendiente = function () { return Object.keys(cambios()).length > 0; };
+    anadir(vaciar($("envio-cuerpo")), [
+      h("div", { class: "dlg-cab" },
+        h("div", null, h("h2", { style: "margin:0" }, c.empresa), h("div", { class: "suave" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona")),
+        h("button", { class: "cerrar", "aria-label": "Cerrar", onclick: function () { cerrarEnvio(); } }, "×")),
+      h("label", null, "Correo de la persona"), email,
+      h("label", null, "Correo que le has enviado"), texto,
+      h("label", { class: "casilla" }, marca, "Ya se la he enviado"),
+      error,
+      h("div", { class: "fila mt" },
+        h("button", { class: "boton", onclick: function (ev) {
+          var boton = ev.currentTarget, x = cambios();
+          if (!Object.keys(x).length) { cerrarEnvio(true); return; }
+          boton.disabled = true;
+          error.textContent = "";
+          api(Object.assign({ accion: "info_enviada", id: c.id }, x)).then(function () {
+            cerrarEnvio(true);
+            toast("Guardado.");
+            return recargar().then(function () {
+              var actual = S.d.contactos.find(function (y) { return y.id === c.id; });
+              if (alGuardar && actual) alGuardar(actual);
+            });
+          }).catch(function (e) { boton.disabled = false; error.textContent = e.message; });
+        } }, "Guardar"),
+        h("button", { class: "boton claro", onclick: function () { cerrarEnvio(); } }, "Cancelar")),
+    ]);
+    $("envio").showModal();
+  }
+  function cerrarEnvio(forzar) {
+    if (!forzar && S.envioPendiente && S.envioPendiente() && !confirm("Hay cambios sin guardar. ¿Cerrar sin guardar?")) return;
+    S.envioPendiente = null;
+    cerrar("envio");
+  }
+  $("envio").addEventListener("cancel", function (ev) { ev.preventDefault(); cerrarEnvio(); });
+
+  function envioEnFicha(c, alCambiar) {
+    var estado = h("div", { class: "peq suave", style: "flex:1 1 200px" });
+    function pintarEstado(x) {
+      estado.textContent = (infoEnviada(x) ? "Enviada " + relativo(x.info_enviada_en) : infoPendiente(x) ? "Por enviar" : "Sin envíos") + (x.info_texto ? " · correo guardado" : "");
+      if (alCambiar) alCambiar(x);
+    }
+    pintarEstado(c);
+    return h("div", null, h("h3", null, "Información por correo"),
+      h("div", { class: "fila" }, estado, h("button", { class: "boton claro mini", onclick: function () {
+        abrirEnvio(S.d.contactos.find(function (y) { return y.id === c.id; }) || c, pintarEstado);
+      } }, "Marcar o pegar el correo")));
   }
 
   // ---------- Personas que llaman ----------
@@ -1387,7 +1543,7 @@
   $("salir").addEventListener("click", salir);
   // Se refresca sola cada minuto (si no hay una ficha abierta), para ver lo que va anotando la otra persona.
   setInterval(function () {
-    if (S.rol && document.visibilityState === "visible" && !$("ficha").open && !$("reserva").open && !$("editar").open) recargar();
+    if (S.rol && document.visibilityState === "visible" && !$("ficha").open && !$("reserva").open && !$("editar").open && !$("envio").open) recargar();
   }, 60000);
   if (S.clave) api({ accion: "entrar" }).then(function (j) { arrancar(j.rol, j.nombre); }).catch(function () { salir(); });
 })();

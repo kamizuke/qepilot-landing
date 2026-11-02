@@ -107,7 +107,7 @@ export function crearDatos(env) {
       return (
         (await rest(
           env,
-          "seg_contacto?select=id,empresa,persona,cargo,telefono,email,web,ciudad,origen,notas,resultado,intentos,ultima_llamada,volver_en,no_llamar,cita_id,creado_en,setter_id,caliente_desde&order=creado_en.asc&limit=5000"
+          "seg_contacto?select=id,empresa,persona,cargo,telefono,email,web,ciudad,origen,notas,resultado,intentos,ultima_llamada,volver_en,no_llamar,cita_id,creado_en,setter_id,caliente_desde,info_enviada_en,info_texto&order=creado_en.asc&limit=5000"
         )) || []
       );
     },

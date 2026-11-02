@@ -24,6 +24,7 @@ Ninguna de las dos sale en Google (van marcadas como «no indexar»).
 | Corregir datos de un contacto y añadir notas | Sí | Sí |
 | Ver el resumen (llamadas, demos, resultados) | Sí | Sí |
 | Cargar contactos (CSV de Apollo) y descargar la lista | — | Sí |
+| Marcar la información enviada y pegar el correo (pestaña Envíos) | — | Sí |
 | Borrar un contacto | — | Sí |
 | Cancelar una demo | — | Sí |
 | Horario, duración, margen, enlace de Teams y bloqueos | — | Sí |
@@ -49,6 +50,25 @@ Cada persona tiene **su propia clave**, **su lista** y **su recuento**:
 La clave común antigua (`AGENDA_SETTER_CLAVE`) sigue funcionando y ve solo
 los contactos **sin asignar**. Cuando todas las personas tengan su clave,
 puedes borrar esa variable en Vercel para cerrarla.
+
+## Envíos de «Info por correo»
+
+Cuando alguien pide información, la setter pulsa «Info por correo» y te llega
+el aviso. La pestaña **Envíos** (solo la ves tú) lista quién la espera; el
+número entre paréntesis es lo pendiente:
+
+- **Marca la casilla** cuando la hayas enviado: pasa a «Enviados» con la fecha.
+  Marcarla no suma llamadas. Si te equivocas, quítala y vuelve a «Por enviar».
+- **De un vistazo:** en Contactos, en Llamar y en la ficha verás la etiqueta
+  verde «✓ Info enviada» con la fecha, o la naranja «Info por enviar». Solo las
+  ves tú.
+- **Pegar el correo** guarda el texto enviado (hasta 20.000 caracteres) y deja
+  corregir la dirección. Las setters no ven ni la casilla ni el texto.
+- Si vuelve a pedirla después del envío, regresa a «Por enviar». Si el contacto
+  pasa a un resultado cerrado (demo, no interesa, no llamar…) sale de la lista
+  de pendientes.
+- En la ficha de cualquier contacto, «Marcar o pegar el correo» sirve también
+  para un envío que no vino de una llamada.
 
 ## Cómo funciona
 

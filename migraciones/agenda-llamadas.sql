@@ -385,3 +385,8 @@ end $$;
 
 revoke all on function public.agenda_reservar(timestamptz, timestamptz, int, text, text, text, text, text, text, uuid, text, text, uuid) from public, anon, authenticated;
 revoke all on function public.seg_registrar_llamada(uuid, text, text, timestamptz, text, uuid) from public, anon, authenticated;
+
+-- 15) (2 nov) Seguimiento de «Info por correo»: cuándo se envió la información
+--     y el correo enviado, pegado a mano. Solo lo ve administración.
+alter table public.seg_contacto add column if not exists info_enviada_en timestamptz;
+alter table public.seg_contacto add column if not exists info_texto text;
