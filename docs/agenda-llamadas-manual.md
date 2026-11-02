@@ -70,6 +70,19 @@ número entre paréntesis es lo pendiente:
 - En la ficha de cualquier contacto, «Marcar o pegar el correo» sirve también
   para un envío que no vino de una llamada.
 
+## Dónde está cada empresa
+
+**Resumen → Dónde está cada empresa** cuenta empresas, no llamadas: cada una está
+en una sola línea, según lo último anotado (sin llamar, sin hablar aún, volver a
+llamar, info por correo, demo o descartada), y al pulsar una línea ves cuáles son.
+Cada setter ve solo sus empresas. Lissette ve además, dentro de «Info por correo»,
+las que están **sin enviar** y las **enviadas sin seguimiento**, es decir, las que
+nadie ha vuelto a llamar desde el envío.
+
+En la ficha, **Historial** junta las llamadas y el envío por orden de fecha. La
+setter no ve el envío. Solo se guarda la fecha del último envío: si marcas otro,
+sustituye al anterior.
+
 ## Certificación de la empresa
 
 En la ficha, «Corregir datos, certificación o notas de la empresa» deja apuntar,

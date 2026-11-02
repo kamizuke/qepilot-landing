@@ -80,6 +80,7 @@
   tr.clic:hover td { background: var(--cream); }
   .tabla-scroll { overflow-x: auto; }
   .barra { height: 10px; background: var(--blue); border-radius: 5px; min-width: 2px; }
+  .sub-etapa td:first-child { padding-left: 26px; }
 
   /* Citas */
   .cita { padding: 14px 0; border-top: 1px solid var(--cream-d); }
@@ -416,6 +417,11 @@
     <section id="v-resumen" class="vista oculto">
       <div class="cifras bloque" id="resumen-cifras"></div>
       <div class="tarjeta bloque">
+        <h2>Dónde está cada empresa</h2>
+        <p class="suave peq">Cada empresa cuenta una sola vez, según lo último anotado. Pulsa una línea para ver cuáles son.</p>
+        <table><tbody id="resumen-embudo"></tbody></table>
+      </div>
+      <div class="tarjeta bloque">
         <div class="fila" style="justify-content:space-between">
           <h2 style="margin:0">Últimas llamadas</h2>
           <select id="ultimas-filtro" style="width:auto"><option value="hoy">Hoy</option><option value="7">Últimos 7 días</option><option value="todas">Todas</option></select>
@@ -430,7 +436,7 @@
       </div>
       <div class="tarjeta bloque">
         <h2>Resultado de las llamadas</h2>
-        <p class="suave peq">Pulsa un resultado para ver las empresas que lo tuvieron.</p>
+        <p class="suave peq">Cuenta llamadas, no empresas: tres «No contesta» a la misma empresa suman tres. Pulsa un resultado para ver las empresas que lo tuvieron.</p>
         <table><tbody id="resumen-resultados"></tbody></table>
       </div>
       <div class="tarjeta bloque">
@@ -747,6 +753,7 @@
     if (!c) return;
     var cuerpo = vaciar($("ficha-cuerpo"));
     var marcaEnvio = h("span", null, etiquetaEnvio(c));
+    var bloqueHistorial = h("div", null, historialDe(c));
     var nota = h("textarea", { id: "f-nota", maxlength: "600", placeholder: "Qué te ha dicho: programa que usan, consultora, próxima auditoría…" });
     var volverFila = h("div", { class: "volver-pendiente oculto" });
     var manana = new Date(Date.now() + 86400000);
@@ -816,15 +823,29 @@
       botones,
       volverFila,
       infoFila,
-      c.historial.length ? h("div", null, h("h3", null, "Intentos anteriores (" + c.historial.length + ")"),
-        h("ul", { class: "historial" }, c.historial.map(function (l) {
-          return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (S.rol === "admin" || l.rol === "admin" ? " · " + l.quien : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
-        }))) : null,
+      bloqueHistorial,
       S.rol === "admin" ? asignacion(c) : null,
-      S.rol === "admin" ? envioEnFicha(c, function (x) { anadir(vaciar(marcaEnvio), etiquetaEnvio(x)); }) : null,
+      S.rol === "admin" ? envioEnFicha(c, function (x) {
+        anadir(vaciar(marcaEnvio), etiquetaEnvio(x));
+        anadir(vaciar(bloqueHistorial), historialDe(x));
+      }) : null,
       datos,
     ]);
     $("ficha").showModal();
+  }
+
+  // Llamadas y envío, lo más reciente arriba. El envío solo llega a administración
+  // y se guarda solo el último: volver a marcarlo cambia su fecha.
+  function historialDe(c) {
+    var eventos = c.historial.slice();
+    if (c.info_enviada_en) eventos.push({ hechaEn: c.info_enviada_en, envio: true });
+    if (!eventos.length) return null;
+    eventos.sort(function (a, b) { return new Date(b.hechaEn) - new Date(a.hechaEn); });
+    return h("div", null, h("h3", null, "Historial (" + eventos.length + ")"),
+      h("ul", { class: "historial" }, eventos.map(function (l) {
+        if (l.envio) return h("li", null, relativo(l.hechaEn) + " · Info enviada" + (c.info_texto ? " · correo guardado" : ""));
+        return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (S.rol === "admin" || l.rol === "admin" ? " · " + l.quien : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
+      })));
   }
 
   var NORMAS = [["vence_9001", "ISO 9001"], ["vence_14001", "ISO 14001"], ["vence_45001", "ISO 45001"]];
@@ -1466,6 +1487,49 @@
     return caja;
   }
 
+  var ETAPAS = [["sin_llamar", "Sin llamar"], ["sin_hablar", "Llamadas, sin hablar aún"], ["volver", "Volver a llamar"], ["info", "Info por correo"], ["demo", "Demo agendada"], ["descartada", "Descartadas"]];
+  // Sigue el mismo orden que etiquetaResultado: lo último anotado decide la etapa.
+  function etapaDe(c) {
+    if (c.no_llamar) return "descartada";
+    if (esCaliente(c) || !c.resultado) return "sin_llamar";
+    if (c.resultado === "no_contesta" || c.resultado === "no_esta") return "sin_hablar";
+    if (c.resultado === "volver" || c.resultado === "info" || c.resultado === "demo") return c.resultado;
+    return "descartada";
+  }
+
+  function empresasDeEtapa(lista) {
+    var caja = h("div", { style: "padding:0 10px" });
+    lista.slice().sort(function (a, b) { return (a.ultima_llamada || "") < (b.ultima_llamada || "") ? 1 : -1; }).forEach(function (c) {
+      var extra = esCaliente(c) ? "Pidió que le llamaran · " + relativo(c.caliente_desde)
+        : c.ultima_llamada ? (c.no_llamar ? "No llamar" : S.d.resultados[c.resultado]) + " · " + relativo(c.ultima_llamada) : null;
+      caja.appendChild(filaContacto(c, extra));
+    });
+    return caja;
+  }
+
+  function pintarEmbudo() {
+    var tb = vaciar($("resumen-embudo"));
+    var total = S.d.contactos.length;
+    if (!total) { tb.appendChild(h("tr", null, h("td", { class: "vacio" }, "Aún no hay contactos cargados."))); return; }
+    tb.appendChild(h("tr", null, h("td", null, h("strong", null, S.rol === "admin" ? "Empresas cargadas" : "Tus empresas")), h("td", { style: "width:60px;text-align:right" }, h("strong", null, String(total))), h("td", { style: "width:30%" })));
+    function fila(k, titulo, lista, pista) {
+      var n = lista.length, abierto = S.etapaAbierta === k;
+      tb.appendChild(h("tr", { class: (n ? "clic" : "") + (pista ? " sub-etapa" : ""), onclick: n ? function () { S.etapaAbierta = abierto ? null : k; pintarEmbudo(); } : null },
+        h("td", null, (n ? (abierto ? "▾ " : "▸ ") : "") + titulo, pista && n ? h("div", { class: "peq suave" }, pista) : null),
+        h("td", { style: "width:60px;text-align:right" }, String(n)),
+        h("td", { style: "width:30%" }, h("div", { class: "barra", style: "width:" + Math.round(n / total * 100) + "%" }))));
+      if (abierto && n) tb.appendChild(h("tr", null, h("td", { colspan: "3", style: "padding:0 0 10px" }, empresasDeEtapa(lista))));
+    }
+    ETAPAS.forEach(function (e) {
+      var lista = S.d.contactos.filter(function (c) { return etapaDe(c) === e[0]; });
+      fila(e[0], e[1], lista);
+      if (e[0] === "info" && S.rol === "admin") {
+        fila("info_sin_enviar", "Sin enviar", lista.filter(function (c) { return !infoEnviada(c); }), "Te toca enviarla");
+        fila("info_enviada", "Enviada, sin seguimiento", lista.filter(infoEnviada), "Toca volver a llamar");
+      }
+    });
+  }
+
   function pintarResumen() {
     var r = S.d.resumen;
     var pendientes = S.d.contactos.filter(function (c) { var q = enCola(c); return q && q.grupo < 3; }).length;
@@ -1477,6 +1541,7 @@
       .concat(S.rol === "admin" ? [[r.llamadasAdmin, "Llamadas tuyas"]] : [])
       .forEach(function (x) { cif.appendChild(h("div", { class: "cifra" }, h("b", null, x[0]), h("span", null, x[1]))); });
 
+    pintarEmbudo();
     pintarUltimas();
 
     if (S.rol === "admin") {
