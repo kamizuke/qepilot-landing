@@ -708,7 +708,8 @@
         h("div", { class: "quien" }, c.empresa),
         h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona", c.telefono ? " · " + c.telefono : ""),
         extra ? h("div", { class: "det" }, extra) : null,
-        etiquetaEnvio(c) ? h("div", { class: "det" }, etiquetaEnvio(c)) : null),
+        etiquetaEnvio(c) ? h("div", { class: "det" }, etiquetaEnvio(c)) : null,
+        etiquetaLinkedin(c) ? h("div", { class: "det" }, etiquetaLinkedin(c)) : null),
       h("span", { class: "boton mini", "aria-hidden": "true" }, "Abrir"));
   }
 
@@ -822,6 +823,7 @@
         web ? h("span", null, (c.ciudad || c.email ? " · " : ""), h("a", { href: web, target: "_blank", rel: "noopener" }, c.web)) : null),
       c.origen ? h("div", { class: "peq", style: "margin-top:6px" }, "Por qué encaja: ", c.origen) : null,
       lineaCertificacion(c),
+      bloqueLinkedin(c),
       c.notas ? h("div", { class: "cita" }, h("div", { class: "notas" }, c.notas)) : null,
       chuleta(c),
       h("h3", null, "Esta llamada"),
@@ -875,9 +877,39 @@
     return partes.length ? h("div", { class: "peq", style: "margin-top:6px" }, partes.join(" · ")) : null;
   }
 
+  // Conexión de Lissette con la empresa en LinkedIn. El estado se guarda al
+  // momento y sin rehacer la ficha, para no perder lo que se esté escribiendo.
+  var ESTADOS_LINKEDIN = { invitacion: "Invitación enviada", contacto: "Somos contactos" };
+  function etiquetaLinkedin(c) {
+    if (!ESTADOS_LINKEDIN[c.linkedin_estado]) return null;
+    return h("span", { class: "etiqueta " + (c.linkedin_estado === "contacto" ? "demo" : "volver") }, "LinkedIn: " + ESTADOS_LINKEDIN[c.linkedin_estado].toLowerCase());
+  }
+  function bloqueLinkedin(c) {
+    var enlace = c.linkedin_empresa
+      ? h("a", { href: c.linkedin_empresa, target: "_blank", rel: "noopener" }, "Página de la empresa en LinkedIn")
+      : h("a", { href: "https://www.linkedin.com/search/results/companies/?keywords=" + encodeURIComponent(c.empresa.replace(/[,\s]+s\.?\s?[la]\.?(\s?u\.?)?\s*(\(unipersonal\))?\s*$/i, "")), target: "_blank", rel: "noopener" }, "Buscar la empresa en LinkedIn");
+    var conQuien = c.linkedin_contacto ? "Contacto: " + c.linkedin_contacto : null;
+    if (S.rol !== "admin") {
+      return h("div", { class: "peq", style: "margin-top:6px" }, enlace,
+        ESTADOS_LINKEDIN[c.linkedin_estado] ? " · " + ESTADOS_LINKEDIN[c.linkedin_estado] : null, conQuien ? " · " + conQuien : null);
+    }
+    var estado = h("select", { "aria-label": "Conexión en LinkedIn con " + c.empresa, style: "width:auto", onchange: function () {
+      var valor = estado.value;
+      api({ accion: "editar_contacto", id: c.id, campos: { linkedin_estado: valor } }).then(function () {
+        c.linkedin_estado = valor || null;
+        toast("LinkedIn guardado.");
+        recargar();
+      }).catch(function (e) { estado.value = c.linkedin_estado || ""; toast(e.message); });
+    } },
+      h("option", { value: "" }, "Sin conectar"),
+      Object.keys(ESTADOS_LINKEDIN).map(function (k) { return h("option", { value: k }, ESTADOS_LINKEDIN[k]); }));
+    estado.value = c.linkedin_estado || "";
+    return h("div", { class: "fila peq", style: "margin-top:6px" }, enlace, estado, conQuien);
+  }
+
   function formularioDatos(c, notaDeLlamada) {
     var campos = [["persona", "Persona", "text"], ["cargo", "Cargo", "text"], ["telefono", "Teléfono", "tel"], ["email", "Correo", "email"]];
-    if (S.rol === "admin") campos = [["empresa", "Empresa", "text"]].concat(campos, [["web", "Web", "text"], ["ciudad", "Ciudad", "text"], ["origen", "Por qué encaja", "text"]]);
+    if (S.rol === "admin") campos = [["empresa", "Empresa", "text"]].concat(campos, [["web", "Web", "text"], ["linkedin_empresa", "Página de empresa en LinkedIn", "url"], ["linkedin_contacto", "Tu contacto en LinkedIn (nombre y cargo)", "text"], ["ciudad", "Ciudad", "text"], ["origen", "Por qué encaja", "text"]]);
     campos = campos.concat([["certificadora", "Certificadora", "text"]], NORMAS.map(function (n) { return [n[0], "Vencimiento " + n[1], "date"]; }));
     var inputs = {};
     var rejilla = h("div", { class: "rejilla2" }, campos.map(function (f) {
@@ -1191,7 +1223,7 @@
   function pintarContactos() {
     var sel = $("filtro");
     if (!sel.options.length) {
-      [["", "Todos"], ["pendiente", "Pendientes de llamar"], ["sin", "Sin llamar"], ["vence_pronto", "Certificado vence en 6 meses"]].concat(Object.keys(S.d.resultados).map(function (k) { return [k, S.d.resultados[k]]; }))
+      [["", "Todos"], ["pendiente", "Pendientes de llamar"], ["sin", "Sin llamar"], ["vence_pronto", "Certificado vence en 6 meses"], ["li_contacto", "LinkedIn: somos contactos"], ["li_invitacion", "LinkedIn: invitación enviada"], ["li_sin", "LinkedIn: sin conectar"]].concat(Object.keys(S.d.resultados).map(function (k) { return [k, S.d.resultados[k]]; }))
         .forEach(function (o) { sel.appendChild(h("option", { value: o[0] }, o[1])); });
     }
     if (S.rol === "admin") rellenarSelectPersonas($("filtro-persona"), [["", "Todas"], ["__yo", "Míos"], ["__sin", "Sin asignar"]]);
@@ -1205,9 +1237,12 @@
       if (f === "pendiente" && !enCola(c)) return false;
       if (f === "sin" && c.resultado) return false;
       if (f === "vence_pronto" && !vencimientosProximos(c).length) return false;
-      if (f && f !== "pendiente" && f !== "sin" && f !== "vence_pronto" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
+      if (f === "li_contacto" && c.linkedin_estado !== "contacto") return false;
+      if (f === "li_invitacion" && c.linkedin_estado !== "invitacion") return false;
+      if (f === "li_sin" && c.linkedin_estado) return false;
+      if (f && f.indexOf("li_") !== 0 && f !== "pendiente" && f !== "sin" && f !== "vence_pronto" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
       if (!q) return true;
-      return [c.empresa, c.persona, c.telefono, c.ciudad].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
+      return [c.empresa, c.persona, c.telefono, c.ciudad, c.linkedin_contacto].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
     });
     if (f === "vence_pronto") lista.sort(function (a, b) { return vencimientosProximos(a)[0].fecha < vencimientosProximos(b)[0].fecha ? -1 : 1; });
     var tb = vaciar($("tabla-contactos"));
@@ -1218,7 +1253,7 @@
           f === "vence_pronto" ? h("div", { class: "peq" }, vencimientosProximos(c).map(function (v) { return v.norma + " vence el " + fechaDia(v.fecha); }).join(" · ")) : null),
         h("td", null, c.persona || "—", c.cargo ? h("div", { class: "peq suave" }, c.cargo) : null),
         h("td", null, c.telefono || "—"),
-        h("td", null, h("div", { class: "etiquetas" }, etiquetaResultado(c), etiquetaEnvio(c))),
+        h("td", null, h("div", { class: "etiquetas" }, etiquetaResultado(c), etiquetaEnvio(c), etiquetaLinkedin(c))),
         h("td", null, String(c.intentos)),
         S.rol === "admin" ? h("td", null, c.setter_id ? nombrePersona(c.setter_id) : h("span", { class: "suave" }, "Sin asignar")) : null));
     });
@@ -1457,7 +1492,7 @@
     }).catch(function (e) { aviso.className = "aviso mal"; aviso.textContent = e.message; });
   });
   $("csv-descargar").addEventListener("click", function () {
-    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "ciudad", "origen", "certificadora", "vence_9001", "vence_14001", "vence_45001", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
+    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "linkedin_empresa", "linkedin_contacto", "linkedin_estado", "ciudad", "origen", "certificadora", "vence_9001", "vence_14001", "vence_45001", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
     var celda = function (v) { v = v === null || v === undefined ? "" : String(v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
     var filas = [cols.join(",")].concat(S.d.contactos.map(function (c) {
       return cols.map(function (k) { return celda(k === "resultado" ? (c.no_llamar ? "No llamar" : S.d.resultados[c.resultado] || "") : c[k]); }).join(",");

@@ -14,6 +14,7 @@ import {
   texto,
   textoLargo,
   emailValido,
+  urlLinkedinEmpresa,
   leerCsvContactos,
   claveContacto,
   correoConfirmacion,
@@ -28,6 +29,7 @@ const TOKEN = /^[A-Za-z0-9_-]{16,64}$/;
 const LOCAL = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/;
 const DIA = /^\d{4}-\d{2}-\d{2}$/;
 const VENCIMIENTOS = ["vence_9001", "vence_14001", "vence_45001"];
+const ESTADOS_LINKEDIN = ["invitacion", "contacto"];
 const SECCIONES_GUION = ["g-intro", "g-pasos", "g-pegas", "g-centralita", "g-demo", "g-resultados", "g-evidran", "g-quien", "g-no", "g-reglas"];
 
 export function hashToken(token) {
@@ -424,7 +426,7 @@ async function editarContacto(deps, quien, body, res) {
   const c = body.campos || {};
   const campos = {};
   const limites = { persona: 120, cargo: 120, telefono: 40, certificadora: 120 };
-  if (rol === "admin") Object.assign(limites, { empresa: 160, web: 200, ciudad: 80, origen: 300 });
+  if (rol === "admin") Object.assign(limites, { empresa: 160, web: 200, ciudad: 80, origen: 300, linkedin_contacto: 160 });
   for (const [k, max] of Object.entries(limites)) if (k in c) campos[k] = texto(c[k], max);
   if ("notas" in c) campos.notas = textoLargo(c.notas, 2000);
   for (const k of VENCIMIENTOS) {
@@ -439,6 +441,18 @@ async function editarContacto(deps, quien, body, res) {
     const e = typeof c.email === "string" ? c.email.trim() : "";
     if (e && !emailValido(e)) return res.status(400).json({ error: "El correo no parece válido." });
     campos.email = e || null;
+  }
+  // LinkedIn es la red de Lissette: la setter lo ve, pero no lo cambia.
+  if (rol === "admin" && "linkedin_empresa" in c) {
+    const pegada = typeof c.linkedin_empresa === "string" ? c.linkedin_empresa.trim() : "";
+    const url = urlLinkedinEmpresa(pegada);
+    if (pegada && !url) return res.status(400).json({ error: "Pega la dirección de la página de empresa (linkedin.com/company/…)." });
+    campos.linkedin_empresa = url;
+  }
+  if (rol === "admin" && "linkedin_estado" in c) {
+    const e = c.linkedin_estado || null;
+    if (e && !ESTADOS_LINKEDIN.includes(e)) return res.status(400).json({ error: "Estado de LinkedIn no válido." });
+    campos.linkedin_estado = e;
   }
   if ("empresa" in campos && !campos.empresa) return res.status(400).json({ error: "La empresa no puede quedar vacía." });
   if (!Object.keys(campos).length) return res.status(400).json({ error: "No hay cambios." });

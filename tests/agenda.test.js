@@ -104,7 +104,7 @@ test("leerCsvContactos entiende la exportación de Apollo y no importa móviles"
   assert.equal(r.sinEmpresa, 1);
   assert.deepEqual(r.contactos[0], {
     empresa: "Metal, S.L.", persona: "Ana Pérez", cargo: "Responsable de calidad", telefono: "+34 986 111 222",
-    email: "ana@metal.es", web: "metal.es", ciudad: "Vigo", origen: null,
+    email: "ana@metal.es", web: "metal.es", linkedin_empresa: null, ciudad: "Vigo", origen: null,
   });
   const conPuntoYComa = leerCsvContactos("Empresa;Persona;Teléfono\nACME;Eva;986 222 333\n");
   assert.equal(conPuntoYComa.contactos[0].telefono, "986 222 333");
@@ -429,6 +429,41 @@ test("la certificadora y los vencimientos se guardan, se vacían y rechazan fech
   assert.equal((await t.setter({ accion: "estado" })).body.contactos[0].vence_9001, "2027-03-15", "la setter los ve");
   await t.setter({ accion: "editar_contacto", id: c.id, campos: { vence_9001: "" } });
   assert.equal(t.datos._db.contactos[0].vence_9001, null);
+});
+
+test("LinkedIn: la página se limpia al cargar, Lissette la edita y la setter solo la ve", async () => {
+  const t = montar();
+  const csv = "Company,Corporate Phone,Company Linkedin Url,Person Linkedin Url\n" +
+    "Metal SL,986111222,https://es.linkedin.com/company/metal-sl/about/?viewAsMember=true,https://www.linkedin.com/in/ana\n" +
+    "Perfil SL,986111333,https://www.linkedin.com/in/luis,\n" +
+    "Otra SL,986111444,https://metal-sl.es,\n";
+  await t.admin({ accion: "importar", csv });
+  const [metal, perfil, otra] = t.datos._db.contactos;
+  assert.equal(metal.linkedin_empresa, "https://www.linkedin.com/company/metal-sl");
+  assert.equal(perfil.linkedin_empresa, null, "un perfil personal no es la página de la empresa");
+  assert.equal(otra.linkedin_empresa, null, "otra web tampoco");
+
+  const editar = (quien, campos, id = metal.id) => t[quien]({ accion: "editar_contacto", id, campos });
+  assert.equal((await editar("admin", { linkedin_estado: "contacto", linkedin_contacto: " Eva  Rey, gerente " })).statusCode, 200);
+  assert.equal(t.datos._db.contactos[0].linkedin_estado, "contacto");
+  assert.equal(t.datos._db.contactos[0].linkedin_contacto, "Eva Rey, gerente");
+  assert.equal((await editar("admin", { linkedin_estado: "amigos" })).statusCode, 400);
+  for (const mal of ["https://evil.example/company/x", "javascript:alert(1)", "https://linkedin.com.evil.example/company/x", "linkedin.com/in/ana"]) {
+    assert.equal((await editar("admin", { linkedin_empresa: mal })).statusCode, 400, mal);
+  }
+  assert.equal((await editar("admin", { linkedin_empresa: "linkedin.com/company/otra" }, otra.id)).statusCode, 200);
+  assert.equal(t.datos._db.contactos[2].linkedin_empresa, "https://www.linkedin.com/company/otra");
+  await editar("admin", { linkedin_empresa: "" }, otra.id);
+  assert.equal(t.datos._db.contactos[2].linkedin_empresa, null);
+
+  const antes = t.datos._db.contactos[0].linkedin_estado;
+  assert.equal((await editar("setter", { linkedin_estado: "invitacion", linkedin_empresa: "linkedin.com/company/z" })).statusCode, 400, "la setter no lo cambia");
+  assert.equal(t.datos._db.contactos[0].linkedin_estado, antes);
+  const visto = (await t.setter({ accion: "estado" })).body.contactos[0];
+  assert.equal(visto.linkedin_estado, "contacto", "la setter lo ve");
+  assert.equal(visto.linkedin_contacto, "Eva Rey, gerente");
+  await editar("admin", { linkedin_estado: "" });
+  assert.equal(t.datos._db.contactos[0].linkedin_estado, null);
 });
 
 test("Lissette edita el guion por secciones, la setter lo lee y vaciarlo vuelve al original", async () => {

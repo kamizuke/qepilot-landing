@@ -401,3 +401,10 @@ alter table public.seg_contacto add column if not exists vence_45001 date;
 -- 17) (2 nov) Guion editable: el texto de cada sección que Lissette ha cambiado.
 --     La sección que no esté aquí se ve con el texto original de la página.
 alter table public.agenda_config add column if not exists guion jsonb not null default '{}'::jsonb;
+
+-- 18) (3 nov) LinkedIn de la empresa: su página, con quién está conectada
+--     Lissette (gerencia o dirección) y en qué punto va esa conexión.
+alter table public.seg_contacto add column if not exists linkedin_empresa text;
+alter table public.seg_contacto add column if not exists linkedin_contacto text;
+alter table public.seg_contacto add column if not exists linkedin_estado text
+  check (linkedin_estado in ('invitacion','contacto'));

@@ -116,13 +116,25 @@ En Contactos, el filtro «Certificado vence en 6 meses» lista a quien le vence
 alguno de hoy a 6 meses, el más cercano primero y con la fecha a la vista. Los ya
 vencidos no salen: lo normal es que hayan renovado y falte actualizar la fecha.
 
+## LinkedIn de la empresa
+
+Para llegar a Calidad a través de gerencia o dirección. En la ficha, Lissette elige
+**Sin conectar**, **Invitación enviada** o **Somos contactos**, y se guarda al
+momento. Sale como etiqueta en Llamar y en Contactos, donde el filtro «Resultado»
+tiene una opción para cada estado.
+
+La ficha enlaza a la **página de la empresa** o, si aún no está, a su búsqueda en
+LinkedIn. La página y el nombre y cargo del contacto se apuntan en «Corregir datos».
+La página solo admite direcciones `linkedin.com/company/…`. La setter lo ve todo,
+pero no lo cambia. Evidran no entra en LinkedIn: todo esto se apunta a mano.
+
 ## Cómo funciona
 
 1. **Lissette carga los contactos** (pestaña Contactos → Cargar contactos)
    con el CSV exportado de Apollo. Entiende las columnas de Apollo
    (*Company*, *First Name*, *Last Name*, *Title*, *Corporate Phone*,
-   *Email*, *Website*, *City*) y las de una hoja en español (*Empresa*,
-   *Persona*, *Cargo*, *Teléfono*…). Los **móviles no se cargan**: se llama al
+   *Email*, *Website*, *Company Linkedin Url*, *City*) y las de una hoja en español
+   (*Empresa*, *Persona*, *Cargo*, *Teléfono*, *LinkedIn empresa*…). Los **móviles no se cargan**: se llama al
    teléfono de la empresa. Los repetidos (mismo teléfono) se saltan.
 2. **La setter abre la pestaña Llamar**. Ve, por orden: a quién le pidieron
    llamar hoy, los que aún no se han llamado y los que no contestaron otro

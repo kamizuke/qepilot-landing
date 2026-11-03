@@ -228,6 +228,21 @@ export function emailValido(v) {
   return typeof v === "string" && v.length <= 200 && EMAIL.test(v.trim());
 }
 
+// Solo páginas de empresa de LinkedIn. Devuelve la dirección limpia o null.
+export function urlLinkedinEmpresa(v) {
+  if (typeof v !== "string") return null;
+  const t = v.trim();
+  if (!t || t.length > 300) return null;
+  try {
+    const u = new URL(/^https?:\/\//i.test(t) ? t : `https://${t}`);
+    if (!/(^|\.)linkedin\.com$/i.test(u.hostname)) return null;
+    const m = /^\/(company|school|showcase)\/([^/]+)/i.exec(u.pathname);
+    return m ? `https://www.linkedin.com/${m[1].toLowerCase()}/${m[2]}` : null;
+  } catch {
+    return null;
+  }
+}
+
 export function soloDigitos(tel) {
   return String(tel || "").replace(/\D/g, "");
 }
@@ -253,6 +268,7 @@ const COLUMNAS = {
   telefono: ["telefono", "telefono empresa", "corporate phone", "company phone", "work direct phone", "phone", "tel"],
   email: ["email", "correo", "e mail", "correo electronico"],
   web: ["web", "website", "sitio web", "pagina web", "company website"],
+  linkedin: ["linkedin empresa", "company linkedin url", "company linkedin", "pagina linkedin", "linkedin"],
   ciudad: ["ciudad", "city", "localidad", "company city"],
   origen: ["origen", "motivo", "notas", "notes"],
 };
@@ -324,6 +340,7 @@ export function leerCsvContactos(textoCsv, max = 2000) {
       telefono: texto(valor(f, "telefono"), 40),
       email: emailValido(email) ? email.trim() : null,
       web: texto(valor(f, "web"), 200),
+      linkedin_empresa: urlLinkedinEmpresa(valor(f, "linkedin")),
       ciudad: texto(valor(f, "ciudad"), 80),
       origen: texto(valor(f, "origen"), 300),
     });
