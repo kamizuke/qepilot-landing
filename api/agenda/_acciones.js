@@ -426,7 +426,7 @@ async function editarContacto(deps, quien, body, res) {
   const c = body.campos || {};
   const campos = {};
   const limites = { persona: 120, cargo: 120, telefono: 40, certificadora: 120 };
-  if (rol === "admin") Object.assign(limites, { empresa: 160, web: 200, ciudad: 80, origen: 300, linkedin_contacto: 160 });
+  if (rol === "admin") Object.assign(limites, { empresa: 160, web: 200, ciudad: 80, origen: 300, linkedin_contacto: 120, linkedin_cargo: 120 });
   for (const [k, max] of Object.entries(limites)) if (k in c) campos[k] = texto(c[k], max);
   if ("notas" in c) campos.notas = textoLargo(c.notas, 2000);
   for (const k of VENCIMIENTOS) {

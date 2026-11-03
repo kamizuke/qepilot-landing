@@ -120,11 +120,12 @@ vencidos no salen: lo normal es que hayan renovado y falte actualizar la fecha.
 
 Para llegar a Calidad a través de gerencia o dirección. En la ficha, Lissette elige
 **Sin conectar**, **Invitación enviada** o **Somos contactos**, y se guarda al
-momento. Sale como etiqueta en Llamar y en Contactos, donde el filtro «Resultado»
+momento. Con la invitación enviada aparecen ahí mismo la **persona** y su **cargo**,
+que también se guardan solos y son aparte de la persona a la que se llama. Sale como etiqueta en Llamar y en Contactos, donde el filtro «Resultado»
 tiene una opción para cada estado.
 
 La ficha enlaza a la **página de la empresa** o, si aún no está, a su búsqueda en
-LinkedIn. La página y el nombre y cargo del contacto se apuntan en «Corregir datos».
+LinkedIn. La página se apunta en «Corregir datos».
 La página solo admite direcciones `linkedin.com/company/…`. La setter lo ve todo,
 pero no lo cambia. Evidran no entra en LinkedIn: todo esto se apunta a mano.
 

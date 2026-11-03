@@ -444,9 +444,10 @@ test("LinkedIn: la página se limpia al cargar, Lissette la edita y la setter so
   assert.equal(otra.linkedin_empresa, null, "otra web tampoco");
 
   const editar = (quien, campos, id = metal.id) => t[quien]({ accion: "editar_contacto", id, campos });
-  assert.equal((await editar("admin", { linkedin_estado: "contacto", linkedin_contacto: " Eva  Rey, gerente " })).statusCode, 200);
+  assert.equal((await editar("admin", { linkedin_estado: "contacto", linkedin_contacto: " Eva  Rey ", linkedin_cargo: " Gerente " })).statusCode, 200);
   assert.equal(t.datos._db.contactos[0].linkedin_estado, "contacto");
-  assert.equal(t.datos._db.contactos[0].linkedin_contacto, "Eva Rey, gerente");
+  assert.equal(t.datos._db.contactos[0].linkedin_contacto, "Eva Rey");
+  assert.equal(t.datos._db.contactos[0].linkedin_cargo, "Gerente");
   assert.equal((await editar("admin", { linkedin_estado: "amigos" })).statusCode, 400);
   for (const mal of ["https://evil.example/company/x", "javascript:alert(1)", "https://linkedin.com.evil.example/company/x", "linkedin.com/in/ana"]) {
     assert.equal((await editar("admin", { linkedin_empresa: mal })).statusCode, 400, mal);
@@ -461,7 +462,8 @@ test("LinkedIn: la página se limpia al cargar, Lissette la edita y la setter so
   assert.equal(t.datos._db.contactos[0].linkedin_estado, antes);
   const visto = (await t.setter({ accion: "estado" })).body.contactos[0];
   assert.equal(visto.linkedin_estado, "contacto", "la setter lo ve");
-  assert.equal(visto.linkedin_contacto, "Eva Rey, gerente");
+  assert.equal(visto.linkedin_contacto, "Eva Rey");
+  assert.equal(visto.linkedin_cargo, "Gerente");
   await editar("admin", { linkedin_estado: "" });
   assert.equal(t.datos._db.contactos[0].linkedin_estado, null);
 });

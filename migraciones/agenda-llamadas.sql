@@ -408,3 +408,7 @@ alter table public.seg_contacto add column if not exists linkedin_empresa text;
 alter table public.seg_contacto add column if not exists linkedin_contacto text;
 alter table public.seg_contacto add column if not exists linkedin_estado text
   check (linkedin_estado in ('invitacion','contacto'));
+
+-- 19) (3 nov) LinkedIn: el cargo de la persona, aparte de su nombre
+--     (linkedin_contacto), que no es la persona a la que se llama.
+alter table public.seg_contacto add column if not exists linkedin_cargo text;

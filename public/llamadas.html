@@ -888,28 +888,47 @@
     var enlace = c.linkedin_empresa
       ? h("a", { href: c.linkedin_empresa, target: "_blank", rel: "noopener" }, "Página de la empresa en LinkedIn")
       : h("a", { href: "https://www.linkedin.com/search/results/companies/?keywords=" + encodeURIComponent(c.empresa.replace(/[,\s]+s\.?\s?[la]\.?(\s?u\.?)?\s*(\(unipersonal\))?\s*$/i, "")), target: "_blank", rel: "noopener" }, "Buscar la empresa en LinkedIn");
-    var conQuien = c.linkedin_contacto ? "Contacto: " + c.linkedin_contacto : null;
     if (S.rol !== "admin") {
+      var conQuien = [c.linkedin_contacto, c.linkedin_cargo].filter(Boolean).join(", ");
       return h("div", { class: "peq", style: "margin-top:6px" }, enlace,
-        ESTADOS_LINKEDIN[c.linkedin_estado] ? " · " + ESTADOS_LINKEDIN[c.linkedin_estado] : null, conQuien ? " · " + conQuien : null);
+        ESTADOS_LINKEDIN[c.linkedin_estado] ? " · " + ESTADOS_LINKEDIN[c.linkedin_estado] : null, conQuien ? " · Contacto: " + conQuien : null);
     }
     var estado = h("select", { "aria-label": "Conexión en LinkedIn con " + c.empresa, style: "width:auto", onchange: function () {
       var valor = estado.value;
+      quien.style.display = valor ? "" : "none";
       api({ accion: "editar_contacto", id: c.id, campos: { linkedin_estado: valor } }).then(function () {
         c.linkedin_estado = valor || null;
         toast("LinkedIn guardado.");
         recargar();
-      }).catch(function (e) { estado.value = c.linkedin_estado || ""; toast(e.message); });
+      }).catch(function (e) {
+        estado.value = c.linkedin_estado || "";
+        quien.style.display = estado.value ? "" : "none";
+        toast(e.message);
+      });
     } },
       h("option", { value: "" }, "Sin conectar"),
       Object.keys(ESTADOS_LINKEDIN).map(function (k) { return h("option", { value: k }, ESTADOS_LINKEDIN[k]); }));
     estado.value = c.linkedin_estado || "";
-    return h("div", { class: "fila peq", style: "margin-top:6px" }, enlace, estado, conQuien);
+    var quien = h("div", { class: "rejilla2", style: c.linkedin_estado ? "" : "display:none" },
+      campoLinkedin(c, "linkedin_contacto", "Persona en LinkedIn"),
+      campoLinkedin(c, "linkedin_cargo", "Cargo"));
+    return h("div", { class: "peq", style: "margin-top:6px" }, h("div", { class: "fila" }, enlace, estado), quien);
+  }
+  function campoLinkedin(c, campo, rotulo) {
+    var entrada = h("input", { type: "text", maxlength: "120", value: c[campo] || "", onchange: function () {
+      var valor = entrada.value.trim();
+      api({ accion: "editar_contacto", id: c.id, campos: { [campo]: valor } }).then(function () {
+        c[campo] = valor || null;
+        entrada.value = valor;
+        toast("LinkedIn guardado.");
+      }).catch(function (e) { entrada.value = c[campo] || ""; toast(e.message); });
+    } });
+    return h("div", null, h("label", null, rotulo), entrada);
   }
 
   function formularioDatos(c, notaDeLlamada) {
     var campos = [["persona", "Persona", "text"], ["cargo", "Cargo", "text"], ["telefono", "Teléfono", "tel"], ["email", "Correo", "email"]];
-    if (S.rol === "admin") campos = [["empresa", "Empresa", "text"]].concat(campos, [["web", "Web", "text"], ["linkedin_empresa", "Página de empresa en LinkedIn", "url"], ["linkedin_contacto", "Tu contacto en LinkedIn (nombre y cargo)", "text"], ["ciudad", "Ciudad", "text"], ["origen", "Por qué encaja", "text"]]);
+    if (S.rol === "admin") campos = [["empresa", "Empresa", "text"]].concat(campos, [["web", "Web", "text"], ["linkedin_empresa", "Página de empresa en LinkedIn", "url"], ["ciudad", "Ciudad", "text"], ["origen", "Por qué encaja", "text"]]);
     campos = campos.concat([["certificadora", "Certificadora", "text"]], NORMAS.map(function (n) { return [n[0], "Vencimiento " + n[1], "date"]; }));
     var inputs = {};
     var rejilla = h("div", { class: "rejilla2" }, campos.map(function (f) {
@@ -1242,7 +1261,7 @@
       if (f === "li_sin" && c.linkedin_estado) return false;
       if (f && f.indexOf("li_") !== 0 && f !== "pendiente" && f !== "sin" && f !== "vence_pronto" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
       if (!q) return true;
-      return [c.empresa, c.persona, c.telefono, c.ciudad, c.linkedin_contacto].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
+      return [c.empresa, c.persona, c.telefono, c.ciudad, c.linkedin_contacto, c.linkedin_cargo].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
     });
     if (f === "vence_pronto") lista.sort(function (a, b) { return vencimientosProximos(a)[0].fecha < vencimientosProximos(b)[0].fecha ? -1 : 1; });
     var tb = vaciar($("tabla-contactos"));
@@ -1492,7 +1511,7 @@
     }).catch(function (e) { aviso.className = "aviso mal"; aviso.textContent = e.message; });
   });
   $("csv-descargar").addEventListener("click", function () {
-    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "linkedin_empresa", "linkedin_contacto", "linkedin_estado", "ciudad", "origen", "certificadora", "vence_9001", "vence_14001", "vence_45001", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
+    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "linkedin_empresa", "linkedin_contacto", "linkedin_cargo", "linkedin_estado", "ciudad", "origen", "certificadora", "vence_9001", "vence_14001", "vence_45001", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
     var celda = function (v) { v = v === null || v === undefined ? "" : String(v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
     var filas = [cols.join(",")].concat(S.d.contactos.map(function (c) {
       return cols.map(function (k) { return celda(k === "resultado" ? (c.no_llamar ? "No llamar" : S.d.resultados[c.resultado] || "") : c[k]); }).join(",");
