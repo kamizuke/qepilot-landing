@@ -1162,14 +1162,26 @@
     var filtro = $("ultimas-filtro").value;
     var desde = filtro === "hoy" ? hoy() : filtro === "7" ? diaDe(Date.now() - 6 * 86400000) : "";
     var lista = [];
-    S.d.contactos.forEach(function (c) { c.historial.forEach(function (l) { lista.push({ l: l, c: c }); }); });
+    S.d.contactos.forEach(function (c) {
+      c.historial.forEach(function (l) { lista.push({ l: l, c: c }); });
+      if (c.linkedin_enviado_en) lista.push({ c: c, l: { hechaEn: c.linkedin_enviado_en, envio: "Mensaje por LinkedIn" } });
+      if (c.info_enviada_en) lista.push({ c: c, l: { hechaEn: c.info_enviada_en, envio: "Correo enviado" } });
+    });
     lista = lista.filter(function (x) { return !desde || diaDe(x.l.hechaEn) >= desde; })
       .sort(function (a, b) { return a.l.hechaEn < b.l.hechaEn ? 1 : -1; });
     var caja = vaciar($("ultimas-llamadas"));
-    if (!lista.length) { caja.appendChild(h("div", { class: "vacio" }, filtro === "hoy" ? "Hoy todavía no hay llamadas anotadas." : "No hay llamadas anotadas en este periodo.")); return; }
+    if (!lista.length) { caja.appendChild(h("div", { class: "vacio" }, filtro === "hoy" ? "Hoy todavía no hay nada anotado." : "No hay nada anotado en este periodo.")); return; }
     var mostradas = lista.slice(0, 200);
     mostradas.forEach(function (x) {
       var l = x.l, c = x.c;
+      if (l.envio) {
+        caja.appendChild(h("div", { class: "contacto", style: "cursor:pointer;align-items:flex-start", onclick: function () { abrirFicha(c.id); } },
+          h("div", null,
+            h("div", { class: "quien" }, c.empresa),
+            h("div", { class: "det" }, relativo(l.hechaEn))),
+          h("span", { class: "etiqueta demo" }, l.envio)));
+        return;
+      }
       var clase = l.resultado === "demo" ? "demo" : l.resultado === "volver" ? "volver" : l.resultado === "no_llamar" ? "fuera" : "";
       caja.appendChild(h("div", { class: "contacto", style: "cursor:pointer;align-items:flex-start", onclick: function () { abrirFicha(c.id); } },
         h("div", null,
@@ -1205,20 +1217,35 @@
     return caja;
   }
 
-  var ETAPAS = [["sin_llamar", "Sin llamar"], ["sin_hablar", "Llamadas, sin hablar aún"], ["volver", "Volver a llamar"], ["info", "Info por correo"], ["demo", "Demo agendada"], ["descartada", "Descartadas"]];
+  var ETAPAS = [["sin_llamar", "Sin llamar"], ["escrita", "Escritas, sin llamar aún"], ["sin_hablar", "Llamadas, sin hablar aún"], ["volver", "Volver a llamar"], ["info", "Info por correo"], ["demo", "Demo agendada"], ["descartada", "Descartadas"]];
   // Sigue el mismo orden que etiquetaResultado: lo último anotado decide la etapa.
+  // Escribirle cuenta como contacto mientras no se haya hablado con esa persona;
+  // lo hablado por teléfono (volver, info, demo, descartada) manda sobre el mensaje.
   function etapaDe(c) {
     if (c.no_llamar) return "descartada";
-    if (esCaliente(c) || !c.resultado) return "sin_llamar";
-    if (c.resultado === "no_contesta" || c.resultado === "no_esta") return "sin_hablar";
+    if (esCaliente(c)) return "sin_llamar";
+    var escrito = ultimoEnvio(c);
+    if (!c.resultado) return escrito ? "escrita" : "sin_llamar";
+    if (c.resultado === "no_contesta" || c.resultado === "no_esta") {
+      return escrito > new Date(c.ultima_llamada || 0).getTime() ? "escrita" : "sin_hablar";
+    }
     if (c.resultado === "volver" || c.resultado === "info" || c.resultado === "demo") return c.resultado;
     return "descartada";
   }
 
+  function ultimoEscrito(c) {
+    var porLinkedin = c.linkedin_enviado_en && new Date(c.linkedin_enviado_en).getTime() === ultimoEnvio(c);
+    return porLinkedin ? "Mensaje por LinkedIn · " + relativo(c.linkedin_enviado_en) : "Correo · " + relativo(c.info_enviada_en);
+  }
+  function momentoDeEtapa(c) {
+    return etapaDe(c) === "escrita" ? ultimoEnvio(c) : new Date(c.ultima_llamada || 0).getTime();
+  }
+
   function empresasDeEtapa(lista) {
     var caja = h("div", { style: "padding:0 10px" });
-    lista.slice().sort(function (a, b) { return (a.ultima_llamada || "") < (b.ultima_llamada || "") ? 1 : -1; }).forEach(function (c) {
+    lista.slice().sort(function (a, b) { return momentoDeEtapa(b) - momentoDeEtapa(a); }).forEach(function (c) {
       var extra = esCaliente(c) ? "Pidió que le llamaran · " + relativo(c.caliente_desde)
+        : etapaDe(c) === "escrita" ? ultimoEscrito(c)
         : c.ultima_llamada ? (c.no_llamar ? "No llamar" : S.d.resultados[c.resultado]) + " · " + relativo(c.ultima_llamada) : null;
       caja.appendChild(filaContacto(c, extra));
     });
@@ -1255,7 +1282,7 @@
     var adm = S.rol === "admin";
     [[r.llamadasSetter, adm ? "Llamadas de todas las personas" : "Tus llamadas (cuentan para el pago)"], [r.llamadasSetterHoy, adm ? "Llamadas de hoy, entre todas" : "Tus llamadas de hoy"],
       [r.demosProximas, "Demos próximas"], [r.demosHechas, "Demos ya celebradas (30 días)"], [r.demosCanceladas, "Demos canceladas (30 días)"],
-      [S.d.contactos.length, "Contactos cargados"], [pendientes, "Pendientes de llamar"]]
+      [S.d.contactos.filter(function (c) { return c.linkedin_enviado_en; }).length, "Empresas con mensaje por LinkedIn"], [S.d.contactos.length, "Contactos cargados"], [pendientes, "Pendientes de llamar"]]
       .concat(S.rol === "admin" ? [[r.llamadasAdmin, "Llamadas tuyas"]] : [])
       .forEach(function (x) { cif.appendChild(h("div", { class: "cifra" }, h("b", null, x[0]), h("span", null, x[1]))); });
 

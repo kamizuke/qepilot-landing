@@ -95,11 +95,18 @@ no se edita desde aquí.
 ## Dónde está cada empresa
 
 **Resumen → Dónde está cada empresa** cuenta empresas, no llamadas: cada una está
-en una sola línea, según lo último anotado (sin llamar, sin hablar aún, volver a
-llamar, info por correo, demo o descartada), y al pulsar una línea ves cuáles son.
+en una sola línea, según lo último anotado (sin llamar, escritas sin llamar aún, sin
+hablar aún, volver a llamar, info por correo, demo o descartada), y al pulsar una
+línea ves cuáles son.
 Cada setter ve solo sus empresas. Lissette ve además, dentro de «Info por correo»,
 las que están **sin enviar** y las **enviadas sin seguimiento**, es decir, las que
 nadie ha vuelto a llamar desde el envío.
+
+**Escritas, sin llamar aún** son las empresas a las que se ha escrito por LinkedIn o
+por correo y con las que todavía no se ha hablado: nadie ha llamado, o no contestaron
+y el mensaje es posterior. Lo hablado por teléfono manda sobre el mensaje. Escribirle
+no la saca de la cola de Llamar, y en la lista de actividad reciente del Resumen salen
+también los envíos.
 
 En la ficha, **Historial** junta las llamadas y el envío por orden de fecha. La
 setter no ve el envío. Solo se guarda la fecha del último envío: si marcas otro,
