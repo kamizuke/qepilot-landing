@@ -224,7 +224,7 @@ export function crearTrabajo(deps) {
       }
       const rol = quien.rol;
       const soloAdmin = ["importar", "borrar_contacto", "guardar_config", "crear_bloqueo", "borrar_bloqueo", "cancelar_cita",
-        "crear_setter", "editar_setter", "nueva_clave_setter", "asignar", "repartir", "quedarme", "info_enviada", "guardar_guion"];
+        "crear_setter", "editar_setter", "nueva_clave_setter", "asignar", "repartir", "quedarme", "info_enviada", "linkedin_enviado", "guardar_guion"];
       if (soloAdmin.includes(accion) && rol !== "admin") {
         return res.status(403).json({ error: "Esta acción no está disponible con tu clave." });
       }
@@ -246,6 +246,8 @@ export function crearTrabajo(deps) {
           return await editarContacto(deps, quien, body, res);
         case "info_enviada":
           return await infoEnviada(deps, body, res);
+        case "linkedin_enviado":
+          return await linkedinEnviado(deps, body, res);
         case "importar":
           return await importar(deps, body, res);
         case "borrar_contacto":
@@ -353,8 +355,9 @@ async function estado(deps, quien, res) {
     guion: config?.guion || {},
     setters: rol === "admin" ? setters : [],
     contactos: contactos.map((c) => {
-      // El seguimiento de los envíos es solo de Lissette.
-      const { info_enviada_en, info_texto, ...resto } = c;
+      // El seguimiento de los envíos es solo de Lissette. De LinkedIn, la setter
+      // ve la fecha para saber que ya se le ha escrito, pero no el texto.
+      const { info_enviada_en, info_texto, linkedin_texto, ...resto } = c;
       return { ...(rol === "admin" ? c : resto), historial: porContacto.get(c.id) || [] };
     }),
     citas: citas.map((c) => ({ ...c, reservadaPor: c.origen === "admin" ? "administración" : c.origen === "web" ? "la propia persona" : c.setter_id ? nombres.get(c.setter_id) || "Setter" : "Setter (clave común)" })),
@@ -536,6 +539,19 @@ async function infoEnviada(deps, body, res) {
     if (e && !emailValido(e)) return res.status(400).json({ error: "El correo no parece válido." });
     campos.email = e || null;
   }
+  if (!Object.keys(campos).length) return res.status(400).json({ error: "No hay cambios." });
+  await deps.datos.editarContacto(id, campos);
+  return res.status(200).json({ ok: true });
+}
+
+// Mensaje por LinkedIn: Lissette lo marca y puede pegar el texto. No hace falta
+// que nadie lo pida por teléfono, y tampoco toca el recuento de llamadas.
+async function linkedinEnviado(deps, body, res) {
+  const id = String(body.id || "");
+  if (!UUID.test(id)) return res.status(400).json({ error: "Contacto no válido." });
+  const campos = {};
+  if (typeof body.enviada === "boolean") campos.linkedin_enviado_en = body.enviada ? deps.ahora().toISOString() : null;
+  if ("texto" in body) campos.linkedin_texto = textoLargo(body.texto, 20000);
   if (!Object.keys(campos).length) return res.status(400).json({ error: "No hay cambios." });
   await deps.datos.editarContacto(id, campos);
   return res.status(200).json({ ok: true });

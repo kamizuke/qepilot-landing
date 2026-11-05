@@ -117,7 +117,7 @@
   function pintarPestanas() {
     var lista = [["llamar", "Llamar"], ["guion", "Guion"], ["contactos", "Contactos"], ["agenda", "Agenda"], ["resumen", "Resumen"]];
     if (S.rol === "admin") {
-      var porEnviar = S.d ? S.d.contactos.filter(infoPendiente).length : 0;
+      var porEnviar = S.d ? S.d.contactos.filter(function (c) { return infoPendiente(c) || linkedinPendiente(c); }).length : 0;
       lista.push(["envios", "Envíos" + (porEnviar ? " (" + porEnviar + ")" : "")], ["ajustes", "Ajustes"]);
     }
     var nav = vaciar($("pestanas"));
@@ -172,7 +172,8 @@
         h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona", c.telefono ? " · " + c.telefono : ""),
         extra ? h("div", { class: "det" }, extra) : null,
         etiquetaEnvio(c) ? h("div", { class: "det" }, etiquetaEnvio(c)) : null,
-        etiquetaLinkedin(c) ? h("div", { class: "det" }, etiquetaLinkedin(c)) : null),
+        etiquetaLinkedin(c) ? h("div", { class: "det" }, etiquetaLinkedin(c)) : null,
+        etiquetaMensaje(c) ? h("div", { class: "det" }, etiquetaMensaje(c)) : null),
       h("span", { class: "boton mini", "aria-hidden": "true" }, "Abrir"));
   }
 
@@ -222,7 +223,7 @@
     var c = S.d.contactos.find(function (x) { return x.id === id; });
     if (!c) return;
     var cuerpo = vaciar($("ficha-cuerpo"));
-    var marcaEnvio = h("span", null, etiquetaEnvio(c));
+    var marcaEnvio = h("span", { class: "etiquetas" }, etiquetaEnvio(c), etiquetaMensaje(c));
     var bloqueHistorial = h("div", null, historialDe(c));
     var nota = h("textarea", { id: "f-nota", maxlength: "600", placeholder: "Qué te ha dicho: programa que usan, consultora, próxima auditoría…" });
     var volverFila = h("div", { class: "volver-pendiente oculto" });
@@ -294,27 +295,28 @@
       botones,
       volverFila,
       infoFila,
-      bloqueHistorial,
-      S.rol === "admin" ? asignacion(c) : null,
       S.rol === "admin" ? envioEnFicha(c, function (x) {
-        anadir(vaciar(marcaEnvio), etiquetaEnvio(x));
+        anadir(vaciar(marcaEnvio), [etiquetaEnvio(x), etiquetaMensaje(x)]);
         anadir(vaciar(bloqueHistorial), historialDe(x));
       }) : null,
+      bloqueHistorial,
+      S.rol === "admin" ? asignacion(c) : null,
       datos,
     ]);
     $("ficha").showModal();
   }
 
-  // Llamadas y envío, lo más reciente arriba. El envío solo llega a administración
-  // y se guarda solo el último: volver a marcarlo cambia su fecha.
+  // Llamadas y envíos, lo más reciente arriba. De cada canal se guarda solo el
+  // último envío. La setter no recibe el del correo ni ningún texto.
   function historialDe(c) {
     var eventos = c.historial.slice();
-    if (c.info_enviada_en) eventos.push({ hechaEn: c.info_enviada_en, envio: true });
+    if (c.info_enviada_en) eventos.push({ hechaEn: c.info_enviada_en, envio: "Info por correo enviada" + (c.info_texto ? " · texto guardado" : "") });
+    if (c.linkedin_enviado_en) eventos.push({ hechaEn: c.linkedin_enviado_en, envio: "Mensaje por LinkedIn enviado" + (c.linkedin_texto ? " · texto guardado" : "") });
     if (!eventos.length) return null;
     eventos.sort(function (a, b) { return new Date(b.hechaEn) - new Date(a.hechaEn); });
     return h("div", null, h("h3", null, "Historial (" + eventos.length + ")"),
       h("ul", { class: "historial" }, eventos.map(function (l) {
-        if (l.envio) return h("li", null, relativo(l.hechaEn) + " · Info enviada" + (c.info_texto ? " · correo guardado" : ""));
+        if (l.envio) return h("li", null, relativo(l.hechaEn) + " · " + l.envio);
         return h("li", null, relativo(l.hechaEn) + " · " + (S.d.resultados[l.resultado] || l.resultado) + (S.rol === "admin" || l.rol === "admin" ? " · " + l.quien : ""), l.nota ? h("div", { class: "suave" }, l.nota) : null);
       })));
   }
@@ -705,7 +707,7 @@
   function pintarContactos() {
     var sel = $("filtro");
     if (!sel.options.length) {
-      [["", "Todos"], ["pendiente", "Pendientes de llamar"], ["sin", "Sin llamar"], ["vence_pronto", "Certificado vence en 6 meses"], ["li_contacto", "LinkedIn: somos contactos"], ["li_invitacion", "LinkedIn: invitación enviada"], ["li_sin", "LinkedIn: sin conectar"]].concat(Object.keys(S.d.resultados).map(function (k) { return [k, S.d.resultados[k]]; }))
+      [["", "Todos"], ["pendiente", "Pendientes de llamar"], ["sin", "Sin llamar"], ["vence_pronto", "Certificado vence en 6 meses"], ["li_contacto", "LinkedIn: somos contactos"], ["li_invitacion", "LinkedIn: invitación enviada"], ["li_sin", "LinkedIn: sin conectar"], ["li_mensaje", "LinkedIn: mensaje enviado"]].concat(Object.keys(S.d.resultados).map(function (k) { return [k, S.d.resultados[k]]; }))
         .forEach(function (o) { sel.appendChild(h("option", { value: o[0] }, o[1])); });
     }
     if (S.rol === "admin") rellenarSelectPersonas($("filtro-persona"), [["", "Todas"], ["__yo", "Míos"], ["__sin", "Sin asignar"]]);
@@ -722,6 +724,7 @@
       if (f === "li_contacto" && c.linkedin_estado !== "contacto") return false;
       if (f === "li_invitacion" && c.linkedin_estado !== "invitacion") return false;
       if (f === "li_sin" && c.linkedin_estado) return false;
+      if (f === "li_mensaje" && !c.linkedin_enviado_en) return false;
       if (f && f.indexOf("li_") !== 0 && f !== "pendiente" && f !== "sin" && f !== "vence_pronto" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
       if (!q) return true;
       return [c.empresa, c.persona, c.telefono, c.ciudad, c.linkedin_contacto, c.linkedin_cargo].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
@@ -735,13 +738,13 @@
           f === "vence_pronto" ? h("div", { class: "peq" }, vencimientosProximos(c).map(function (v) { return v.norma + " vence el " + fechaDia(v.fecha); }).join(" · ")) : null),
         h("td", null, c.persona || "—", c.cargo ? h("div", { class: "peq suave" }, c.cargo) : null),
         h("td", null, c.telefono || "—"),
-        h("td", null, h("div", { class: "etiquetas" }, etiquetaResultado(c), etiquetaEnvio(c), etiquetaLinkedin(c))),
+        h("td", null, h("div", { class: "etiquetas" }, etiquetaResultado(c), etiquetaEnvio(c), etiquetaLinkedin(c), etiquetaMensaje(c))),
         h("td", null, String(c.intentos)),
         S.rol === "admin" ? h("td", null, c.setter_id ? nombrePersona(c.setter_id) : h("span", { class: "suave" }, "Sin asignar")) : null));
     });
   }
 
-  // ---------- Envíos de «Info por correo» (solo administración) ----------
+  // ---------- Envíos por correo y por LinkedIn (la pestaña es solo de administración) ----------
   var SIN_ENVIO = ["demo", "no_interesa", "herramienta_propia", "no_encaja", "no_llamar", "erroneo"];
   // El historial llega con la llamada más reciente primero.
   function ultimaInfo(c) {
@@ -762,66 +765,126 @@
     return null;
   }
 
-  function filaEnvio(c) {
-    var l = ultimaInfo(c);
-    var marca = h("input", { type: "checkbox", class: "marca", "aria-label": "Información enviada a " + c.empresa, onchange: function () {
+  // Los dos canales comparten pantalla: cambia dónde se guarda y cómo se nombra.
+  var CANALES = {
+    correo: { accion: "info_enviada", fecha: "info_enviada_en", texto: "info_texto", titulo: "Correo", marcar: "Correo enviado", verTexto: "Ver el correo", pegar: "Pegar el correo", rotulo: "Correo que le has enviado", pista: "Pega aquí el correo que le has enviado", casilla: "Ya se la he enviado" },
+    linkedin: { accion: "linkedin_enviado", fecha: "linkedin_enviado_en", texto: "linkedin_texto", titulo: "LinkedIn", marcar: "Mensaje enviado por LinkedIn", verTexto: "Ver el mensaje", pegar: "Pegar el mensaje", rotulo: "Mensaje que le has enviado", pista: "Pega aquí el mensaje que le has enviado", casilla: "Ya se lo he enviado" },
+  };
+  function enviadoPor(c, canal) { return canal === "correo" ? infoEnviada(c) : !!c.linkedin_enviado_en; }
+  // Ya sois contactos y aún no le has escrito.
+  function linkedinPendiente(c) {
+    return c.linkedin_estado === "contacto" && !c.linkedin_enviado_en && !c.no_llamar && SIN_ENVIO.indexOf(c.resultado) < 0;
+  }
+  function etiquetaMensaje(c) {
+    return c.linkedin_enviado_en ? h("span", { class: "etiqueta demo" }, "✓ Mensaje por LinkedIn · " + relativo(c.linkedin_enviado_en)) : null;
+  }
+  function personaLinkedin(c) { return [c.linkedin_contacto, c.linkedin_cargo].filter(Boolean).join(" · "); }
+
+  function botonTexto(c, canal) {
+    var K = CANALES[canal];
+    return h("button", { class: "boton claro mini", onclick: function () { abrirEnvio(c, canal); } }, c[K.texto] ? K.verTexto : K.pegar);
+  }
+  function botonFicha(c) {
+    return h("button", { class: "boton claro mini", onclick: function () { abrirFicha(c.id); } }, "Ficha");
+  }
+
+  function filaPendiente(c, canal) {
+    var K = CANALES[canal], l = canal === "correo" ? ultimaInfo(c) : null;
+    var marca = h("input", { type: "checkbox", class: "marca", "aria-label": K.marcar + ": " + c.empresa, onchange: function () {
       marca.disabled = true;
-      api({ accion: "info_enviada", id: c.id, enviada: marca.checked }).then(function () {
-        toast((marca.checked ? "Marcada como enviada: " : "Vuelve a estar por enviar: ") + c.empresa.replace(/\.$/, "") + ".");
+      api({ accion: K.accion, id: c.id, enviada: marca.checked }).then(function () {
+        toast("Marcado como enviado: " + c.empresa.replace(/\.$/, "") + ".");
         return recargar();
       }).catch(function (e) { marca.checked = !marca.checked; marca.disabled = false; toast(e.message); });
     } });
-    marca.checked = infoEnviada(c);
     return h("div", { class: "contacto envio" },
       marca,
       h("div", { class: "texto" },
         h("div", { class: "quien" }, c.empresa),
-        infoEnviada(c) ? h("div", { class: "det" }, etiquetaEnvio(c)) : null,
-        h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona"),
-        h("div", { class: "det" }, c.email ? h("a", { href: "mailto:" + c.email }, c.email) : h("span", { class: "etiqueta fuera" }, "Falta el correo")),
-        l ? h("div", { class: "det" }, "Lo pidió " + relativo(l.hechaEn) + " · anotó " + l.quien) : null,
-        l && l.nota ? h("div", { class: "nota-envio" }, l.nota) : null,
-        c.info_enviada_en && infoPendiente(c) ? h("div", { class: "det" }, "Último envío " + relativo(c.info_enviada_en)) : null),
-      h("div", { class: "fila acciones" },
-        h("button", { class: "boton claro mini", onclick: function () { abrirEnvio(c); } }, c.info_texto ? "Ver el correo" : "Pegar el correo"),
-        h("button", { class: "boton claro mini", onclick: function () { abrirFicha(c.id); } }, "Ficha")));
+        canal === "correo"
+          ? [h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona"),
+            h("div", { class: "det" }, c.email ? h("a", { href: "mailto:" + c.email }, c.email) : h("span", { class: "etiqueta fuera" }, "Falta el correo")),
+            l ? h("div", { class: "det" }, "Lo pidió " + relativo(l.hechaEn) + " · anotó " + l.quien) : null,
+            l && l.nota ? h("div", { class: "nota-envio" }, l.nota) : null,
+            c.info_enviada_en ? h("div", { class: "det" }, "Último envío " + relativo(c.info_enviada_en)) : null]
+          : [h("div", { class: "det" }, personaLinkedin(c) || "Sin persona en LinkedIn"),
+            c.linkedin_empresa ? h("div", { class: "det" }, h("a", { href: c.linkedin_empresa, target: "_blank", rel: "noopener" }, "Página de la empresa en LinkedIn")) : null]),
+      h("div", { class: "fila acciones" }, botonTexto(c, canal), botonFicha(c)));
+  }
+
+  // Una fila por empresa, con lo enviado por cada canal.
+  function filaEnviado(c) {
+    var canales = Object.keys(CANALES).filter(function (k) { return enviadoPor(c, k); });
+    return h("div", { class: "contacto envio" },
+      h("div", { class: "texto" },
+        h("div", { class: "quien" }, c.empresa),
+        h("div", { class: "det" }, h("div", { class: "etiquetas" }, enviadoPor(c, "correo") ? etiquetaEnvio(c) : null, etiquetaMensaje(c))),
+        h("div", { class: "det" }, (canales.length === 1 && canales[0] === "linkedin" && personaLinkedin(c)) || [c.persona, c.cargo].filter(Boolean).join(" · ") || personaLinkedin(c) || "Sin persona")),
+      h("div", { class: "fila acciones" }, canales.map(function (k) { return botonTexto(c, k); }), botonFicha(c)));
+  }
+
+  function ultimoEnvio(c) {
+    return Math.max(enviadoPor(c, "correo") ? new Date(c.info_enviada_en).getTime() : 0, c.linkedin_enviado_en ? new Date(c.linkedin_enviado_en).getTime() : 0);
   }
 
   function pintarEnvios() {
-    var pend = S.d.contactos.filter(infoPendiente).sort(function (a, b) { return new Date(ultimaInfo(a).hechaEn) - new Date(ultimaInfo(b).hechaEn); });
-    var hechos = S.d.contactos.filter(infoEnviada).sort(function (a, b) { return new Date(b.info_enviada_en) - new Date(a.info_enviada_en); });
+    var correo = S.d.contactos.filter(infoPendiente).sort(function (a, b) { return new Date(ultimaInfo(a).hechaEn) - new Date(ultimaInfo(b).hechaEn); });
+    var linkedin = S.d.contactos.filter(linkedinPendiente);
+    var hechos = S.d.contactos.filter(function (c) { return ultimoEnvio(c) > 0; }).sort(function (a, b) { return ultimoEnvio(b) - ultimoEnvio(a); });
     var cp = vaciar($("envios-pendientes"));
-    if (!pend.length) cp.appendChild(h("div", { class: "vacio" }, "No hay nada pendiente de enviar."));
-    pend.forEach(function (c) { cp.appendChild(filaEnvio(c)); });
+    if (!correo.length && !linkedin.length) cp.appendChild(h("div", { class: "vacio" }, "No hay nada pendiente de enviar."));
+    if (correo.length) cp.appendChild(h("h3", null, "Por correo: lo pidieron (" + correo.length + ")"));
+    correo.forEach(function (c) { cp.appendChild(filaPendiente(c, "correo")); });
+    if (linkedin.length) cp.appendChild(h("h3", null, "Por LinkedIn: ya sois contactos (" + linkedin.length + ")"));
+    linkedin.forEach(function (c) { cp.appendChild(filaPendiente(c, "linkedin")); });
     var ch = vaciar($("envios-hechos"));
     if (!hechos.length) ch.appendChild(h("div", { class: "vacio" }, "Todavía no has marcado ningún envío."));
-    hechos.forEach(function (c) { ch.appendChild(filaEnvio(c)); });
+    hechos.forEach(function (c) { ch.appendChild(filaEnviado(c)); });
   }
 
-  // `alGuardar` recibe el contacto ya actualizado.
-  function abrirEnvio(c, alGuardar) {
-    var email = h("input", { type: "email", maxlength: "200", value: c.email || "", placeholder: "correo@empresa.com" });
-    var texto = h("textarea", { id: "e-texto", maxlength: "20000", placeholder: "Pega aquí el correo que le has enviado" });
-    texto.value = c.info_texto || "";
+  // `alGuardar` recibe el contacto ya actualizado. Con `marcar`, la casilla sale
+  // ya puesta: se abre porque acabas de enviarlo y solo falta guardar.
+  function abrirEnvio(c, canal, alGuardar, marcar) {
+    var K = CANALES[canal];
+    var enviado = enviadoPor(c, canal);
+    var email = canal === "correo" ? h("input", { type: "email", maxlength: "200", value: c.email || "", placeholder: "correo@empresa.com" }) : null;
+    var texto = h("textarea", { id: "e-texto", maxlength: "20000", placeholder: K.pista });
+    texto.value = c[K.texto] || "";
     var marca = h("input", { type: "checkbox", class: "marca" });
-    marca.checked = infoEnviada(c);
-    var inicial = marca.checked;
+    marca.checked = enviado || !!marcar;
+    var marcaInicial = marca.checked;
+    var nuevo = false;
     var error = h("div", { class: "aviso mal" });
-    function cambios() {
+    function cambiosDeTexto() {
       var x = {};
-      if (marca.checked !== inicial) x.enviada = marca.checked;
-      if (email.value.trim() !== (c.email || "")) x.email = email.value;
-      if (texto.value.trim() !== (c.info_texto || "")) x.texto = texto.value;
+      if (email && email.value.trim() !== (c.email || "")) x.email = email.value;
+      if (texto.value.trim() !== (c[K.texto] || "")) x.texto = texto.value;
       return x;
     }
-    S.envioPendiente = function () { return Object.keys(cambios()).length > 0; };
+    function cambios() {
+      var x = cambiosDeTexto();
+      if (marca.checked !== enviado || nuevo) x.enviada = marca.checked;
+      return x;
+    }
+    S.envioPendiente = function () { return nuevo || marca.checked !== marcaInicial || Object.keys(cambiosDeTexto()).length > 0; };
+    var otro = h("button", { class: "boton claro mini", onclick: function () {
+      nuevo = true;
+      marca.checked = true;
+      anadir(vaciar(aviso), "Al guardar, la fecha pasa a hoy. Se guarda solo el último texto: añade el nuevo debajo si quieres conservar el anterior.");
+      otro.classList.add("oculto");
+      texto.focus();
+    } }, "Es un mensaje nuevo");
+    var aviso = h("div", { class: "peq", style: "margin-top:8px" });
+    var persona = canal === "linkedin" ? personaLinkedin(c) : [c.persona, c.cargo].filter(Boolean).join(" · ");
     anadir(vaciar($("envio-cuerpo")), [
       h("div", { class: "dlg-cab" },
-        h("div", null, h("h2", { style: "margin:0" }, c.empresa), h("div", { class: "suave" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona")),
+        h("div", null, h("h2", { style: "margin:0" }, K.marcar), h("div", { class: "suave" }, [c.empresa, persona].filter(Boolean).join(" · "))),
         h("button", { class: "cerrar", "aria-label": "Cerrar", onclick: function () { cerrarEnvio(); } }, "×")),
-      h("label", null, "Correo de la persona"), email,
-      h("label", null, "Correo que le has enviado"), texto,
-      h("label", { class: "casilla" }, marca, "Ya se la he enviado"),
+      email ? [h("label", null, "Correo de la persona"), email] : null,
+      h("label", null, K.rotulo), texto,
+      h("label", { class: "casilla" }, marca, enviado ? "Enviado " + relativo(c[K.fecha]) : K.casilla),
+      enviado ? h("div", { class: "fila", style: "margin-top:8px" }, otro) : null,
+      aviso,
       error,
       h("div", { class: "fila mt" },
         h("button", { class: "boton", onclick: function (ev) {
@@ -829,7 +892,7 @@
           if (!Object.keys(x).length) { cerrarEnvio(true); return; }
           boton.disabled = true;
           error.textContent = "";
-          api(Object.assign({ accion: "info_enviada", id: c.id }, x)).then(function () {
+          api(Object.assign({ accion: K.accion, id: c.id }, x)).then(function () {
             cerrarEnvio(true);
             toast("Guardado.");
             return recargar().then(function () {
@@ -850,16 +913,25 @@
   $("envio").addEventListener("cancel", function (ev) { ev.preventDefault(); cerrarEnvio(); });
 
   function envioEnFicha(c, alCambiar) {
-    var estado = h("div", { class: "peq suave", style: "flex:1 1 200px" });
-    function pintarEstado(x) {
-      estado.textContent = (infoEnviada(x) ? "Enviada " + relativo(x.info_enviada_en) : infoPendiente(x) ? "Por enviar" : "Sin envíos") + (x.info_texto ? " · correo guardado" : "");
-      if (alCambiar) alCambiar(x);
+    function fila(canal) {
+      var K = CANALES[canal];
+      var estado = h("div", { class: "peq", style: "flex:1 1 200px" });
+      var boton = h("button", { class: "boton claro mini", onclick: function () {
+        var actual = S.d.contactos.find(function (y) { return y.id === c.id; }) || c;
+        abrirEnvio(actual, canal, pintarEstado, !enviadoPor(actual, canal));
+      } });
+      function pintarEstado(x) {
+        var situacion = enviadoPor(x, canal) ? "Enviado " + relativo(x[K.fecha])
+          : canal === "correo" && infoPendiente(x) ? "Lo pidió, por enviar"
+          : canal === "linkedin" && linkedinPendiente(x) ? "Sois contactos, sin mensaje" : "Sin enviar";
+        estado.textContent = K.titulo + ": " + situacion + (x[K.texto] ? " · texto guardado" : "");
+        boton.textContent = enviadoPor(x, canal) ? "Ver o cambiar" : K.marcar;
+        if (alCambiar) alCambiar(x);
+      }
+      pintarEstado(c);
+      return h("div", { class: "fila", style: "margin-top:6px" }, estado, boton);
     }
-    pintarEstado(c);
-    return h("div", null, h("h3", null, "Información por correo"),
-      h("div", { class: "fila" }, estado, h("button", { class: "boton claro mini", onclick: function () {
-        abrirEnvio(S.d.contactos.find(function (y) { return y.id === c.id; }) || c, pintarEstado);
-      } }, "Marcar o pegar el correo")));
+    return h("div", null, h("h3", null, "Envíos"), fila("correo"), fila("linkedin"));
   }
 
   // ---------- Personas que llaman ----------
@@ -974,7 +1046,7 @@
     }).catch(function (e) { aviso.className = "aviso mal"; aviso.textContent = e.message; });
   });
   $("csv-descargar").addEventListener("click", function () {
-    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "linkedin_empresa", "linkedin_contacto", "linkedin_cargo", "linkedin_estado", "ciudad", "origen", "certificadora", "vence_9001", "vence_14001", "vence_45001", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
+    var cols = ["empresa", "persona", "cargo", "telefono", "email", "web", "linkedin_empresa", "linkedin_contacto", "linkedin_cargo", "linkedin_estado", "linkedin_enviado_en", "ciudad", "origen", "certificadora", "vence_9001", "vence_14001", "vence_45001", "resultado", "intentos", "ultima_llamada", "volver_en", "notas"];
     // Lo que empieza por = + - @ lo ejecutaría Excel como fórmula: algunos datos llegan de formularios públicos.
     var celda = function (v) {
       v = v === null || v === undefined ? "" : String(v);

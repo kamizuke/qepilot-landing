@@ -452,3 +452,8 @@ revoke all on function public.agenda_clave_bloqueada(text) from public, anon, au
 revoke all on function public.agenda_clave_fallo(text, int, int, int) from public, anon, authenticated;
 grant execute on function public.agenda_clave_bloqueada(text) to service_role;
 grant execute on function public.agenda_clave_fallo(text, int, int, int) to service_role;
+
+-- 21) (5 nov) Mensaje enviado por LinkedIn: cuándo y el texto, pegado a mano.
+--     Como en el correo, se guarda solo el último.
+alter table public.seg_contacto add column if not exists linkedin_enviado_en timestamptz;
+alter table public.seg_contacto add column if not exists linkedin_texto text;

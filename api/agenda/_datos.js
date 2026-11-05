@@ -107,7 +107,7 @@ export function crearDatos(env) {
       return (
         (await rest(
           env,
-          "seg_contacto?select=id,empresa,persona,cargo,telefono,email,web,ciudad,origen,notas,resultado,intentos,ultima_llamada,volver_en,no_llamar,cita_id,creado_en,setter_id,caliente_desde,info_enviada_en,info_texto,certificadora,vence_9001,vence_14001,vence_45001,linkedin_empresa,linkedin_contacto,linkedin_cargo,linkedin_estado&order=creado_en.asc&limit=5000"
+          "seg_contacto?select=id,empresa,persona,cargo,telefono,email,web,ciudad,origen,notas,resultado,intentos,ultima_llamada,volver_en,no_llamar,cita_id,creado_en,setter_id,caliente_desde,info_enviada_en,info_texto,certificadora,vence_9001,vence_14001,vence_45001,linkedin_empresa,linkedin_contacto,linkedin_cargo,linkedin_estado,linkedin_enviado_en,linkedin_texto&order=creado_en.asc&limit=5000"
         )) || []
       );
     },

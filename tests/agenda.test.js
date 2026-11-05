@@ -584,3 +584,27 @@ test("/llamadas no admite scripts en línea ni que otra web la incruste", () => 
   assert.equal(/<script(?![^>]*\bsrc=)/.test(html), false);
   assert.equal(/\son[a-z]+="/.test(html), false);
 });
+
+test("Lissette marca el mensaje de LinkedIn y pega el texto; la setter ve la fecha pero no el texto", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nMetal SL,986111222\n" });
+  const c = t.datos._db.contactos[0];
+  assert.equal((await t.setter({ accion: "linkedin_enviado", id: c.id, enviada: true })).statusCode, 403);
+  assert.equal((await t.admin({ accion: "linkedin_enviado", id: "no-es-un-id", enviada: true })).statusCode, 400);
+  assert.equal((await t.admin({ accion: "linkedin_enviado", id: c.id })).statusCode, 400);
+  assert.equal((await t.admin({ accion: "linkedin_enviado", id: c.id, enviada: true, texto: "  Hola, Ana:\n\nTe escribo…  " })).statusCode, 200);
+  const fila = t.datos._db.contactos[0];
+  assert.equal(fila.linkedin_enviado_en, new Date("2026-11-01T19:00:00Z").toISOString());
+  assert.equal(fila.linkedin_texto, "Hola, Ana:\n\nTe escribo…");
+  assert.equal(fila.intentos, 0, "un mensaje no cuenta como llamada");
+  assert.equal(fila.info_enviada_en, null, "el correo sigue sin enviar: son canales aparte");
+  assert.equal(fila.resultado, null, "no hace falta que lo pidan por teléfono");
+  assert.equal((await t.admin({ accion: "estado" })).body.contactos[0].linkedin_texto, "Hola, Ana:\n\nTe escribo…");
+  const paraSetter = (await t.setter({ accion: "estado" })).body.contactos[0];
+  assert.equal(paraSetter.linkedin_enviado_en, fila.linkedin_enviado_en);
+  assert.ok(!("linkedin_texto" in paraSetter));
+  // Quitar la marca deja el texto guardado.
+  await t.admin({ accion: "linkedin_enviado", id: c.id, enviada: false });
+  assert.equal(t.datos._db.contactos[0].linkedin_enviado_en, null);
+  assert.equal(t.datos._db.contactos[0].linkedin_texto, "Hola, Ana:\n\nTe escribo…");
+});

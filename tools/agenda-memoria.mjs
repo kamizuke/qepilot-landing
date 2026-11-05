@@ -99,7 +99,7 @@ export function crearDatosMemoria(semilla = {}) {
           notas: null, resultado: null, intentos: 0, ultima_llamada: null, volver_en: null, no_llamar: false,
           cita_id: null, creado_en: ahoraIso(), setter_id: null, caliente_desde: null, info_enviada_en: null, info_texto: null,
           certificadora: null, vence_9001: null, vence_14001: null, vence_45001: null,
-          linkedin_empresa: null, linkedin_contacto: null, linkedin_cargo: null, linkedin_estado: null, ...f,
+          linkedin_empresa: null, linkedin_contacto: null, linkedin_cargo: null, linkedin_estado: null, linkedin_enviado_en: null, linkedin_texto: null, ...f,
         });
       }
     },

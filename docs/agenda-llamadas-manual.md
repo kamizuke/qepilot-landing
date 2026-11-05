@@ -24,7 +24,7 @@ Ninguna de las dos sale en Google (van marcadas como «no indexar»).
 | Corregir datos de un contacto y añadir notas | Sí | Sí |
 | Ver el resumen (llamadas, demos, resultados) | Sí | Sí |
 | Cargar contactos (CSV de Apollo) y descargar la lista | — | Sí |
-| Marcar la información enviada y pegar el correo (pestaña Envíos) | — | Sí |
+| Marcar lo enviado por correo o LinkedIn y pegar el texto (pestaña Envíos) | — | Sí |
 | Editar el guion | — | Sí |
 | Borrar un contacto | — | Sí |
 | Cancelar una demo | — | Sí |
@@ -59,7 +59,8 @@ el aviso. La pestaña **Envíos** (solo la ves tú) lista quién la espera; el
 número entre paréntesis es lo pendiente:
 
 - **Marca la casilla** cuando la hayas enviado: pasa a «Enviados» con la fecha.
-  Marcarla no suma llamadas. Si te equivocas, quítala y vuelve a «Por enviar».
+  Marcarla no suma llamadas. Si te equivocas, abre el envío, quita la marca y
+  vuelve a «Por enviar».
 - **De un vistazo:** en Contactos, en Llamar y en la ficha verás la etiqueta
   verde «✓ Info enviada» con la fecha, o la naranja «Info por enviar». Solo las
   ves tú.
@@ -68,8 +69,8 @@ número entre paréntesis es lo pendiente:
 - Si vuelve a pedirla después del envío, regresa a «Por enviar». Si el contacto
   pasa a un resultado cerrado (demo, no interesa, no llamar…) sale de la lista
   de pendientes.
-- En la ficha de cualquier contacto, «Marcar o pegar el correo» sirve también
-  para un envío que no vino de una llamada.
+- En la ficha de cualquier contacto, el botón «Correo enviado» del bloque
+  **Envíos** sirve también para un envío que no vino de una llamada.
 
 ## Editar el guion
 
@@ -128,6 +129,20 @@ La ficha enlaza a la **página de la empresa** o, si aún no está, a su búsque
 LinkedIn. La página se apunta en «Corregir datos».
 La página solo admite direcciones `linkedin.com/company/…`. La setter lo ve todo,
 pero no lo cambia. Evidran no entra en LinkedIn: todo esto se apunta a mano.
+
+### Mensajes por LinkedIn
+
+En la ficha, bloque **Envíos**, pulsa **Mensaje enviado por LinkedIn**, pega el texto
+si quieres y guarda. No hace falta que nadie lo pida por teléfono y no suma llamadas.
+
+- En la pestaña **Envíos**, «Por LinkedIn» lista quienes ya sois contactos y aún no
+  tienen mensaje; «Enviados» junta correo y LinkedIn, una fila por empresa.
+- Sale como etiqueta verde en Llamar y en Contactos, donde el filtro «Resultado» tiene
+  «LinkedIn: mensaje enviado».
+- Si le escribes otra vez, abre el envío y pulsa **Es un mensaje nuevo**: la fecha pasa
+  a hoy. Se guarda solo el último texto, así que añade el nuevo debajo si quieres
+  conservar el anterior.
+- La setter ve la fecha, para saber que ya se le ha escrito, pero no el texto.
 
 ## Cómo funciona
 
