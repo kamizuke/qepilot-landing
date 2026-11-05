@@ -36,6 +36,10 @@
   .boton.claro { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
   .boton.peligro { background: #fff; color: #B42318; border: 1.5px solid var(--line); }
   .boton.mini { font-size: 13px; padding: 6px 12px; border-radius: 10px; }
+  .boton.mini.copiar { font-size: 12px; padding: 2px 8px; border-radius: 8px; vertical-align: 1px; }
+  .celda-correo { cursor: text; }
+  .celda-correo .correo { white-space: nowrap; }
+  .celda-correo .copiar { cursor: pointer; }
   .boton:disabled { opacity: .55; cursor: default; }
   .fila { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   .fila.mt { margin-top: 14px; }
@@ -361,11 +365,12 @@
       <div class="tarjeta bloque">
         <h2>Todos los contactos</h2>
         <div class="rejilla2">
-          <div><label for="buscar">Buscar</label><input id="buscar" type="search" placeholder="Empresa, persona o teléfono" /></div>
+          <div><label for="buscar">Buscar</label><input id="buscar" type="search" placeholder="Empresa, persona, teléfono o correo" /></div>
           <div><label for="filtro">Resultado</label><select id="filtro"></select></div>
           <div class="solo-admin"><label for="filtro-persona">Quién llama</label><select id="filtro-persona"></select></div>
         </div>
-        <div class="tabla-scroll bloque"><table><thead><tr><th>Empresa</th><th>Persona</th><th>Teléfono</th><th>Resultado</th><th>Intentos</th><th class="solo-admin">Quién llama</th></tr></thead><tbody id="tabla-contactos"></tbody></table></div>
+        <div class="fila mt solo-admin"><button class="boton claro mini" id="copiar-correos" type="button">Copiar los correos de esta lista</button></div>
+        <div class="tabla-scroll bloque"><table><thead><tr><th>Empresa</th><th>Persona</th><th>Teléfono</th><th>Correo</th><th>Resultado</th><th>Intentos</th><th class="solo-admin">Quién llama</th></tr></thead><tbody id="tabla-contactos"></tbody></table></div>
       </div>
       <div class="tarjeta bloque solo-admin">
         <h2>Cargar contactos</h2>

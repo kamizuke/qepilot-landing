@@ -23,7 +23,9 @@ Ninguna de las dos sale en Google (van marcadas como «no indexar»).
 | Corregir los datos de una demo y reenviar la invitación | Sí | Sí |
 | Corregir datos de un contacto y añadir notas | Sí | Sí |
 | Ver el resumen (llamadas, demos, resultados) | Sí | Sí |
+| Copiar el correo de un contacto | Sí | Sí |
 | Cargar contactos (CSV de Apollo) y descargar la lista | — | Sí |
+| Copiar todos los correos de una lista filtrada | — | Sí |
 | Marcar lo enviado por correo o LinkedIn y pegar el texto (pestaña Envíos) | — | Sí |
 | Editar el guion | — | Sí |
 | Borrar un contacto | — | Sí |
@@ -71,6 +73,17 @@ número entre paréntesis es lo pendiente:
   de pendientes.
 - En la ficha de cualquier contacto, el botón «Correo enviado» del bloque
   **Envíos** sirve también para un envío que no vino de una llamada.
+
+### Copiar correos
+
+- **Uno:** el botón «Copiar» junto al correo, en la ficha, en la columna Correo
+  de Contactos, en Envíos y en las demos. También se puede seleccionar a mano;
+  en Contactos, pinchar sobre el correo no abre la ficha.
+- **Varios (solo tú):** en Contactos, filtra o busca y pulsa «Copiar los correos
+  de esta lista». Copia los de la lista que ves, sin repetidos y separados por
+  punto y coma, que es como los acepta el campo de destinatarios del correo. Si
+  van a varias empresas, pégalos en CCO: en «Para» cada una vería a las demás.
+- El buscador de Contactos también busca por correo.
 
 ## Editar el guion
 

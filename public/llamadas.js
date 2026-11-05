@@ -54,6 +54,49 @@
     tToast = setTimeout(function () { t.classList.add("oculto"); }, 3500);
   }
 
+  // Copia al portapapeles. Si el navegador no lo permite, lo intenta por la vía antigua;
+  // con una ficha abierta el resto de la página no admite selección, por eso va dentro de ella.
+  function copiar(texto, alTerminar) {
+    function viaAntigua() {
+      var foco = document.activeElement;
+      var t = h("textarea", { readonly: true, style: "position:fixed;top:0;opacity:0" });
+      t.value = texto;
+      (document.querySelector("dialog[open]") || document.body).appendChild(t);
+      t.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      t.remove();
+      if (foco && foco.focus) foco.focus();
+      alTerminar(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(function () { alTerminar(true); }, viaAntigua);
+    } else viaAntigua();
+  }
+  // El aviso va en el propio botón: el toast queda detrás de una ficha abierta.
+  function botonCopiar(email) {
+    var espera;
+    return h("button", { type: "button", class: "boton claro mini copiar", "aria-label": "Copiar el correo " + email, onclick: function (ev) {
+      var b = ev.currentTarget;
+      ev.stopPropagation();
+      copiar(email, function (ok) {
+        b.textContent = ok ? "Copiado ✓" : "No se pudo";
+        clearTimeout(espera);
+        espera = setTimeout(function () { b.textContent = "Copiar"; }, 1800);
+      });
+    } }, "Copiar");
+  }
+  // Sin vacíos ni repetidos, aunque cambien las mayúsculas.
+  function correosDe(lista) {
+    var vistos = {};
+    return lista.map(function (c) { return (c.email || "").trim(); }).filter(function (e) {
+      var k = e.toLowerCase();
+      if (!e || vistos[k]) return false;
+      vistos[k] = true;
+      return true;
+    });
+  }
+
   function api(cuerpo) {
     return fetch("/api/agenda/trabajo", {
       method: "POST",
@@ -283,7 +326,8 @@
         etiquetaResultado(c),
         marcaEnvio),
       h("div", { class: "peq suave", style: "margin-top:6px" },
-        [c.ciudad, c.email].filter(Boolean).join(" · "),
+        c.ciudad || null,
+        c.email ? [c.ciudad ? " · " : null, c.email, " ", botonCopiar(c.email)] : null,
         web ? h("span", null, (c.ciudad || c.email ? " · " : ""), h("a", { href: web, target: "_blank", rel: "noopener" }, c.web)) : null),
       c.origen ? h("div", { class: "peq", style: "margin-top:6px" }, "Por qué encaja: ", c.origen) : null,
       lineaCertificacion(c),
@@ -727,17 +771,22 @@
       if (f === "li_mensaje" && !c.linkedin_enviado_en) return false;
       if (f && f.indexOf("li_") !== 0 && f !== "pendiente" && f !== "sin" && f !== "vence_pronto" && (f === "no_llamar" ? !c.no_llamar : c.resultado !== f)) return false;
       if (!q) return true;
-      return [c.empresa, c.persona, c.telefono, c.ciudad, c.linkedin_contacto, c.linkedin_cargo].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
+      return [c.empresa, c.persona, c.telefono, c.email, c.ciudad, c.linkedin_contacto, c.linkedin_cargo].filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
     });
     if (f === "vence_pronto") lista.sort(function (a, b) { return vencimientosProximos(a)[0].fecha < vencimientosProximos(b)[0].fecha ? -1 : 1; });
+    S.correosLista = correosDe(lista);
+    $("copiar-correos").textContent = "Copiar los correos de esta lista (" + S.correosLista.length + ")";
+    $("copiar-correos").disabled = !S.correosLista.length;
     var tb = vaciar($("tabla-contactos"));
-    if (!lista.length) { tb.appendChild(h("tr", null, h("td", { colspan: "6", class: "vacio" }, "Ningún contacto con ese filtro."))); return; }
+    if (!lista.length) { tb.appendChild(h("tr", null, h("td", { colspan: "7", class: "vacio" }, "Ningún contacto con ese filtro."))); return; }
     lista.forEach(function (c) {
       tb.appendChild(h("tr", { class: "clic", onclick: function () { abrirFicha(c.id); } },
         h("td", null, h("strong", null, c.empresa), c.ciudad ? h("div", { class: "peq suave" }, c.ciudad) : null,
           f === "vence_pronto" ? h("div", { class: "peq" }, vencimientosProximos(c).map(function (v) { return v.norma + " vence el " + fechaDia(v.fecha); }).join(" · ")) : null),
         h("td", null, c.persona || "—", c.cargo ? h("div", { class: "peq suave" }, c.cargo) : null),
         h("td", null, c.telefono || "—"),
+        // Pinchar en el correo no abre la ficha, para poder seleccionarlo a mano.
+        c.email ? h("td", { class: "celda-correo", onclick: function (ev) { ev.stopPropagation(); } }, h("span", { class: "correo" }, c.email), " ", botonCopiar(c.email)) : h("td", null, "—"),
         h("td", null, h("div", { class: "etiquetas" }, etiquetaResultado(c), etiquetaEnvio(c), etiquetaLinkedin(c), etiquetaMensaje(c))),
         h("td", null, String(c.intentos)),
         S.rol === "admin" ? h("td", null, c.setter_id ? nombrePersona(c.setter_id) : h("span", { class: "suave" }, "Sin asignar")) : null));
@@ -803,7 +852,7 @@
         h("div", { class: "quien" }, c.empresa),
         canal === "correo"
           ? [h("div", { class: "det" }, [c.persona, c.cargo].filter(Boolean).join(" · ") || "Sin persona"),
-            h("div", { class: "det" }, c.email ? h("a", { href: "mailto:" + c.email }, c.email) : h("span", { class: "etiqueta fuera" }, "Falta el correo")),
+            h("div", { class: "det" }, c.email ? [h("a", { href: "mailto:" + c.email }, c.email), " ", botonCopiar(c.email)] : h("span", { class: "etiqueta fuera" }, "Falta el correo")),
             l ? h("div", { class: "det" }, "Lo pidió " + relativo(l.hechaEn) + " · anotó " + l.quien) : null,
             l && l.nota ? h("div", { class: "nota-envio" }, l.nota) : null,
             c.info_enviada_en ? h("div", { class: "det" }, "Último envío " + relativo(c.info_enviada_en)) : null]
@@ -819,7 +868,8 @@
       h("div", { class: "texto" },
         h("div", { class: "quien" }, c.empresa),
         h("div", { class: "det" }, h("div", { class: "etiquetas" }, enviadoPor(c, "correo") ? etiquetaEnvio(c) : null, etiquetaMensaje(c))),
-        h("div", { class: "det" }, (canales.length === 1 && canales[0] === "linkedin" && personaLinkedin(c)) || [c.persona, c.cargo].filter(Boolean).join(" · ") || personaLinkedin(c) || "Sin persona")),
+        h("div", { class: "det" }, (canales.length === 1 && canales[0] === "linkedin" && personaLinkedin(c)) || [c.persona, c.cargo].filter(Boolean).join(" · ") || personaLinkedin(c) || "Sin persona"),
+        c.email ? h("div", { class: "det" }, c.email, " ", botonCopiar(c.email)) : null),
       h("div", { class: "fila acciones" }, canales.map(function (k) { return botonTexto(c, k); }), botonFicha(c)));
   }
 
@@ -1023,6 +1073,12 @@
   });
   $("buscar").addEventListener("input", function () { if (S.d) pintarContactos(); });
   $("filtro").addEventListener("change", function () { if (S.d) pintarContactos(); });
+  $("copiar-correos").addEventListener("click", function () {
+    var correos = S.correosLista || [];
+    copiar(correos.join("; "), function (ok) {
+      toast(ok ? (correos.length === 1 ? "1 correo copiado." : correos.length + " correos copiados, separados por punto y coma.") : "No se pudieron copiar los correos.");
+    });
+  });
 
   $("csv-fichero").addEventListener("change", function (ev) {
     var f = ev.target.files[0];
@@ -1069,7 +1125,7 @@
         h("div", { class: "cuando" }, cuando(c.inicio)),
         c.estado === "cancelada" ? h("span", { class: "etiqueta fuera" }, "Cancelada" + (c.cancelada_por ? " por " + c.cancelada_por : "")) : null),
       h("div", null, h("strong", null, c.empresa || "Sin empresa"), " · ", c.nombre),
-      h("div", { class: "peq suave" }, [c.email, c.telefono, "reservada por " + origen].filter(Boolean).join(" · ")),
+      h("div", { class: "peq suave" }, c.email ? [c.email, " ", botonCopiar(c.email), " · "] : null, [c.telefono, "reservada por " + origen].filter(Boolean).join(" · ")),
       c.notas ? h("div", { class: "notas" }, c.notas) : null,
       proxima ? h("div", { class: "fila mt" },
         h("button", { class: "boton claro mini", onclick: function () { abrirEditarCita(c); } }, "Corregir datos"),
