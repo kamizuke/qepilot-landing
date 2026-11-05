@@ -27,6 +27,7 @@ export function crearDatosMemoria(semilla = {}) {
     setters: [],
     citas: [],
     llamadas: [],
+    frenos: {},
   };
   const id = () => crypto.randomUUID();
   const ahoraIso = () => new Date().toISOString();
@@ -110,6 +111,14 @@ export function crearDatosMemoria(semilla = {}) {
     async contactoPorId(cid) { const c = db.contactos.find((x) => x.id === cid); return c ? copia(c) : null; },
     async asignarContactos(ids, setterId) { for (const c of db.contactos) if (ids.includes(c.id)) c.setter_id = setterId; },
     async listarSetters() { return copia(db.setters.map(({ clave_hash, ...x }) => ({ ...x, reservado: clave_hash === "admin:reservado" }))); },
+    async claveBloqueada(ip) { const f = db.frenos[ip]; return !!f && f.hasta > Date.now(); },
+    async registrarFalloClave(ip, max, ventanaMin, bloqueoMin) {
+      const f = (db.frenos[ip] ||= { fallos: 0, desde: Date.now(), hasta: 0 });
+      if (f.desde < Date.now() - ventanaMin * 60000) { f.fallos = 0; f.desde = Date.now(); }
+      if (++f.fallos < max) return false;
+      Object.assign(f, { hasta: Date.now() + bloqueoMin * 60000, fallos: 0, desde: Date.now() });
+      return true;
+    },
     async setterPorHash(h) { const x = db.setters.find((s) => s.clave_hash === h); return x ? { id: x.id, nombre: x.nombre, activo: x.activo } : null; },
     async crearSetter(f) { const x = { id: id(), activo: true, creado_en: ahoraIso(), ...f }; db.setters.push(x); return { id: x.id, nombre: x.nombre }; },
     async editarSetter(sid, campos) { Object.assign(db.setters.find((x) => x.id === sid) || {}, campos); },

@@ -2,6 +2,7 @@
 // Ejecutar: npm test
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import {
   madridAUtc,
   partesMadrid,
@@ -504,4 +505,82 @@ test("repetir el mismo resultado poco después corrige la anotación en vez de s
   await t.admin({ accion: "llamada", contactoId: c.id, resultado: "no_contesta" });
   assert.equal(t.datos._db.llamadas.length, 3);
   assert.equal(t.datos._db.contactos[0].intentos, 3);
+});
+
+function frenoDePrueba({ datos = crearDatosMemoria() } = {}) {
+  const enviados = [];
+  const reloj = { ms: Date.parse("2026-11-05T10:00:00Z") };
+  const handler = crearTrabajo({
+    datos,
+    correo: { remitente: "app@evidran.com", async enviar(m) { enviados.push(m); } },
+    ahora: () => new Date(reloj.ms),
+    ajustes: () => ({ claveAdmin: "clave-admin", claveSetter: "", secreto: "pruebas", avisos: "demo@evidran.com", base: "https://evidran.com" }),
+  });
+  const entrar = async (clave, ip = "203.0.113.7") => {
+    const res = respuesta();
+    await handler({ method: "POST", headers: { "x-clave": clave, "x-forwarded-for": ip }, body: { accion: "entrar" } }, res);
+    return res;
+  };
+  return { entrar, enviados, reloj, datos };
+}
+
+test("tras 10 fallos, esa IP no entra ni acertando la clave y Lissette recibe un solo aviso", async () => {
+  const t = frenoDePrueba();
+  for (let i = 0; i < 10; i++) assert.equal((await t.entrar(`clave-mala-numero-${i}`)).statusCode, 401);
+  assert.equal((await t.entrar("clave-admin")).statusCode, 429);
+  assert.equal((await t.entrar("clave-mala-otra-vez")).statusCode, 429);
+  assert.equal(t.enviados.length, 1);
+  assert.equal(t.enviados[0].para, "demo@evidran.com");
+  assert.equal((await t.entrar("clave-admin", "203.0.113.8")).statusCode, 200, "otra IP sigue entrando");
+});
+
+test("el bloqueo termina: pasado el tiempo, la clave correcta vuelve a entrar", async () => {
+  const t = frenoDePrueba();
+  for (let i = 0; i < 10; i++) await t.entrar(`clave-mala-numero-${i}`);
+  t.reloj.ms += 31 * 60000;
+  for (const f of Object.values(t.datos._db.frenos)) f.hasta = 0;
+  assert.equal((await t.entrar("clave-admin")).statusCode, 200);
+});
+
+test("el bloqueo vale entre instancias: otra instancia lo lee de la base", async () => {
+  const datos = crearDatosMemoria();
+  const a = frenoDePrueba({ datos });
+  const b = frenoDePrueba({ datos });
+  for (let i = 0; i < 10; i++) await a.entrar(`clave-mala-numero-${i}`);
+  assert.equal((await b.entrar("clave-admin")).statusCode, 429);
+});
+
+test("si el freno de la base falla, se sigue entrando y la memoria sigue frenando", async () => {
+  const datos = crearDatosMemoria();
+  datos.claveBloqueada = async () => { throw new Error("sin tabla"); };
+  datos.registrarFalloClave = async () => { throw new Error("sin tabla"); };
+  const error = console.error;
+  console.error = () => {};
+  try {
+    const t = frenoDePrueba({ datos });
+    assert.equal((await t.entrar("clave-admin")).statusCode, 200);
+    for (let i = 0; i < 10; i++) await t.entrar(`clave-mala-numero-${i}`);
+    assert.equal((await t.entrar("clave-admin")).statusCode, 429);
+  } finally {
+    console.error = error;
+  }
+});
+
+test("la página avisa si la clave de administración es corta", async () => {
+  const t = frenoDePrueba();
+  assert.equal((await t.entrar("clave-admin")).body.claveCorta, true);
+});
+
+test("/llamadas no admite scripts en línea ni que otra web la incruste", () => {
+  const vercel = JSON.parse(fs.readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
+  for (const ruta of ["/llamadas", "/llamadas.html"]) {
+    const cab = Object.fromEntries(vercel.headers.find((h) => h.source === ruta).headers.map((h) => [h.key, h.value]));
+    const csp = cab["Content-Security-Policy"];
+    assert.match(csp, /script-src 'self'(;|$)/);
+    assert.match(csp, /frame-ancestors 'none'/);
+    assert.equal(cab["X-Frame-Options"], "DENY");
+  }
+  const html = fs.readFileSync(new URL("../public/llamadas.html", import.meta.url), "utf8");
+  assert.equal(/<script(?![^>]*\bsrc=)/.test(html), false);
+  assert.equal(/\son[a-z]+="/.test(html), false);
 });

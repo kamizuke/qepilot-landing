@@ -255,3 +255,16 @@ Pruebas automáticas: `npm test`.
 | Pruebas | `tests/agenda.test.js` |
 | Servidor local y datos de ejemplo | `tools/agenda-local.mjs`, `tools/agenda-memoria.mjs` |
 | Rutas y no-indexar | `vercel.json` |
+
+## Seguridad
+
+- **Quién entra:** solo con clave. 10 fallos en 10 minutos bloquean esa IP 30
+  minutos, aunque después acierte, y llega un aviso a `AGENDA_AVISOS_EMAIL`.
+  Para desbloquear a mano, en Supabase: `delete from public.agenda_freno_clave;`
+- **La clave de administración** debe tener 20 caracteres o más, generada con
+  un gestor de contraseñas. Si es más corta, la página lo avisa al entrar.
+- **La base de datos** no es accesible con la clave pública de Supabase: todo
+  pasa por `/api/agenda/*`, en el servidor.
+- **La página** tiene su script en `/llamadas.js` y una política de seguridad
+  en `vercel.json`: no añadas `<script>` en línea ni recursos de otros
+  dominios sin actualizarla.

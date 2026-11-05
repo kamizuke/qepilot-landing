@@ -412,3 +412,43 @@ alter table public.seg_contacto add column if not exists linkedin_estado text
 -- 19) (3 nov) LinkedIn: el cargo de la persona, aparte de su nombre
 --     (linkedin_contacto), que no es la persona a la que se llama.
 alter table public.seg_contacto add column if not exists linkedin_cargo text;
+
+-- 20) (5 nov) Freno a quien prueba claves: compartido entre todas las instancias
+--     de Vercel y con la IP guardada solo como huella. Para desbloquear a mano:
+--     delete from public.agenda_freno_clave;
+create table if not exists public.agenda_freno_clave (
+  ip_huella text primary key,
+  fallos int not null default 0,
+  desde timestamptz not null default now(),
+  bloqueada_hasta timestamptz
+);
+alter table public.agenda_freno_clave enable row level security;
+revoke all on table public.agenda_freno_clave from public, anon, authenticated;
+
+create or replace function public.agenda_clave_bloqueada(p_ip text)
+returns boolean language sql stable set search_path = public as $$
+  select exists (select 1 from public.agenda_freno_clave where ip_huella = p_ip and bloqueada_hasta > now());
+$$;
+
+-- Devuelve true solo en el fallo que provoca el bloqueo (para avisar una vez).
+create or replace function public.agenda_clave_fallo(p_ip text, p_max int, p_ventana_min int, p_bloqueo_min int)
+returns boolean language plpgsql set search_path = public as $$
+declare v_fallos int;
+begin
+  delete from public.agenda_freno_clave where coalesce(bloqueada_hasta, desde) < now() - interval '1 day';
+  insert into public.agenda_freno_clave as f (ip_huella, fallos) values (p_ip, 1)
+  on conflict (ip_huella) do update set
+    fallos = case when f.desde < now() - make_interval(mins => p_ventana_min) then 1 else f.fallos + 1 end,
+    desde = case when f.desde < now() - make_interval(mins => p_ventana_min) then now() else f.desde end
+  returning fallos into v_fallos;
+  if v_fallos < p_max then return false; end if;
+  update public.agenda_freno_clave
+     set bloqueada_hasta = now() + make_interval(mins => p_bloqueo_min), fallos = 0, desde = now()
+   where ip_huella = p_ip;
+  return true;
+end $$;
+
+revoke all on function public.agenda_clave_bloqueada(text) from public, anon, authenticated;
+revoke all on function public.agenda_clave_fallo(text, int, int, int) from public, anon, authenticated;
+grant execute on function public.agenda_clave_bloqueada(text) to service_role;
+grant execute on function public.agenda_clave_fallo(text, int, int, int) to service_role;

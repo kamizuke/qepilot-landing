@@ -159,6 +159,12 @@ export function crearDatos(env) {
       const filas = (await rest(env, "seg_setter?select=id,nombre,activo,creado_en,clave_hash&order=creado_en.asc")) || [];
       return filas.map(({ clave_hash, ...x }) => ({ ...x, reservado: clave_hash === RESERVA }));
     },
+    async claveBloqueada(ipHuella) {
+      return (await rpc(env, "agenda_clave_bloqueada", { p_ip: ipHuella })) === true;
+    },
+    async registrarFalloClave(ipHuella, max, ventanaMin, bloqueoMin) {
+      return (await rpc(env, "agenda_clave_fallo", { p_ip: ipHuella, p_max: max, p_ventana_min: ventanaMin, p_bloqueo_min: bloqueoMin })) === true;
+    },
     async setterPorHash(hash) {
       const filas = await rest(env, `seg_setter?clave_hash=eq.${hash}&select=id,nombre,activo`);
       return filas?.[0] || null;

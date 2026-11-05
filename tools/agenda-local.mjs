@@ -35,6 +35,7 @@ const trabajo = crearTrabajo(deps);
 const cita = crearCitaPublica(deps);
 const calculadora = crearCalculadora({ ...deps, datos: crearDatosHuellaMemoria(datos._db), comercializadoras: COMERCIALIZADORAS });
 
+const CABECERAS = JSON.parse(fs.readFileSync(path.join(raiz, "..", "vercel.json"), "utf8")).headers;
 const TIPOS = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon", ".webp": "image/webp" };
 
 function adaptar(res) {
@@ -61,6 +62,8 @@ http.createServer(async (req, res) => {
         "</body>"
     );
   }
+  // Las mismas cabeceras que en producción, para que la política de seguridad se pruebe aquí.
+  for (const regla of CABECERAS) if (regla.source === url.pathname) for (const c of regla.headers) res.setHeader(c.key, c.value);
   const RUTAS = { "/llamadas": "/llamadas.html", "/huella": "/huella.html" };
   let ruta = RUTAS[url.pathname] || (url.pathname.startsWith("/cita/") ? "/cita.html" : url.pathname.startsWith("/huella/informe/") ? "/huella-informe.html" : url.pathname);
   if (ruta === "/") ruta = "/llamadas.html";

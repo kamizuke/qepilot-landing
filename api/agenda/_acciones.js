@@ -134,12 +134,72 @@ async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien,
   return ok;
 }
 
+// Freno a quien prueba claves: 10 fallos en 10 minutos bloquean esa IP 30 minutos.
+// Se guarda en la base para que valga en todas las instancias de Vercel; si la
+// base falla, sigue frenando la memoria de esta instancia en vez de dejar paso.
+const FRENO = { max: 10, ventanaMin: 10, bloqueoMin: 30 };
+
+function crearFreno(deps) {
+  const local = new Map();
+  const huella = (ip) => hashToken(`agenda-ip|${ip}`);
+  const ahora = () => deps.ahora().getTime();
+
+  function falloLocal(ip) {
+    const t = ahora();
+    let r = local.get(ip);
+    if (!r || t - r.desde > FRENO.ventanaMin * 60000) r = { fallos: 0, desde: t, hasta: 0 };
+    r.fallos++;
+    const bloquea = r.fallos >= FRENO.max;
+    if (bloquea) Object.assign(r, { fallos: 0, desde: t, hasta: t + FRENO.bloqueoMin * 60000 });
+    if (local.size > 5000) local.clear();
+    local.set(ip, r);
+    return bloquea;
+  }
+
+  async function avisar(ip) {
+    const { avisos } = deps.ajustes();
+    if (!deps.correo || !avisos) return;
+    try {
+      await deps.correo.enviar({
+        para: avisos,
+        asunto: "Evidran · Intentos de entrar en /llamadas bloqueados",
+        html: `<p>Alguien ha fallado la clave de /llamadas ${FRENO.max} veces seguidas desde la IP ${escaparHtml(ip)}. Esa IP queda bloqueada ${FRENO.bloqueoMin} minutos.</p><p>Si no has sido tú y se repite, cambia la clave en Vercel.</p>`,
+      });
+    } catch (err) {
+      console.error("agenda aviso de bloqueo falló:", err?.code || err?.responseCode || "sin código");
+    }
+  }
+
+  return {
+    async bloqueada(ip) {
+      if ((local.get(ip)?.hasta || 0) > ahora()) return true;
+      try {
+        return await deps.datos.claveBloqueada(huella(ip));
+      } catch (err) {
+        console.error("agenda freno (leer):", err?.message || err);
+        return false;
+      }
+    },
+    async fallo(ip) {
+      const porMemoria = falloLocal(ip);
+      let bloquea = porMemoria;
+      try {
+        bloquea = await deps.datos.registrarFalloClave(huella(ip), FRENO.max, FRENO.ventanaMin, FRENO.bloqueoMin);
+      } catch (err) {
+        console.error("agenda freno (anotar):", err?.message || err);
+      }
+      console.warn("agenda: clave incorrecta", bloquea ? "· IP bloqueada" : "");
+      if (bloquea) await avisar(ip);
+    },
+  };
+}
+
 // ============================================================
 // /api/agenda/trabajo — la página /llamadas (setter y Lissette)
 // ============================================================
 export function crearTrabajo(deps) {
   const limitado = limitador(300, 10 * 60 * 1000);
-  const fallosClave = limitador(10, 10 * 60 * 1000);
+  const freno = crearFreno(deps);
 
   return async function handler(req, res) {
     if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido" });
@@ -154,9 +214,12 @@ export function crearTrabajo(deps) {
     const body = req.body || {};
     const accion = body.accion;
     try {
-      const quien = await identificar(deps, a, String(req.headers["x-clave"] || ""));
+      const dada = String(req.headers["x-clave"] || "");
+      // Antes de mirar la clave: una IP bloqueada no puede acertarla.
+      if (await freno.bloqueada(ip)) return res.status(429).json({ error: "Demasiados intentos. Espera 30 minutos." });
+      const quien = await identificar(deps, a, dada);
       if (!quien) {
-        if (fallosClave(ip)) return res.status(429).json({ error: "Demasiados intentos. Espera unos minutos." });
+        if (dada) await freno.fallo(ip);
         return res.status(401).json({ error: "Clave incorrecta." });
       }
       const rol = quien.rol;
@@ -168,7 +231,7 @@ export function crearTrabajo(deps) {
 
       switch (accion) {
         case "entrar":
-          return res.status(200).json({ rol, nombre: quien.nombre });
+          return res.status(200).json({ rol, nombre: quien.nombre, claveCorta: rol === "admin" && a.claveAdmin.length < 20 });
         case "estado":
           return await estado(deps, quien, res);
         case "huecos": {
