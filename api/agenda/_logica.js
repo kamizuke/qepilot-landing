@@ -456,7 +456,7 @@ export function correoConfirmacion({ cita, enlaceReunion, enlaceGestion }) {
         `Hola, ${escaparHtml(cita.nombre)}:`,
         `Queda confirmada la demo de Evidran el <strong>${escaparHtml(cuando)}</strong> (hora peninsular). Dura ${minutosDe(cita)} minutos.`,
         lineaReunion(enlaceReunion),
-        "En la demo verás cómo se registra una no conformidad contándola con tus palabras, y te dejamos montada la prueba gratis de 30 días, sin tarjeta. Si tienes a mano un caso real reciente, mejor.",
+        "En la demo veremos Evidran centrándonos en lo que más te interese y resolveremos tus dudas. Si te encaja, te dejamos activada la prueba gratis de 30 días, sin tarjeta.",
         `Si necesitas cambiar la hora o no puedes asistir: <a href="${escaparHtml(enlaceGestion)}">cambiar o cancelar la demo</a>.`,
         "Un saludo,<br>El equipo de Evidran<br>evidran.com",
       ],
