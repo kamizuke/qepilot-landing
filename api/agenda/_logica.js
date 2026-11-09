@@ -178,6 +178,12 @@ function plegar(linea) {
   return trozos.join("\r\n ");
 }
 
+function organizadorIcs(organizador, avisos) {
+  const cn = `CN="${organizador.nombre.replace(/"/g, "")}"`;
+  if (!avisos || avisos === organizador.email) return `ORGANIZER;${cn}:mailto:${organizador.email}`;
+  return `ORGANIZER;${cn};SENT-BY="mailto:${organizador.email}":mailto:${avisos}`;
+}
+
 export function crearIcs({ cita, metodo, organizador, avisos, enlaceReunion, ahora = new Date() }) {
   const cancelada = metodo === "CANCEL";
   const descripcion = [
@@ -199,12 +205,15 @@ export function crearIcs({ cita, metodo, organizador, avisos, enlaceReunion, aho
     `SUMMARY:${textoIcs(cita.empresa ? `Demo de Evidran · ${cita.empresa}` : "Demo de Evidran")}`,
     `DESCRIPTION:${textoIcs(descripcion)}`,
     `LOCATION:${textoIcs(enlaceReunion || "Videollamada")}`,
-    `ORGANIZER;CN="${organizador.nombre.replace(/"/g, "")}":mailto:${organizador.email}`,
-    cita.email ? `ATTENDEE;CN="${String(cita.nombre).replace(/"/g, "")}";ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=FALSE:mailto:${cita.email}` : null,
+    // Las respuestas «Sí / No / Quizás» del calendario van al organizador. El
+    // correo sale de app@ (nadie lo lee), así que el organizador es el buzón de
+    // avisos y app@ figura como quien la envía en su nombre (SENT-BY).
+    organizadorIcs(organizador, avisos),
+    // RSVP=TRUE: Gmail y Outlook muestran los botones para responder.
+    cita.email
+      ? `ATTENDEE;CN="${String(cita.nombre).replace(/"/g, "")}";ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=${cancelada ? "FALSE" : "TRUE"}:mailto:${cita.email}`
+      : null,
   ];
-  if (avisos && avisos !== cita.email) {
-    lineas.push(`ATTENDEE;CN="Evidran";ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=FALSE:mailto:${avisos}`);
-  }
   lineas.push(`STATUS:${cancelada ? "CANCELLED" : "CONFIRMED"}`, "TRANSP:OPAQUE", "END:VEVENT", "END:VCALENDAR");
   return lineas.filter(Boolean).map(plegar).join("\r\n") + "\r\n";
 }

@@ -84,6 +84,11 @@ test("crearIcs genera una invitación válida con líneas plegadas", () => {
   assert.match(ics, /SEQUENCE:2\r\n/);
   assert.match(ics, /SUMMARY:Demo de Evidran · Metal\\, S\.L\.\r\n/);
   for (const linea of ics.split("\r\n")) assert.ok(Buffer.byteLength(linea) <= 75, linea);
+  // Las respuestas del calendario llegan al buzón de avisos, enviadas por app@.
+  const desplegada = ics.replace(/\r\n /g, "");
+  assert.match(desplegada, /ORGANIZER;CN="Lissette · Evidran";SENT-BY="mailto:app@evidran\.com":mailto:demo@evidran\.com\r\n/);
+  assert.match(desplegada, /ATTENDEE;CN="Ana Pérez";[^\r]*RSVP=TRUE:mailto:ana@metal\.es\r\n/);
+  assert.doesNotMatch(desplegada, /ATTENDEE[^\r]*mailto:demo@evidran\.com/);
   const cancel = crearIcs({
     cita: { id: "abc", inicio: "2026-11-04T09:00:00Z", fin: "2026-11-04T09:30:00Z", nombre: "Ana", email: "ana@metal.es", secuencia: 3 },
     metodo: "CANCEL",
@@ -91,6 +96,10 @@ test("crearIcs genera una invitación válida con líneas plegadas", () => {
   });
   assert.match(cancel, /METHOD:CANCEL\r\n/);
   assert.match(cancel, /STATUS:CANCELLED\r\n/);
+  // Sin buzón de avisos, organiza app@ como antes; una cancelación no pide respuesta.
+  const cancelPlana = cancel.replace(/\r\n /g, "");
+  assert.match(cancelPlana, /ORGANIZER;CN="Evidran":mailto:app@evidran\.com\r\n/);
+  assert.match(cancelPlana, /RSVP=FALSE:mailto:ana@metal\.es\r\n/);
 });
 
 // --- CSV ---
