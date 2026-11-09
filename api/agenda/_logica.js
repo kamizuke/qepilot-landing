@@ -373,6 +373,43 @@ export function escaparHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+// Versión en texto plano de un correo HTML de la agenda. Los filtros de spam
+// desconfían de los correos que solo traen HTML; los de la app ya la llevan.
+export function textoDeHtml(html) {
+  return String(html ?? "")
+    .replace(/<a\s[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, (_, url, txt) => {
+      const visible = txt.replace(/<[^>]+>/g, "").trim();
+      return !visible || visible === url ? url : `${visible} (${url})`;
+    })
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/td>/gi, " ")
+    .replace(/<\/(tr|li)>/gi, "\n")
+    .replace(/<\/(p|div|h[1-6]|table)>/gi, "\n\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .split("\n")
+    .map((l) => l.replace(/[ \t]+/g, " ").trim())
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+// HTML completo (doctype, idioma y codificación): un fragmento suelto también
+// resta puntos en algunos filtros.
+export function documentoHtml(cuerpo, asunto) {
+  if (/^\s*<!doctype/i.test(cuerpo)) return cuerpo;
+  return (
+    `<!doctype html><html lang="es"><head><meta charset="utf-8">` +
+    `<meta name="viewport" content="width=device-width,initial-scale=1">` +
+    `<title>${escaparHtml(asunto || "Evidran")}</title></head>` +
+    `<body style="margin:0;padding:16px;background:#ffffff">${cuerpo}</body></html>`
+  );
+}
+
 function envolver(parrafos, pie) {
   const cuerpo = parrafos
     .map((p) => `<p style="margin:0 0 14px">${p}</p>`)

@@ -668,3 +668,22 @@ test("la nota se guarda con cualquier resultado", async () => {
   await t.setter({ accion: "llamada", contactoId: c.id, resultado: "no_contesta", nota: "Salta el buzón; probar por la tarde" });
   assert.equal(t.datos._db.llamadas.at(-1).nota, "Salta el buzón; probar por la tarde");
 });
+
+// --- Entregabilidad: texto plano + HTML completo ---
+test("los correos de la agenda salen con texto plano y HTML completo", async () => {
+  const { textoDeHtml } = await import("../api/agenda/_logica.js");
+  const { montarMensaje } = await import("../api/agenda/_correo.js");
+  const { correoConfirmacion } = await import("../api/agenda/_logica.js");
+  const cita = { id: "abc", inicio: "2026-11-10T10:30:00Z", fin: "2026-11-10T11:00:00Z", nombre: "Ana <Pérez>", empresa: "Metal & Co", email: "ana@metal.es" };
+  const c = correoConfirmacion({ cita, enlaceReunion: "https://teams.live.com/meet/1", enlaceGestion: "https://www.evidran.com/cita/tok" });
+  const m = montarMensaje({ remitente: "app@evidran.com", para: cita.email, ...c, ics: "BEGIN:VCALENDAR\r\nEND:VCALENDAR\r\n", responderA: "demo@evidran.com" });
+  assert.match(m.html, /^<!doctype html><html lang="es">/);
+  assert.match(m.text, /^Hola, Ana <Pérez>:/);
+  assert.match(m.text, /https:\/\/teams\.live\.com\/meet\/1/);
+  assert.match(m.text, /cambiar o cancelar la demo \(https:\/\/www\.evidran\.com\/cita\/tok\)/);
+  assert.doesNotMatch(m.text, /<p|<a |<br|&amp;|&lt;|&quot;/);
+  assert.equal(m.replyTo, "demo@evidran.com");
+  assert.equal(m.icalEvent.method, "REQUEST");
+  // Tablas: cada fila en su línea, celdas separadas.
+  assert.equal(textoDeHtml("<table><tr><td>Empresa</td><td>ACME</td></tr><tr><td>Tel</td><td>1</td></tr></table>"), "Empresa ACME\nTel 1");
+});

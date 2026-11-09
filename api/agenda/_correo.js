@@ -5,6 +5,21 @@
 //   SMTP_FROM            remitente (si falta, SMTP_USER)
 //   AGENDA_AVISOS_EMAIL  dónde le llegan a Lissette los avisos de demos
 import nodemailer from "nodemailer";
+import { textoDeHtml, documentoHtml } from "./_logica.js";
+
+// El mensaje tal cual sale: HTML completo + texto plano + invitación de
+// calendario. Separado del envío para poder probarlo sin SMTP.
+export function montarMensaje({ remitente, para, asunto, html, ics, metodo, responderA }) {
+  return {
+    from: { name: "Evidran", address: remitente },
+    to: para,
+    replyTo: responderA || undefined,
+    subject: asunto,
+    text: textoDeHtml(html),
+    html: documentoHtml(html, asunto),
+    icalEvent: ics ? { method: metodo || "REQUEST", filename: "demo-evidran.ics", content: ics } : undefined,
+  };
+}
 
 export function crearCorreo() {
   const host = process.env.SMTP_HOST;
@@ -24,15 +39,8 @@ export function crearCorreo() {
   });
   return {
     remitente,
-    async enviar({ para, asunto, html, ics, metodo, responderA }) {
-      await transporter.sendMail({
-        from: { name: "Evidran", address: remitente },
-        to: para,
-        replyTo: responderA || undefined,
-        subject: asunto,
-        html,
-        icalEvent: ics ? { method: metodo || "REQUEST", filename: "demo-evidran.ics", content: ics } : undefined,
-      });
+    async enviar(datos) {
+      await transporter.sendMail(montarMensaje({ remitente, ...datos }));
     },
   };
 }
