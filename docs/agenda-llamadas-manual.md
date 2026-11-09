@@ -175,12 +175,17 @@ si quieres y guarda. No hace falta que nadie lo pida por teléfono y no suma lla
 2. **La setter abre la pestaña Llamar**. Ve, por orden: a quién le pidieron
    llamar hoy, los que aún no se han llamado y los que no contestaron otro
    día (hasta 3 intentos por contacto).
-3. **En la ficha de cada contacto** escribe una nota y pulsa el resultado.
-   Cada pulsación es un intento y **cuenta para el pago**.
+3. **En la ficha de cada contacto** pulsa el resultado: aparece un cuadro con
+   una pista de lo que conviene apuntar en ese caso (qué herramienta usan, por
+   qué no le interesa, cuándo suele estar…). Se explica lo que haga falta (es
+   opcional) y se pulsa «Guardar» (o Ctrl/Cmd + Intro). Cada resultado
+   guardado es un intento y **cuenta para el pago**.
    - «Volver a llamar» pide día y hora; ese día vuelve a salir arriba.
    - «No llamar» lo saca para siempre de la lista.
    - «Demo agendada» abre la agenda: elige día y hora entre los huecos libres,
-     confirma el correo de la persona y reserva.
+     confirma el correo de la persona y reserva. Con la casilla «Reservar
+     sin enviar la invitación» el hueco queda reservado pero no se le escribe
+     (el correo puede faltar todavía); sale solo el aviso a Lissette.
 4. **Al reservar**, salen dos correos desde el SMTP de Evidran:
    - a la persona: confirmación, enlace de Teams, invitación de calendario
      (se añade a Outlook, Google o iPhone con un clic) y enlace para cambiar o
@@ -191,7 +196,9 @@ si quieres y guarda. No hace falta que nadie lo pida por teléfono y no suma lla
    «Corregir datos». Si cambia el correo, la invitación sale a la dirección
    nueva y el enlace del correo anterior deja de funcionar. «Reenviar
    invitación» la vuelve a mandar sin cambiar nada (útil si dice que no le ha
-   llegado).
+   llegado). Las demos reservadas sin invitación salen con la etiqueta
+   «Invitación sin enviar» y el botón «Enviar invitación»; corregir sus datos
+   no la envía, y si se cancelan no se avisa a la persona.
 6. **Si la persona cambia la hora o cancela**, os llega a las dos el aviso con
    la invitación actualizada. Si cancela, el contacto vuelve a «Volver a
    llamar» para que la setter busque otro momento.

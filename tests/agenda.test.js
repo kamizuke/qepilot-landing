@@ -608,3 +608,54 @@ test("Lissette marca el mensaje de LinkedIn y pega el texto; la setter ve la fec
   assert.equal(t.datos._db.contactos[0].linkedin_enviado_en, null);
   assert.equal(t.datos._db.contactos[0].linkedin_texto, "Hola, Ana:\n\nTe escribo…");
 });
+
+test("reservar sin enviar la invitación: solo sale el aviso interno y se envía después", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Persona,Teléfono\nMetal SL,Ana,986111222\n" });
+  const ana = t.datos._db.contactos[0];
+  const { huecos } = (await t.setter({ accion: "huecos" })).body;
+
+  // Sin correo y sin la casilla: se rechaza. Con la casilla, vale sin correo.
+  assert.equal((await t.setter({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Ana" })).statusCode, 400);
+  assert.equal((await t.setter({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Ana", email: "mal", sinInvitacion: true })).statusCode, 400);
+  const r = await t.setter({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Ana", empresa: "Metal SL", contactoId: ana.id, sinInvitacion: true });
+  assert.equal(r.statusCode, 200);
+  assert.equal(r.body.sinInvitacion, true);
+  assert.equal(t.enviados.length, 1);
+  assert.equal(t.enviados[0].para, "demo@evidran.com");
+  assert.match(t.enviados[0].asunto, /^Nueva demo \(invitación sin enviar\)/);
+  assert.doesNotMatch(t.enviados[0].ics, /mailto:\r?\n|mailto:$/m);
+  assert.equal(t.datos._db.citas[0].invitacion_pendiente, true);
+  assert.equal(t.datos._db.contactos[0].resultado, "demo");
+
+  // Enviar sin correo: pide el correo. Añadirlo no la envía todavía.
+  assert.equal((await t.setter({ accion: "editar_cita", id: r.body.id, campos: {}, reenviar: true })).statusCode, 400);
+  const e = await t.setter({ accion: "editar_cita", id: r.body.id, campos: { email: "ana@metal.es" } });
+  assert.equal(e.body.reenviada, false);
+  assert.equal(t.enviados.length, 1);
+
+  // «Enviar invitación»: sale a la persona y deja de estar pendiente.
+  const env = await t.setter({ accion: "editar_cita", id: r.body.id, campos: {}, reenviar: true });
+  assert.equal(env.body.correo, true);
+  assert.equal(t.enviados.at(-2).para, "ana@metal.es");
+  assert.match(t.enviados.at(-2).html, /\/cita\/[A-Za-z0-9_-]+/);
+  assert.match(t.enviados.at(-1).asunto, /^Invitación enviada/);
+  assert.equal(t.datos._db.citas[0].invitacion_pendiente, false);
+});
+
+test("cancelar una demo cuya invitación no salió no escribe a la persona", async () => {
+  const t = montar();
+  const { huecos } = (await t.admin({ accion: "huecos" })).body;
+  const r = await t.admin({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Eva", email: "eva@x.es", sinInvitacion: true });
+  const antes = t.enviados.length;
+  assert.equal((await t.admin({ accion: "cancelar_cita", id: r.body.id })).statusCode, 200);
+  assert.deepEqual(t.enviados.slice(antes).map((m) => m.para), ["demo@evidran.com"]);
+});
+
+test("la nota se guarda con cualquier resultado", async () => {
+  const t = montar();
+  await t.admin({ accion: "importar", csv: "Empresa,Teléfono\nBuzón SL,986777888\n" });
+  const c = t.datos._db.contactos[0];
+  await t.setter({ accion: "llamada", contactoId: c.id, resultado: "no_contesta", nota: "Salta el buzón; probar por la tarde" });
+  assert.equal(t.datos._db.llamadas.at(-1).nota, "Salta el buzón; probar por la tarde");
+});

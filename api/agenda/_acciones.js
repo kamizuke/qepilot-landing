@@ -96,7 +96,9 @@ async function calcularHuecos(deps, excepto = null) {
 
 // Correo a la persona y aviso interno (AGENDA_AVISOS_EMAIL), con la invitación de calendario.
 // Si falla, la cita ya está hecha: se devuelve false y la pantalla lo dice.
-async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien, tipoAviso } = {}) {
+// `soloAviso`: la invitación no se envía a la persona (se agendó sin enviarla);
+// sale solo el aviso interno.
+async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien, tipoAviso, soloAviso } = {}) {
   const correo = deps.correo;
   if (!correo) return false;
   const a = deps.ajustes();
@@ -118,11 +120,13 @@ async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien,
         ? correoCambio({ cita, enlaceReunion, enlaceGestion })
         : correoCancelacion({ cita, porLaPersona });
   let ok = true;
-  try {
-    await correo.enviar({ para: cita.email, ...paraPersona, ics, metodo, responderA: a.avisos });
-  } catch (err) {
-    ok = false;
-    console.error(`agenda correo ${tipo} a la persona falló:`, err?.code || err?.responseCode || "sin código");
+  if (!soloAviso) {
+    try {
+      await correo.enviar({ para: cita.email, ...paraPersona, ics, metodo, responderA: a.avisos });
+    } catch (err) {
+      ok = false;
+      console.error(`agenda correo ${tipo} a la persona falló:`, err?.code || err?.responseCode || "sin código");
+    }
   }
   if (a.avisos) {
     try {
@@ -370,8 +374,11 @@ async function reservar(deps, quien, body, res) {
   const rol = quien.rol;
   const nombre = texto(body.nombre, 120);
   const email = typeof body.email === "string" ? body.email.trim() : "";
-  if (!nombre || !emailValido(email)) {
-    return res.status(400).json({ error: "Faltan el nombre o un correo válido de la persona." });
+  // «Sin enviar la invitación»: la demo se reserva y queda marcada para enviarla
+  // más tarde desde la Agenda. El correo puede faltar todavía.
+  const sinInvitacion = body.sinInvitacion === true;
+  if (!nombre || (email || !sinInvitacion ? !emailValido(email) : false)) {
+    return res.status(400).json({ error: sinInvitacion && nombre ? "El correo no parece válido." : "Faltan el nombre o un correo válido de la persona." });
   }
   const contactoId = body.contactoId ? String(body.contactoId) : null;
   if (contactoId && !UUID.test(contactoId)) return res.status(400).json({ error: "Contacto no válido." });
@@ -401,7 +408,13 @@ async function reservar(deps, quien, body, res) {
     rol,
     setterId: quien.setterId,
   });
-  const correo = await notificar(deps, "nueva", cita, { config, token, quien: rol === "admin" ? "ti" : quien.nombre });
+  const por = rol === "admin" ? "ti" : quien.nombre;
+  if (sinInvitacion) {
+    await deps.datos.editarCita(cita.id, { invitacion_pendiente: true });
+    await notificar(deps, "nueva", cita, { config, quien: por, tipoAviso: "sin_invitacion", soloAviso: true });
+    return res.status(200).json({ ok: true, id: cita.id, correo: null, sinInvitacion: true });
+  }
+  const correo = await notificar(deps, "nueva", cita, { config, token, quien: por });
   return res.status(200).json({ ok: true, id: cita.id, correo });
 }
 
@@ -668,18 +681,25 @@ async function editarCita(deps, quien, body, res) {
   if ("empresa" in c) campos.empresa = texto(c.empresa, 160);
   if ("telefono" in c) campos.telefono = texto(c.telefono, 40);
   if ("notas" in c) campos.notas = textoLargo(c.notas, 1500);
+  // Agendada sin enviar la invitación: el correo puede seguir vacío y
+  // corregirlo no la envía; sale solo con «Enviar invitación».
+  const pendiente = !!cita.invitacion_pendiente;
   if ("email" in c) {
     const e = typeof c.email === "string" ? c.email.trim() : "";
-    if (!emailValido(e)) return res.status(400).json({ error: "El correo no parece válido." });
+    if (!(pendiente && !e) && !emailValido(e)) return res.status(400).json({ error: "El correo no parece válido." });
     campos.email = e;
   }
   const cambiaEmail = "email" in campos && campos.email.toLowerCase() !== String(cita.email).toLowerCase();
-  const reenviar = cambiaEmail || body.reenviar === true;
+  const reenviar = (cambiaEmail && !pendiente) || body.reenviar === true;
   let token = null;
   if (reenviar) {
+    if (!emailValido(campos.email ?? cita.email)) {
+      return res.status(400).json({ error: "Falta el correo de la persona: añádelo en «Corregir datos» para enviarle la invitación." });
+    }
     token = generarToken();
     campos.token_hash = hashToken(token);
     campos.secuencia = (cita.secuencia || 0) + 1;
+    if (pendiente) campos.invitacion_pendiente = false;
   }
   if (!Object.keys(campos).length) return res.status(400).json({ error: "No hay cambios." });
   await deps.datos.editarCita(id, campos);
@@ -690,7 +710,9 @@ async function editarCita(deps, quien, body, res) {
   if (reenviar) {
     const config = await deps.datos.leerConfig();
     const por = quien.rol === "admin" ? "administración" : quien.nombre;
-    correo = await notificar(deps, "nueva", { ...cita, ...campos }, { config, token, quien: por, tipoAviso: "reenvio" });
+    correo = await notificar(deps, "nueva", { ...cita, ...campos }, { config, token, quien: por, tipoAviso: pendiente ? "enviada" : "reenvio" });
+    // Si no ha salido, sigue pendiente de enviar.
+    if (pendiente && !correo) await deps.datos.editarCita(id, { invitacion_pendiente: true }).catch(() => {});
   }
   return res.status(200).json({ ok: true, reenviada: reenviar, correo });
 }
@@ -703,7 +725,7 @@ async function cancelarCita(deps, body, res) {
   cita.secuencia = await deps.datos.cancelar(id, "administración");
   const config = await deps.datos.leerConfig();
   const correo = new Date(cita.fin) > deps.ahora()
-    ? await notificar(deps, "cancelada", cita, { config, porLaPersona: false, quien: "ti" })
+    ? await notificar(deps, "cancelada", cita, { config, porLaPersona: false, quien: "ti", soloAviso: !!cita.invitacion_pendiente })
     : true;
   return res.status(200).json({ ok: true, correo });
 }

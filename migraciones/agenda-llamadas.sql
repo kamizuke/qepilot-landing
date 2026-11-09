@@ -457,3 +457,7 @@ grant execute on function public.agenda_clave_fallo(text, int, int, int) to serv
 --     Como en el correo, se guarda solo el último.
 alter table public.seg_contacto add column if not exists linkedin_enviado_en timestamptz;
 alter table public.seg_contacto add column if not exists linkedin_texto text;
+
+-- 22) (9 nov) Demo agendada sin enviar la invitación: queda marcada para
+--     enviarla después desde la Agenda («Enviar invitación»).
+alter table public.agenda_cita add column if not exists invitacion_pendiente boolean not null default false;

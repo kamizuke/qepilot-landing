@@ -26,7 +26,7 @@ async function conCodigo(promesa) {
   }
 }
 
-const CAMPOS_CITA = "id,inicio,fin,nombre,empresa,email,telefono,notas,origen,contacto_id,estado,secuencia,creada_en,cancelada_en,cancelada_por,setter_id";
+const CAMPOS_CITA = "id,inicio,fin,nombre,empresa,email,telefono,notas,origen,contacto_id,estado,secuencia,creada_en,cancelada_en,cancelada_por,setter_id,invitacion_pendiente";
 
 export function crearDatos(env) {
   return {

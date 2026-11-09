@@ -102,9 +102,8 @@
   .telefono { font-size: 22px; font-weight: 800; letter-spacing: .01em; }
   .resultados { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px; }
   .resultados .boton { width: 100%; font-size: 14px; padding: 10px 8px; }
+  .resultados .boton[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
   .historial { font-size: 13.5px; margin-top: 6px; }
-  .volver-pendiente { margin-top: 12px; background: #EAF1FE; border-radius: 12px; padding: 12px 14px; color: #1D4ED8; }
-  .volver-pendiente label { color: #1D4ED8; }
   .historial li { margin: 4px 0 0 18px; }
   details { margin-top: 14px; }
   summary { cursor: pointer; font-weight: 700; font-size: 14.5px; }
@@ -284,11 +283,12 @@
           <li>Pulsa <b>Reservar demo</b>. La invitación le llega al momento, con el enlace de la videollamada.</li>
         </ol>
         <p>¿Te has equivocado en el correo o te dice que no le ha llegado? En la pestaña <b>Agenda</b>, en esa demo: <b>Corregir datos</b> o <b>Reenviar invitación</b>.</p>
+        <p>¿Ha aceptado día y hora pero todavía no quiere recibir nada (o no tienes su correo)? Marca <b>Reservar sin enviar la invitación</b>. La demo queda en la Agenda como «Invitación sin enviar» y desde allí pulsas <b>Enviar invitación</b> cuando toque.</p>
       </details>
 
       <details class="tarjeta" id="g-resultados">
         <summary>Cómo anotar cada llamada</summary>
-        <p>Cada intento cuenta como una llamada, conteste o no. En la ficha de cada contacto escribe la nota y pulsa uno de estos resultados:</p>
+        <p>Cada intento cuenta como una llamada, conteste o no. En la ficha de cada contacto pulsa uno de estos resultados, explica lo que haga falta en el cuadro que aparece y pulsa <b>Guardar</b>:</p>
         <div id="guion-resultados"></div>
         <p>En la nota escribe en una línea lo que te haya contado, sobre todo el programa que usan, la consultora y la fecha de su próxima auditoría. Es lo más útil para preparar la demo.</p>
       </details>
@@ -528,11 +528,13 @@
       <div class="rejilla2">
         <div><label for="r-nombre">Nombre de la persona *</label><input id="r-nombre" type="text" maxlength="120" /></div>
         <div><label for="r-empresa">Empresa</label><input id="r-empresa" type="text" maxlength="160" /></div>
-        <div><label for="r-email">Correo para la invitación *</label><input id="r-email" type="email" maxlength="200" /></div>
+        <div><label for="r-email" id="r-email-etiqueta">Correo para la invitación *</label><input id="r-email" type="email" maxlength="200" /></div>
         <div><label for="r-telefono">Teléfono</label><input id="r-telefono" type="tel" maxlength="40" /></div>
       </div>
       <label for="r-notas">Notas para la demo</label>
       <textarea id="r-notas" maxlength="1500" placeholder="Normas que llevan, cómo registran hoy las no conformidades, qué le preocupa, quién más se conecta"></textarea>
+      <label class="casilla"><input type="checkbox" class="marca" id="r-sin-invitacion" /> Reservar sin enviar la invitación</label>
+      <p class="peq suave oculto" id="r-sin-invitacion-ayuda" style="margin-top:4px">El hueco queda reservado y la demo aparece en la Agenda como «Invitación sin enviar». La envías desde allí cuando toque. El correo puede quedar vacío hasta entonces.</p>
       <div class="aviso mal" id="r-error"></div>
       <div class="fila mt"><button class="boton" id="r-reservar">Reservar demo</button><button class="boton claro" data-cierra="reserva">Cancelar</button></div>
     </div>

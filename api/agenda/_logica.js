@@ -200,13 +200,13 @@ export function crearIcs({ cita, metodo, organizador, avisos, enlaceReunion, aho
     `DESCRIPTION:${textoIcs(descripcion)}`,
     `LOCATION:${textoIcs(enlaceReunion || "Videollamada")}`,
     `ORGANIZER;CN="${organizador.nombre.replace(/"/g, "")}":mailto:${organizador.email}`,
-    `ATTENDEE;CN="${String(cita.nombre).replace(/"/g, "")}";ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=FALSE:mailto:${cita.email}`,
+    cita.email ? `ATTENDEE;CN="${String(cita.nombre).replace(/"/g, "")}";ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=FALSE:mailto:${cita.email}` : null,
   ];
   if (avisos && avisos !== cita.email) {
     lineas.push(`ATTENDEE;CN="Evidran";ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=FALSE:mailto:${avisos}`);
   }
   lineas.push(`STATUS:${cancelada ? "CANCELLED" : "CONFIRMED"}`, "TRANSP:OPAQUE", "END:VEVENT", "END:VCALENDAR");
-  return lineas.map(plegar).join("\r\n") + "\r\n";
+  return lineas.filter(Boolean).map(plegar).join("\r\n") + "\r\n";
 }
 
 // --- Validaciones ---
@@ -441,16 +441,25 @@ const ORIGENES = { setter: "la setter", admin: "ti", web: "la propia persona" };
 
 // Aviso interno a Lissette.
 export function correoAviso({ tipo, cita, quien }) {
-  const titulo = { nueva: "Nueva demo", cambio: "Demo cambiada", cancelada: "Demo cancelada", reenvio: "Invitación reenviada" }[tipo];
+  const titulo = {
+    nueva: "Nueva demo",
+    sin_invitacion: "Nueva demo (invitación sin enviar)",
+    enviada: "Invitación enviada",
+    cambio: "Demo cambiada",
+    cancelada: "Demo cancelada",
+    reenvio: "Invitación reenviada",
+  }[tipo];
   const filas = [
     ["Cuándo", fechaLarga(cita.inicio)],
     ["Empresa", cita.empresa || "—"],
     ["Persona", cita.nombre],
-    ["Correo", cita.email],
+    ["Correo", cita.email || "—"],
     ["Teléfono", cita.telefono || "—"],
     ["Notas", cita.notas || "—"],
-    [{ cancelada: "Cancelada por", reenvio: "Reenviada por", cambio: "Cambiada por" }[tipo] || "Reservada por", quien || ORIGENES[cita.origen] || cita.origen],
+    [{ cancelada: "Cancelada por", reenvio: "Reenviada por", enviada: "Enviada por", cambio: "Cambiada por" }[tipo] || "Reservada por", quien || ORIGENES[cita.origen] || cita.origen],
   ];
+  if (tipo === "sin_invitacion") filas.push(["Invitación", "No se ha enviado a la persona. Envíala desde la Agenda cuando toque."]);
+  if (tipo === "cancelada" && cita.invitacion_pendiente) filas.push(["Invitación", "No se le había enviado: a la persona no le llega aviso."]);
   const tabla = filas
     .map(
       ([k, v]) =>

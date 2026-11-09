@@ -268,50 +268,56 @@
     var cuerpo = vaciar($("ficha-cuerpo"));
     var marcaEnvio = h("span", { class: "etiquetas" }, etiquetaEnvio(c), etiquetaMensaje(c));
     var bloqueHistorial = h("div", null, historialDe(c));
-    var nota = h("textarea", { id: "f-nota", maxlength: "600", placeholder: "Qué te ha dicho: programa que usan, consultora, próxima auditoría…" });
-    var volverFila = h("div", { class: "volver-pendiente oculto" });
+    var nota = h("textarea", { id: "f-nota", maxlength: "600", placeholder: "Puedes ir escribiendo mientras hablas: programa que usan, consultora, próxima auditoría…" });
     var manana = new Date(Date.now() + 86400000);
     var volverInput = h("input", { type: "datetime-local", value: diaDe(manana) + "T10:00" });
-    anadir(volverFila, [
-      h("label", { style: "margin-top:0" }, "¿Cuándo le vuelves a llamar?"),
-      h("div", { class: "fila" }, volverInput,
-        h("button", { class: "boton", onclick: function () { guardarLlamada(c, "volver", nota.value, volverInput.value); } }, "Guardar «Volver a llamar»")),
-      h("div", { class: "peq", style: "margin-top:6px" }, "Todavía no está guardado: elige día y hora y pulsa el botón.")]);
-    var infoFila = h("div", { class: "volver-pendiente oculto" });
     var infoInput = h("input", { type: "email", value: c.email || "", placeholder: "correo@empresa.com", style: "flex:1 1 220px" });
-    anadir(infoFila, [
-      h("label", { style: "margin-top:0" }, "¿A qué correo le enviamos la información?"),
-      h("div", { class: "fila" }, infoInput,
-        h("button", { class: "boton", onclick: function () { guardarLlamada(c, "info", nota.value, null, infoInput.value); } }, "Guardar «Info por correo»")),
-      h("div", { class: "peq", style: "margin-top:6px" }, "Se guarda en el contacto y llega un aviso para enviársela. Si no quiso darlo, déjalo vacío y pulsa el botón.")]);
+    var volverFila = h("div", { class: "oculto" },
+      h("label", null, "¿Cuándo le vuelves a llamar?"), volverInput);
+    var infoFila = h("div", { class: "oculto" },
+      h("label", null, "¿A qué correo le enviamos la información?"), h("div", { class: "fila" }, infoInput),
+      h("div", { class: "peq suave", style: "margin-top:6px" }, "Se guarda en el contacto y llega un aviso para enviársela. Si no quiso darlo, déjalo vacío."));
+    var etiquetaNota = h("label", { for: "f-nota" }, "Nota de la llamada");
+    var guardar = h("button", { class: "boton" }, "Guardar");
+    var pieGuardar = h("div", { class: "fila mt oculto" }, guardar,
+      h("span", { class: "peq suave" }, "La nota es opcional."));
+    var elegido = null;
     nota.value = notaInicial || "";
     var datos = formularioDatos(c, function () { return nota.value; });
-    // Lo que se perdería al cerrar: la nota, el «volver a llamar» a medias o datos corregidos sin guardar.
+    // Lo que se perdería al cerrar: la nota, un resultado elegido sin guardar o datos corregidos.
     S.fichaPendiente = function () {
-      return !!nota.value.trim() || !volverFila.classList.contains("oculto") || !infoFila.classList.contains("oculto") || datos.cambiado();
+      return !!nota.value.trim() || !!elegido || datos.cambiado();
     };
 
     var botones = h("div", { class: "resultados" });
     botones.appendChild(h("button", { class: "boton", onclick: function () { var n = nota.value.trim(); cerrarFicha(true); abrirReserva(c, n); } }, "Demo agendada"));
     Object.keys(S.d.resultados).forEach(function (k) {
       if (k === "demo") return;
-      botones.appendChild(h("button", { class: "boton claro", onclick: function () {
-        if (k === "info") {
-          infoFila.classList.remove("oculto");
-          infoFila.scrollIntoView({ block: "nearest", behavior: "smooth" });
-          infoInput.focus();
-          return;
-        }
-        if (k === "volver") {
-          volverFila.classList.remove("oculto");
-          volverFila.scrollIntoView({ block: "nearest", behavior: "smooth" });
-          volverInput.focus();
-          return;
-        }
-        if (k === "no_llamar" && !confirm("¿Ha pedido que no le llamemos? No se le volverá a llamar.")) return;
-        guardarLlamada(c, k, nota.value, null);
-      } }, S.d.resultados[k]));
+      botones.appendChild(h("button", { class: "boton claro", "aria-pressed": "false", "data-resultado": k, onclick: function () { elegir(k); } }, S.d.resultados[k]));
     });
+    // Elegir un resultado no lo guarda: aparece su cuadro para explicar lo que haga falta.
+    function elegir(k) {
+      elegido = k;
+      botones.querySelectorAll("button[data-resultado]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-resultado") === k)); });
+      etiquetaNota.textContent = S.d.resultados[k] + " · explica lo que haga falta";
+      nota.placeholder = PISTA_NOTA[k] || "";
+      volverFila.classList.toggle("oculto", k !== "volver");
+      infoFila.classList.toggle("oculto", k !== "info");
+      guardar.textContent = "Guardar «" + S.d.resultados[k] + "»";
+      pieGuardar.classList.remove("oculto");
+      pieGuardar.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      (k === "volver" ? volverInput : k === "info" ? infoInput : nota).focus();
+    }
+    function guardarElegido() {
+      if (!elegido) return;
+      if (elegido === "no_llamar" && !confirm("¿Ha pedido que no le llamemos? No se le volverá a llamar.")) return;
+      if (elegido === "volver" && !volverInput.value) { toast("Elige día y hora para volver a llamar."); volverInput.focus(); return; }
+      guardar.disabled = true;
+      guardarLlamada(c, elegido, nota.value, elegido === "volver" ? volverInput.value : null, elegido === "info" ? infoInput.value : undefined, function () { guardar.disabled = false; });
+    }
+    guardar.addEventListener("click", guardarElegido);
+    // Ctrl/Cmd + Intro en la nota guarda el resultado elegido.
+    nota.addEventListener("keydown", function (ev) { if (ev.key === "Enter" && (ev.metaKey || ev.ctrlKey)) { ev.preventDefault(); guardarElegido(); } });
 
     var web = c.web ? (/^https?:\/\//i.test(c.web) ? c.web : "https://" + c.web) : null;
     var tel = (c.telefono || "").replace(/[^\d+]/g, "");
@@ -335,10 +341,13 @@
       c.notas ? h("div", { class: "cita" }, h("div", { class: "notas" }, c.notas)) : null,
       chuleta(c),
       h("h3", null, "Esta llamada"),
-      nota,
+      h("div", { class: "peq suave" }, "Pulsa cómo ha ido, explica lo que haga falta y guarda."),
       botones,
       volverFila,
       infoFila,
+      etiquetaNota,
+      nota,
+      pieGuardar,
       S.rol === "admin" ? envioEnFicha(c, function (x) {
         anadir(vaciar(marcaEnvio), [etiquetaEnvio(x), etiquetaMensaje(x)]);
         anadir(vaciar(bloqueHistorial), historialDe(x));
@@ -469,14 +478,27 @@
     return bloque;
   }
 
-  function guardarLlamada(c, resultado, nota, volverEn, email) {
+  // Qué conviene apuntar con cada resultado (pista del cuadro de la nota).
+  var PISTA_NOTA = {
+    volver: "Por qué hay que volver a llamar y por quién preguntar. P. ej.: está en auditoría esta semana, preguntar por Marta.",
+    info: "Qué información quiere y qué le interesa: normas, cómo lo llevan hoy, qué le preocupa…",
+    no_contesta: "Lo que ayude a la próxima: salta el buzón, comunica, mejor por la tarde…",
+    no_esta: "Quién ha cogido el teléfono, cuándo suele estar, su extensión o quién la sustituye.",
+    no_interesa: "Por qué no le interesa, con sus palabras.",
+    herramienta_propia: "Qué usan (programa, Excel, Power Apps…), si la han hecho ellos y si están contentos.",
+    no_encaja: "Por qué no encaja: no tienen ISO, son muy pocos, otro sector…",
+    no_llamar: "Qué ha dicho exactamente.",
+    erroneo: "Qué pasa con el número (no existe, es otra empresa…) y el bueno si lo sabes.",
+  };
+
+  function guardarLlamada(c, resultado, nota, volverEn, email, siFalla) {
     api({ accion: "llamada", contactoId: c.id, resultado: resultado, nota: nota, volverEn: volverEn, email: email }).then(function (j) {
       cerrarFicha(true);
       toast(j.corregida
         ? "Ya estaba anotado hace un momento: se ha actualizado, no cuenta como otra llamada."
         : "Anotado: " + S.d.resultados[resultado] + "." + (resultado === "info" && j.aviso ? " Ha salido el aviso para enviársela." : ""));
       recargar();
-    }).catch(function (e) { toast(e.message); });
+    }).catch(function (e) { toast(e.message); if (siFalla) siFalla(); });
   }
 
   function cerrar(id) { var d = $(id); if (d.open) d.close(); }
@@ -484,7 +506,7 @@
   // Cerrar la ficha avisando si se perdería algo escrito. `forzar`: tras guardar.
   function cerrarFicha(forzar) {
     if (!forzar && S.fichaPendiente && S.fichaPendiente() &&
-      !confirm("Hay cambios sin guardar en esta ficha (la nota de la llamada, el «volver a llamar» o los datos). ¿Cerrar sin guardar?")) return;
+      !confirm("Hay cambios sin guardar en esta ficha (la nota, el resultado elegido o los datos). ¿Cerrar sin guardar?")) return;
     S.fichaPendiente = null;
     cerrar("ficha");
   }
@@ -501,6 +523,8 @@
     $("r-email").value = c ? c.email || "" : "";
     $("r-telefono").value = c ? c.telefono || "" : "";
     $("r-notas").value = [c ? c.notas : "", notaLlamada].filter(Boolean).join("\n");
+    $("r-sin-invitacion").checked = false;
+    marcarSinInvitacion();
     $("r-error").textContent = "";
     $("r-formulario").classList.remove("oculto");
     $("r-hecho").classList.add("oculto");
@@ -529,6 +553,14 @@
     });
   }
 
+  function marcarSinInvitacion() {
+    var sin = $("r-sin-invitacion").checked;
+    $("r-sin-invitacion-ayuda").classList.toggle("oculto", !sin);
+    $("r-email-etiqueta").textContent = sin ? "Correo de la persona (opcional)" : "Correo para la invitación *";
+    $("r-reservar").textContent = sin ? "Reservar sin enviar invitación" : "Reservar demo";
+  }
+  $("r-sin-invitacion").addEventListener("change", marcarSinInvitacion);
+
   $("r-reservar").addEventListener("click", function () {
     var err = $("r-error");
     err.textContent = "";
@@ -542,14 +574,17 @@
       telefono: $("r-telefono").value,
       notas: $("r-notas").value,
       contactoId: S.reserva.contacto ? S.reserva.contacto.id : null,
+      sinInvitacion: $("r-sin-invitacion").checked,
     };
-    if (!cuerpo.nombre.trim() || !cuerpo.email.trim()) { err.textContent = "Faltan el nombre y el correo."; return; }
+    if (!cuerpo.nombre.trim()) { err.textContent = "Falta el nombre de la persona."; return; }
+    if (!cuerpo.sinInvitacion && !cuerpo.email.trim()) { err.textContent = "Falta el correo para la invitación. Si todavía no lo tienes, marca «Reservar sin enviar la invitación»."; return; }
     $("r-reservar").disabled = true;
     api(cuerpo).then(function (j) {
       $("r-formulario").classList.add("oculto");
       $("r-hecho").classList.remove("oculto");
       $("r-hecho-texto").textContent = "Demo reservada para el " + cuando(cuerpo.inicio) + ". " +
-        (j.correo ? "La invitación ha salido a " + cuerpo.email.trim() + "." : "Ojo: la demo está reservada, pero el correo no ha salido. Avisa para que se le envíe a mano.");
+        (j.sinInvitacion ? "No se ha enviado la invitación: queda en la Agenda como «Invitación sin enviar» para enviarla cuando toque."
+          : j.correo ? "La invitación ha salido a " + cuerpo.email.trim() + "." : "Ojo: la demo está reservada, pero el correo no ha salido. Avisa para que se le envíe a mano.");
       recargar();
     }).catch(function (e) {
       $("r-reservar").disabled = false;
@@ -1126,13 +1161,21 @@
     return h("div", { class: "cita" },
       h("div", { class: "fila", style: "justify-content:space-between" },
         h("div", { class: "cuando" }, cuando(c.inicio)),
-        c.estado === "cancelada" ? h("span", { class: "etiqueta fuera" }, "Cancelada" + (c.cancelada_por ? " por " + c.cancelada_por : "")) : null),
+        c.estado === "cancelada" ? h("span", { class: "etiqueta fuera" }, "Cancelada" + (c.cancelada_por ? " por " + c.cancelada_por : ""))
+          : c.invitacion_pendiente ? h("span", { class: "etiqueta por-enviar" }, "Invitación sin enviar") : null),
       h("div", null, h("strong", null, c.empresa || "Sin empresa"), " · ", c.nombre),
       h("div", { class: "peq suave" }, c.email ? [c.email, " ", botonCopiar(c.email), " · "] : null, [c.telefono, "reservada por " + origen].filter(Boolean).join(" · ")),
       c.notas ? h("div", { class: "notas" }, c.notas) : null,
       proxima ? h("div", { class: "fila mt" },
         h("button", { class: "boton claro mini", onclick: function () { abrirEditarCita(c); } }, "Corregir datos"),
-        h("button", { class: "boton claro mini", onclick: function () {
+        c.invitacion_pendiente ? h("button", { class: "boton mini", onclick: function () {
+          if (!c.email) { toast("Falta su correo: añádelo en «Corregir datos» y luego pulsa «Enviar invitación»."); abrirEditarCita(c); return; }
+          if (!confirm("¿Enviar ahora la invitación a " + c.email + "?")) return;
+          api({ accion: "editar_cita", id: c.id, campos: {}, reenviar: true }).then(function (j) {
+            toast(j.correo ? "Invitación enviada a " + c.email + "." : "No se pudo enviar el correo: sigue pendiente.");
+            recargar();
+          }).catch(function (e) { toast(e.message); });
+        } }, "Enviar invitación") : h("button", { class: "boton claro mini", onclick: function () {
           if (!confirm("¿Volver a enviar la invitación a " + c.email + "? El enlace para cambiar o cancelar del correo anterior dejará de funcionar.")) return;
           api({ accion: "editar_cita", id: c.id, campos: {}, reenviar: true }).then(function (j) {
             toast(j.correo ? "Invitación reenviada a " + c.email + "." : "No se pudo enviar el correo.");
@@ -1140,13 +1183,14 @@
           }).catch(function (e) { toast(e.message); });
         } }, "Reenviar invitación"),
         S.rol === "admin" ? h("button", { class: "boton peligro mini", onclick: function () {
-          if (!confirm("¿Cancelar la demo con " + c.nombre + "? Le llegará un correo avisando.")) return;
-          api({ accion: "cancelar_cita", id: c.id }).then(function (j) { toast(j.correo ? "Demo cancelada y aviso enviado." : "Demo cancelada, pero el correo no salió."); recargar(); }).catch(function (e) { toast(e.message); });
+          if (!confirm("¿Cancelar la demo con " + c.nombre + "?" + (c.invitacion_pendiente ? " No se le había enviado la invitación, así que no le llega ningún aviso." : " Le llegará un correo avisando."))) return;
+          api({ accion: "cancelar_cita", id: c.id }).then(function (j) { toast(c.invitacion_pendiente ? "Demo cancelada." : j.correo ? "Demo cancelada y aviso enviado." : "Demo cancelada, pero el correo no salió."); recargar(); }).catch(function (e) { toast(e.message); });
         } }, "Cancelar demo") : null) : null);
   }
 
   function abrirEditarCita(c) {
-    var campos = [["nombre", "Nombre de la persona *", "text"], ["empresa", "Empresa", "text"], ["email", "Correo para la invitación *", "email"], ["telefono", "Teléfono", "tel"]];
+    var pendiente = !!c.invitacion_pendiente;
+    var campos = [["nombre", "Nombre de la persona *", "text"], ["empresa", "Empresa", "text"], ["email", pendiente ? "Correo de la persona" : "Correo para la invitación *", "email"], ["telefono", "Teléfono", "tel"]];
     var inputs = {};
     var notas = h("textarea", { maxlength: "1500" });
     notas.value = c.notas || "";
@@ -1160,7 +1204,9 @@
         return h("div", null, h("label", null, f[1]), inputs[f[0]]);
       })),
       h("label", null, "Notas para la demo"), notas,
-      h("p", { class: "peq suave", style: "margin-top:10px" }, "Si cambias el correo, la invitación se envía a la dirección nueva y el enlace del correo anterior deja de funcionar."),
+      h("p", { class: "peq suave", style: "margin-top:10px" }, pendiente
+        ? "La invitación todavía no se ha enviado. Guardar no la envía: cuando toque, pulsa «Enviar invitación» en la Agenda."
+        : "Si cambias el correo, la invitación se envía a la dirección nueva y el enlace del correo anterior deja de funcionar."),
       error,
       h("div", { class: "fila mt" },
         h("button", { class: "boton", onclick: function (ev) {
