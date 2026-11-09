@@ -461,3 +461,12 @@ alter table public.seg_contacto add column if not exists linkedin_texto text;
 -- 22) (9 nov) Demo agendada sin enviar la invitación: queda marcada para
 --     enviarla después desde la Agenda («Enviar invitación»).
 alter table public.agenda_cita add column if not exists invitacion_pendiente boolean not null default false;
+
+-- 23) (9 nov) Enlace de la videollamada propio de cada demo (Lissette crea
+--     una reunión de Teams por demo). Si está vacío, se usa el fijo de Ajustes.
+--     APLICAR ANTES de subir el código: la Agenda lo lee en cada cita.
+alter table public.agenda_cita add column if not exists enlace_reunion text;
+do $$ begin
+  alter table public.agenda_cita add constraint agenda_cita_enlace_reunion_ck
+    check (enlace_reunion is null or (length(enlace_reunion) <= 600 and enlace_reunion like 'https://%'));
+exception when duplicate_object then null; end $$;

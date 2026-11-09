@@ -373,6 +373,22 @@ export function escaparHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+// Enlace de la videollamada de UNA demo (cada una lleva el suyo). Vacío → null;
+// si no es una dirección https válida → undefined (error para quien lo pegó).
+export function enlaceReunionValido(v) {
+  if (v == null) return null;
+  if (typeof v !== "string") return undefined;
+  const t = v.trim();
+  if (!t) return null;
+  if (t.length > 600) return undefined;
+  try {
+    const u = new URL(t);
+    return u.protocol === "https:" ? u.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 // Versión en texto plano de un correo HTML de la agenda. Los filtros de spam
 // desconfían de los correos que solo traen HTML; los de la app ya la llevan.
 export function textoDeHtml(html) {

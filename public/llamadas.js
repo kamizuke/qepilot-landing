@@ -523,6 +523,7 @@
     $("r-email").value = c ? c.email || "" : "";
     $("r-telefono").value = c ? c.telefono || "" : "";
     $("r-notas").value = [c ? c.notas : "", notaLlamada].filter(Boolean).join("\n");
+    $("r-enlace").value = "";
     $("r-sin-invitacion").checked = false;
     marcarSinInvitacion();
     $("r-error").textContent = "";
@@ -573,6 +574,7 @@
       email: $("r-email").value,
       telefono: $("r-telefono").value,
       notas: $("r-notas").value,
+      enlaceReunion: $("r-enlace").value,
       contactoId: S.reserva.contacto ? S.reserva.contacto.id : null,
       sinInvitacion: $("r-sin-invitacion").checked,
     };
@@ -1166,6 +1168,8 @@
       h("div", null, h("strong", null, c.empresa || "Sin empresa"), " · ", c.nombre),
       h("div", { class: "peq suave" }, c.email ? [c.email, " ", botonCopiar(c.email), " · "] : null, [c.telefono, "reservada por " + origen].filter(Boolean).join(" · ")),
       c.notas ? h("div", { class: "notas" }, c.notas) : null,
+      c.enlace_reunion ? h("div", { class: "peq suave" }, "Teams: ", h("a", { href: c.enlace_reunion, target: "_blank", rel: "noopener" }, "abrir la reunión"), " ", botonCopiar(c.enlace_reunion))
+        : proxima ? h("div", { class: "peq suave" }, "Sin enlace propio de Teams: añádelo en «Corregir datos».") : null,
       proxima ? h("div", { class: "fila mt" },
         h("button", { class: "boton claro mini", onclick: function () { abrirEditarCita(c); } }, "Corregir datos"),
         c.invitacion_pendiente ? h("button", { class: "boton mini", onclick: function () {
@@ -1194,6 +1198,7 @@
     var inputs = {};
     var notas = h("textarea", { maxlength: "1500" });
     notas.value = c.notas || "";
+    var enlace = h("input", { type: "url", maxlength: "600", placeholder: "https://teams.microsoft.com/…", value: c.enlace_reunion || "" });
     var error = h("div", { class: "aviso mal" });
     var cuerpo = vaciar($("editar-cuerpo"));
     anadir(cuerpo, [
@@ -1204,21 +1209,23 @@
         return h("div", null, h("label", null, f[1]), inputs[f[0]]);
       })),
       h("label", null, "Notas para la demo"), notas,
+      h("label", null, "Enlace de Teams de esta demo"), enlace,
       h("p", { class: "peq suave", style: "margin-top:10px" }, pendiente
         ? "La invitación todavía no se ha enviado. Guardar no la envía: cuando toque, pulsa «Enviar invitación» en la Agenda."
-        : "Si cambias el correo, la invitación se envía a la dirección nueva y el enlace del correo anterior deja de funcionar."),
+        : "Si cambias el correo o el enlace de Teams, la invitación se vuelve a enviar con los datos nuevos y el enlace «cambiar o cancelar» del correo anterior deja de funcionar."),
       error,
       h("div", { class: "fila mt" },
         h("button", { class: "boton", onclick: function (ev) {
           var cambios = {};
           Object.keys(inputs).forEach(function (k) { if (inputs[k].value.trim() !== (c[k] || "")) cambios[k] = inputs[k].value; });
           if (notas.value !== (c.notas || "")) cambios.notas = notas.value;
+          if (enlace.value.trim() !== (c.enlace_reunion || "")) cambios.enlace_reunion = enlace.value.trim();
           if (!Object.keys(cambios).length) { error.textContent = "No hay cambios."; return; }
           ev.currentTarget.disabled = true;
           var boton = ev.currentTarget;
           api({ accion: "editar_cita", id: c.id, campos: cambios }).then(function (j) {
             cerrar("editar");
-            toast(!j.reenviada ? "Datos corregidos." : j.correo ? "Datos corregidos. Invitación enviada a " + cambios.email.trim() + "." : "Datos corregidos, pero el correo no salió.");
+            toast(!j.reenviada ? "Datos corregidos." : j.correo ? "Datos corregidos. Invitación enviada a " + (cambios.email || c.email).trim() + "." : "Datos corregidos, pero el correo no salió.");
             recargar();
           }).catch(function (e) { boton.disabled = false; error.textContent = e.message; });
         } }, "Guardar"),

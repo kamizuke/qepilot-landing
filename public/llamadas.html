@@ -533,6 +533,9 @@
       </div>
       <label for="r-notas">Notas para la demo</label>
       <textarea id="r-notas" maxlength="1500" placeholder="Normas que llevan, cómo registran hoy las no conformidades, qué le preocupa, quién más se conecta"></textarea>
+      <label for="r-enlace">Enlace de Teams de esta demo</label>
+      <input id="r-enlace" type="url" maxlength="600" placeholder="https://teams.microsoft.com/… (pega el enlace de la reunión)" />
+      <p class="peq suave" style="margin-top:4px">Va dentro de la invitación. Si lo dejas vacío, se usa el enlace fijo de Ajustes; si tampoco hay, la invitación dice que lo enviarás antes de la demo.</p>
       <label class="casilla"><input type="checkbox" class="marca" id="r-sin-invitacion" /> Reservar sin enviar la invitación</label>
       <p class="peq suave oculto" id="r-sin-invitacion-ayuda" style="margin-top:4px">El hueco queda reservado y la demo aparece en la Agenda como «Invitación sin enviar». La envías desde allí cuando toque. El correo puede quedar vacío hasta entonces.</p>
       <div class="aviso mal" id="r-error"></div>

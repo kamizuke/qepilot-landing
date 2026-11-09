@@ -63,7 +63,7 @@ export function crearDatosMemoria(semilla = {}) {
         id: id(), inicio: a.inicio, fin: a.fin, nombre: a.nombre, empresa: a.empresa, email: a.email,
         telefono: a.telefono, notas: a.notas, origen: a.origen, contacto_id: a.contactoId, estado: "confirmada",
         token_hash: a.tokenHash, secuencia: 0, creada_en: ahoraIso(), cancelada_en: null, cancelada_por: null,
-        setter_id: a.setterId || null, invitacion_pendiente: false,
+        setter_id: a.setterId || null, invitacion_pendiente: false, enlace_reunion: null,
       };
       db.citas.push(cita);
       if (a.contactoId) {

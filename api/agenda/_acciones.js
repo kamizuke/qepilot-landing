@@ -22,7 +22,10 @@ import {
   correoCancelacion,
   correoAviso,
   escaparHtml,
+  enlaceReunionValido,
 } from "./_logica.js";
+
+const ENLACE_NO_VALIDO = "El enlace de la videollamada no parece válido: pega el enlace completo de Teams (empieza por https://).";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const TOKEN = /^[A-Za-z0-9_-]{16,64}$/;
@@ -102,7 +105,8 @@ async function notificar(deps, tipo, cita, { config, token, porLaPersona, quien,
   const correo = deps.correo;
   if (!correo) return false;
   const a = deps.ajustes();
-  const enlaceReunion = config?.enlace_reunion || null;
+  // El enlace propio de la demo manda; si no tiene, el fijo de Ajustes.
+  const enlaceReunion = cita.enlace_reunion || config?.enlace_reunion || null;
   const enlaceGestion = token ? `${a.base}/cita/${token}` : `${a.base}/`;
   const metodo = tipo === "cancelada" ? "CANCEL" : "REQUEST";
   const ics = crearIcs({
@@ -380,6 +384,8 @@ async function reservar(deps, quien, body, res) {
   if (!nombre || (email || !sinInvitacion ? !emailValido(email) : false)) {
     return res.status(400).json({ error: sinInvitacion && nombre ? "El correo no parece válido." : "Faltan el nombre o un correo válido de la persona." });
   }
+  const enlaceReunion = enlaceReunionValido(body.enlaceReunion);
+  if (enlaceReunion === undefined) return res.status(400).json({ error: ENLACE_NO_VALIDO });
   const contactoId = body.contactoId ? String(body.contactoId) : null;
   if (contactoId && !UUID.test(contactoId)) return res.status(400).json({ error: "Contacto no válido." });
   if (contactoId && !esSuyo(quien, await deps.datos.contactoPorId(contactoId))) return res.status(403).json({ error: NO_ES_TUYO });
@@ -409,8 +415,15 @@ async function reservar(deps, quien, body, res) {
     setterId: quien.setterId,
   });
   const por = rol === "admin" ? "ti" : quien.nombre;
+  // El enlace se guarda aparte (la reserva atómica no lo conoce).
+  if (enlaceReunion) cita.enlace_reunion = enlaceReunion;
+  if (sinInvitacion || enlaceReunion) {
+    await deps.datos.editarCita(cita.id, {
+      ...(sinInvitacion ? { invitacion_pendiente: true } : {}),
+      ...(enlaceReunion ? { enlace_reunion: enlaceReunion } : {}),
+    });
+  }
   if (sinInvitacion) {
-    await deps.datos.editarCita(cita.id, { invitacion_pendiente: true });
     await notificar(deps, "nueva", cita, { config, quien: por, tipoAviso: "sin_invitacion", soloAviso: true });
     return res.status(200).json({ ok: true, id: cita.id, correo: null, sinInvitacion: true });
   }
@@ -689,8 +702,16 @@ async function editarCita(deps, quien, body, res) {
     if (!(pendiente && !e) && !emailValido(e)) return res.status(400).json({ error: "El correo no parece válido." });
     campos.email = e;
   }
+  let cambiaEnlace = false;
+  if ("enlace_reunion" in c) {
+    const enlace = enlaceReunionValido(c.enlace_reunion);
+    if (enlace === undefined) return res.status(400).json({ error: ENLACE_NO_VALIDO });
+    cambiaEnlace = enlace !== (cita.enlace_reunion || null);
+    if (cambiaEnlace) campos.enlace_reunion = enlace;
+  }
   const cambiaEmail = "email" in campos && campos.email.toLowerCase() !== String(cita.email).toLowerCase();
-  const reenviar = (cambiaEmail && !pendiente) || body.reenviar === true;
+  // Correo o enlace nuevos: la persona necesita la invitación actualizada.
+  const reenviar = ((cambiaEmail || cambiaEnlace) && !pendiente) || body.reenviar === true;
   let token = null;
   if (reenviar) {
     if (!emailValido(campos.email ?? cita.email)) {
@@ -835,7 +856,7 @@ export function crearCitaPublica(deps) {
           fin: cita.fin,
           estado: cita.estado,
           pasada,
-          enlaceReunion: config?.enlace_reunion || null,
+          enlaceReunion: cita.enlace_reunion || config?.enlace_reunion || null,
         });
       }
       if (!activa) {

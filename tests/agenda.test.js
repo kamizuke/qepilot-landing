@@ -687,3 +687,37 @@ test("los correos de la agenda salen con texto plano y HTML completo", async () 
   // Tablas: cada fila en su línea, celdas separadas.
   assert.equal(textoDeHtml("<table><tr><td>Empresa</td><td>ACME</td></tr><tr><td>Tel</td><td>1</td></tr></table>"), "Empresa ACME\nTel 1");
 });
+
+test("cada demo puede llevar su propio enlace de Teams", async () => {
+  const t = montar();
+  const { huecos } = (await t.admin({ accion: "huecos" })).body;
+  const propio = "https://teams.microsoft.com/l/meetup-join/propio-de-ana";
+
+  // Un enlace que no es https se rechaza antes de reservar nada.
+  const mal = await t.admin({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Ana", email: "ana@metal.es", enlaceReunion: "http://inseguro" });
+  assert.equal(mal.statusCode, 400);
+  assert.equal(t.datos._db.citas.length, 0);
+
+  // Al reservar con enlace propio, la invitación lleva ese y no el fijo de Ajustes.
+  const r = await t.admin({ accion: "reservar", inicio: huecos[0].inicio, nombre: "Ana", email: "ana@metal.es", enlaceReunion: propio });
+  assert.equal(r.statusCode, 200);
+  assert.equal(t.datos._db.citas[0].enlace_reunion, propio);
+  assert.ok(t.enviados[0].html.includes(propio));
+  assert.ok(t.enviados[0].ics.replace(/\r\n /g, "").includes(`LOCATION:${propio}`));
+  const token = t.enviados[0].html.match(/\/cita\/([A-Za-z0-9_-]+)/)[1];
+  assert.equal((await t.publica({ token, accion: "ver" })).body.enlaceReunion, propio);
+
+  // Cambiar el enlace reenvía la invitación con el nuevo.
+  const otro = "https://teams.microsoft.com/l/meetup-join/otro";
+  const antes = t.enviados.length;
+  const e = await t.admin({ accion: "editar_cita", id: r.body.id, campos: { enlace_reunion: otro } });
+  assert.deepEqual([e.statusCode, e.body.reenviada, e.body.correo], [200, true, true]);
+  assert.equal(t.enviados.length, antes + 2);
+  assert.ok(t.enviados[antes].html.includes(otro));
+  assert.equal(t.datos._db.citas[0].secuencia, 1);
+
+  // Mismo enlace: no hay cambio ni correo. Enlace no válido: error.
+  assert.equal((await t.admin({ accion: "editar_cita", id: r.body.id, campos: { enlace_reunion: otro } })).statusCode, 400);
+  assert.equal((await t.admin({ accion: "editar_cita", id: r.body.id, campos: { enlace_reunion: "teams" } })).statusCode, 400);
+  assert.equal(t.enviados.length, antes + 2);
+});
