@@ -17,9 +17,13 @@ const CASO = {
 test("el cálculo da lo mismo que la app y que la calculadora del MITECO", () => {
   const r = calcular(CASO, COMERCIALIZADORAS);
   assert.equal(toneladas(r.total), "47,2");
-  assert.equal(toneladas(r.a1), "24,6");
+  assert.equal(toneladas(r.a1), "24,7");
   assert.equal(toneladas(r.a2), "22,6");
-  assert.deepEqual(r.partidas.map((p) => p.factor), [0.182, 2.505, 0.251]);
+  // Factores por gases (CO₂ + CH₄ + N₂O con su PCA), como la calculadora
+  // oficial: 47.244,3 kg, lo mismo que dio el Excel del MITECO (47,24 t).
+  // Con la tabla redondeada (0,182 y 2,505) salían 47.198 kg (QA-091).
+  assert.deepEqual(r.partidas.map((p) => p.factor), [0.1824464, 2.5054667, 0.251]);
+  assert.equal(Math.round(r.total * 10) / 10, 47244.3);
   assert.deepEqual(tablasMiteco(r).map((t) => t.filas), [
     [["Gas natural (kWhPCS)*", "100800"]],
     [["Furgonetas y furgones (N1)", "B7 (l)", "2500"]],
@@ -117,7 +121,7 @@ test("cada partida enseña su operación y de dónde sale el factor", () => {
   assert.equal(operacion(de("R-410A")), "3 kg × PCA 2256 = 6,768 t CO₂e");
   assert.equal(de("R-410A").procedencia, "PCA de la lista del MITECO");
   assert.equal(de("R-454B").procedencia, "PCA escrito por ti");
-  assert.equal(operacion(de("Gas natural")), "100.800 kWh × 0,182 kg CO₂e/kWh = 18,346 t CO₂e");
+  assert.equal(operacion(de("Gas natural")), "100.800 kWh × 0,1824464 kg CO₂e/kWh = 18,391 t CO₂e");
   assert.equal(de("Gas natural").procedencia, "Factor del MITECO para 2025");
   assert.equal(operacion(de("Electricidad")), "90.000 kWh × 0,251 kg CO₂e/kWh = 22,590 t CO₂e");
   assert.match(de("Electricidad").procedencia, /comercializadora en 2025, según el MITECO/);
@@ -128,7 +132,7 @@ test("cada partida enseña su operación y de dónde sale el factor", () => {
 test("simulador, objetivo y texto para cuestionarios", () => {
   const { escenarios } = simular(CASO, COMERCIALIZADORAS);
   assert.deepEqual(escenarios.map((e) => [e.titulo, toneladas(e.total)]), [
-    ["Electricidad con garantía de origen renovable", "24,6"],
+    ["Electricidad con garantía de origen renovable", "24,7"],
     ["Un 10 % menos de combustible en vehículos", "46,6"],
     ["Un 10 % menos de combustible en instalaciones", "45,4"],
   ]);

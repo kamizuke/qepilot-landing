@@ -315,7 +315,7 @@ function cuanto(cantidad, unidad) {
 
 /** Cómo sale la cifra de una partida: «3 kg × PCA 2256 = 6,768 t CO₂e». */
 export function operacion(p) {
-  const fac = p.factor.toLocaleString("es-ES", { maximumFractionDigits: 6 });
+  const fac = p.factor.toLocaleString("es-ES", { maximumFractionDigits: 7 });
   const t = (p.kg / 1000).toLocaleString("es-ES", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
   return `${cuanto(p.cantidad, p.unidad)} × ${p.bloque === "fugas" ? `PCA ${fac}` : `${fac} kg CO₂e/${p.unidad}`} = ${t} t CO₂e`;
 }

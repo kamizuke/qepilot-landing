@@ -125,7 +125,7 @@
     <div class="tarjeta cta">
       <h2>Que se calcule sola, cada año</h2>
       <p class="suave" style="max-width:60ch;margin:6px auto 0">En Evidran la huella sale de los consumos que ya registras en tus aspectos ambientales y queda lista para la auditoría de la ISO 14001 y la revisión por la dirección.</p>
-      <div class="fila no-imprimir" style="justify-content:center"><a class="boton pri" href="https://app.evidran.com/?alta=1">Pruébalo gratis 30 días</a></div>
+      <div class="fila no-imprimir" style="justify-content:center"><a class="boton pri" href="https://app.evidran.com/?alta=14001">Pruébalo gratis</a></div>
     </div>
 
     <p class="suave peq" style="margin-top:18px" id="pie"></p>
@@ -187,7 +187,7 @@
     $("desglose").replaceChildren(...r.partidas.slice().sort((a, b) => b.kg - a.kg).map((p) => el("tr", null,
       el("td", null, p.etiqueta + (p.aprox ? " (aproximado)" : ""), el("div", { class: "suave peq" }, p.procedencia)),
       el("td", { class: "n" }, `${p.cantidad.toLocaleString("es-ES")} ${p.unidad}`),
-      el("td", { class: "n" }, p.bloque === "fugas" ? `PCA ${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })}` : `${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })} kg/${p.unidad}`),
+      el("td", { class: "n" }, p.bloque === "fugas" ? `PCA ${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })}` : `${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 7 })} kg/${p.unidad}`),
       el("td", { class: "n" }, toneladas(p.kg)),
       el("td", { class: "n" }, porcentaje(p.kg, r.total) + " %"))));
     $("nota-aprox").textContent = r.aproximado ? "Parte de los consumos son aproximados." : "";
