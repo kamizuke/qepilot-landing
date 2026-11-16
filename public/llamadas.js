@@ -604,7 +604,7 @@
     ["«Con Excel nos va bien.»", "«Lo entiendo. Excel no te avisa cuando una acción se pasa de plazo ni te dice qué problemas se repiten. Eso es lo que verías en la demo.»"],
     ["«Ya uso ChatGPT para redactar.»", "«Ayuda a redactar, pero el informe se queda en un chat suelto. En Evidran cada no conformidad queda registrada, con responsable, plazo y aviso cuando vence.»"],
     ["«Nos lo lleva una consultora.»", "«Perfecto, la demo también le sirve a tu consultor. ¿Le invitamos? ¿Cómo se llama la consultora?» (Apúntalo siempre.)"],
-    ["«¿Cuánto cuesta?»", "«Ahora mismo nada: las primeras 10 no conformidades son gratis, sin fecha de fin y sin tarjeta. Si después quieres seguir, en la demo te explican el precio: es anual por empresa, no por usuario.»"],
+    ["«¿Cuánto cuesta?»", "«Ahora mismo nada: las primeras 10 no conformidades son gratis durante un año y sin tarjeta. Si después quieres seguir, en la demo te explican el precio: es anual por empresa, no por usuario.»"],
     ["«¿Esto es inteligencia artificial? No me fío.»", "«La herramienta no decide por ti. Te pregunta y redacta a partir de lo que tú cuentas. El criterio sigue siendo tuyo.»"],
     ["«Esto no lo decido yo.»", "«¿Quién lo decide? ¿Os encaja conectaros los dos a la demo?»"],
     ["«Llámame en otro momento.»", "«Claro. ¿Qué día y a qué hora te viene bien?» (Pulsa «Volver a llamar» y pon ese día.)"],
@@ -783,7 +783,7 @@
         h("h4", null, "3. Pregunta (y escucha)"), h("div", { class: "frase" }, "«Por curiosidad, ¿cómo registráis hoy las no conformidades? ¿Word, Excel, algún programa?»"),
         h("details", { class: "opcional" }, h("summary", null, "Opcional: qué gana la empresa"),
           h("p", { class: "suave peq" }, "Solo si te da pie. Elige UNA, la que encaje con lo que te ha contado."), listaGanancias()),
-        h("h4", null, "5. Pide la cita"), h("div", { class: "frase" }, "«Estamos buscando unas pocas empresas que lo prueben gratis con sus próximas 10 no conformidades, sin fecha de fin, sin tarjeta y sin compromiso. En una videollamada de 30 minutos te lo dejamos montado. ¿Te va mejor el [día] a las [hora] o el [día] a las [hora]?»"),
+        h("h4", null, "5. Pide la cita"), h("div", { class: "frase" }, "«Estamos buscando unas pocas empresas que lo prueben gratis con sus próximas 10 no conformidades durante un año, sin tarjeta y sin compromiso. En una videollamada de 30 minutos te lo dejamos montado. ¿Te va mejor el [día] a las [hora] o el [día] a las [hora]?»"),
         h("h4", null, "Si te dicen…"), listaObjeciones()));
   }
 
