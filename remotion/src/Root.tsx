@@ -6,6 +6,7 @@ import { Anuncio01, Anuncio01Props, DURACION_ANUNCIO01 } from "./Anuncio01";
 import { Anuncio01Gancho, DURACION_GANCHO } from "./Anuncio01Gancho";
 import { Anuncio03, DURACION_ANUNCIO03 } from "./Anuncio03";
 import { Anuncio11, DURACION_ANUNCIO11 } from "./Anuncio11";
+import { Anuncio12, Anuncio12Props, DURACION_ANUNCIO12 } from "./Anuncio12";
 
 // 9:16 (historias y reels): la pieza 4:5 centrada sobre fondo crema.
 const Anuncio01GanchoVertical: React.FC<Anuncio01Props> = ({ tema }) => (
@@ -32,6 +33,14 @@ const Anuncio11Vertical: React.FC<Anuncio01Props> = ({ tema }) => (
   </AbsoluteFill>
 );
 
+const Anuncio12Vertical: React.FC<Anuncio12Props> = ({ tema }) => (
+  <AbsoluteFill style={{ backgroundColor: tema === "azul" ? "#2563EB" : "#F7F6F2", justifyContent: "center" }}>
+    <div style={{ position: "relative", width: 1080, height: 1350 }}>
+      <Anuncio12 tema={tema} formato="4x5" />
+    </div>
+  </AbsoluteFill>
+);
+
 const Anuncio01Vertical: React.FC<Anuncio01Props> = ({ tema }) => (
   <AbsoluteFill style={{ backgroundColor: tema === "azul" ? "#2563EB" : "#F7F6F2", justifyContent: "center" }}>
     <div style={{ position: "relative", width: 1080, height: 1350 }}>
@@ -53,6 +62,10 @@ export const RemotionRoot: React.FC = () => {
           <Composition id={`Anuncio03Vertical-${tema}`} component={Anuncio03Vertical} defaultProps={{ tema }} durationInFrames={DURACION_ANUNCIO03} fps={30} width={1080} height={1920} />
           <Composition id={`Anuncio11-${tema}`} component={Anuncio11} defaultProps={{ tema }} durationInFrames={DURACION_ANUNCIO11} fps={30} width={1080} height={1350} />
           <Composition id={`Anuncio11Vertical-${tema}`} component={Anuncio11Vertical} defaultProps={{ tema }} durationInFrames={DURACION_ANUNCIO11} fps={30} width={1080} height={1920} />
+          <Composition id={`Anuncio12-${tema}`} component={Anuncio12} defaultProps={{ tema, formato: "4x5" as const }} durationInFrames={DURACION_ANUNCIO12} fps={30} width={1080} height={1350} />
+          <Composition id={`Anuncio12Vertical-${tema}`} component={Anuncio12Vertical} defaultProps={{ tema, formato: "4x5" as const }} durationInFrames={DURACION_ANUNCIO12} fps={30} width={1080} height={1920} />
+          {/* LinkedIn: vídeo ancho 16:9 */}
+          <Composition id={`Anuncio12Ancho-${tema}`} component={Anuncio12} defaultProps={{ tema, formato: "16x9" as const }} durationInFrames={DURACION_ANUNCIO12} fps={30} width={1920} height={1080} />
           <Composition id={`Anuncio01Vertical-${tema}`} component={Anuncio01Vertical} defaultProps={{ tema }} durationInFrames={DURACION_ANUNCIO01} fps={30} width={1080} height={1920} />
         </React.Fragment>
       ))}
