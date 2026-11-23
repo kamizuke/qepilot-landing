@@ -5,7 +5,7 @@
 // Dos formatos: 4:5 (Meta Ads, y su versión 9:16) y 16:9 (LinkedIn).
 // Pantallas: capturas reales de la org demo Metalúrgica Duero (las de la portada).
 import React from "react";
-import { AbsoluteFill, Audio, Easing, Img, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Easing, Img, OffthreadVideo, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { Cierre, FUENTE, TEMAS, TemaCtx, fuentes, suave } from "./Anuncio01";
 
 export type Anuncio12Props = { tema: "crema" | "azul"; formato: "4x5" | "16x9" };
@@ -68,11 +68,15 @@ const Rotulo: React.FC<{ texto: string; duracion: number }> = ({ texto, duracion
 // ---------- Pantalla fija con movimiento de cámara ----------
 // x, y: esquina superior izquierda del encuadre en fracciones de la imagen; w: fracción del ancho visible.
 type Clave = { f: number; x: number; y: number; w: number };
-type Captura = { src: string; ancho: number; alto: number };
+// `video`: la pantalla es una grabación (segundo donde empieza y velocidad), no una captura fija.
+type Captura = { src: string; ancho: number; alto: number; video?: { inicio: number; velocidad: number } };
 const ENTREVISTA: Captura = { src: "anuncio12/evidran-entrevista-2026-10.webp", ancho: 2560, alto: 1290 };
 const MIDIA: Captura = { src: "anuncio12/evidran-mi-dia-2026-10.webp", ancho: 2560, alto: 1600 };
-const PLAN: Captura = { src: "anuncio12/evidran-plan-2026-10.webp", ancho: 2560, alto: 1600 };
-const FIRMA: Captura = { src: "anuncio12/evidran-firma-2026-10.webp", ancho: 1520, alto: 1390 };
+// Casos anteriores: se busca «clip» y sale la NC de entonces con su causa y su solución
+// (grabación del anuncio 11, org demo Inyectados Rívora).
+const CASOS: Captura = { src: "anuncio11/L-cerebro.mp4", ancho: 1920, alto: 2400, video: { inicio: 9.5, velocidad: 1.2 } };
+// Inteligencia: causas raíz agrupadas y el objetivo 6.2 que Evidran propone a partir de ellas.
+const CAUSAS: Captura = { src: "anuncio12/evidran-causas-2026-10.webp", ancho: 2008, alto: 1114 };
 
 const Pantalla: React.FC<{ cap: Captura; claves: Clave[]; aparece?: boolean }> = ({ cap, claves, aparece }) => {
   const f = useCurrentFrame();
@@ -101,10 +105,22 @@ const Pantalla: React.FC<{ cap: Captura; claves: Clave[]; aparece?: boolean }> =
         backgroundColor: "#fff",
       }}
     >
-      <Img
-        src={staticFile(cap.src)}
-        style={{ position: "absolute", width: anchoImg, height: altoImg, left: -cam("x") * anchoImg, top: -cam("y") * altoImg, opacity: op }}
-      />
+      {cap.video ? (
+        <div style={{ position: "absolute", width: anchoImg, height: altoImg, left: -cam("x") * anchoImg, top: -cam("y") * altoImg, opacity: op }}>
+          <OffthreadVideo
+            src={staticFile(cap.src)}
+            startFrom={Math.round(cap.video.inicio * 30)}
+            playbackRate={cap.video.velocidad}
+            muted
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
+      ) : (
+        <Img
+          src={staticFile(cap.src)}
+          style={{ position: "absolute", width: anchoImg, height: altoImg, left: -cam("x") * anchoImg, top: -cam("y") * altoImg, opacity: op }}
+        />
+      )}
     </div>
   );
 };
@@ -124,9 +140,9 @@ const Gancho: React.FC = () => {
     >
       <div style={{ fontSize: m.ganchoFuente, fontWeight: 700, lineHeight: 1.3 }}>
         {linea("Las NC, en un Excel.", 0)}
-        {linea("Los aspectos ambientales, en otro.", 12)}
-        {linea("Los requisitos legales, en una carpeta.", 24)}
-        {linea("Las acciones, en el correo.", 36)}
+        {linea("Los aspectos ambientales, en otro.", 22)}
+        {linea("Los requisitos legales, en una carpeta.", 44)}
+        {linea("Las acciones, en el correo.", 66)}
       </div>
       <div
         style={{
@@ -136,8 +152,8 @@ const Gancho: React.FC = () => {
           letterSpacing: -3,
           lineHeight: 1.02,
           color: tema.enfasis,
-          opacity: a(60),
-          transform: `scale(${0.94 + 0.06 * a(60)})`,
+          opacity: a(96),
+          transform: `scale(${0.94 + 0.06 * a(96)})`,
         }}
       >
         ¿Dónde está todo?
@@ -155,7 +171,7 @@ const PIEZAS: Pieza[] = [
   { tipo: "carpeta", titulo: "Auditoría interna › evidencias (2)" },
   { tipo: "docx", titulo: "Requisitos legales 2026 (revisar).docx" },
   { tipo: "pdf", titulo: "Evaluación de riesgos_firmada.pdf" },
-  { tipo: "chat", titulo: "Javi (Mantenimiento)" },
+  { tipo: "chat", titulo: "Pablo (Mantenimiento)" },
   { tipo: "xlsx", titulo: "Aspectos ambientales_matriz.xlsx" },
   { tipo: "foto", titulo: "IMG_4471.jpg" },
   { tipo: "nota", titulo: "" },
@@ -275,7 +291,7 @@ const PiezaVista: React.FC<{ p: Pieza }> = ({ p }) => {
       >
         Plazo acción 3: ¿viernes?
         <br />
-        Preguntar a Javi
+        Preguntar a Pablo
       </div>
     );
   }
@@ -428,7 +444,8 @@ const mov = (de: Omit<Clave, "f">, a: Omit<Clave, "f">, fin: number): Clave[] =>
   { f: fin, ...a },
 ];
 const TRAMOS: Tramo[] = [
-  { d: 110, gancho: true },
+  // 5 s: da tiempo a leer las cuatro líneas y la pregunta
+  { d: 150, gancho: true },
   // Archivos sueltos que se amontonan y luego se juntan en Evidran
   { d: JUNTA + 75, caos: true },
   // La entrevista y el informe, en el mismo sitio
@@ -444,32 +461,62 @@ const TRAMOS: Tramo[] = [
     cap: MIDIA,
     claves: { "4x5": mov({ x: 0.19, y: 0, w: 0.6 }, { x: 0.205, y: 0.2, w: 0.5 }, 105), "16x9": mov({ x: 0.19, y: 0, w: 0.81 }, { x: 0.2, y: 0.3, w: 0.8 }, 105) },
   },
-  // Plan de mejora: acciones de NC, auditorías, riesgos y cambios, juntas
+  // «Esto ya nos pasó»: la búsqueda encuentra la NC de entonces, con causa y solución
   {
-    d: 115,
-    cap: PLAN,
-    claves: { "4x5": mov({ x: 0.2, y: 0.06, w: 0.55 }, { x: 0.42, y: 0.12, w: 0.55 }, 105), "16x9": mov({ x: 0.2, y: 0.05, w: 0.8 }, { x: 0.2, y: 0.3, w: 0.8 }, 105) },
+    d: 125,
+    cap: CASOS,
+    claves: {
+      "4x5": [
+        { f: 0, x: 0.08, y: 0, w: 0.92 },
+        { f: 70, x: 0.08, y: 0, w: 0.92 },
+        { f: 115, x: 0.18, y: 0.18, w: 0.45 },
+      ],
+      "16x9": [
+        { f: 0, x: 0.19, y: 0.02, w: 0.81 },
+        { f: 70, x: 0.19, y: 0.02, w: 0.81 },
+        { f: 118, x: 0.21, y: 0.3, w: 0.44 },
+      ],
+    },
   },
-  // Aprobado y firmado, con sitio para lo que llegue después (acta, albarán…)
+  // Inteligencia: de las causas que se repiten sale un objetivo 6.2 propuesto
   {
-    d: 110,
-    cap: FIRMA,
-    claves: { "4x5": mov({ x: 0.07, y: 0.17, w: 0.48 }, { x: 0.035, y: 0.12, w: 0.56 }, 100), "16x9": mov({ x: 0.05, y: 0.15, w: 0.7 }, { x: 0.02, y: 0.14, w: 0.96 }, 100) },
+    d: 100,
+    cap: CAUSAS,
+    claves: {
+      "4x5": [
+        { f: 0, x: 0, y: 0, w: 0.55 },
+        { f: 22, x: 0, y: 0, w: 0.55 },
+        { f: 90, x: 0.56, y: 0.24, w: 0.42 },
+      ],
+      "16x9": [
+        { f: 0, x: 0.01, y: 0.01, w: 1 },
+        { f: 22, x: 0.01, y: 0.01, w: 1 },
+        { f: 90, x: 0.56, y: 0.52, w: 0.44 },
+      ],
+    },
   },
   { d: 95, frase: true },
   { d: 95, cierre: true },
 ];
 const inicioTramo = (n: number) => TRAMOS.slice(0, n).reduce((a, t) => a + t.d, 0);
+const DURACION_TOTAL = inicioTramo(TRAMOS.length);
 
 // Rótulos: [desde (fotograma absoluto), duración, texto]
 const T1 = inicioTramo(1);
+// La pista dura 32 s (960 fotogramas): se retrasa lo justo para que acabe con el vídeo
+// y su golpe caiga cuando todo se junta en Evidran.
+const RETRASO_MUSICA = DURACION_TOTAL - 960;
 const ROTULOS: [number, number, string][] = [
-  [T1, JUNTA, "Tu sistema de gestión, en diez sitios."],
+  [T1, JUNTA, "Tu sistema de gestión, en\u00a0diez\u00a0sitios."],
   [T1 + JUNTA, 75, "Con Evidran, en uno solo."],
-  [inicioTramo(2), TRAMOS[2].d, "La NC se escribe aquí, no en Word."],
-  [inicioTramo(3), TRAMOS[3].d, "Todo lo que vence, de un vistazo."],
-  [inicioTramo(4), TRAMOS[4].d, "Acciones de NC, auditorías y riesgos, juntas."],
-  [inicioTramo(5), TRAMOS[5].d, "Firmado y archivado, en el expediente."],
+  // Dolor: la plantilla en blanco y redactar la NC
+  [inicioTramo(2), TRAMOS[2].d, "La NC se escribe en una\u00a0conversación."],
+  // Dolor: que lo vencido lo descubra el auditor
+  [inicioTramo(3), TRAMOS[3].d, "Lo vencido lo ves tú, no\u00a0el\u00a0auditor."],
+  // Dolor: «esto ya nos pasó» y nadie encuentra cómo se resolvió
+  [inicioTramo(4), TRAMOS[4].d, "¿Ya os pasó? Te recuerda cómo se\u00a0resolvió."],
+  // Dolor: inventarse los objetivos de calidad para la auditoría
+  [inicioTramo(5), TRAMOS[5].d, "Y te propone objetivos con\u00a0tus\u00a0datos."],
 ];
 
 export const Anuncio12: React.FC<Anuncio12Props> = ({ tema, formato }) => (
@@ -479,16 +526,19 @@ export const Anuncio12: React.FC<Anuncio12Props> = ({ tema, formato }) => (
         <AbsoluteFill style={{ backgroundColor: TEMAS[tema].fondo }}>
           <style>{fuentes}</style>
           {/* Música: ElevenLabs Music v2.5 vía Higgsfield (23/11/2026), 32 s, instrumental.
-              Sube de intensidad hacia los 8,5 s, cuando todo se junta en Evidran. */}
-          <Audio
-            src={staticFile("anuncio12/musica.mp3")}
-            volume={(f) =>
-              interpolate(f, [0, 9, DURACION_ANUNCIO12 - 15, DURACION_ANUNCIO12], [0, 1, 1, 0], {
-                extrapolateLeft: "clamp",
-                extrapolateRight: "clamp",
-              })
-            }
-          />
+              Sube de intensidad a los 8,5 s de la pista; empieza con 40 fotogramas de retraso
+              (gancho de 5 s) para que ese golpe siga cayendo cuando todo se junta en Evidran. */}
+          <Sequence from={RETRASO_MUSICA}>
+            <Audio
+              src={staticFile("anuncio12/musica.mp3")}
+              volume={(f) =>
+                interpolate(f, [0, 9, DURACION_ANUNCIO12 - RETRASO_MUSICA - 15, DURACION_ANUNCIO12 - RETRASO_MUSICA], [0, 1, 1, 0], {
+                  extrapolateLeft: "clamp",
+                  extrapolateRight: "clamp",
+                })
+              }
+            />
+          </Sequence>
           {TRAMOS.map((t, n) => (
             <Sequence key={n} from={inicioTramo(n)} durationInFrames={t.d}>
               {t.gancho && <Gancho />}
