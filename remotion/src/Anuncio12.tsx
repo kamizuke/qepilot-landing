@@ -5,7 +5,7 @@
 // Dos formatos: 4:5 (Meta Ads, y su versión 9:16) y 16:9 (LinkedIn).
 // Pantallas: capturas reales de la org demo Metalúrgica Duero (las de la portada).
 import React from "react";
-import { AbsoluteFill, Easing, Img, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Easing, Img, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { Cierre, FUENTE, TEMAS, TemaCtx, fuentes, suave } from "./Anuncio01";
 
 export type Anuncio12Props = { tema: "crema" | "azul"; formato: "4x5" | "16x9" };
@@ -478,6 +478,17 @@ export const Anuncio12: React.FC<Anuncio12Props> = ({ tema, formato }) => (
       <FormatoCtx.Provider value={formato}>
         <AbsoluteFill style={{ backgroundColor: TEMAS[tema].fondo }}>
           <style>{fuentes}</style>
+          {/* Música: ElevenLabs Music v2.5 vía Higgsfield (23/11/2026), 32 s, instrumental.
+              Sube de intensidad hacia los 8,5 s, cuando todo se junta en Evidran. */}
+          <Audio
+            src={staticFile("anuncio12/musica.mp3")}
+            volume={(f) =>
+              interpolate(f, [0, 9, DURACION_ANUNCIO12 - 15, DURACION_ANUNCIO12], [0, 1, 1, 0], {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp",
+              })
+            }
+          />
           {TRAMOS.map((t, n) => (
             <Sequence key={n} from={inicioTramo(n)} durationInFrames={t.d}>
               {t.gancho && <Gancho />}
