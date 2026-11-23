@@ -8,7 +8,8 @@ import React from "react";
 import { AbsoluteFill, Audio, Easing, Img, OffthreadVideo, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { Cierre, FUENTE, TEMAS, TemaCtx, fuentes, suave } from "./Anuncio01";
 
-export type Anuncio12Props = { tema: "crema" | "azul"; formato: "4x5" | "16x9" };
+// `largo`: versión de LinkedIn de 48 s que añade la parte de sistema integrado (ISO 14001).
+export type Anuncio12Props = { tema: "crema" | "azul"; formato: "4x5" | "16x9"; largo?: boolean };
 
 // ---------- Maquetación por formato ----------
 type Maqueta = {
@@ -71,14 +72,59 @@ type Clave = { f: number; x: number; y: number; w: number };
 // `video`: la pantalla es una grabación (segundo donde empieza y velocidad), no una captura fija.
 type Captura = { src: string; ancho: number; alto: number; video?: { inicio: number; velocidad: number } };
 const ENTREVISTA: Captura = { src: "anuncio12/evidran-entrevista-2026-10.webp", ancho: 2560, alto: 1290 };
-const MIDIA: Captura = { src: "anuncio12/evidran-mi-dia-2026-10.webp", ancho: 2560, alto: 1600 };
-// Casos anteriores: se busca «clip» y sale la NC de entonces con su causa y su solución
-// (grabación del anuncio 11, org demo Inyectados Rívora).
-const CASOS: Captura = { src: "anuncio11/L-cerebro.mp4", ancho: 1920, alto: 2400, video: { inicio: 9.5, velocidad: 1.2 } };
+const MIDIA: Captura = { src: "anuncio12/evidran-mi-dia-2026-11.webp", ancho: 2560, alto: 1600 };
+// «Esto ya pasó»: mientras se escribe la NC-2026-056, la tarjeta ámbar avisa de que se parece a una
+// NC de junio y dice con qué acción se cerró (org de pruebas, 23/11/2026).
+const CASOS: Captura = { src: "anuncio12/evidran-esto-ya-paso-2026-11.webp", ancho: 2560, alto: 1600 };
 // Inteligencia: causas raíz agrupadas y el objetivo 6.2 que Evidran propone a partir de ellas.
 const CAUSAS: Captura = { src: "anuncio12/evidran-causas-2026-10.webp", ancho: 2008, alto: 1114 };
+// Versión larga (org de pruebas, 23/11/2026):
+// NC-2026-020, NC ambiental ISO 14001 escrita en conversación; el informe ya dice el aspecto afectado.
+const NC_AMBIENTAL: Captura = { src: "anuncio12/evidran-nc-ambiental-2026-11.webp", ancho: 2560, alto: 1600 };
+// Plan de mejora con una acción de calidad, una ambiental y una de seguridad juntas
+// (filas reordenadas en pantalla para la captura; los datos no se tocaron).
+const PLAN: Captura = { src: "anuncio12/evidran-plan-mejora-2026-11.webp", ancho: 2560, alto: 1600 };
+// Revisión por la dirección: el resumen que redacta Evidran cuenta las NC por norma (9001, 14001, 45001).
+const ACTA: Captura = { src: "anuncio12/evidran-acta-direccion-2026-11.webp", ancho: 2560, alto: 1600 };
 
-const Pantalla: React.FC<{ cap: Captura; claves: Clave[]; aparece?: boolean }> = ({ cap, claves, aparece }) => {
+// Subrayado de rotulador sobre una línea de la captura, para que se vea qué frase importa.
+// x, y, w, h en fracciones de la imagen; se dibuja de izquierda a derecha entre `f` y `f + d`.
+type Resalte = { x: number; y: number; w: number; h: number; f: number; d: number };
+const MARCADOR = "rgba(116,179,163,0.55)";
+// Líneas medidas sobre la captura de 2560×1600 (título del aviso y la acción con que se cerró).
+const RESALTES_CASOS: Resalte[] = [
+  { x: 0.4395, y: 0.2085, w: 0.4705, h: 0.0225, f: 54, d: 10 },
+  { x: 0.4395, y: 0.2297, w: 0.1755, h: 0.0215, f: 64, d: 5 },
+  { x: 0.7045, y: 0.2535, w: 0.231, h: 0.023, f: 73, d: 9 },
+  { x: 0.4395, y: 0.2772, w: 0.5023, h: 0.023, f: 82, d: 11 },
+  { x: 0.4395, y: 0.3022, w: 0.0547, h: 0.0215, f: 93, d: 3 },
+];
+// «Gestión de residuos — segregación incorrecta:» en el informe de la NC ambiental.
+const RESALTES_NC_AMBIENTAL: Resalte[] = [
+  { x: 0.6348, y: 0.6469, w: 0.1238, h: 0.0231, f: 80, d: 9 },
+  { x: 0.6348, y: 0.6731, w: 0.1328, h: 0.0231, f: 90, d: 9 },
+];
+// Las tres acciones del plan: mantenimiento (calidad), aceite usado (medio ambiente), humos (seguridad).
+const RESALTES_PLAN: Resalte[] = [
+  { x: 0.4773, y: 0.6556, w: 0.2055, h: 0.0175, f: 76, d: 10 },
+  { x: 0.4941, y: 0.8025, w: 0.1621, h: 0.0175, f: 88, d: 8 },
+  { x: 0.4668, y: 0.8994, w: 0.0977, h: 0.0175, f: 98, d: 6 },
+];
+// La frase del resumen que cuenta las NC de cada norma sin contar dos veces las multisistema.
+const RESALTES_ACTA: Resalte[] = [
+  { x: 0.3691, y: 0.6638, w: 0.2539, h: 0.0213, f: 74, d: 10 },
+  { x: 0.3445, y: 0.6944, w: 0.468, h: 0.0213, f: 86, d: 16 },
+  { x: 0.2363, y: 0.7244, w: 0.3059, h: 0.0213, f: 104, d: 10 },
+];
+// El objetivo recomendado (captura de 2008×1114).
+const RESALTES_CAUSAS: Resalte[] = [
+  { x: 0.5996, y: 0.5637, w: 0.3357, h: 0.0431, f: 66, d: 8 },
+  { x: 0.5996, y: 0.6068, w: 0.2351, h: 0.0395, f: 74, d: 6 },
+  { x: 0.5996, y: 0.6463, w: 0.3108, h: 0.0431, f: 80, d: 7 },
+  { x: 0.5996, y: 0.6894, w: 0.0518, h: 0.0395, f: 87, d: 3 },
+];
+
+const Pantalla: React.FC<{ cap: Captura; claves: Clave[]; aparece?: boolean; resaltes?: Resalte[] }> = ({ cap, claves, aparece, resaltes }) => {
   const f = useCurrentFrame();
   const m = useMaqueta();
   const fs = claves.map((k) => k.f);
@@ -116,10 +162,27 @@ const Pantalla: React.FC<{ cap: Captura; claves: Clave[]; aparece?: boolean }> =
           />
         </div>
       ) : (
-        <Img
-          src={staticFile(cap.src)}
-          style={{ position: "absolute", width: anchoImg, height: altoImg, left: -cam("x") * anchoImg, top: -cam("y") * altoImg, opacity: op }}
-        />
+        <div style={{ position: "absolute", width: anchoImg, height: altoImg, left: -cam("x") * anchoImg, top: -cam("y") * altoImg, opacity: op }}>
+          <Img src={staticFile(cap.src)} style={{ width: "100%", height: "100%" }} />
+          {(resaltes ?? []).map((r, i) => {
+            const p = interpolate(f, [r.f, r.f + r.d], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            return (
+              <div
+                key={i}
+                style={{
+                  position: "absolute",
+                  left: `${r.x * 100}%`,
+                  top: `${r.y * 100}%`,
+                  width: `${r.w * p * 100}%`,
+                  height: `${r.h * 100}%`,
+                  backgroundColor: MARCADOR,
+                  mixBlendMode: "multiply",
+                  borderRadius: 4,
+                }}
+              />
+            );
+          })}
+        </div>
       )}
     </div>
   );
@@ -317,8 +380,56 @@ const PiezaVista: React.FC<{ p: Pieza }> = ({ p }) => {
   );
 };
 
-// Las piezas entran amontonándose; a partir de JUNTA vuelan al centro y
-// aparece la tarjeta de Evidran, que crece hasta el tamaño de la pantalla.
+// ---------- El círculo de Evidran (el mismo de la portada, sección «flujo») ----------
+const DIAM_HUB: Record<Anuncio12Props["formato"], number> = { "4x5": 180, "16x9": 230 };
+const Hub: React.FC<{ cx: number; cy: number; escala: number }> = ({ cx, cy, escala }) => {
+  const f = useCurrentFrame();
+  const formato = React.useContext(FormatoCtx);
+  const d = DIAM_HUB[formato];
+  const anillo = d / 2 + 2;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: cx - d / 2,
+        top: cy - d / 2,
+        width: d,
+        height: d,
+        transform: `scale(${escala})`,
+        opacity: Math.min(1, escala * 1.5),
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: -16,
+          borderRadius: "50%",
+          background: "conic-gradient(from 200deg,rgba(74,166,245,.55),rgba(20,178,186,.55),rgba(51,223,157,.55),rgba(74,166,245,.55))",
+          WebkitMaskImage: `radial-gradient(circle,transparent ${anillo}px,#000 ${anillo + 1}px)`,
+          maskImage: `radial-gradient(circle,transparent ${anillo}px,#000 ${anillo + 1}px)`,
+          transform: `rotate(${f * 0.86}deg)`,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: "50%",
+          backgroundColor: "#fff",
+          boxShadow: "0 18px 50px rgba(37,99,235,.18),0 0 0 1px #e4e9f0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Img src={staticFile("anuncio12/evidran-isotipo.svg")} style={{ width: d * 0.4, height: d * 0.4 }} />
+      </div>
+    </div>
+  );
+};
+
+// Las piezas entran amontonándose; a partir de JUNTA vuelan al centro y se
+// funden en el círculo de Evidran, donde arranca la escena del flujo.
 const JUNTA = 135;
 const Desperdigado: React.FC = () => {
   const f = useCurrentFrame();
@@ -326,18 +437,15 @@ const Desperdigado: React.FC = () => {
   const formato = React.useContext(FormatoCtx);
   const cx = m.x + m.w / 2;
   const cy = m.y + m.h / 2;
-  const crece = interpolate(f, [JUNTA + 22, JUNTA + 58], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: suave });
-  const logo = interpolate(f, [JUNTA + 30, JUNTA + 44], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const anchoT = interpolate(crece, [0, 1], [220, m.w]);
-  const altoT = interpolate(crece, [0, 1], [220, m.h]);
+  const crece = interpolate(f, [JUNTA + 16, JUNTA + 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: suave });
   return (
     <AbsoluteFill>
       {PIEZAS.map((p, i) => {
         const [x, y, giro] = SITIOS[formato][i];
         const ini = i * 9;
         const entra = interpolate(f, [ini, ini + 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: suave });
-        const j0 = JUNTA + i * 3;
-        const va = interpolate(f, [j0, j0 + 26], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.in(Easing.cubic) });
+        const j0 = JUNTA + i * 2;
+        const va = interpolate(f, [j0, j0 + 22], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.in(Easing.cubic) });
         const ancho = p.tipo === "nota" ? 290 : W_PIEZA;
         const alto = p.tipo === "nota" ? 270 : H_PIEZA;
         // Leve deriva mientras están quietas, para que la escena respire.
@@ -360,25 +468,233 @@ const Desperdigado: React.FC = () => {
           </div>
         );
       })}
-      {f >= JUNTA + 22 && (
-        <div
-          style={{
-            position: "absolute",
-            left: cx - anchoT / 2,
-            top: cy - altoT / 2,
-            width: anchoT,
-            height: altoT,
-            borderRadius: 28,
-            backgroundColor: "#fff",
-            boxShadow: "0 30px 70px rgba(21,48,74,.22), 0 0 0 1px rgba(21,48,74,.10)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Img src={staticFile("anuncio12/evidran-logo.svg")} style={{ width: 460, opacity: logo, transform: `scale(${0.9 + 0.1 * logo})` }} />
-        </div>
-      )}
+      {f >= JUNTA + 16 && <Hub cx={cx} cy={cy} escala={crece} />}
+    </AbsoluteFill>
+  );
+};
+
+// ---------- Todo entra por un sitio, sale ordenado (portada, sección «flujo») ----------
+type NodoFlujo = { t: string; s: string; ic: React.ReactNode };
+const ENTRA: NodoFlujo[] = [
+  { t: "Hallazgo de auditoría", s: "interna, de cliente o de certificación", ic: <><rect x="6" y="4" width="12" height="17" rx="2" /><path d="M9.5 3h5v3h-5zM9 13l2 2 4-4" /></> },
+  { t: "Reclamación de cliente", s: "con la pieza ya de vuelta", ic: <><path d="M4 5h16v11H9l-5 4z" /><path d="M12 8v3.2M12 13.4v.1" /></> },
+  { t: "Lo que te cuentan en el pasillo", s: "y el viernes, de memoria", ic: <><path d="M3 5h11v7H7l-4 3z" /><path d="M14 9h7v7l-3-2h-6v-2" /></> },
+  { t: "Proveedor que vuelve a fallar", s: "otra vez el mismo lote", ic: <><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" /><circle cx="7" cy="17.5" r="1.5" /><circle cx="17" cy="17.5" r="1.5" /></> },
+  { t: "Indicador fuera de objetivo", s: "y nadie sabe desde cuándo", ic: <><path d="M4 4v16h16" /><path d="M7 8l4 4 3-3 5 5" /></> },
+];
+const SALE: NodoFlujo[] = [
+  { t: "Un expediente que se defiende", s: "causa, decisión y evidencia, ante el auditor", ic: <><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" /><path d="M8.5 12l2.5 2.5 4.5-4.5" /></> },
+  { t: "Acciones con dueño y plazo", s: "y la verificación de que funcionó", ic: <><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 9h16M8 3v4M16 3v4M9 14.5l2 2 4-4" /></> },
+  { t: "Las causas que se repiten", s: "y el objetivo que sale de ellas", ic: <><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 12a8 8 0 0 1-14 5.3L4 15" /><path d="M20 4v5h-5M4 20v-5h5" /></> },
+  { t: "La respuesta para dirección", s: "sin tener que pedir un informe", ic: <><path d="M4 20h16" /><rect x="6" y="12" width="3" height="6" /><rect x="11" y="8" width="3" height="10" /><rect x="16" y="4" width="3" height="14" /></> },
+];
+// Cuándo aparece cada nodo (fotograma de la escena): primero lo que entra, luego lo que sale.
+const T_ENTRA = (i: number) => 2 + i * 5;
+const T_SALE = (j: number) => 36 + j * 6;
+const PERIODO_PULSO = 26;
+
+const Icono: React.FC<{ ic: React.ReactNode; tam: number; sale?: boolean }> = ({ ic, tam, sale }) => (
+  <div
+    style={{
+      flex: "none",
+      width: tam,
+      height: tam,
+      borderRadius: tam * 0.28,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: sale ? "linear-gradient(135deg,#e6faf3,#e3f4fb)" : "#fff",
+      border: `1.5px solid ${sale ? "#cdeee6" : "#dddcd5"}`,
+      color: sale ? "#0f8f86" : "#4a5563",
+    }}
+  >
+    <svg viewBox="0 0 24 24" width={tam * 0.54} height={tam * 0.54} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+      {ic}
+    </svg>
+  </div>
+);
+
+const Nodo: React.FC<{ n: NodoFlujo; sale?: boolean; ancho: number; alto: number; fT: number; fS: number; icono: number }> = ({ n, sale, ancho, alto, fT, fS, icono }) => (
+  <div
+    style={{
+      width: ancho,
+      height: alto,
+      boxSizing: "border-box",
+      display: "flex",
+      alignItems: "center",
+      gap: 16,
+      padding: "0 20px 0 16px",
+      borderRadius: 18,
+      backgroundColor: sale ? "#fff" : "#FBFAF7",
+      border: "1.5px solid #dddcd5",
+      boxShadow: sale ? "0 10px 30px rgba(22,32,43,.10)" : "none",
+      fontFamily: FUENTE,
+    }}
+  >
+    <Icono ic={n.ic} tam={icono} sale={sale} />
+    <div style={{ minWidth: 0 }}>
+      <div style={{ fontSize: fT, fontWeight: 650, color: "#16202b", lineHeight: 1.2, letterSpacing: -0.3 }}>{n.t}</div>
+      <div style={{ fontSize: fS, color: "#56616d", lineHeight: 1.3, marginTop: 3 }}>{n.s}</div>
+    </div>
+  </div>
+);
+
+// Punto de una curva de Bézier cúbica.
+const bez = (p: number[], c1: number[], c2: number[], q: number[], t: number) => {
+  const u = 1 - t;
+  return [0, 1].map((k) => u * u * u * p[k] + 3 * u * u * t * c1[k] + 3 * u * t * t * c2[k] + t * t * t * q[k]);
+};
+// Pulso que recorre un cable una y otra vez a partir del fotograma `desde`.
+const pulsoT = (f: number, desde: number, fase: number) => (f < desde ? -1 : (((f - desde + fase) % PERIODO_PULSO) + PERIODO_PULSO) % PERIODO_PULSO / PERIODO_PULSO);
+const op01 = (f: number, a: number, b: number) => interpolate(f, [a, b], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: suave });
+
+const Flujo: React.FC = () => {
+  const f = useCurrentFrame();
+  const m = useMaqueta();
+  const tema = React.useContext(TemaCtx);
+  const formato = React.useContext(FormatoCtx);
+  const azul = tema.fondo === TEMAS.azul.fondo;
+  const cx = m.x + m.w / 2;
+  const cy = m.y + m.h / 2;
+  const cableIn = azul ? "rgba(255,255,255,.45)" : "#c9d3de";
+  const cableOut = azul ? "rgba(160,240,220,.75)" : "#9fd8cf";
+  const pulsoIn = azul ? "#ffffff" : "#4aa6f5";
+  const pulsoOut = azul ? "#33df9d" : "#14b2ba";
+  const etiqueta: React.CSSProperties = { fontFamily: FUENTE, fontSize: 21, fontWeight: 700, letterSpacing: 3.5, textTransform: "uppercase", color: tema.secundario };
+
+  if (formato === "16x9") {
+    const d = DIAM_HUB[formato];
+    const r = d / 2 + 16;
+    const anchoN = 530;
+    const altoN = 108;
+    const hueco = 20;
+    const xIn = cx - d / 2 - 120 - anchoN;
+    const xOut = cx + d / 2 + 120;
+    const yIn0 = cy - (ENTRA.length * altoN + (ENTRA.length - 1) * hueco) / 2 + 22;
+    const yOut0 = cy - (SALE.length * altoN + (SALE.length - 1) * hueco) / 2 + 22;
+    const cable = (y: number, sale: boolean) => {
+      const dy = Math.max(-r * 0.55, Math.min(r * 0.55, (y - cy) * 0.4));
+      const hx = Math.sqrt(r * r - dy * dy);
+      const p = sale ? [cx + hx, cy + dy] : [xIn + anchoN, y];
+      const q = sale ? [xOut, y] : [cx - hx, cy + dy];
+      const k = (q[0] - p[0]) * 0.55;
+      return { p, c1: [p[0] + k, p[1]], c2: [q[0] - k, q[1]], q };
+    };
+    return (
+      <AbsoluteFill>
+        <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
+          {ENTRA.map((_, i) => {
+            const y = yIn0 + i * (altoN + hueco) + altoN / 2;
+            const c = cable(y, false);
+            const o = op01(f, T_ENTRA(i) + 3, T_ENTRA(i) + 10);
+            const t = pulsoT(f, T_ENTRA(i) + 8, i * 5);
+            const pt = t >= 0 ? bez(c.p, c.c1, c.c2, c.q, t) : null;
+            return (
+              <g key={`i${i}`} opacity={o}>
+                <path d={`M${c.p} C${c.c1} ${c.c2} ${c.q}`} fill="none" stroke={cableIn} strokeWidth={2.2} />
+                <circle cx={c.p[0]} cy={c.p[1]} r={5} fill="#fff" stroke={cableIn} strokeWidth={2} />
+                {pt && <circle cx={pt[0]} cy={pt[1]} r={6.5} fill={pulsoIn} opacity={Math.sin(Math.PI * t)} />}
+              </g>
+            );
+          })}
+          {SALE.map((_, j) => {
+            const y = yOut0 + j * (altoN + hueco) + altoN / 2;
+            const c = cable(y, true);
+            const o = op01(f, T_SALE(j) - 4, T_SALE(j) + 4);
+            const t = pulsoT(f, T_SALE(j), j * 6);
+            const pt = t >= 0 ? bez(c.p, c.c1, c.c2, c.q, t) : null;
+            return (
+              <g key={`o${j}`} opacity={o}>
+                <path d={`M${c.p} C${c.c1} ${c.c2} ${c.q}`} fill="none" stroke={cableOut} strokeWidth={2.2} />
+                <circle cx={c.q[0]} cy={c.q[1]} r={5} fill="#fff" stroke={cableOut} strokeWidth={2} />
+                {pt && <circle cx={pt[0]} cy={pt[1]} r={6.5} fill={pulsoOut} opacity={Math.sin(Math.PI * t)} />}
+              </g>
+            );
+          })}
+        </svg>
+        <div style={{ ...etiqueta, position: "absolute", left: xIn, width: anchoN, textAlign: "right", top: yIn0 - 44, opacity: op01(f, 0, 8) }}>Lo que ocurre</div>
+        <div style={{ ...etiqueta, position: "absolute", left: xOut, top: yOut0 - 44, opacity: op01(f, T_SALE(0) - 6, T_SALE(0) + 2) }}>Lo que queda</div>
+        {ENTRA.map((n, i) => {
+          const a = op01(f, T_ENTRA(i), T_ENTRA(i) + 12);
+          return (
+            <div key={n.t} style={{ position: "absolute", left: xIn, top: yIn0 + i * (altoN + hueco), opacity: a, transform: `translateX(${(1 - a) * -50}px)` }}>
+              <Nodo n={n} ancho={anchoN} alto={altoN} fT={27} fS={19} icono={54} />
+            </div>
+          );
+        })}
+        {SALE.map((n, j) => {
+          const a = op01(f, T_SALE(j), T_SALE(j) + 12);
+          return (
+            <div key={n.t} style={{ position: "absolute", left: xOut, top: yOut0 + j * (altoN + hueco), opacity: a, transform: `translateX(${(1 - a) * 50}px)` }}>
+              <Nodo n={n} sale ancho={anchoN} alto={altoN} fT={27} fS={19} icono={54} />
+            </div>
+          );
+        })}
+        <Hub cx={cx} cy={cy} escala={1} />
+        <div style={{ position: "absolute", left: cx - 200, width: 400, top: cy + d / 2 + 34, textAlign: "center", fontFamily: FUENTE, fontWeight: 700, fontSize: 24, letterSpacing: 4, color: tema.texto }}>EVIDRAN</div>
+      </AbsoluteFill>
+    );
+  }
+
+  // 4:5 — como la portada en móvil: lo que ocurre arriba (etiquetas), Evidran en medio, lo que queda abajo.
+  const d = DIAM_HUB[formato];
+  const topHub = cy - d / 2;
+  const finHub = cy + d / 2;
+  const vlink = (y0: number, y1: number, desde: number, color: string, pulso: string) => {
+    const t = pulsoT(f, desde, 0);
+    return (
+      <div style={{ position: "absolute", left: cx - 1.5, top: y0, width: 3, height: y1 - y0, backgroundColor: color, opacity: op01(f, desde - 8, desde) }}>
+        {t >= 0 && (
+          <div style={{ position: "absolute", left: -5, top: t * (y1 - y0) - 6, width: 13, height: 13, borderRadius: "50%", backgroundColor: pulso, opacity: Math.sin(Math.PI * t) }} />
+        )}
+      </div>
+    );
+  };
+  return (
+    <AbsoluteFill>
+      <div style={{ ...etiqueta, position: "absolute", left: 0, right: 0, textAlign: "center", top: 285, opacity: op01(f, 0, 8) }}>Lo que ocurre</div>
+      <div style={{ position: "absolute", left: m.x + 10, width: m.w - 20, top: 330, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
+        {ENTRA.map((n, i) => {
+          const a = op01(f, T_ENTRA(i), T_ENTRA(i) + 12);
+          return (
+            <div
+              key={n.t}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "7px 18px 7px 8px",
+                borderRadius: 100,
+                backgroundColor: "#FBFAF7",
+                border: "1.5px solid #dddcd5",
+                fontFamily: FUENTE,
+                fontSize: 25,
+                fontWeight: 600,
+                color: "#16202b",
+                opacity: a,
+                transform: `translateY(${(1 - a) * -20}px)`,
+              }}
+            >
+              <Icono ic={n.ic} tam={40} />
+              {n.t}
+            </div>
+          );
+        })}
+      </div>
+      {vlink(560, topHub - 18, T_ENTRA(4) + 6, cableIn, pulsoIn)}
+      <Hub cx={cx} cy={cy} escala={1} />
+      {vlink(finHub + 18, 905, T_SALE(0) - 2, cableOut, pulsoOut)}
+      <div style={{ ...etiqueta, position: "absolute", left: 0, right: 0, textAlign: "center", top: 920, opacity: op01(f, T_SALE(0) - 6, T_SALE(0) + 2) }}>Lo que queda</div>
+      <div style={{ position: "absolute", left: m.x + 10, width: m.w - 20, top: 962, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        {SALE.map((n, j) => {
+          const a = op01(f, T_SALE(j), T_SALE(j) + 12);
+          return (
+            <div key={n.t} style={{ opacity: a, transform: `translateY(${(1 - a) * 24}px)` }}>
+              <Nodo n={n} sale ancho={(m.w - 20 - 16) / 2} alto={128} fT={25} fS={19} icono={50} />
+            </div>
+          );
+        })}
+      </div>
     </AbsoluteFill>
   );
 };
@@ -436,116 +752,188 @@ const Aviso: React.FC = () => {
 
 // ---------- Montaje (30 fps) ----------
 type Encuadres = Record<Anuncio12Props["formato"], Clave[]>;
-type Tramo = { d: number; gancho?: boolean; caos?: boolean; cap?: Captura; claves?: Encuadres; aparece?: boolean; frase?: boolean; cierre?: boolean };
+type Tramo = { d: number; gancho?: boolean; caos?: boolean; cap?: Captura; claves?: Encuadres; aparece?: boolean; resaltes?: Resalte[]; flujo?: boolean; frase?: boolean; cierre?: boolean };
 // Encuadre quieto los primeros 30 fotogramas y movimiento hasta el fotograma `fin`.
 const mov = (de: Omit<Clave, "f">, a: Omit<Clave, "f">, fin: number): Clave[] => [
   { f: 0, ...de },
   { f: 30, ...de },
   { f: fin, ...a },
 ];
-const TRAMOS: Tramo[] = [
-  // 5 s: da tiempo a leer las cuatro líneas y la pregunta
-  { d: 150, gancho: true },
-  // Archivos sueltos que se amontonan y luego se juntan en Evidran
-  { d: JUNTA + 75, caos: true },
-  // La entrevista y el informe, en el mismo sitio
-  {
-    d: 110,
-    cap: ENTREVISTA,
-    aparece: true,
-    claves: { "4x5": mov({ x: 0, y: 0, w: 0.5 }, { x: 0.42, y: 0, w: 0.5 }, 100), "16x9": mov({ x: 0, y: 0, w: 0.95 }, { x: 0.4, y: 0.12, w: 0.6 }, 100) },
+const GANCHO: Tramo = { d: 150, gancho: true };
+// Archivos sueltos que se amontonan y luego vuelan al círculo de Evidran
+const CAOS: Tramo = { d: JUNTA + 40, caos: true };
+// El esquema de la portada: lo que ocurre entra por un sitio y sale ordenado
+const FLUJO: Tramo = { d: 100, flujo: true };
+// La entrevista y el informe, en el mismo sitio
+const T_ENTREVISTA: Tramo = {
+  d: 100,
+  cap: ENTREVISTA,
+  aparece: true,
+  claves: { "4x5": mov({ x: 0, y: 0, w: 0.5 }, { x: 0.42, y: 0, w: 0.5 }, 92), "16x9": mov({ x: 0, y: 0, w: 0.95 }, { x: 0.4, y: 0.12, w: 0.6 }, 92) },
+};
+// Mi día: lo que vence, venga de donde venga
+const T_MIDIA: Tramo = {
+  d: 105,
+  cap: MIDIA,
+  claves: { "4x5": mov({ x: 0.19, y: 0, w: 0.6 }, { x: 0.205, y: 0.2, w: 0.5 }, 98), "16x9": mov({ x: 0.19, y: 0, w: 0.81 }, { x: 0.2, y: 0.3, w: 0.8 }, 98) },
+};
+// «Esto ya pasó»: la NC que se está escribiendo (izquierda la conversación, derecha el informe)
+// y, encima, el aviso. Se acerca a la tarjeta y se subraya a qué se parece y cómo se cerró.
+const T_CASOS: Tramo = {
+  d: 112,
+  cap: CASOS,
+  resaltes: RESALTES_CASOS,
+  claves: {
+    "4x5": [
+      { f: 0, x: 0.405, y: 0, w: 0.595 },
+      { f: 18, x: 0.405, y: 0, w: 0.595 },
+      { f: 56, x: 0.437, y: 0.01, w: 0.505 },
+    ],
+    "16x9": [
+      { f: 0, x: 0, y: 0, w: 1 },
+      { f: 18, x: 0, y: 0, w: 1 },
+      { f: 56, x: 0.42, y: 0.13, w: 0.565 },
+    ],
   },
-  // Mi día: lo que vence, venga de donde venga
-  {
-    d: 115,
-    cap: MIDIA,
-    claves: { "4x5": mov({ x: 0.19, y: 0, w: 0.6 }, { x: 0.205, y: 0.2, w: 0.5 }, 105), "16x9": mov({ x: 0.19, y: 0, w: 0.81 }, { x: 0.2, y: 0.3, w: 0.8 }, 105) },
+};
+// Inteligencia: de las causas que se repiten sale un objetivo 6.2 propuesto
+const T_CAUSAS: Tramo = {
+  d: 95,
+  cap: CAUSAS,
+  resaltes: RESALTES_CAUSAS,
+  claves: {
+    "4x5": [
+      { f: 0, x: 0, y: 0, w: 0.55 },
+      { f: 18, x: 0, y: 0, w: 0.55 },
+      { f: 66, x: 0.56, y: 0.24, w: 0.42 },
+    ],
+    "16x9": [
+      { f: 0, x: 0.01, y: 0.01, w: 1 },
+      { f: 18, x: 0.01, y: 0.01, w: 1 },
+      { f: 66, x: 0.56, y: 0.52, w: 0.44 },
+    ],
   },
-  // «Esto ya nos pasó»: la búsqueda encuentra la NC de entonces, con causa y solución
-  {
-    d: 125,
-    cap: CASOS,
-    claves: {
-      "4x5": [
-        { f: 0, x: 0.08, y: 0, w: 0.92 },
-        { f: 70, x: 0.08, y: 0, w: 0.92 },
-        { f: 115, x: 0.18, y: 0.18, w: 0.45 },
-      ],
-      "16x9": [
-        { f: 0, x: 0.19, y: 0.02, w: 0.81 },
-        { f: 70, x: 0.19, y: 0.02, w: 0.81 },
-        { f: 118, x: 0.21, y: 0.3, w: 0.44 },
-      ],
-    },
-  },
-  // Inteligencia: de las causas que se repiten sale un objetivo 6.2 propuesto
-  {
-    d: 100,
-    cap: CAUSAS,
-    claves: {
-      "4x5": [
-        { f: 0, x: 0, y: 0, w: 0.55 },
-        { f: 22, x: 0, y: 0, w: 0.55 },
-        { f: 90, x: 0.56, y: 0.24, w: 0.42 },
-      ],
-      "16x9": [
-        { f: 0, x: 0.01, y: 0.01, w: 1 },
-        { f: 22, x: 0.01, y: 0.01, w: 1 },
-        { f: 90, x: 0.56, y: 0.52, w: 0.44 },
-      ],
-    },
-  },
-  { d: 95, frase: true },
-  { d: 95, cierre: true },
-];
-const inicioTramo = (n: number) => TRAMOS.slice(0, n).reduce((a, t) => a + t.d, 0);
+};
+const FRASE: Tramo = { d: 68, frase: true };
+const CIERRE: Tramo = { d: 95, cierre: true };
+
+// Solo la versión larga (16:9); el 4:5 repite el encuadre para que el tipo cuadre.
+const ambos = (c: Clave[]): Encuadres => ({ "4x5": c, "16x9": c });
+const T_NC_AMBIENTAL: Tramo = {
+  d: 120,
+  cap: NC_AMBIENTAL,
+  resaltes: RESALTES_NC_AMBIENTAL,
+  claves: ambos(mov({ x: 0, y: 0, w: 1 }, { x: 0.44, y: 0.39, w: 0.52 }, 76)),
+};
+const T_PLAN: Tramo = {
+  d: 120,
+  cap: PLAN,
+  resaltes: RESALTES_PLAN,
+  claves: ambos(mov({ x: 0, y: 0, w: 1 }, { x: 0.205, y: 0.34, w: 0.78 }, 72)),
+};
+const T_ACTA: Tramo = {
+  d: 125,
+  cap: ACTA,
+  resaltes: RESALTES_ACTA,
+  claves: ambos(mov({ x: 0, y: 0, w: 1 }, { x: 0.225, y: 0.3, w: 0.74 }, 70)),
+};
+
+type Version = { tramos: Tramo[]; rotulos: [number, number, string][]; musica: string; retraso: number };
+const inicioEn = (tramos: Tramo[], n: number) => tramos.slice(0, n).reduce((a, t) => a + t.d, 0);
+
+// Corta (33 s, Meta y LinkedIn)
+const TRAMOS: Tramo[] = [GANCHO, CAOS, FLUJO, T_ENTREVISTA, T_MIDIA, T_CASOS, T_CAUSAS, FRASE, CIERRE];
+const inicioTramo = (n: number) => inicioEn(TRAMOS, n);
 const DURACION_TOTAL = inicioTramo(TRAMOS.length);
-
-// Rótulos: [desde (fotograma absoluto), duración, texto]
 const T1 = inicioTramo(1);
-// La pista dura 32 s (960 fotogramas): se retrasa lo justo para que acabe con el vídeo
-// y su golpe caiga cuando todo se junta en Evidran.
-const RETRASO_MUSICA = DURACION_TOTAL - 960;
-const ROTULOS: [number, number, string][] = [
-  [T1, JUNTA, "Tu sistema de gestión, en\u00a0diez\u00a0sitios."],
-  [T1 + JUNTA, 75, "Con Evidran, en uno solo."],
-  // Dolor: la plantilla en blanco y redactar la NC
-  [inicioTramo(2), TRAMOS[2].d, "La NC se escribe en una\u00a0conversación."],
-  // Dolor: que lo vencido lo descubra el auditor
-  [inicioTramo(3), TRAMOS[3].d, "Lo vencido lo ves tú, no\u00a0el\u00a0auditor."],
-  // Dolor: «esto ya nos pasó» y nadie encuentra cómo se resolvió
-  [inicioTramo(4), TRAMOS[4].d, "¿Ya os pasó? Te recuerda cómo se\u00a0resolvió."],
-  // Dolor: inventarse los objetivos de calidad para la auditoría
-  [inicioTramo(5), TRAMOS[5].d, "Y te propone objetivos con\u00a0tus\u00a0datos."],
-];
+const CORTA: Version = {
+  tramos: TRAMOS,
+  // La pista dura 32 s (960 fotogramas): se retrasa lo justo para que acabe con el vídeo
+  // y su golpe (8,5 s de la pista) caiga cuando todo se junta en Evidran.
+  musica: "anuncio12/musica.mp3",
+  retraso: DURACION_TOTAL - 960,
+  rotulos: [
+    [T1, JUNTA, "Tu sistema de gestión, en\u00a0diez\u00a0sitios."],
+    [T1 + JUNTA, 40 + 30, "Con Evidran, en uno solo."],
+    [inicioTramo(2) + 30, TRAMOS[2].d - 30, "Todo entra por un sitio. Sale\u00a0ordenado."],
+    // Dolor: la plantilla en blanco y redactar la NC
+    [inicioTramo(3), TRAMOS[3].d, "La NC se escribe en una\u00a0conversación."],
+    // Dolor: que lo vencido lo descubra el auditor
+    [inicioTramo(4), TRAMOS[4].d, "Lo vencido lo ves tú, no\u00a0el\u00a0auditor."],
+    // Dolor: «esto ya nos pasó» y nadie encuentra cómo se resolvió
+    [inicioTramo(5), TRAMOS[5].d, "¿Ya os pasó? Te recuerda cómo se\u00a0resolvió."],
+    // Dolor: inventarse los objetivos de calidad para la auditoría
+    [inicioTramo(6), TRAMOS[6].d, "Y te propone objetivos con\u00a0tus\u00a0datos."],
+  ],
+};
 
-export const Anuncio12: React.FC<Anuncio12Props> = ({ tema, formato }) => (
+// Larga (48 s, LinkedIn 16:9): calidad primero y, cuando sube la música, el sistema integrado.
+const TRAMOS_LARGO: Tramo[] = [
+  GANCHO,
+  CAOS,
+  { ...FLUJO, d: 115 },
+  { ...T_ENTREVISTA, d: 115 },
+  T_NC_AMBIENTAL, // empieza en el fotograma 555 (18,5 s), justo cuando sube la música
+  T_MIDIA,
+  { ...T_CASOS, d: 120 },
+  T_PLAN,
+  T_CAUSAS,
+  T_ACTA,
+  { ...FRASE, d: 80 },
+  { ...CIERRE, d: 120 },
+];
+const iL = (n: number) => inicioEn(TRAMOS_LARGO, n);
+const dL = (n: number) => TRAMOS_LARGO[n].d;
+const LARGA: Version = {
+  tramos: TRAMOS_LARGO,
+  // Pista de 48 s (ElevenLabs Music v2.5 vía Higgsfield, 23/11/2026): acento a los 8,5 s y subida
+  // fuerte a los 17,5 s. Con 1 s de retraso, el acento cae en «Con Evidran, en uno solo» y la
+  // subida, al entrar la NC ambiental.
+  musica: "anuncio12/musica-larga.mp3",
+  retraso: 30,
+  rotulos: [
+    [T1, JUNTA, "Tu sistema de gestión, en\u00a0diez\u00a0sitios."],
+    [T1 + JUNTA, 40 + 30, "Con Evidran, en uno solo."],
+    [iL(2) + 30, dL(2) - 30, "Todo entra por un sitio. Sale\u00a0ordenado."],
+    [iL(3), dL(3), "La NC se escribe en una\u00a0conversación."],
+    [iL(4), dL(4), "¿También la 14001? En el mismo\u00a0sitio."],
+    [iL(5), dL(5), "Lo vencido lo ves tú, no\u00a0el\u00a0auditor."],
+    [iL(6), dL(6), "¿Ya os pasó? Te recuerda cómo se\u00a0resolvió."],
+    [iL(7), dL(7), "Calidad, medio ambiente y seguridad: un\u00a0solo\u00a0plan."],
+    [iL(8), dL(8), "Y te propone objetivos con\u00a0tus\u00a0datos."],
+    [iL(9), dL(9), "Y te redacta la revisión por la\u00a0dirección."],
+  ],
+};
+
+export const Anuncio12: React.FC<Anuncio12Props> = ({ tema, formato, largo }) => {
+  const v = largo ? LARGA : CORTA;
+  const total = inicioEn(v.tramos, v.tramos.length);
+  return (
   <TemaCtx.Provider value={TEMAS[tema]}>
     <MaquetaCtx.Provider value={MAQUETAS[formato]}>
       <FormatoCtx.Provider value={formato}>
         <AbsoluteFill style={{ backgroundColor: TEMAS[tema].fondo }}>
           <style>{fuentes}</style>
-          {/* Música: ElevenLabs Music v2.5 vía Higgsfield (23/11/2026), 32 s, instrumental.
-              Sube de intensidad a los 8,5 s de la pista; empieza con 40 fotogramas de retraso
-              (gancho de 5 s) para que ese golpe siga cayendo cuando todo se junta en Evidran. */}
-          <Sequence from={RETRASO_MUSICA}>
+          {/* Música: ElevenLabs Music v2.5 vía Higgsfield (23/11/2026), instrumental. */}
+          <Sequence from={v.retraso}>
             <Audio
-              src={staticFile("anuncio12/musica.mp3")}
+              src={staticFile(v.musica)}
               volume={(f) =>
-                interpolate(f, [0, 9, DURACION_ANUNCIO12 - RETRASO_MUSICA - 15, DURACION_ANUNCIO12 - RETRASO_MUSICA], [0, 1, 1, 0], {
+                interpolate(f, [0, 9, total - v.retraso - 15, total - v.retraso], [0, 1, 1, 0], {
                   extrapolateLeft: "clamp",
                   extrapolateRight: "clamp",
                 })
               }
             />
           </Sequence>
-          {TRAMOS.map((t, n) => (
-            <Sequence key={n} from={inicioTramo(n)} durationInFrames={t.d}>
+          {v.tramos.map((t, n) => (
+            <Sequence key={n} from={inicioEn(v.tramos, n)} durationInFrames={t.d}>
               {t.gancho && <Gancho />}
               {t.caos && <Desperdigado />}
+              {t.flujo && <Flujo />}
               {t.cap && (
                 <>
-                  <Pantalla cap={t.cap} claves={t.claves![formato]} aparece={t.aparece} />
+                  <Pantalla cap={t.cap} claves={t.claves![formato]} aparece={t.aparece} resaltes={t.resaltes} />
                   <Aviso />
                 </>
               )}
@@ -553,7 +941,7 @@ export const Anuncio12: React.FC<Anuncio12Props> = ({ tema, formato }) => (
               {t.cierre && <Cierre />}
             </Sequence>
           ))}
-          {ROTULOS.map(([desde, d, texto]) => (
+          {v.rotulos.map(([desde, d, texto]) => (
             <Sequence key={texto} from={desde} durationInFrames={d}>
               <Rotulo texto={texto} duracion={d} />
             </Sequence>
@@ -562,6 +950,8 @@ export const Anuncio12: React.FC<Anuncio12Props> = ({ tema, formato }) => (
       </FormatoCtx.Provider>
     </MaquetaCtx.Provider>
   </TemaCtx.Provider>
-);
+  );
+};
 
-export const DURACION_ANUNCIO12 = inicioTramo(TRAMOS.length);
+export const DURACION_ANUNCIO12 = DURACION_TOTAL;
+export const DURACION_ANUNCIO12_LARGO = inicioEn(TRAMOS_LARGO, TRAMOS_LARGO.length);

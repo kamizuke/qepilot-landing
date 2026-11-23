@@ -6,7 +6,7 @@ import { Anuncio01, Anuncio01Props, DURACION_ANUNCIO01 } from "./Anuncio01";
 import { Anuncio01Gancho, DURACION_GANCHO } from "./Anuncio01Gancho";
 import { Anuncio03, DURACION_ANUNCIO03 } from "./Anuncio03";
 import { Anuncio11, DURACION_ANUNCIO11 } from "./Anuncio11";
-import { Anuncio12, Anuncio12Props, DURACION_ANUNCIO12 } from "./Anuncio12";
+import { Anuncio12, Anuncio12Props, DURACION_ANUNCIO12, DURACION_ANUNCIO12_LARGO } from "./Anuncio12";
 
 // 9:16 (historias y reels): la pieza 4:5 centrada sobre fondo crema.
 const Anuncio01GanchoVertical: React.FC<Anuncio01Props> = ({ tema }) => (
@@ -66,6 +66,7 @@ export const RemotionRoot: React.FC = () => {
           <Composition id={`Anuncio12Vertical-${tema}`} component={Anuncio12Vertical} defaultProps={{ tema, formato: "4x5" as const }} durationInFrames={DURACION_ANUNCIO12} fps={30} width={1080} height={1920} />
           {/* LinkedIn: vídeo ancho 16:9 */}
           <Composition id={`Anuncio12Ancho-${tema}`} component={Anuncio12} defaultProps={{ tema, formato: "16x9" as const }} durationInFrames={DURACION_ANUNCIO12} fps={30} width={1920} height={1080} />
+          <Composition id={`Anuncio12Largo-${tema}`} component={Anuncio12} defaultProps={{ tema, formato: "16x9" as const, largo: true }} durationInFrames={DURACION_ANUNCIO12_LARGO} fps={30} width={1920} height={1080} />
           <Composition id={`Anuncio01Vertical-${tema}`} component={Anuncio01Vertical} defaultProps={{ tema }} durationInFrames={DURACION_ANUNCIO01} fps={30} width={1080} height={1920} />
         </React.Fragment>
       ))}
