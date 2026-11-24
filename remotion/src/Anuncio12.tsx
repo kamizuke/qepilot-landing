@@ -24,16 +24,16 @@ type Maqueta = {
   ganchoGrande: number;
   fraseFuente: number;
 };
-const MAQUETAS: Record<Anuncio12Props["formato"], Maqueta> = {
+export const MAQUETAS: Record<Anuncio12Props["formato"], Maqueta> = {
   "4x5": { banda: 250, rotuloFuente: 64, x: 40, y: 250, w: 1000, h: 1000, avisoFuente: 28, ganchoFuente: 50, ganchoGrande: 122, fraseFuente: 84 },
   "16x9": { banda: 200, rotuloFuente: 66, x: 200, y: 200, w: 1520, h: 800, avisoFuente: 26, ganchoFuente: 54, ganchoGrande: 140, fraseFuente: 100 },
 };
-const MaquetaCtx = React.createContext<Maqueta>(MAQUETAS["4x5"]);
-const useMaqueta = () => React.useContext(MaquetaCtx);
-const FormatoCtx = React.createContext<Anuncio12Props["formato"]>("4x5");
+export const MaquetaCtx = React.createContext<Maqueta>(MAQUETAS["4x5"]);
+export const useMaqueta = () => React.useContext(MaquetaCtx);
+export const FormatoCtx = React.createContext<Anuncio12Props["formato"]>("4x5");
 
 // ---------- Rótulo de la franja superior ----------
-const Rotulo: React.FC<{ texto: string; duracion: number }> = ({ texto, duracion }) => {
+export const Rotulo: React.FC<{ texto: string; duracion: number }> = ({ texto, duracion }) => {
   const f = useCurrentFrame();
   const tema = React.useContext(TemaCtx);
   const m = useMaqueta();
@@ -68,9 +68,9 @@ const Rotulo: React.FC<{ texto: string; duracion: number }> = ({ texto, duracion
 
 // ---------- Pantalla fija con movimiento de cámara ----------
 // x, y: esquina superior izquierda del encuadre en fracciones de la imagen; w: fracción del ancho visible.
-type Clave = { f: number; x: number; y: number; w: number };
+export type Clave = { f: number; x: number; y: number; w: number };
 // `video`: la pantalla es una grabación (segundo donde empieza y velocidad), no una captura fija.
-type Captura = { src: string; ancho: number; alto: number; video?: { inicio: number; velocidad: number } };
+export type Captura = { src: string; ancho: number; alto: number; video?: { inicio: number; velocidad: number } };
 const ENTREVISTA: Captura = { src: "anuncio12/evidran-entrevista-2026-10.webp", ancho: 2560, alto: 1290 };
 const MIDIA: Captura = { src: "anuncio12/evidran-mi-dia-2026-11.webp", ancho: 2560, alto: 1600 };
 // «Esto ya pasó»: mientras se escribe la NC-2026-056, la tarjeta ámbar avisa de que se parece a una
@@ -89,7 +89,7 @@ const ACTA: Captura = { src: "anuncio12/evidran-acta-direccion-2026-11.webp", an
 
 // Subrayado de rotulador sobre una línea de la captura, para que se vea qué frase importa.
 // x, y, w, h en fracciones de la imagen; se dibuja de izquierda a derecha entre `f` y `f + d`.
-type Resalte = { x: number; y: number; w: number; h: number; f: number; d: number };
+export type Resalte = { x: number; y: number; w: number; h: number; f: number; d: number };
 const MARCADOR = "rgba(116,179,163,0.55)";
 // Líneas medidas sobre la captura de 2560×1600 (título del aviso y la acción con que se cerró).
 const RESALTES_CASOS: Resalte[] = [
@@ -124,7 +124,7 @@ const RESALTES_CAUSAS: Resalte[] = [
   { x: 0.5996, y: 0.6894, w: 0.0518, h: 0.0395, f: 87, d: 3 },
 ];
 
-const Pantalla: React.FC<{ cap: Captura; claves: Clave[]; aparece?: boolean; resaltes?: Resalte[] }> = ({ cap, claves, aparece, resaltes }) => {
+export const Pantalla: React.FC<{ cap: Captura; claves: Clave[]; aparece?: boolean; resaltes?: Resalte[] }> = ({ cap, claves, aparece, resaltes }) => {
   const f = useCurrentFrame();
   const m = useMaqueta();
   const fs = claves.map((k) => k.f);
@@ -227,7 +227,8 @@ const Gancho: React.FC = () => {
 
 // ---------- Lo desperdigado (genérico, sin marcas) ----------
 type Tipo = "xlsx" | "correo" | "carpeta" | "docx" | "foto" | "nota" | "pdf" | "chat";
-type Pieza = { tipo: Tipo; titulo: string };
+// `lineas`: lo que se ve dentro de una carpeta; `nota`: el texto del pósit (con \n).
+export type Pieza = { tipo: Tipo; titulo: string; lineas?: string[]; nota?: string };
 const PIEZAS: Pieza[] = [
   { tipo: "xlsx", titulo: "Registro NC 2026_v7_FINAL.xlsx" },
   { tipo: "correo", titulo: "RE: RE: RV: acción correctiva lote 214" },
@@ -313,7 +314,7 @@ const Cuerpo: React.FC<{ p: Pieza }> = ({ p }) => {
   if (p.tipo === "carpeta") {
     return (
       <div style={{ padding: "18px 22px", display: "flex", flexDirection: "column", gap: 12, fontSize: 22, fontWeight: 600, color: "#4B5563" }}>
-        {["acta_reunion (1).pdf", "foto_lote_FINAL2.jpg", "Nueva carpeta", "copia de copia.xlsx"].map((n) => (
+        {(p.lineas ?? ["acta_reunion (1).pdf", "foto_lote_FINAL2.jpg", "Nueva carpeta", "copia de copia.xlsx"]).map((n) => (
           <div key={n} style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ width: 26, height: 20, borderRadius: 4, backgroundColor: "#F2C94C" }} />
             {n}
@@ -352,9 +353,9 @@ const PiezaVista: React.FC<{ p: Pieza }> = ({ p }) => {
           fontStyle: "italic",
         }}
       >
-        Plazo acción 3: ¿viernes?
-        <br />
-        Preguntar a Pablo
+        {(p.nota ?? "Plazo acción 3: ¿viernes?\nPreguntar a Pablo").split("\n").map((l, i) => (
+          <div key={i}>{l}</div>
+        ))}
       </div>
     );
   }
@@ -382,7 +383,7 @@ const PiezaVista: React.FC<{ p: Pieza }> = ({ p }) => {
 
 // ---------- El círculo de Evidran (el mismo de la portada, sección «flujo») ----------
 const DIAM_HUB: Record<Anuncio12Props["formato"], number> = { "4x5": 180, "16x9": 230 };
-const Hub: React.FC<{ cx: number; cy: number; escala: number }> = ({ cx, cy, escala }) => {
+export const Hub: React.FC<{ cx: number; cy: number; escala: number }> = ({ cx, cy, escala }) => {
   const f = useCurrentFrame();
   const formato = React.useContext(FormatoCtx);
   const d = DIAM_HUB[formato];
@@ -430,8 +431,8 @@ const Hub: React.FC<{ cx: number; cy: number; escala: number }> = ({ cx, cy, esc
 
 // Las piezas entran amontonándose; a partir de JUNTA vuelan al centro y se
 // funden en el círculo de Evidran, donde arranca la escena del flujo.
-const JUNTA = 135;
-const Desperdigado: React.FC = () => {
+export const JUNTA = 135;
+export const Desperdigado: React.FC<{ piezas?: Pieza[] }> = ({ piezas = PIEZAS }) => {
   const f = useCurrentFrame();
   const m = useMaqueta();
   const formato = React.useContext(FormatoCtx);
@@ -440,7 +441,7 @@ const Desperdigado: React.FC = () => {
   const crece = interpolate(f, [JUNTA + 16, JUNTA + 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: suave });
   return (
     <AbsoluteFill>
-      {PIEZAS.map((p, i) => {
+      {piezas.map((p, i) => {
         const [x, y, giro] = SITIOS[formato][i];
         const ini = i * 9;
         const entra = interpolate(f, [ini, ini + 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: suave });
@@ -727,7 +728,7 @@ const Frase: React.FC = () => {
   );
 };
 
-const Aviso: React.FC = () => {
+export const Aviso: React.FC = () => {
   const tema = React.useContext(TemaCtx);
   const m = useMaqueta();
   return (
@@ -754,7 +755,7 @@ const Aviso: React.FC = () => {
 type Encuadres = Record<Anuncio12Props["formato"], Clave[]>;
 type Tramo = { d: number; gancho?: boolean; caos?: boolean; cap?: Captura; claves?: Encuadres; aparece?: boolean; resaltes?: Resalte[]; flujo?: boolean; frase?: boolean; cierre?: boolean };
 // Encuadre quieto los primeros 30 fotogramas y movimiento hasta el fotograma `fin`.
-const mov = (de: Omit<Clave, "f">, a: Omit<Clave, "f">, fin: number): Clave[] => [
+export const mov = (de: Omit<Clave, "f">, a: Omit<Clave, "f">, fin: number): Clave[] => [
   { f: 0, ...de },
   { f: 30, ...de },
   { f: fin, ...a },
