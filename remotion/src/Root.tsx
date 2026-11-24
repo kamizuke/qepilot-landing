@@ -9,6 +9,7 @@ import { Anuncio11, DURACION_ANUNCIO11 } from "./Anuncio11";
 import { Anuncio12, Anuncio12Props, DURACION_ANUNCIO12, DURACION_ANUNCIO12_LARGO } from "./Anuncio12";
 import { Anuncio13, Anuncio13Props, DURACION_ANUNCIO13 } from "./Anuncio13";
 import { Anuncio13Li, DURACION_ANUNCIO13LI } from "./Anuncio13Li";
+import { Anuncio14, DURACION_ANUNCIO14 } from "./Anuncio14";
 
 // 9:16 (historias y reels): la pieza 4:5 centrada sobre fondo crema.
 const Anuncio01GanchoVertical: React.FC<Anuncio01Props> = ({ tema }) => (
@@ -63,6 +64,8 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <MyComposition />
+      {/* Anuncio 14 solo para LinkedIn: la transición a ISO 9001:2026 / 14001:2026 */}
+      <Composition id="Anuncio14" component={Anuncio14} durationInFrames={DURACION_ANUNCIO14} fps={30} width={1920} height={1080} />
       {/* Anuncio 13 solo para LinkedIn: cuatro versiones con estética y música propias */}
       {(["editorial", "noche", "proceso", "cifras"] as const).map((estilo) => (
         <Composition key={estilo} id={`Anuncio13Li-${estilo}`} component={Anuncio13Li} defaultProps={{ estilo }} durationInFrames={DURACION_ANUNCIO13LI} fps={30} width={1920} height={1080} />
