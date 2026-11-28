@@ -282,3 +282,53 @@ test("el cron borra los contactos sin actividad en 24 meses y nada más", async 
   assert.equal(res.c, 401);
   assert.equal(typeof limpiar, "function");
 });
+
+// Primer uso real (28 nov 2026): una cooperativa grande con biomasa, gasóleo
+// repetido en dos bloques y mucha maquinaria.
+const COOPERATIVA = {
+  anio: 2025,
+  fijas: [
+    { combustible: "gas_natural", cantidad: 21551632 },
+    { combustible: "biomasa", detalle: "hueso", cantidad: 37834220 },
+    { combustible: "gasoleo_a", cantidad: 281520 },
+  ],
+  vehiculos: [
+    { combustible: "gasoleo_a", categoria: "n2n3", cantidad: 281520 },
+    { combustible: "gasolina", categoria: "m1", cantidad: 15440 },
+  ],
+  maquinaria: [{ combustible: "gasoleo_b", tipo: "maq_industrial", cantidad: 1290180 }],
+  electricidad: [{ comercializadora: "Otras", gdo: "no", kwh: 25641429.27 }],
+};
+
+test("la biomasa explica que su CO₂ no se suma", () => {
+  const r = calcular(COOPERATIVA, COMERCIALIZADORAS);
+  const bio = r.partidas.find((p) => p.combustible === "biomasa");
+  assert.match(bio.nota, /no se suma/);
+  assert.equal(r.partidas.filter((p) => p.nota).length, 1);
+});
+
+test("avisa del mismo consumo puesto en dos sitios, sin quitarlo", () => {
+  const r = calcular(COOPERATIVA, COMERCIALIZADORAS);
+  assert.equal(r.avisos.length, 1);
+  assert.match(r.avisos[0], /^Has puesto 281\.520 l de gasóleo A \(diésel\) en instalaciones y en vehículos\./);
+  assert.equal(r.parcial, false);
+  assert.equal(r.partidas.filter((p) => p.combustible === "gasoleo_a").length, 2);
+  const sinRepetir = calcular({ ...COOPERATIVA, fijas: COOPERATIVA.fijas.slice(0, 2) }, COMERCIALIZADORAS);
+  assert.deepEqual(sinRepetir.avisos, []);
+});
+
+test("escenario de maquinaria y «menos del 1 %»", () => {
+  const { escenarios } = simular(COOPERATIVA, COMERCIALIZADORAS);
+  const maq = escenarios.find((e) => /maquinaria/.test(e.titulo));
+  assert.ok(maq);
+  assert.equal(maq.pctTexto, "2 %");
+  const veh = escenarios.find((e) => /vehículos/.test(e.titulo));
+  assert.equal(veh.pct, 0);
+  assert.equal(veh.pctTexto, "menos del 1 %");
+});
+
+test("el texto para clientes dice «procede de», no «es los»", () => {
+  const t = textoCuestionario(calcular(COOPERATIVA, COMERCIALIZADORAS), "Coop");
+  assert.match(t, /La mayor parte procede de los combustibles de las instalaciones \(\d+ % del total\)\./);
+  assert.doesNotMatch(t, /es los/);
+});

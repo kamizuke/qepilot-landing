@@ -134,7 +134,7 @@
 </div>
 
 <script type="module">
-  import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, toneladas, porcentaje, versionFactores, ORIGEN } from "/huella/calculo.js";
+  import { calcular, simular, objetivo, textoCuestionario, tablasMiteco, toneladas, porcentaje, porcentajeTexto, versionFactores, ORIGEN } from "/huella/calculo.js";
   import { COMERCIALIZADORAS } from "/huella/comercializadoras.js";
 
   const $ = (id) => document.getElementById(id);
@@ -185,18 +185,18 @@
         el("div", null, "Tampoco lo tienen en cuenta los escenarios, el objetivo ni el texto para clientes. Para la cifra completa, vuelve a calcular en evidran.com/huella con ese dato."));
     }
     $("desglose").replaceChildren(...r.partidas.slice().sort((a, b) => b.kg - a.kg).map((p) => el("tr", null,
-      el("td", null, p.etiqueta + (p.aprox ? " (aproximado)" : ""), el("div", { class: "suave peq" }, p.procedencia)),
+      el("td", null, p.etiqueta + (p.aprox ? " (aproximado)" : ""), el("div", { class: "suave peq" }, p.procedencia), p.nota ? el("div", { class: "suave peq" }, p.nota) : null),
       el("td", { class: "n" }, `${p.cantidad.toLocaleString("es-ES")} ${p.unidad}`),
       el("td", { class: "n" }, p.bloque === "fugas" ? `PCA ${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 3 })}` : `${p.factor.toLocaleString("es-ES", { maximumFractionDigits: 7 })} kg/${p.unidad}`),
       el("td", { class: "n" }, toneladas(p.kg)),
-      el("td", { class: "n" }, porcentaje(p.kg, r.total) + " %"))));
-    $("nota-aprox").textContent = r.aproximado ? "Parte de los consumos son aproximados." : "";
+      el("td", { class: "n" }, porcentajeTexto(p.kg, r.total)))));
+    $("nota-aprox").textContent = [...r.avisos, r.aproximado ? "Parte de los consumos son aproximados." : ""].filter(Boolean).join(" ");
 
     const { escenarios } = simular(d.entrada, COMERCIALIZADORAS);
     $("escenarios").replaceChildren(...(escenarios.length ? escenarios.map((e) => el("tr", null,
       el("td", null, el("b", null, e.titulo), el("div", { class: "suave peq" }, e.descripcion)),
       el("td", { class: "n" }, `${toneladas(e.total)} t`),
-      el("td", { class: "n" }, `−${toneladas(e.ahorro)} t (${e.pct} %)`))) : [el("tr", null, el("td", { colspan: "3", class: "suave" }, "Con estos consumos no hay escenarios que comparar."))]));
+      el("td", { class: "n" }, `−${toneladas(e.ahorro)} t (${e.pctTexto})`))) : [el("tr", null, el("td", { colspan: "3", class: "suave" }, "Con estos consumos no hay escenarios que comparar."))]));
 
     const sel = $("obj-anio");
     if (!sel.options.length) for (let a = r.anio + 1; a <= r.anio + 5; a++) sel.append(el("option", { value: a }, String(a)));

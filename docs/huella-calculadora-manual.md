@@ -24,6 +24,12 @@ contactos» (https://claude.ai/artifact/8Jc596SZZvbDNaHX3gtnDb). Fase 1
    igual: el correo, el informe, el objetivo y el texto para clientes lo dicen, y
    a ti te llega en el aviso. Una cantidad que no es un número («3 kg») se marca
    en rojo y no deja calcular ni enviar.
+   Los combustibles en kg (biomasa, propano, butano, GNC) dejan elegir **kg o
+   t**; se guarda siempre en kg. Si el mismo combustible lleva la misma
+   cantidad en dos filas (p. ej. el gasóleo en instalaciones y en vehículos),
+   sale un aviso de que puede estar contado dos veces; no se quita nada. La
+   biomasa lleva una nota: su CO₂ no se suma (biogénico, criterio del MITECO);
+   solo cuentan el CH₄ y el N₂O.
 3. Para el informe completo deja correo y empresa (teléfono opcional) y marca
    las casillas: informe (obligatoria), novedades y aviso anual (opcional),
    que le llamen (opcional, solo con teléfono).
@@ -31,8 +37,9 @@ contactos» (https://claude.ai/artifact/8Jc596SZZvbDNaHX3gtnDb). Fase 1
    correo y te llega un aviso a `AGENDA_AVISOS_EMAIL` (demo@evidran.com) con
    la empresa, la huella, la fuente principal y lo que ha autorizado.
 5. El informe trae: resultado y desglose con factores, **qué pasa si** (luz
-   con garantía de origen renovable, un 10 % menos en vehículos, un 10 % menos
-   en instalaciones), **objetivo ISO 14001** con porcentaje y año editables,
+   con garantía de origen renovable, un 10 % menos en vehículos, en maquinaria
+   y en instalaciones; una reducción por debajo del 1 % sale como «menos del
+   1 %»), **objetivo ISO 14001** con porcentaje y año editables,
    **texto para cuestionarios** y **cifras para la calculadora del MITECO**
    con botón de copiar. Se guarda en PDF con el botón de la página (imprimir
    del navegador). Si aceptó novedades, puede darse de baja desde ahí.

@@ -106,6 +106,9 @@
   .cantidad span { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--ink-soft); pointer-events: none; }
   .cantidad input { padding-right: 46px; }
   .hc .cantidad input.mal { border-color: #B42318; }
+  .cantidad.con-unidad { display: flex; gap: 6px; }
+  .cantidad.con-unidad input { padding-right: 12px; flex: 1; min-width: 0; }
+  .hc .cantidad.con-unidad select { width: auto; flex: 0 0 auto; padding: 10px 8px; }
   .fila-hc .ayuda-pca { grid-column: 1 / -1; font-size: 13px; color: var(--ink-soft); margin: 0; }
   .aprox { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--ink-soft); white-space: nowrap; cursor: pointer; }
   .aprox input { width: auto; }
@@ -252,6 +255,7 @@
       <h2 style="margin-bottom:8px">Preguntas frecuentes</h2>
       <details><summary>¿Es la calculadora oficial del Ministerio?</summary><p>No. Usa los mismos factores de emisión que la calculadora de huella de carbono de organización del MITECO y te da las cifras con los nombres exactos de sus desplegables, para que registrarla allí sea copiar y pegar.</p></details>
       <details><summary>¿Qué son los alcances 1 y 2?</summary><p>Alcance 1: lo que se quema en la empresa (gas, gasóleo, combustible de vehículos y maquinaria) y las fugas de gas refrigerante de la climatización y el frío. Alcance 2: la electricidad comprada. Son los dos alcances de la calculadora de huella de organización del MITECO.</p></details>
+      <details><summary>¿Por qué cuenta la biomasa si es renovable?</summary><p>Su CO₂ no se suma: el MITECO lo considera neutro porque es de origen biogénico. Lo que sí cuenta es el metano y el óxido nitroso que salen al quemarla, y en calderas grandes de hueso, astilla o pellet esa parte se nota. Es el mismo criterio que la calculadora oficial.</p></details>
       <details><summary>¿Qué no incluye?</summary><p>El alcance 3: emisiones de proveedores, transporte contratado, viajes o residuos.</p></details>
       <details><summary>¿De dónde saco los kilos de refrigerante?</summary><p>De la hoja de intervención o el registro del mantenedor. Se cuenta lo que se recargó en el año: lo que se repone es lo que se había fugado. Cada gas calienta distinto, por eso cada kilo se multiplica por su potencial de calentamiento (PCA). Si tu gas no está en la lista, elige «Otro gas» y escribe el PCA de su ficha técnica.</p></details>
       <details><summary>¿Guardáis mis consumos?</summary><p>Guardamos el cálculo sin ningún dato personal, para mejorar la herramienta. Tus datos de contacto solo si pides el informe.</p></details>
@@ -267,7 +271,7 @@
 </section>
 
 <script type="module">
-  import { PRIMER_ANIO, ULTIMO_ANIO, BLOQUES, COMBUSTIBLES, BIOMASAS, GDO, GASES, GAS_OTRO, usosDe, calcular, operacion, toneladas, porcentaje, versionFactores } from "/huella/calculo.js";
+  import { PRIMER_ANIO, ULTIMO_ANIO, BLOQUES, COMBUSTIBLES, BIOMASAS, GDO, GASES, GAS_OTRO, usosDe, calcular, operacion, toneladas, porcentaje, porcentajeTexto, versionFactores } from "/huella/calculo.js";
 
   const $ = (id) => document.getElementById(id);
   const estado = { fijas: [], vehiculos: [], maquinaria: [], fugas: [], electricidad: [] };
@@ -308,12 +312,21 @@
 
   const anioActual = () => Number($("anio").value);
 
-  function campoCantidad(fila, campo, unidad, etiqueta) {
+  // Con `toneladas`, un campo en kg deja elegir «t»: quien gasta miles de
+  // toneladas de biomasa las tiene así en sus papeles. La cantidad se guarda
+  // siempre en kg (fila.enT solo dice cómo la escribió).
+  function campoCantidad(fila, campo, unidad, etiqueta, toneladas = false) {
+    if (!toneladas && fila.enT) fila.enT = false;
+    const leer = () => { const n = leerNumero(fila[campo + "Texto"] ?? ""); fila[campo] = n == null ? 0 : fila.enT ? n * 1000 : n; };
+    if (fila[campo + "Texto"] != null) leer();
     const input = el("input", { type: "text", inputmode: "decimal", placeholder: "0", value: fila[campo + "Texto"] || "", "aria-label": etiqueta || `Cantidad en ${unidad}` });
     const marcar = () => input.classList.toggle("mal", leerNumero(input.value) == null);
     marcar();
-    input.addEventListener("input", () => { fila[campo + "Texto"] = input.value; fila[campo] = leerNumero(input.value) ?? 0; marcar(); cambiado(); });
-    return el("div", { class: "cantidad" }, input, el("span", null, unidad));
+    input.addEventListener("input", () => { fila[campo + "Texto"] = input.value; leer(); marcar(); cambiado(); });
+    const sufijo = toneladas
+      ? selector([["kg", "kg"], ["t", "t"]], fila.enT ? "t" : "kg", (v) => { fila.enT = v === "t"; leer(); cambiado(); }, "Unidad: kilos o toneladas")
+      : el("span", null, unidad);
+    return el("div", { class: "cantidad" + (toneladas ? " con-unidad" : "") }, input, sufijo);
   }
   function campoAprox(fila) {
     const c = el("input", { type: "checkbox" });
@@ -336,8 +349,8 @@
     const comb = selector(BLOQUES.fijas.map((c) => [c, COMBUSTIBLES[c].nombre]), f.combustible, (v) => { f.combustible = v; pintar("fijas"); cambiado(); }, "Combustible");
     const segundo = f.combustible === "biomasa"
       ? selector([["", "Tipo de biomasa…"], ...BIOMASAS.map((b) => [b.value, b.label])], f.detalle || "", (v) => { f.detalle = v; cambiado(); }, "Tipo de biomasa")
-      : campoCantidad(f, "cantidad", COMBUSTIBLES[f.combustible].unidad);
-    const tercero = f.combustible === "biomasa" ? campoCantidad(f, "cantidad", "kg") : el("span");
+      : campoCantidad(f, "cantidad", COMBUSTIBLES[f.combustible].unidad, null, COMBUSTIBLES[f.combustible].unidad === "kg");
+    const tercero = f.combustible === "biomasa" ? campoCantidad(f, "cantidad", "kg", null, true) : el("span");
     return el("div", { class: "fila-hc fijas" }, comb, segundo, tercero, campoAprox(f), botonQuitar("fijas", i));
   }
   function filaUso(bloque, f, i) {
@@ -346,7 +359,7 @@
     if (!usos.some((u) => u.value === f[campoUso])) f[campoUso] = usos[0]?.value || "";
     const comb = selector(BLOQUES[bloque].map((c) => [c, COMBUSTIBLES[c].nombre]), f.combustible, (v) => { f.combustible = v; pintar(bloque); cambiado(); }, "Combustible");
     const uso = selector(usos.map((u) => [u.value, u.label]), f[campoUso], (v) => { f[campoUso] = v; cambiado(); }, bloque === "vehiculos" ? "Tipo de vehículo" : "Tipo de maquinaria");
-    return el("div", { class: `fila-hc ${bloque}` }, comb, uso, campoCantidad(f, "cantidad", COMBUSTIBLES[f.combustible].unidad), campoAprox(f), botonQuitar(bloque, i));
+    return el("div", { class: `fila-hc ${bloque}` }, comb, uso, campoCantidad(f, "cantidad", COMBUSTIBLES[f.combustible].unidad, null, COMBUSTIBLES[f.combustible].unidad === "kg"), campoAprox(f), botonQuitar(bloque, i));
   }
   function filaElectricidad(f, i) {
     const com = el("input", { type: "text", list: "lista-comercializadoras", placeholder: "Escribe tu comercializadora…", value: f.comercializadora || "", "aria-label": "Comercializadora" });
@@ -392,7 +405,7 @@
   }
 
   function entrada() {
-    const limpio = (f) => Object.fromEntries(Object.entries(f).filter(([k]) => !k.endsWith("Texto")));
+    const limpio = (f) => Object.fromEntries(Object.entries(f).filter(([k]) => !k.endsWith("Texto") && k !== "enT"));
     return {
       anio: anioActual(),
       fijas: estado.fijas.map(limpio),
@@ -422,9 +435,10 @@
       el("tr", null,
         el("td", null, p.etiqueta, p.aprox ? " (aproximado)" : "",
           el("div", { class: "operacion" }, operacion(p)),
-          el("div", { class: "operacion" }, p.procedencia)),
+          el("div", { class: "operacion" }, p.procedencia),
+          p.nota ? el("div", { class: "operacion" }, p.nota) : null),
         el("td", { class: "n" }, toneladas(p.kg)),
-        el("td", { class: "n" }, porcentaje(p.kg, r.total) + " %"))));
+        el("td", { class: "n" }, porcentajeTexto(p.kg, r.total)))));
     $("r-aprox").textContent = r.aproximado ? "Parte de los consumos son aproximados." : "";
     $("r-origen").textContent = `Factores: calculadora de huella de organización del MITECO (${versionFactores()}).`;
     return r;

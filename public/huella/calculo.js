@@ -201,8 +201,10 @@ export function calcular(entrada, comercializadoras) {
       unidad: c.unidad,
       factor,
       procedencia: `Factor del MITECO para ${anio}`,
+      ...(fila.combustible === "biomasa" ? { nota: NOTA_BIOMASA } : {}),
       kg: cantidad * factor,
       aprox: !!fila.aprox,
+      combustible: fila.combustible,
       celdas: [...celdas, c.miteco(anio, uso, fila.detalle)],
     });
   };
@@ -303,9 +305,39 @@ export function calcular(entrada, comercializadoras) {
       celdas: [nombre, gdo.miteco],
     });
   }
+  avisos.push(...repetidas(partidas));
   const a1 = partidas.filter((p) => p.alcance === 1).reduce((s, p) => s + p.kg, 0);
   const a2 = partidas.filter((p) => p.alcance === 2).reduce((s, p) => s + p.kg, 0);
   return { anio, partidas, avisos, faltan, parcial: faltan.length > 0, a1, a2, total: a1 + a2, aproximado: partidas.some((p) => p.aprox) };
+}
+
+// Nota ** de la pestaña 3 de la calculadora oficial: su factor de biomasa
+// solo lleva CH₄ y N₂O.
+export const NOTA_BIOMASA =
+  "El CO₂ de la biomasa no se suma: el MITECO lo considera neutro por ser de origen biogénico. Esta cifra es el metano y el óxido nitroso de su combustión.";
+
+const DONDE = { fijas: "instalaciones", vehiculos: "vehículos", maquinaria: "maquinaria" };
+
+/**
+ * El mismo combustible con la misma cantidad en dos filas (p. ej. 281.520 l de
+ * gasóleo en instalaciones y en vehículos): casi siempre es contarlo dos veces.
+ * No quita nada; solo avisa.
+ */
+function repetidas(partidas) {
+  const grupos = new Map();
+  for (const p of partidas) {
+    if (!p.combustible) continue;
+    const k = `${p.combustible}|${p.cantidad}`;
+    grupos.set(k, [...(grupos.get(k) || []), p]);
+  }
+  return [...grupos.values()]
+    .filter((g) => g.length > 1)
+    .map((g) => {
+      const sitios = [...new Set(g.map((p) => DONDE[p.bloque]))];
+      const donde = sitios.length > 1 ? `en ${sitios.join(" y en ")}` : `${g.length} veces en ${sitios[0]}`;
+      const nombre = COMBUSTIBLES[g[0].combustible].nombre;
+      return `Has puesto ${cuanto(g[0].cantidad, g[0].unidad)} de ${nombre[0].toLowerCase() + nombre.slice(1)} ${donde}. Si es el mismo consumo, déjalo en un solo sitio para no contarlo dos veces.`;
+    });
 }
 
 /** «3 kg» · «100.800 kWh» */
@@ -337,6 +369,12 @@ export function porcentaje(parte, total) {
   return total > 0 ? Math.round((parte / total) * 100) : 0;
 }
 
+/** «32 %» · «menos del 1 %» (un 0 % con ahorro real parecería que no hace nada). */
+export function porcentajeTexto(parte, total) {
+  const p = porcentaje(parte, total);
+  return p === 0 && parte > 0 ? "menos del 1 %" : `${p} %`;
+}
+
 /** Peso de cada bloque (fijas, vehículos, maquinaria, electricidad), de mayor a menor. */
 export function porBloque(r) {
   const m = new Map();
@@ -360,7 +398,7 @@ export function simular(entrada, comercializadoras) {
     cambiar(e);
     const r = calcular(e, comercializadoras);
     const ahorro = base.total - r.total;
-    if (ahorro > 0.5) escenarios.push({ titulo, descripcion, total: r.total, ahorro, pct: porcentaje(ahorro, base.total) });
+    if (ahorro > 0.5) escenarios.push({ titulo, descripcion, total: r.total, ahorro, pct: porcentaje(ahorro, base.total), pctTexto: porcentajeTexto(ahorro, base.total) });
   };
   probar(
     "Electricidad con garantía de origen renovable",
@@ -373,6 +411,11 @@ export function simular(entrada, comercializadoras) {
     "Un 10 % menos de combustible en vehículos",
     "Por ejemplo, con rutas mejor planificadas o conducción eficiente.",
     (e) => (e.vehiculos || []).forEach((x) => (x.cantidad = (numero(x.cantidad) || 0) * 0.9))
+  );
+  probar(
+    "Un 10 % menos de combustible en maquinaria",
+    "Por ejemplo, con mantenimiento de motores y menos tiempo al ralentí.",
+    (e) => (e.maquinaria || []).forEach((x) => (x.cantidad = (numero(x.cantidad) || 0) * 0.9))
   );
   probar(
     "Un 10 % menos de combustible en instalaciones",
@@ -414,7 +457,7 @@ export function textoCuestionario(r, empresa) {
     `${r.parcial ? "Resultado parcial" : "Resultado"}: ${toneladas(r.total)} t CO₂e (alcance 1: ${toneladas(r.a1)} t; alcance 2: ${toneladas(r.a2)} t).`,
   ];
   if (r.parcial) partes.push(`Esta cifra no incluye ${queFalta(r)}, pendiente de completar.`);
-  if (principal) partes.push(`La fuente principal es ${principal.ambito} (${porcentaje(principal.kg, r.total)} % del total).`);
+  if (principal) partes.push(`La mayor parte procede de ${principal.ambito} (${porcentaje(principal.kg, r.total)} % del total).`);
   if (r.aproximado) partes.push("Parte de los consumos son estimaciones.");
   partes.push("No incluye el alcance 3 (emisiones indirectas de la cadena de valor).");
   return partes.join(" ");
